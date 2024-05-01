@@ -1,18 +1,18 @@
 package com.nick1est.proconnectx.controller;
 
-import com.nick1est.proconnectx.dao.Field;
 import com.nick1est.proconnectx.dao.Offer;
+import com.nick1est.proconnectx.dto.OfferFilter;
 import com.nick1est.proconnectx.service.OfferService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Range;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/offer")
 @Slf4j
 public class OfferController {
@@ -25,21 +25,16 @@ public class OfferController {
     }
 
     @PostMapping
-    public ResponseEntity<Offer> createOffer(@RequestBody Offer offer) {
-        return ResponseEntity.ok(offerService.createOffer(offer));
+    @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public Offer createOffer(@RequestBody Offer offer) {
+        return offerService.createOffer(offer);
     }
 
     @GetMapping
-    public ResponseEntity<List<Offer>> getFilteredFreelancers(
-            @RequestParam(required = false) Field field,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) Double rating,
-            @RequestParam(required = false) Range<Double> price
-    ) {
-        return ResponseEntity.ok(offerService.findFilteredOffers(
-                field,
-                location,
-                rating,
-                price));
+    @ResponseStatus(HttpStatus.OK)
+    public List<Offer> getFilteredOffers(
+            @RequestBody OfferFilter offerFilter) {
+        return offerService.findFilteredOffers(offerFilter);
     }
 }

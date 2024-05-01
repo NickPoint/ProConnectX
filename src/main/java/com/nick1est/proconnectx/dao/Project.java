@@ -1,17 +1,19 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 @ToString
+@Builder
 public class Project {
 
     @Id
@@ -19,37 +21,40 @@ public class Project {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private String shortDescription;
 
     @JoinColumn(nullable = false)
     @ManyToOne
     private Client owner;
 
     @OneToOne
-    private Freelancer freelancer;
+    private Client freelancer;
 
     private Integer budget;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Field field;
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private Category category;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ProjectStatus projectStatus;
+    private ProjectStatus status;
 
     @Column(nullable = false)
     private String location;
 
     @OneToMany(mappedBy = "project")
-    private List<Proposal> proposals;
+    private List<Bid> bids;
 
     @Column(nullable = false)
     private OffsetDateTime datePosted;
 
-    private OffsetDateTime dateDue;
+    private OffsetDateTime dueDate;
 
 }

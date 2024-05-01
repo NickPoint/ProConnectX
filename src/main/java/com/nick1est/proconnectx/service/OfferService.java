@@ -1,11 +1,10 @@
 package com.nick1est.proconnectx.service;
 
-import com.nick1est.proconnectx.dao.Field;
 import com.nick1est.proconnectx.dao.Offer;
+import com.nick1est.proconnectx.dto.OfferFilter;
 import com.nick1est.proconnectx.repository.OfferRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Range;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,14 +24,17 @@ public class OfferService {
         return offerRepository.save(offer);
     }
 
-    public List<Offer> findFilteredOffers(Field field, String location, Double rating, Range<Double> price) {
-        log.info("Finding offers by field: {}, location: {}, rating: {}, price: {}", field, location, rating, price);
-        return offerRepository
-                .findByFieldAndLocationAndRatingAndPrice(
-                        field,
-                        location,
-                        rating,
-                        price != null ? price.getLowerBound().getValue().orElse(null) : null,
-                        price != null ? price.getUpperBound().getValue().orElse(null) : null);
+    public List<Offer> findFilteredOffers(OfferFilter offerFilter) {
+        log.info("Finding filtered offers: {}", offerFilter);
+        return offerRepository.findByFieldAndLocationAndRatingAndPrice(
+                offerFilter.getCategories(),
+                offerFilter.getLocation(),
+                offerFilter.getRating(),
+                offerFilter.getPrice() != null
+                        ? offerFilter.getPrice().getLowerBound().getValue().orElse(null)
+                        : null,
+                offerFilter.getPrice() != null
+                        ? offerFilter.getPrice().getUpperBound().getValue().orElse(null)
+                        : null);
     }
 }

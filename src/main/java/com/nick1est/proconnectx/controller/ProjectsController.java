@@ -1,18 +1,20 @@
 package com.nick1est.proconnectx.controller;
 
-import com.nick1est.proconnectx.dao.Field;
+import com.nick1est.proconnectx.dao.ECategory;
 import com.nick1est.proconnectx.dao.Project;
+import com.nick1est.proconnectx.dto.ProjectCreateDto;
+import com.nick1est.proconnectx.dto.ProjectFilter;
+import com.nick1est.proconnectx.dto.ProjectFilterResponse;
 import com.nick1est.proconnectx.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Range;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/project")
 @Slf4j
 public class ProjectsController {
@@ -25,19 +27,16 @@ public class ProjectsController {
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        return ResponseEntity.ok(projectService.createProject(project));
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public Project createProject(@RequestBody ProjectCreateDto project) {
+        return projectService.createProject(project);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Project>> getFilteredProjects(
-            @RequestParam(required = false) Field field,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) Range<Double> price
-    ) {
-        return ResponseEntity.ok(projectService.findFilteredProjects(
-                field,
-                location,
-                price));
+    @PostMapping("/filter")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProjectFilterResponse> getFilteredProjects(
+            @RequestBody ProjectFilter projectFilter) {
+        return projectService.findFilteredProjects(projectFilter);
     }
 }

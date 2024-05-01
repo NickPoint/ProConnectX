@@ -19,15 +19,6 @@ const injectedRtkApi = api.injectEndpoints({
         method: "PUT",
       }),
     }),
-    getFilteredProjects: build.query<
-      GetFilteredProjectsApiResponse,
-      GetFilteredProjectsApiArg
-    >({
-      query: queryArg => ({
-        url: `/project`,
-        params: { projectFilter: queryArg.projectFilter },
-      }),
-    }),
     createProject: build.mutation<
       CreateProjectApiResponse,
       CreateProjectApiArg
@@ -35,7 +26,17 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({
         url: `/project`,
         method: "POST",
-        body: queryArg.project,
+        body: queryArg.projectCreateDto,
+      }),
+    }),
+    getFilteredProjects: build.mutation<
+      GetFilteredProjectsApiResponse,
+      GetFilteredProjectsApiArg
+    >({
+      query: queryArg => ({
+        url: `/project/filter`,
+        method: "POST",
+        body: queryArg.projectFilter,
       }),
     }),
     getFilteredOffers: build.query<
@@ -101,9 +102,21 @@ const injectedRtkApi = api.injectEndpoints({
       GetFilteredFreelancersApiArg
     >({
       query: queryArg => ({
-        url: `/freelancer`,
+        url: `/client`,
         params: { freelancerFilter: queryArg.freelancerFilter },
       }),
+    }),
+    getClientProfile: build.query<
+      GetClientProfileApiResponse,
+      GetClientProfileApiArg
+    >({
+      query: queryArg => ({ url: `/client/profile/${queryArg.id}` }),
+    }),
+    getCurrentUser: build.query<
+      GetCurrentUserApiResponse,
+      GetCurrentUserApiArg
+    >({
+      query: () => ({ url: `/auth` }),
     }),
   }),
   overrideExisting: false,
@@ -124,13 +137,14 @@ export type ApproveBidApiArg = {
   projectId: number
   bidId: number
 }
-export type GetFilteredProjectsApiResponse = /** status 200 OK */ Project[]
-export type GetFilteredProjectsApiArg = {
-  projectFilter: ProjectFilter
-}
 export type CreateProjectApiResponse = /** status 200 OK */ Project
 export type CreateProjectApiArg = {
-  project: Project
+  projectCreateDto: ProjectCreateDto
+}
+export type GetFilteredProjectsApiResponse =
+  /** status 200 OK */ ProjectFilterResponse[]
+export type GetFilteredProjectsApiArg = {
+  projectFilter: ProjectFilter
 }
 export type GetFilteredOffersApiResponse = /** status 200 OK */ Offer[]
 export type GetFilteredOffersApiArg = {
@@ -163,32 +177,40 @@ export type AllAccessApiResponse = /** status 200 OK */ string
 export type AllAccessApiArg = void
 export type AdminAccessApiResponse = /** status 200 OK */ string
 export type AdminAccessApiArg = void
-export type GetFilteredFreelancersApiResponse = /** status 200 OK */ Offer[]
+export type GetFilteredFreelancersApiResponse = /** status 200 OK */ Client[]
 export type GetFilteredFreelancersApiArg = {
   freelancerFilter: FreelancerFilter
 }
-export type ERole = "ROLE_CLIENT" | "ROLE_FREELANCER" | "ROLE_ADMIN"
+export type GetClientProfileApiResponse = /** status 200 OK */ Client
+export type GetClientProfileApiArg = {
+  id: number
+}
+export type GetCurrentUserApiResponse = /** status 200 OK */ UserInfoResponse
+export type GetCurrentUserApiArg = void
 export type Role = {
   id?: number
-  name?: ERole
+  name?: "ROLE_CLIENT" | "ROLE_FREELANCER" | "ROLE_ADMIN"
 }
-export type Field =
-  | "WEB_DESIGN"
-  | "WEB_DEVELOPMENT"
-  | "MOBILE_DEVELOPMENT"
-  | "GRAPHIC_DESIGN"
-  | "VIDEO_EDITING"
-  | "WRITING"
-  | "TRANSLATION"
-  | "MARKETING"
-  | "SALES"
-  | "CUSTOMER_SERVICE"
-  | "ADMIN_SUPPORT"
-  | "DATA_SCIENCE"
-  | "ENGINEERING"
-  | "ACCOUNTING"
-  | "LEGAL"
-  | "OTHER"
+export type Category = {
+  id?: number
+  name?:
+    | "WEB_DESIGN"
+    | "WEB_DEVELOPMENT"
+    | "MOBILE_DEVELOPMENT"
+    | "GRAPHIC_DESIGN"
+    | "VIDEO_EDITING"
+    | "WRITING"
+    | "TRANSLATION"
+    | "MARKETING"
+    | "SALES"
+    | "CUSTOMER_SERVICE"
+    | "ADMIN_SUPPORT"
+    | "DATA_SCIENCE"
+    | "ENGINEERING"
+    | "ACCOUNTING"
+    | "LEGAL"
+    | "OTHER"
+}
 export type Client = {
   id?: number
   name: string
@@ -199,30 +221,29 @@ export type Client = {
   profilePicture?: string
   location?: string
   rating?: number
-  fields?: Field[]
+  categories?: Category[]
 }
-export type ProjectStatus = "OPEN" | "IN_PROGRESS" | "CLOSED"
 export type Project = {
   id?: number
-  name?: string
+  title?: string
   description?: string
+  shortDescription?: string
   owner?: Client
   freelancer?: Client
   budget?: number
-  field?: Field
-  projectStatus?: ProjectStatus
+  category?: Category
+  status?: "OPEN" | "IN_PROGRESS" | "CLOSED"
   location?: string
   bids?: Bid[]
   datePosted?: string
-  dateDue?: string
+  dueDate?: string
 }
-export type BidStatus = "NEW" | "IN_REVIEW" | "APPROVED" | "DECLINED"
 export type Bid = {
   id?: number
   project?: Project
   freelancer?: Client
-  price?: number
-  bidStatus?: BidStatus
+  amount?: number
+  bidStatus?: "NEW" | "IN_REVIEW" | "APPROVED" | "DECLINED"
   description?: string
   datePosted?: string
   dateSubmitted?: string
@@ -231,6 +252,84 @@ export type ErrorMessage = {
   id?: string
   message?: string
 }
+export type ProjectCreateDto = {
+  title: string
+  description: string
+  shortDescription: string
+  budget: number
+  category:
+    | "WEB_DESIGN"
+    | "WEB_DEVELOPMENT"
+    | "MOBILE_DEVELOPMENT"
+    | "GRAPHIC_DESIGN"
+    | "VIDEO_EDITING"
+    | "WRITING"
+    | "TRANSLATION"
+    | "MARKETING"
+    | "SALES"
+    | "CUSTOMER_SERVICE"
+    | "ADMIN_SUPPORT"
+    | "DATA_SCIENCE"
+    | "ENGINEERING"
+    | "ACCOUNTING"
+    | "LEGAL"
+    | "OTHER"
+  location: string
+}
+export type ProjectFilterResponse = {
+  id?: number
+  title?: string
+  shortDescription?: string
+  owner?: Client
+  budget?: number
+  category?:
+    | "WEB_DESIGN"
+    | "WEB_DEVELOPMENT"
+    | "MOBILE_DEVELOPMENT"
+    | "GRAPHIC_DESIGN"
+    | "VIDEO_EDITING"
+    | "WRITING"
+    | "TRANSLATION"
+    | "MARKETING"
+    | "SALES"
+    | "CUSTOMER_SERVICE"
+    | "ADMIN_SUPPORT"
+    | "DATA_SCIENCE"
+    | "ENGINEERING"
+    | "ACCOUNTING"
+    | "LEGAL"
+    | "OTHER"
+  status?: "OPEN" | "IN_PROGRESS" | "CLOSED"
+  location?: string
+  bidCount?: number
+  lastBid?: number
+  dueDate?: string
+}
+export type ProjectFilter = {
+  title?: string
+  categories?: (
+    | "WEB_DESIGN"
+    | "WEB_DEVELOPMENT"
+    | "MOBILE_DEVELOPMENT"
+    | "GRAPHIC_DESIGN"
+    | "VIDEO_EDITING"
+    | "WRITING"
+    | "TRANSLATION"
+    | "MARKETING"
+    | "SALES"
+    | "CUSTOMER_SERVICE"
+    | "ADMIN_SUPPORT"
+    | "DATA_SCIENCE"
+    | "ENGINEERING"
+    | "ACCOUNTING"
+    | "LEGAL"
+    | "OTHER"
+  )[]
+  location?: string
+  minBudget?: number
+  maxBudget?: number
+}
+export type Offer = object
 export type BoundDouble = {
   value?: number
   inclusive?: boolean
@@ -240,14 +339,8 @@ export type RangeDouble = {
   lowerBound?: BoundDouble
   upperBound?: BoundDouble
 }
-export type ProjectFilter = {
-  fields?: Field[]
-  location?: string
-  price?: RangeDouble
-}
-export type Offer = object
 export type OfferFilter = {
-  fields?: Field[]
+  categories?: Category[]
   location?: string
   rating?: number
   price?: RangeDouble
@@ -267,16 +360,21 @@ export type LoginRequest = {
   password: string
 }
 export type FreelancerFilter = {
-  fields?: Field[]
+  categories?: Category[]
   location?: string
   rating?: number
+}
+export type UserInfoResponse = {
+  id?: number
+  email?: string
+  roles?: string[]
 }
 export const {
   useReviewBidMutation,
   useDeclineBidMutation,
   useApproveBidMutation,
-  useGetFilteredProjectsQuery,
   useCreateProjectMutation,
+  useGetFilteredProjectsMutation,
   useGetFilteredOffersQuery,
   useCreateOfferMutation,
   useMakeBidMutation,
@@ -288,4 +386,6 @@ export const {
   useAllAccessQuery,
   useAdminAccessQuery,
   useGetFilteredFreelancersQuery,
+  useGetClientProfileQuery,
+  useGetCurrentUserQuery,
 } = injectedRtkApi

@@ -30,21 +30,41 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.data:spring-data-rest-hal-explorer'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.session:spring-session-core'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 	implementation 'com.google.guava:guava:33.0.0-jre'
 	implementation 'org.postgresql:postgresql'
 	implementation 'net.datafaker:datafaker:2.0.2'
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
 	compileOnly 'org.projectlombok:lombok'
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+openApiGenerate {
+	generatorName.set("typescript-redux-query")
+	inputSpec.set("$rootDir/pxc-openapi.yaml")
+	outputDir.set("$rootDir/generated-client")
+	apiPackage.set("org.openapi.proconnectx.api")
+	invokerPackage.set("org.openapi.proconnectx.invoker")
+	modelPackage.set("org.openapi.proconnectx.model")
 }

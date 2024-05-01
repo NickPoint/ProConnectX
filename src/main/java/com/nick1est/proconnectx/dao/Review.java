@@ -15,7 +15,7 @@ public class Review {
 
     @JoinColumn(nullable = false)
     @ManyToOne
-    private Client user;
+    private Client client;
 
     @JoinColumn(nullable = false)
     @ManyToOne

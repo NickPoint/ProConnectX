@@ -27,8 +27,9 @@ public class Offer {
 
     private String location;
 
-    @Enumerated(EnumType.STRING)
-    private Field field;
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private Category category;
 
     @IntRange(from = 0, to = 5)
     private Integer rating;

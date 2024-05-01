@@ -1,7 +1,7 @@
 # Functional Requirements
-- [ ] The user can create a new account
-- [ ] The user can log in
-- [ ] The user can log out
+- [ ] The client can create a new account
+- [ ] The client can log in
+- [ ] The client can log out
 - [x] It is possible to see all projects and filter them by field, location, price.
 - [x] It is possible to see a single project
 - [x] It is possible to see all bids on a project

@@ -25,6 +25,12 @@ paths:
           type: integer
           format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -33,12 +39,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -68,6 +68,12 @@ paths:
           type: integer
           format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -76,12 +82,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -111,6 +111,12 @@ paths:
           type: integer
           format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -119,12 +125,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -147,6 +147,12 @@ paths:
         schema:
           $ref: '#/components/schemas/ProjectFilter'
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -155,12 +161,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -181,9 +181,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Project'
+              $ref: '#/components/schemas/ProjectCreateDto'
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -192,12 +198,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -220,6 +220,12 @@ paths:
         schema:
           $ref: '#/components/schemas/OfferFilter'
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -228,12 +234,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -257,6 +257,12 @@ paths:
               $ref: '#/components/schemas/Offer'
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -265,12 +271,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -300,6 +300,12 @@ paths:
               $ref: '#/components/schemas/BidRequest'
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -308,12 +314,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -336,6 +336,12 @@ paths:
               $ref: '#/components/schemas/SignupRequest'
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -344,12 +350,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -366,6 +366,12 @@ paths:
       - auth-controller
       operationId: logoutUser
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -374,12 +380,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -402,6 +402,12 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -410,12 +416,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -432,6 +432,12 @@ paths:
       - test-controller
       operationId: userAccess
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -440,12 +446,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -462,6 +462,12 @@ paths:
       - test-controller
       operationId: moderatorAccess
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -470,12 +476,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -492,6 +492,12 @@ paths:
       - test-controller
       operationId: allAccess
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -500,12 +506,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -522,6 +522,12 @@ paths:
       - test-controller
       operationId: adminAccess
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -530,12 +536,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -546,10 +546,10 @@ paths:
             application/hal+json:
               schema:
                 type: string
-  /freelancer:
+  /client:
     get:
       tags:
-      - freelancer-controller
+      - client-controller
       operationId: getFilteredFreelancers
       parameters:
       - name: freelancerFilter
@@ -558,6 +558,12 @@ paths:
         schema:
           $ref: '#/components/schemas/FreelancerFilter'
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -566,12 +572,6 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
           content:
             application/hal+json:
               schema:
@@ -583,7 +583,74 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
+                  $ref: '#/components/schemas/Client'
+  /client/profile/{id}:
+    get:
+      tags:
+      - client-controller
+      operationId: getClientProfile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Client'
+  /auth:
+    get:
+      tags:
+      - auth-controller
+      operationId: getCurrentUser
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
 components:
   schemas:
     ErrorMessage:
@@ -608,7 +675,12 @@ components:
           type: integer
           format: int32
         bidStatus:
-          $ref: '#/components/schemas/BidStatus'
+          type: string
+          enum:
+          - NEW
+          - IN_REVIEW
+          - APPROVED
+          - DECLINED
         description:
           type: string
         datePosted:
@@ -617,13 +689,31 @@ components:
         dateSubmitted:
           type: string
           format: date-time
-    BidStatus:
-      type: string
-      enum:
-      - NEW
-      - IN_REVIEW
-      - APPROVED
-      - DECLINED
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          enum:
+          - WEB_DESIGN
+          - WEB_DEVELOPMENT
+          - MOBILE_DEVELOPMENT
+          - GRAPHIC_DESIGN
+          - VIDEO_EDITING
+          - WRITING
+          - TRANSLATION
+          - MARKETING
+          - SALES
+          - CUSTOMER_SERVICE
+          - ADMIN_SUPPORT
+          - DATA_SCIENCE
+          - ENGINEERING
+          - ACCOUNTING
+          - LEGAL
+          - OTHER
     Client:
       required:
       - email
@@ -654,42 +744,17 @@ components:
         rating:
           type: number
           format: double
-        fields:
+        categories:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
-    ERole:
-      type: string
-      enum:
-      - ROLE_CLIENT
-      - ROLE_FREELANCER
-      - ROLE_ADMIN
-    Field:
-      type: string
-      enum:
-      - WEB_DESIGN
-      - WEB_DEVELOPMENT
-      - MOBILE_DEVELOPMENT
-      - GRAPHIC_DESIGN
-      - VIDEO_EDITING
-      - WRITING
-      - TRANSLATION
-      - MARKETING
-      - SALES
-      - CUSTOMER_SERVICE
-      - ADMIN_SUPPORT
-      - DATA_SCIENCE
-      - ENGINEERING
-      - ACCOUNTING
-      - LEGAL
-      - OTHER
+            $ref: '#/components/schemas/Category'
     Project:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        name:
+        title:
           type: string
         description:
           type: string
@@ -700,10 +765,14 @@ components:
         budget:
           type: integer
           format: int32
-        field:
-          $ref: '#/components/schemas/Field'
-        projectStatus:
-          $ref: '#/components/schemas/ProjectStatus'
+        category:
+          $ref: '#/components/schemas/Category'
+        status:
+          type: string
+          enum:
+          - OPEN
+          - IN_PROGRESS
+          - CLOSED
         location:
           type: string
         bids:
@@ -716,12 +785,6 @@ components:
         dateDue:
           type: string
           format: date-time
-    ProjectStatus:
-      type: string
-      enum:
-      - OPEN
-      - IN_PROGRESS
-      - CLOSED
     Role:
       type: object
       properties:
@@ -729,7 +792,48 @@ components:
           type: integer
           format: int64
         name:
-          $ref: '#/components/schemas/ERole'
+          type: string
+          enum:
+          - ROLE_CLIENT
+          - ROLE_FREELANCER
+          - ROLE_ADMIN
+    ProjectCreateDto:
+      required:
+      - budget
+      - category
+      - description
+      - location
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        budget:
+          type: integer
+          format: int32
+        category:
+          type: string
+          enum:
+          - WEB_DESIGN
+          - WEB_DEVELOPMENT
+          - MOBILE_DEVELOPMENT
+          - GRAPHIC_DESIGN
+          - VIDEO_EDITING
+          - WRITING
+          - TRANSLATION
+          - MARKETING
+          - SALES
+          - CUSTOMER_SERVICE
+          - ADMIN_SUPPORT
+          - DATA_SCIENCE
+          - ENGINEERING
+          - ACCOUNTING
+          - LEGAL
+          - OTHER
+        location:
+          type: string
     Offer:
       type: object
     BidRequest:
@@ -772,6 +876,38 @@ components:
           type: string
         password:
           type: string
+    ProjectFilter:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+            - WEB_DESIGN
+            - WEB_DEVELOPMENT
+            - MOBILE_DEVELOPMENT
+            - GRAPHIC_DESIGN
+            - VIDEO_EDITING
+            - WRITING
+            - TRANSLATION
+            - MARKETING
+            - SALES
+            - CUSTOMER_SERVICE
+            - ADMIN_SUPPORT
+            - DATA_SCIENCE
+            - ENGINEERING
+            - ACCOUNTING
+            - LEGAL
+            - OTHER
+        location:
+          type: string
+        minBudget:
+          type: number
+          format: double
+        maxBudget:
+          type: number
+          format: double
     BoundDouble:
       type: object
       properties:
@@ -782,15 +918,18 @@ components:
           type: boolean
         bounded:
           type: boolean
-    ProjectFilter:
+    OfferFilter:
       type: object
       properties:
-        fields:
+        categories:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
+            $ref: '#/components/schemas/Category'
         location:
           type: string
+        rating:
+          type: number
+          format: double
         price:
           $ref: '#/components/schemas/RangeDouble'
     RangeDouble:
@@ -800,29 +939,27 @@ components:
           $ref: '#/components/schemas/BoundDouble'
         upperBound:
           $ref: '#/components/schemas/BoundDouble'
-    OfferFilter:
-      type: object
-      properties:
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-        location:
-          type: string
-        rating:
-          type: number
-          format: double
-        price:
-          $ref: '#/components/schemas/RangeDouble'
     FreelancerFilter:
       type: object
       properties:
-        fields:
+        categories:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
+            $ref: '#/components/schemas/Category'
         location:
           type: string
         rating:
           type: number
           format: double
+    UserInfoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string

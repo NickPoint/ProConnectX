@@ -13,7 +13,7 @@ public class Payment {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    private Proposal proposal;
+    private Bid bid;
     private Integer amount;
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
