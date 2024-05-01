@@ -27,21 +27,26 @@ const ProjectCard = (props: ProjectFilterResponse) => {
                 </Grid>
             </Grid>
             <Grid xs={12} item p={3} bgcolor='secondary.main'>
-                <Grid container>
-                    <Grid xs={6} item>
+                <Grid container alignItems='center'>
+                    <Grid container xs={6} item alignItems='center'>
                         <Avatar><AccountCircleIcon/></Avatar>
+                        <Typography variant='body1' ml={1}>{props.owner?.name}</Typography>
                     </Grid>
-                    <Grid container xs={6} alignItems='center' justifyContent='flex-end' item>
-                        <PaidIcon/>
-                        <Typography variant='h6' ml={1}>{
-                            props.lastBid ? props.lastBid : props.budget
-                        }</Typography>
-                    </Grid>
-                    <Grid textAlign='right' xs={12} item>
-                        <Typography variant='body2'>{props.lastBid ? "Current bid" : "Budget"}</Typography>
-                    </Grid>
-                    <Grid xs={12} item>
-                        <Typography variant='body2' align='right'>{props.bidCount} bids</Typography>
+                    <Grid container xs={6} textAlign='right' alignItems='center' item rowSpacing={3}>
+                        <Grid xs={12} item>
+                            <Typography
+                                variant='body2'>{props.lastBid ? "Current bid" : "Budget"}
+                            </Typography>
+                            <Box display='flex' item justifyContent='right'>
+                                <PaidIcon/>
+                                <Typography variant='h6' ml={1}>{
+                                    props.lastBid ? props.lastBid : props.budget
+                                }</Typography>
+                            </Box>
+                        </Grid>
+                        <Grid xs={12} item>
+                            <Typography variant='body2'>{props.bidCount} bids</Typography>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
