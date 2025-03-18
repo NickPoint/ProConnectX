@@ -6,10 +6,9 @@ import {store} from "./app/store"
 import "./index.css"
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./app/theme/theme";
+import {SnackbarProvider} from "notistack";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
-import {BrowserRouter} from "react-router-dom";
-import {SnackbarProvider} from "notistack";
 
 const container = document.getElementById("root")
 
@@ -21,13 +20,13 @@ if (container) {
             <Provider store={store}>
                 <CssBaseline/>
                 <ThemeProvider theme={theme}>
-                    <DevSupport ComponentPreviews={ComponentPreviews}
-                                useInitialHook={useInitial}
-                    >
-                        <SnackbarProvider maxSnack={3}>
+                    <SnackbarProvider maxSnack={3}>
+                        <DevSupport ComponentPreviews={ComponentPreviews}
+                                    useInitialHook={useInitial}
+                        >
                             <App/>
-                        </SnackbarProvider>
-                    </DevSupport>
+                        </DevSupport>
+                    </SnackbarProvider>
                 </ThemeProvider>
             </Provider>
         </React.StrictMode>,

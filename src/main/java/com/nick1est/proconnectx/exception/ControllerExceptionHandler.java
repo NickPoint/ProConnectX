@@ -1,21 +1,19 @@
 package com.nick1est.proconnectx.exception;
 
+import com.nick1est.proconnectx.dto.FormValidationResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springdoc.api.ErrorMessage;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Map;
+
 @Slf4j
-@ControllerAdvice
-@ResponseBody
+@RestControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -64,5 +62,11 @@ public class ControllerExceptionHandler {
                 ex);
 
         return errorMessage;
+    }
+
+    @ExceptionHandler(FormValidationEx.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public FormValidationResponse handleFieldValidationException(FormValidationEx ex) {
+        return new FormValidationResponse(ex.getMessage(), ex.getErrors());
     }
 }

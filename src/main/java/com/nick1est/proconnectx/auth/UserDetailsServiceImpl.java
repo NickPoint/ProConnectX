@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.auth;
 
-import com.nick1est.proconnectx.repository.ClientRepository;
+import com.nick1est.proconnectx.repository.PrincipalRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    ClientRepository clientRepository;
+    PrincipalRepository principalRepository;
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        val user = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Client Not Found with username: " + email));
+    public UserDetailsImpl loadUserByUsername(String email) throws UsernameNotFoundException {
+        val user = principalRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Person Not Found with username: " + email));
         return UserDetailsImpl.build(user);
     }
 

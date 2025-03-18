@@ -37,7 +37,7 @@ dependencies {
 	implementation 'com.google.guava:guava:33.0.0-jre'
 	implementation 'org.postgresql:postgresql'
 	implementation 'net.datafaker:datafaker:2.0.2'
-	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
@@ -60,11 +60,18 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+task generateApi(type: Exec) {
+	commandLine 'powershell', '-ExecutionPolicy', 'Bypass', '-File', './generate-api.ps1'
+}
+build.dependsOn generateApi
+
+
 openApiGenerate {
 	generatorName.set("typescript-redux-query")
-	inputSpec.set("$rootDir/pxc-openapi.yaml")
+	inputSpec.set("$rootDir/api-docs.yaml")
 	outputDir.set("$rootDir/generated-client")
 	apiPackage.set("org.openapi.proconnectx.api")
 	invokerPackage.set("org.openapi.proconnectx.invoker")
 	modelPackage.set("org.openapi.proconnectx.model")
 }
+

@@ -7,6 +7,7 @@ const config: ConfigFile = {
     outputFile: './pcxApi.ts',
     exportName: 'pcxApi',
     hooks: true,
+    useEnumType: true,
 }
 
 export default config

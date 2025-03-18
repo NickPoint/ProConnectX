@@ -1,16 +1,16 @@
 import {ComponentPreview, Previews} from "@react-buddy/ide-toolbox";
 import {PaletteTree} from "./palette";
-import Header from "../features/header/Header";
-import PostServicePage from "../app/pages/PostServicePage";
+import EmployerInformationForm from "../app/components/verification/employer/EmployerInformationForm.tsx";
+import VerificationPage from "../app/pages/VerificationPage.tsx";
 
 const ComponentPreviews = () => {
     return (
         <Previews palette={<PaletteTree/>}>
-            <ComponentPreview path="/Header">
-                <Header/>
+            <ComponentPreview path="/EmployerInformationForm">
+                <EmployerInformationForm/>
             </ComponentPreview>
-            <ComponentPreview path="/PostServicePage">
-                <PostServicePage/>
+            <ComponentPreview path="/VerificationPage">
+                <VerificationPage/>
             </ComponentPreview>
         </Previews>
     );

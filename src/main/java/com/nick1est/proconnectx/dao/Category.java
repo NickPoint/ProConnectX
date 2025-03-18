@@ -4,11 +4,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
-public class Category {
+@ToString
+public class Category implements Serializable {
+
+    //TODO: Exception on filter projects by category. Why it should be Serializable?
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

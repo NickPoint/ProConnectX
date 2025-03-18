@@ -5,5 +5,6 @@ export const emptySplitApi = createApi({
         baseUrl: 'http://localhost:3000/api',
         credentials: "include",
     }),
+    tagTypes: ['Project', 'File'],
     endpoints: () => ({}),
 })

@@ -1,9 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {useCookies} from "react-cookie";
-import {UserInfoResponse} from "../api/pcxApi";
+import {AuthResponse} from "../api/pcxApi";
+import {useAppSelector} from "../../app/hooks";
 
 interface AuthState {
-    user: UserInfoResponse | null;
+    user: AuthResponse | null;
 }
 
 const initialState: AuthState = {
@@ -15,7 +15,7 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         logout: () => initialState,
-        setCredentials: (state, action: PayloadAction<UserInfoResponse>) => {
+        setCredentials: (state, action: PayloadAction<AuthResponse>) => {
             state.user = action.payload;
         },
     },
@@ -24,6 +24,11 @@ export const authSlice = createSlice({
     },
 })
 
-export const { logout, setCredentials } = authSlice.actions
+export const userHasRole = (role: string) => {
+    const user = useAppSelector(selectUser);
+    return user?.roles?.includes(role);
+}
+
+export const { logout,  setCredentials } = authSlice.actions
 
 export const { selectUser } = authSlice.selectors

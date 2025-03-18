@@ -1,5 +1,5 @@
 /*
-import Filter from "./Filter";
+import ProjectsFilter from "./ProjectsFilter";
 import Grid from "@mui/material/Unstable_Grid2";
 
 interface FilterBasePageProps {
@@ -12,7 +12,7 @@ const FilterBasePage: React.FC<React = ({children}) => {
     return (
         <Grid container spacing={2} sx={{justifyContent: 'center'}}>
             <Grid>
-                <Filter props={}/>
+                <ProjectsFilter props={}/>
             </Grid>
             <Grid>
                 {children}

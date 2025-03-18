@@ -1,43 +1,31 @@
 package com.nick1est.proconnectx.mapper;
 
 import com.nick1est.proconnectx.dao.Bid;
-import com.nick1est.proconnectx.dao.Category;
-import com.nick1est.proconnectx.dao.ECategory;
+import com.nick1est.proconnectx.dao.BidStatus;
 import com.nick1est.proconnectx.dao.Project;
 import com.nick1est.proconnectx.dto.ProjectCreateDto;
-import com.nick1est.proconnectx.dto.ProjectFilterResponse;
-import com.nick1est.proconnectx.service.CategoryService;
-import jdk.jfr.Name;
+import com.nick1est.proconnectx.dto.ProjectOwnerDto;
+import com.nick1est.proconnectx.dto.ProjectPublicDto;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class ProjectMapper {
-
-    @Autowired
-    protected CategoryService categoryService;
+public abstract class ProjectMapper extends CommonMapper {
 
     public abstract Project projectCreateDtoToProject(ProjectCreateDto projectCreateDto);
-    public abstract ProjectCreateDto projectToProjectCreateDto(Project project);
 
-    @Mapping(target = "lastBid", source = "bids", qualifiedByName = "mapLastBid")
+    @IterableMapping(qualifiedByName = "projectToProjectPublicDto")
+    public abstract List<ProjectPublicDto> projectsToProjectPublicDtos(List<Project> projects);
+
+    @Named("projectToProjectPublicDto")
+    @Mapping(target = "maxBid", source = "bids", qualifiedByName = "mapLastBid")
     @Mapping(target = "bidCount", source = "bids", qualifiedByName = "mapBidCount")
-    public abstract ProjectFilterResponse projectToProjectFilterResponse(Project project);
-    public abstract List<ProjectFilterResponse> projectsToProjectFilterResponse(List<Project> projects);
+    public abstract ProjectPublicDto projectToProjectPublicDto(Project project);
 
-    public Category mapCategory(ECategory category) {
-        return categoryService.findByName(category);
-    }
-    public ECategory mapCategory(Category category) {
-        return category.getName();
-    }
-    public List<Category> mapCategories(List<ECategory> categories) {
-        return categories.stream().map(this::mapCategory).collect(Collectors.toList());
-    }
+    @Mapping(target = "maxBid", source = "bids", qualifiedByName = "mapLastBid")
+    @Mapping(target = "bidCount", source = "bids", qualifiedByName = "mapBidCount")
+    public abstract ProjectOwnerDto projectToProjectOwnerDto(Project projects);
 
     @Named("mapBidCount")
     public Integer mapBidCount(List<Bid> bids) {
@@ -45,8 +33,9 @@ public abstract class ProjectMapper {
     }
 
     @Named("mapLastBid")
-    public Integer mapLastBid(List<Bid> bids) {
-        return bids.stream().map(Bid::getAmount).max(Integer::compareTo).orElse(0);
+    public Double mapMaxBid(List<Bid> bids) {
+        return bids.stream().filter(bid -> !bid.getStatus().equals(BidStatus.DECLINED))
+                .map(Bid::getAmount).max(Double::compareTo).orElse(null);
     }
 
 }

@@ -1,15 +1,13 @@
 package com.nick1est.proconnectx.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
-@Setter
-@Getter
-@RequiredArgsConstructor
+@Data
+@Builder
 public class MessageResponse {
-
-    private final String message;
-
+    @NotBlank
+    private String message;
+    private Long entityId;
 }
 

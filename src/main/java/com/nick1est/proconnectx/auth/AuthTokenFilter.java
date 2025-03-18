@@ -29,8 +29,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                String activeRole = jwtUtils.getActiveRoleFromJwtToken(jwt);
                 log.debug("Username from JWT: {}", username);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                log.debug("Active role from JWT: {}", activeRole);
+                UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
+                userDetails.setActiveRole(activeRole);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

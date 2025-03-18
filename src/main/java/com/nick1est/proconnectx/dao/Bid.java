@@ -3,6 +3,7 @@ package com.nick1est.proconnectx.dao;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -23,19 +24,29 @@ public class Bid {
 
     @JoinColumn(nullable = false)
     @ManyToOne
-    private Client freelancer;
+    private Freelancer bidder;
 
     @Column(nullable = false)
-    private Integer amount;
+    private Double amount;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private BidStatus bidStatus;
+    private BidStatus status;
 
-    private String description;
+    @Lob
+    private String coverLetter;
+
+    private String shortCoverLetter;
 
     @Column(nullable = false)
     private OffsetDateTime datePosted;
     private OffsetDateTime dateSubmitted;
+    private LocalDate dueDate;
+
+    @PrePersist
+    public void prePersist() {
+        status = BidStatus.NEW;
+        datePosted = OffsetDateTime.now();
+    }
 
 }

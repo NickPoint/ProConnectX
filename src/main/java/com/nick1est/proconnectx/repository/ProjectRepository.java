@@ -17,17 +17,24 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByTitle(String title);
 
     @Query("SELECT p FROM Project p " +
-            "LEFT JOIN p.freelancer f " +
-            "LEFT JOIN p.bids pr " +
-            "WHERE f.id = :freelancerId OR pr.freelancer.id = :freelancerId")
-    List<Project> findByFreelancerId(Long freelancerId);
+            "LEFT JOIN p.employer f " +
+            "LEFT JOIN p.bids bid " +
+            "WHERE f.id = :freelancerId OR bid.bidder.id = :employerId")
+    List<Project> findByEmployerId(Long employerId);
 
     @Query("SELECT project FROM Project project " +
-            "WHERE (:categories is null or project.category in :categories) " +
+            "WHERE (:title is null or project.title ILIKE %:title%) " +
+            "AND (:categories is null or EXISTS (SELECT 1 FROM project.categories category WHERE category IN :categories)) " +
             "and (:location is null or project.location = :location) " +
-            "and (:minBudget is null or project.budget >= :minBudget) and (:maxBudget is null or project.budget <= :maxBudget)")
-    List<Project> findByFieldAndLocationAndPrice(@Param("categories") List<Category> categories,
+            "and (:minBudget is null or project.budget >= :minBudget " +
+            "       or exists (select 1 from project.bids bid where bid.amount >= :minBudget)) " +
+            "and (:maxBudget is null or project.budget <= :maxBudget " +
+            "       or exists (select 1 from project.bids bid where bid.amount <= :maxBudget))" +
+            "and (:type is null or project.projectType = :type)")
+    List<Project> findByFieldAndLocationAndPriceAndType(@Param("title") String title,
+                                                 @Param("categories") List<Category> categories,
                                                  @Param("location") String location,
                                                  @Param("minBudget") Double minBudget,
-                                                 @Param("maxBudget") Double maxBudget);
+                                                 @Param("maxBudget") Double maxBudget,
+                                                 @Param("type") String type);
 }

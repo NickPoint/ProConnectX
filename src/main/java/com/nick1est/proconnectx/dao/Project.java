@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -24,23 +25,26 @@ public class Project {
     private String title;
 
     @Column(nullable = false)
+    @NotBlank
+    @NotNull
     private String description;
 
-    @Column(nullable = false)
     private String shortDescription;
 
     @JoinColumn(nullable = false)
     @ManyToOne
-    private Client owner;
+    private Employer employer;
 
-    @OneToOne
-    private Client freelancer;
-
-    private Integer budget;
-
-    @JoinColumn(nullable = false)
     @ManyToOne
-    private Category category;
+    private Freelancer freelancer;
+
+    private Double budget;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "project_categories",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -49,12 +53,28 @@ public class Project {
     @Column(nullable = false)
     private String location;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private List<Bid> bids;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private ProjectType projectType;
+
+    private Double minSatisfyingBid;
+
+    private Double bidStep;
+
+    @Column(nullable = false)
+    @NotNull
     private OffsetDateTime datePosted;
 
     private OffsetDateTime dueDate;
+
+    @PrePersist
+    public void prePersist() {
+        status = ProjectStatus.OPEN;
+        datePosted = OffsetDateTime.now();
+    }
 
 }

@@ -1,24 +1,26 @@
 import {useCookies} from "react-cookie";
 import {Navigate, Outlet, useLocation, useNavigate} from "react-router-dom";
-import {authApi, useAuthorisedClientQuery} from "../../features/api/authApi";
+import {useAuthorizeQuery} from "../../features/api/authApi";
+import {FC, useEffect} from "react";
+import {useAppSelector} from "../hooks";
+import {selectUser} from "../../features/auth/authSlice";
 
-const RequireUser = ({ allowedRoles }: { allowedRoles: string[] }) => {
-    const [cookies] = useCookies(['proConnectX']);
+interface RequireUserProps {
+    allowedRoles: string[];
+}
+
+const RequireUser: FC<RequireUserProps> = ({ allowedRoles }) => {
     const location = useLocation();
+    const user = useAppSelector(selectUser);
+    const { isLoading, isFetching } = useAuthorizeQuery(null);
 
-    const { data, isLoading, isFetching   } = useAuthorisedClientQuery(null);
-
-    const loading = isLoading || isFetching;
-
-    const navigateFunction = useNavigate();
-
-    if (loading) {
+    if (isLoading || isFetching) {
         return <div>Loading...</div>;
     }
 
-    return data && data.roles.some((role) => allowedRoles.includes(role)) ? (
+    return user && user?.roles?.some(role => allowedRoles.includes(role)) ? (
         <Outlet />
-    ) : cookies.proConnectX && data? (
+    ) : user ? (
         <Navigate to='/unauthorized' state={{ from: location }} replace />
     ) : (
         <Navigate to='/login' state={{ from: location }} replace />

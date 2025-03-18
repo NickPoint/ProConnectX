@@ -2,14 +2,12 @@ package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.Category;
-import com.nick1est.proconnectx.dao.ECategory;
+import com.nick1est.proconnectx.dao.Employer;
 import com.nick1est.proconnectx.dao.Project;
-import com.nick1est.proconnectx.dao.ProjectStatus;
 import com.nick1est.proconnectx.dto.ProjectCreateDto;
 import com.nick1est.proconnectx.dto.ProjectFilter;
-import com.nick1est.proconnectx.dto.ProjectFilterResponse;
+import com.nick1est.proconnectx.dto.ProjectPublicDto;
 import com.nick1est.proconnectx.mapper.ProjectMapper;
-import com.nick1est.proconnectx.repository.CategoryRepository;
 import com.nick1est.proconnectx.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,35 +25,46 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
-    private final ClientService clientService;
-    private final CategoryService categoryService;
+    private final EmployerService employerService;
 
     public Project createProject(ProjectCreateDto project) {
         log.info("Creating project: {}", project);
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         val projectEntity = projectMapper.projectCreateDtoToProject(project);
-        val client = clientService.findById(userDetails.getId());
-//        val category = categoryService.findByName(project.getCategory());
-        projectEntity.setOwner(client);
-        projectEntity.setStatus(ProjectStatus.OPEN);
+        val employer = employerService.findById(userDetails.getId());
+        projectEntity.setEmployer(employer);
 
         return projectRepository.save(projectEntity);
     }
+
     public void deleteProject(Long projectId) {
         log.info("Deleting project by id: {}", projectId);
-        findProject(projectId);
+        findById(projectId, null);
         projectRepository.deleteById(projectId);
     }
 
-    public Project findProject(Long projectId) {
+    public Object findById(Long projectId, Long principalId) {
         log.info("Finding project by id: {}", projectId);
-        return projectRepository.findById(projectId).orElseThrow(
-                () -> new EntityNotFoundException("ProjectCreateDto with id " + projectId + " not found"));
+        val project = projectRepository.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException("Project with id " + projectId + " not found"));
+        if (project.getEmployer().getId().equals(principalId)) {
+            return projectMapper.projectToProjectOwnerDto(project);
+        }
+
+        return projectMapper.projectToProjectPublicDto(project);
     }
 
-    public List<Project> findProjectsByUserId(Long freelancerId) {
-        log.info("Finding projects by freelancer id: {}", freelancerId);
-        return projectRepository.findByFreelancerId(freelancerId);
+    public Employer findProjectOwner(Long projectId) {
+        log.info("Finding project owner by id: {}", projectId);
+        val project = projectRepository.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException("ProjectCreateDto with id " + projectId + " not found"));
+
+        return project.getEmployer();
+    }
+
+    public List<Project> findProjectsByEmployerId(Long employerId) {
+        log.info("Finding projects by employer id: {}", employerId);
+        return projectRepository.findByEmployerId(employerId);
     }
 
     public List<Project> findProjectsByName(String projectName) {
@@ -63,22 +72,25 @@ public class ProjectService {
         return projectRepository.findByTitle(projectName);
     }
 
-    public List<ProjectFilterResponse> findFilteredProjects(ProjectFilter projectFilter) {
+    public List<ProjectPublicDto> findFilteredProjects(ProjectFilter projectFilter) {
         log.info("Finding projects by filter: {}", projectFilter);
         List<Category> categories;
         if (projectFilter.getCategories() != null) {
-            categories = projectMapper.mapCategories(projectFilter.getCategories());
+            categories = projectMapper.mapECategoriesToCategories(projectFilter.getCategories());
         }
         else {
             categories = null;
         }
+        log.debug("Categories: {}", categories);
 
-        val filteredProjects = projectRepository.findByFieldAndLocationAndPrice(
+        val filteredProjects = projectRepository.findByFieldAndLocationAndPriceAndType(
+                projectFilter.getTitle(),
                 categories,
                 projectFilter.getLocation(),
                 projectFilter.getMinBudget(),
-                projectFilter.getMaxBudget());
-        return projectMapper.projectsToProjectFilterResponse(filteredProjects);
+                projectFilter.getMaxBudget(),
+                projectFilter.getType() != null ? projectFilter.getType().name() : null);
+        return projectMapper.projectsToProjectPublicDtos(filteredProjects);
     }
 
 

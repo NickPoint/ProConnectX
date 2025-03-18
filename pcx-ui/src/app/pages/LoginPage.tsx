@@ -1,23 +1,21 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {object, string} from "yup";
 import {useFormik} from "formik";
-import {useAuthenticateUserMutation, UserInfoResponse} from "../../features/api/pcxApi";
+import {useAuthenticateUserMutation} from "../../features/api/pcxApi";
 import {Link as RouterLink} from "react-router-dom";
 import {Alert, Collapse, IconButton, LinearProgress} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import {useAppDispatch} from "../hooks";
-import {useEffect} from "react";
 import {setCredentials} from "../../features/auth/authSlice";
+import {useNavigate, useLocation} from "react-router-dom";
 
 
 const loginSchema = object({
@@ -32,22 +30,25 @@ const loginSchema = object({
 
 const LoginPage = () => {
     const dispatch = useAppDispatch();
-    const [loginUser, {isSuccess, data}] = useAuthenticateUserMutation();
-
-    useEffect(() => {
-        dispatch(setCredentials(data as UserInfoResponse));
-    }, [data, dispatch]);
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [loginUser] = useAuthenticateUserMutation();
+    const {from} = location.state || {from: {pathname: "/"}};
 
     const formik = useFormik({
         initialValues: {
             email: '',
             password: '',
+            role: ''
         },
         validationSchema: loginSchema,
         onSubmit: (values, formikHelpers) => {
             formikHelpers.setStatus(undefined);
             loginUser({loginRequest: values}).unwrap()
+                .then((response) => {
+                    dispatch(setCredentials(response));
+                    navigate(from);
+                })
                 .catch((error) => {
                     //TODO: better way to handle error if no connection with BE or if errorMiddleware is already handling it
                     if (error.data !== undefined) {
@@ -61,12 +62,8 @@ const LoginPage = () => {
     });
 
     return (
-        <Grid container component="main" sx={{height: '100vh'}}>
+        (<Grid container component="main" sx={{height: '100vh'}}>
             <Grid
-                item
-                xs={false}
-                sm={4}
-                md={7}
                 sx={{
                     backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
                     backgroundRepeat: 'no-repeat',
@@ -75,8 +72,20 @@ const LoginPage = () => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
-            />
-            <Grid xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                size={{
+                    xs: false,
+                    sm: 4,
+                    md: 7
+                }} />
+            <Grid
+                component={Paper}
+                elevation={6}
+                square
+                size={{
+                    xs: 12,
+                    sm: 8,
+                    md: 5
+                }}>
                 <Box
                     sx={{
                         my: 8,
@@ -131,12 +140,12 @@ const LoginPage = () => {
                             Sign In
                         </Button>
                         <Grid container>
-                            <Grid xs>
+                            <Grid size="grow">
                                 <Link href="#" variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
-                            <Grid xs>
+                            <Grid size="grow">
                                 <Link variant='body2' component={RouterLink} to='/signup'>
                                     {"Don't have an account? Sign Up"}
                                 </Link>
@@ -165,7 +174,7 @@ const LoginPage = () => {
                     </Box>
                 </Box>
             </Grid>
-        </Grid>
+        </Grid>)
     );
 }
 

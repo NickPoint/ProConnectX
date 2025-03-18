@@ -1,5 +1,6 @@
 package com.nick1est.proconnectx.auth;
 
+import com.nick1est.proconnectx.dao.ERole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -36,8 +37,14 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
-        String jwt = generateTokenFromUsername(userPrincipal.getEmail());
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, String role) {
+        String jwt = Jwts.builder()
+                .subject(userPrincipal.getEmail())
+                .claim("activeRole", role)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key())
+                .compact();
         return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 
@@ -48,6 +55,11 @@ public class JwtUtils {
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getActiveRoleFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().get("activeRole", String.class);
     }
 
     private Key key() {
@@ -69,14 +81,5 @@ public class JwtUtils {
         }
 
         return false;
-    }
-
-    public String generateTokenFromUsername(String username) {
-        return Jwts.builder()
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
-                .compact();
     }
 }

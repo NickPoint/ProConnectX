@@ -11,8 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -21,13 +20,16 @@ public class DataInitializer {
     private final Integer NUMBER_OF_CLIENTS = 15;
     private final Integer NUMBER_OF_FREELANCERS = 15;
 
-    private final ClientRepository clientRepository;
+    private final PrincipalRepository principalRepository;
     private final RoleRepository roleRepository;
     private final CategoryRepository categoryRepository;
     private final PasswordEncoder encoder;
+    private final FreelancerRepository freelancerRepository;
+    private final EmployerRepository employerRepository;
     private final CategoryService categoryService;
     private final ProjectRepository projectRepository;
     private final BidRepository bidRepository;
+    private final ServiceRepository serviceRepository;
 
     @PostConstruct
     public void init() {
@@ -42,56 +44,121 @@ public class DataInitializer {
             categoryRepository.save(category);
         }
 
-        Client client = new Client(
-                "Mykyta Voievudskyi",
-                "nikita.voevudsky@gmail.com",
-                encoder.encode("12345678"));
-        clientRepository.save(client);
+        val principal1 = new Principal();
+        principal1.setFirstName("Freelancer");
+        principal1.setLastName("Freelancer");
+        principal1.setEmail("freelancer@gmail.com");
+        principal1.setPassword(encoder.encode("12345678"));
+        roleRepository.findByName(ERole.ROLE_FREELANCER).ifPresent(role -> principal1.setRoles(Set.of(role)));
+        principalRepository.save(principal1);
+        val freelancer = new Freelancer();
+        freelancer.setCountry("Estonia");
+        freelancer.setFirstName("Freelancer");
+        freelancer.setLastName("Freelancer");
+        freelancer.setPhoneNumber("+37287654321");
+        freelancer.setAddress("Tallinn, Estonia");
+        freelancer.setActivationDate(OffsetDateTime.now());
+        freelancer.setAccountStatus(AccountStatus.ACTIVE);
+        freelancer.setPrincipal(principal1);
+        freelancerRepository.save(freelancer);
 
-        val project = Project.builder()
-                .title("Test project")
+        val employer = new Employer();
+        val principal2 = new Principal();
+        principal2.setEmail("employer@gmail.com");
+        principal2.setFirstName("Employer");
+        principal2.setLastName("Employer");
+        principal2.setPassword(encoder.encode("12345678"));
+        roleRepository.findByName(ERole.ROLE_EMPLOYER).ifPresent(role -> principal2.setRoles(Set.of(role)));
+        principalRepository.save(principal2);
+        employer.setCompanyName("Company Name");
+        employer.setCountry("Estonia");
+        employer.setRegistrationCode("12345678");
+        employer.setEmail("employer@gmail.com");
+        employer.setPhoneNumber("+37212345678");
+        employer.setAddress("Tallinn, Estonia");
+        employer.setActivationDate(OffsetDateTime.now());
+        employer.setAccountStatus(AccountStatus.ACTIVE);
+        employer.setPrincipal(principal2);
+        employerRepository.save(employer);
+
+
+
+        val projectFixed = Project.builder()
+                .title("Test projectFixed")
                 .description("Test description")
                 .shortDescription("Test short description")
-                .owner(client)
-                .budget(100)
-                .category(categoryService.findByName(ECategory.WEB_DESIGN))
+                .freelancer(freelancer)
+                .budget(100.50)
+                .categories(List.of(categoryService.findByName(ECategory.WEB_DESIGN)))
                 .status(ProjectStatus.OPEN)
                 .location("Kyiv")
-                .datePosted(OffsetDateTime.now())
+                .projectType(ProjectType.FIXED)
                 .dueDate(OffsetDateTime.now().plusDays(7))
+                .employer(employer)
                 .build();
 
-        projectRepository.save(project);
+        projectRepository.save(projectFixed);
+
+        val projectBid = Project.builder()
+                .title("Test projectBid")
+                .description("Test description")
+                .shortDescription("Test short description")
+                .freelancer(freelancer)
+                .categories(List.of(categoryService.findByName(ECategory.WEB_DESIGN)))
+                .status(ProjectStatus.OPEN)
+                .location("Kyiv")
+                .projectType(ProjectType.BID)
+                .dueDate(OffsetDateTime.now().plusDays(7))
+                .employer(employer)
+                .build();
 
         val bids = new ArrayList<Bid>();
         for (int i = 0; i < 5; i++) {
             Bid bid = Bid.builder()
-                    .amount(50 + i * 10)
-                    .freelancer(client)
-                    .project(project)
-                    .bidStatus(BidStatus.NEW)
+                    .amount(50.0 + i * 10)
+                    .bidder(freelancer)
+                    .project(projectBid)
+                    .status(BidStatus.NEW)
                     .datePosted(OffsetDateTime.now())
                     .build();
             bids.add(bid);
         }
 
-        bidRepository.saveAll(bids);
+        val bidWithShortCoverLetter = Bid.builder()
+                .amount(100.0)
+                .bidder(freelancer)
+                .project(projectBid)
+                .status(BidStatus.NEW)
+                .datePosted(OffsetDateTime.now())
+                .shortCoverLetter("Short cover letter")
+                .build();
 
-        project.setBids(bids);
+        val bidWithShortCoverLetter2 = Bid.builder()
+                .amount(100.0)
+                .bidder(freelancer)
+                .project(projectBid)
+                .status(BidStatus.NEW)
+                .datePosted(OffsetDateTime.now())
+                .shortCoverLetter("Short but no so short cover letter, a bit longer than the previous one")
+                .build();
 
+        bids.add(bidWithShortCoverLetter);
+        bids.add(bidWithShortCoverLetter2);
+        projectBid.setBids(bids);
+        projectRepository.save(projectBid);
 
+        val serviceDao = ServiceDao.builder()
+                .title("Test service")
+                .description("Test description")
+                .freelancer(freelancer)
+                .price(100)
+                .category(categoryService.findByName(ECategory.WEB_DESIGN))
+                .rating(4.6)
+                .ratingCount(10)
+                .location("Kyiv")
+                .build();
 
-//        List<Client> clients = new ArrayList<>();
-//        for (int i = 0; i < NUMBER_OF_CLIENTS; i++) {
-//            Faker faker = new Faker();
-//            Client client = new Client(
-//                    faker.name().fullName(),
-//                    faker.internet().emailAddress(),
-//                    encoder.encode(faker.internet().password()));
-//            clients.add(client);
-//        }
-//
-//        clientRepository.saveAll(clients);
+        serviceRepository.save(serviceDao);
     }
 
     public static <T extends Enum<?>> T getRandomEnum(Class<T> enumeration) {

@@ -6,9 +6,10 @@ export enum BidStatus {
 }
 
 export enum ERole {
-    ROLE_CLIENT = "ROLE_CLIENT",
+    ROLE_EMPLOYER = "ROLE_EMPLOYER",
     ROLE_FREELANCER = "ROLE_FREELANCER",
-    ROLE_ADMIN = "ROLE_ADMIN"
+    ROLE_ADMIN = "ROLE_ADMIN",
+    ROLE_UNVERIFIED = "ROLE_UNVERIFIED"
 }
 
 export enum Category {
@@ -34,5 +35,17 @@ export enum ProjectStatus {
     OPEN = "OPEN",
     IN_PROGRESS = "IN_PROGRESS",
     CLOSED = "CLOSED"
+}
+
+export enum FilterType {
+    PROJETCS = "PROJETCS",
+    SERVICES = "SERVICES",
+    FREELANCERS = "FREELANCERS",
+    BIDS = "BIDS"
+}
+
+export enum ProjectType {
+    FIXED = "FIXED",
+    BID = "BID"
 }
 
