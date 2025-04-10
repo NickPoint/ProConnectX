@@ -1,5 +1,4 @@
-import Grid from "@mui/material/Grid2"
-import {Typography} from "@mui/material";
+import {Grid, Typography} from "@mui/material"
 import {useAppDispatch} from "../../hooks";
 import {BidCardDto, useGetFilteredBidsQuery} from "../../../features/api/pcxApi";
 import {useParams} from "react-router-dom";

@@ -1,84 +1,6 @@
 import { emptySplitApi as api } from "./emptyApi"
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
-    listAllFormsOfMetadata1: build.query<
-      ListAllFormsOfMetadata1ApiResponse,
-      ListAllFormsOfMetadata1ApiArg
-    >({
-      query: () => ({ url: `/profile` }),
-    }),
-    descriptor111: build.query<Descriptor111ApiResponse, Descriptor111ApiArg>({
-      query: () => ({ url: `/profile/uploadedFiles` }),
-    }),
-    getUploadedFiles: build.query<
-      GetUploadedFilesApiResponse,
-      GetUploadedFilesApiArg
-    >({
-      query: queryArg => ({
-        url: `/uploadedFiles`,
-        params: {
-          page: queryArg.page,
-          size: queryArg.size,
-          sort: queryArg.sort,
-        },
-      }),
-    }),
-    postUploadedFiles: build.mutation<
-      PostUploadedFilesApiResponse,
-      PostUploadedFilesApiArg
-    >({
-      query: queryArg => ({
-        url: `/uploadedFiles`,
-        method: "POST",
-        body: queryArg.uploadedFileRequestBody,
-      }),
-    }),
-    getUploadedFilesSearchFindAllByPrincipal: build.query<
-      GetUploadedFilesSearchFindAllByPrincipalApiResponse,
-      GetUploadedFilesSearchFindAllByPrincipalApiArg
-    >({
-      query: queryArg => ({
-        url: `/uploadedFiles/search/findAllByPrincipal`,
-        params: {
-          principal: queryArg.principal,
-        },
-      }),
-    }),
-    getUploadedFilesById: build.query<
-      GetUploadedFilesByIdApiResponse,
-      GetUploadedFilesByIdApiArg
-    >({
-      query: queryArg => ({ url: `/uploadedFiles/${queryArg.id}` }),
-    }),
-    putUploadedFilesById: build.mutation<
-      PutUploadedFilesByIdApiResponse,
-      PutUploadedFilesByIdApiArg
-    >({
-      query: queryArg => ({
-        url: `/uploadedFiles/${queryArg.id}`,
-        method: "PUT",
-        body: queryArg.uploadedFileRequestBody,
-      }),
-    }),
-    deleteUploadedFilesById: build.mutation<
-      DeleteUploadedFilesByIdApiResponse,
-      DeleteUploadedFilesByIdApiArg
-    >({
-      query: queryArg => ({
-        url: `/uploadedFiles/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-    patchUploadedFilesById: build.mutation<
-      PatchUploadedFilesByIdApiResponse,
-      PatchUploadedFilesByIdApiArg
-    >({
-      query: queryArg => ({
-        url: `/uploadedFiles/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.uploadedFileRequestBody,
-      }),
-    }),
     reviewBid: build.mutation<ReviewBidApiResponse, ReviewBidApiArg>({
       query: queryArg => ({
         url: `/bid/review/${queryArg.projectId}/${queryArg.bidId}`,
@@ -135,6 +57,13 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/project/filter`,
         method: "POST",
         body: queryArg.projectFilter,
+      }),
+    }),
+    bookService: build.mutation<BookServiceApiResponse, BookServiceApiArg>({
+      query: queryArg => ({
+        url: `/orders/book/${queryArg.serviceId}`,
+        method: "POST",
+        body: queryArg.body,
       }),
     }),
     getFilteredFreelancers: build.mutation<
@@ -223,6 +152,9 @@ const injectedRtkApi = api.injectEndpoints({
     getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
       query: queryArg => ({ url: `/project/${queryArg.projectId}` }),
     }),
+    getOrder: build.query<GetOrderApiResponse, GetOrderApiArg>({
+      query: queryArg => ({ url: `/orders/${queryArg.orderId}` }),
+    }),
     getFreelancerProfile: build.query<
       GetFreelancerProfileApiResponse,
       GetFreelancerProfileApiArg
@@ -268,53 +200,6 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 })
 export { injectedRtkApi as pcxApi }
-export type ListAllFormsOfMetadata1ApiResponse =
-  /** status 200 OK */ RepresentationModelObject
-export type ListAllFormsOfMetadata1ApiArg = void
-export type Descriptor111ApiResponse = /** status 200 OK */ string
-export type Descriptor111ApiArg = void
-export type GetUploadedFilesApiResponse =
-  /** status 200 OK */ PagedModelEntityModelUploadedFile
-export type GetUploadedFilesApiArg = {
-  /** Zero-based page index (0..N) */
-  page?: number
-  /** The size of the page to be returned */
-  size?: number
-  /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-  sort?: string[]
-}
-export type PostUploadedFilesApiResponse =
-  /** status 201 Created */ EntityModelUploadedFile
-export type PostUploadedFilesApiArg = {
-  uploadedFileRequestBody: UploadedFileRequestBody
-}
-export type GetUploadedFilesSearchFindAllByPrincipalApiResponse =
-  /** status 200 OK */ CollectionModelEntityModelUploadedFile
-export type GetUploadedFilesSearchFindAllByPrincipalApiArg = {
-  principal?: Principal
-}
-export type GetUploadedFilesByIdApiResponse =
-  /** status 200 OK */ EntityModelUploadedFile
-export type GetUploadedFilesByIdApiArg = {
-  id: string
-}
-export type PutUploadedFilesByIdApiResponse = /** status 200 OK */
-  | EntityModelUploadedFile
-  | /** status 201 Created */ EntityModelUploadedFile
-export type PutUploadedFilesByIdApiArg = {
-  id: string
-  uploadedFileRequestBody: UploadedFileRequestBody
-}
-export type DeleteUploadedFilesByIdApiResponse = unknown
-export type DeleteUploadedFilesByIdApiArg = {
-  id: string
-}
-export type PatchUploadedFilesByIdApiResponse =
-  /** status 200 OK */ EntityModelUploadedFile
-export type PatchUploadedFilesByIdApiArg = {
-  id: string
-  uploadedFileRequestBody: UploadedFileRequestBody
-}
 export type ReviewBidApiResponse = /** status 200 OK */ Bid
 export type ReviewBidApiArg = {
   projectId: number
@@ -330,7 +215,7 @@ export type ApproveBidApiArg = {
   projectId: number
   bidId: number
 }
-export type CreateServiceApiResponse = /** status 200 OK */ ServiceDao
+export type CreateServiceApiResponse = /** status 200 OK */ Service
 export type CreateServiceApiArg = {
   serviceCreateDto: ServiceCreateDto
 }
@@ -347,6 +232,11 @@ export type GetFilteredProjectsApiResponse =
   /** status 200 OK */ ProjectPublicDto[]
 export type GetFilteredProjectsApiArg = {
   projectFilter: ProjectFilter
+}
+export type BookServiceApiResponse = /** status 200 OK */ MessageResponse
+export type BookServiceApiArg = {
+  serviceId: number
+  body: string
 }
 export type GetFilteredFreelancersApiResponse =
   /** status 200 OK */ FreelancerFilterResponse[]
@@ -368,7 +258,7 @@ export type MakeBidApiArg = {
 }
 export type SwitchRoleApiResponse = /** status 200 OK */ object
 export type SwitchRoleApiArg = {
-  role: string
+  role: ERole
 }
 export type RegisterUserApiResponse = /** status 200 OK */ AuthResponse
 export type RegisterUserApiArg = {
@@ -388,7 +278,7 @@ export type AllAccessApiResponse = /** status 200 OK */ string
 export type AllAccessApiArg = void
 export type AdminAccessApiResponse = /** status 200 OK */ string
 export type AdminAccessApiArg = void
-export type GetServiceApiResponse = /** status 200 OK */ ServiceDao
+export type GetServiceApiResponse = /** status 200 OK */ ServiceDto
 export type GetServiceApiArg = {
   id: number
 }
@@ -397,6 +287,10 @@ export type GetProjectApiResponse = /** status 200 Project owner info found */
   | /** status 203 Project public info found */ ProjectPublicDto
 export type GetProjectApiArg = {
   projectId: number
+}
+export type GetOrderApiResponse = /** status 200 OK */ OrderDto
+export type GetOrderApiArg = {
+  orderId: number
 }
 export type GetFreelancerProfileApiResponse = /** status 200 OK */ Freelancer
 export type GetFreelancerProfileApiArg = {
@@ -411,7 +305,7 @@ export type DownloadFileApiArg = {
 }
 export type GetEmployerApiResponse = /** status 200 OK */ EmployerResponseDto
 export type GetEmployerApiArg = void
-export type GetFilteredBidsApiResponse = /** status 200 OK */ BidCardDto[]
+export type GetFilteredBidsApiResponse = /** status 200 OK */ BidDto[]
 export type GetFilteredBidsApiArg = {
   projectId: number
   rating?: number
@@ -423,42 +317,51 @@ export type GetFilteredBidsApiArg = {
 }
 export type GetCurrentUserApiResponse = /** status 200 OK */ AuthResponse
 export type GetCurrentUserApiArg = void
-export type Link = {
-  href?: string
-  hreflang?: string
-  title?: string
-  type?: string
-  deprecation?: string
-  profile?: string
-  name?: string
-  templated?: boolean
+export type Address = {
+  id?: number
+  country: string
+  city: string
+  street: string
+  postalCode: string
+  houseNumber: string
+  region: string
 }
-export type Links = {
-  [key: string]: Link
-}
-export type RepresentationModelObject = {
-  _links?: Links
+export type Category = {
+  id?: number
+  name?: CategoryType
 }
 export type Role = {
   id?: number
   name?: ERole
 }
-export type Category = {
+export type Client = {
   id?: number
-  name?: ECategory
+  principal?: Principal
+  address?: Address
+  firstName: string
+  lastName: string
+  rating?: number
 }
-export type Employer = {
+export type Principal = {
   id?: number
-  companyName: string
-  description?: string
-  country: string
-  registrationCode: string
   email?: string
+  password: string
+  roles?: Role[]
+  freelancer?: Freelancer
+  employer?: Employer
+  client?: Client
+}
+export type Freelancer = {
+  id?: number
+  address: Address
+  description?: string
+  firstName: string
+  lastName: string
   phoneNumber: string
   profilePicture?: string
-  address: string
   rating?: number
   ratingCount?: number
+  categories?: Category[]
   accountStatus: AccountStatus
   documents?: Document[]
   principal: Principal
@@ -474,73 +377,24 @@ export type Document = {
   verified: boolean
   uploadedDate: string
 }
-export type Freelancer = {
+export type Employer = {
   id?: number
+  address: Address
+  companyName?: string
+  firstName?: string
+  lastName?: string
   description?: string
-  firstName: string
-  lastName: string
-  country: string
+  registrationCode?: string
+  email?: string
   phoneNumber: string
   profilePicture?: string
-  address?: string
   rating?: number
   ratingCount?: number
-  categories?: Category[]
   accountStatus: AccountStatus
   documents?: Document[]
   principal: Principal
   registrationDate: string
   activationDate?: string
-}
-export type Principal = {
-  id?: number
-  email?: string
-  firstName: string
-  lastName: string
-  password: string
-  roles?: Role[]
-  freelancer?: Freelancer
-  employer?: Employer
-}
-export type EntityModelUploadedFile = {
-  type: string
-  documentType?: DocumentType
-  path: string
-  fileName: string
-  verified?: boolean
-  uploadDate: string
-  principal?: Principal
-  id?: number
-  _links?: Links
-}
-export type PageMetadata = {
-  size?: number
-  totalElements?: number
-  totalPages?: number
-  number?: number
-}
-export type PagedModelEntityModelUploadedFile = {
-  _embedded?: {
-    uploadedFiles?: EntityModelUploadedFile[]
-  }
-  _links?: Links
-  page?: PageMetadata
-}
-export type UploadedFileRequestBody = {
-  type: string
-  documentType?: DocumentType
-  path: string
-  fileName: string
-  verified?: boolean
-  uploadDate: string
-  principal?: Principal
-  id?: number
-}
-export type CollectionModelEntityModelUploadedFile = {
-  _embedded?: {
-    uploadedFiles?: EntityModelUploadedFile[]
-  }
-  _links?: Links
 }
 export type Project = {
   id?: number
@@ -560,17 +414,29 @@ export type Project = {
   datePosted: string
   dueDate?: string
 }
+export type File = {
+  type: string
+  documentType?: DocumentType
+  path: string
+  fileName: string
+  verified?: boolean
+  uploadDate: string
+  principal?: Principal
+  id?: number
+}
 export type Bid = {
   id?: number
-  project?: Project
-  bidder?: Freelancer
-  amount?: number
+  project: Project
+  freelancer: Freelancer
+  amount: number
   status?: BidStatus
-  coverLetter?: string
-  shortCoverLetter?: string
-  datePosted?: string
-  dateSubmitted?: string
-  dueDate?: string
+  coverLetter: string
+  submittedAt: string
+  estimatedCompletionDate?: string
+  attachments?: File[]
+  milestones?: {
+    [key: string]: object
+  }
 }
 export type FormValidationResponse = {
   message: string
@@ -583,31 +449,31 @@ export type ErrorMessage = {
   message?: string
 }
 export type Comment = object
-export type ServiceDao = {
+export type Service = {
   id?: number
+  freelancer?: Freelancer
   title?: string
   description?: string
   price?: number
-  freelancer?: Freelancer
   comments?: Comment[]
   location?: string
-  category?: Category
+  category?: CategoryType
   rating?: number
   ratingCount?: number
-  datePosted?: string
+  postedAt?: string
 }
 export type ServiceCreateDto = {
   title: string
   description: string
   price: number
   location: string
-  category: ECategory
+  category: CategoryType
 }
-export type FreelancerMainInfo = {
-  id?: number
-  firstName?: string
-  lastName?: string
-  profilePicture?: string
+export type FreelancerDto = {
+  id: number
+  firstName: string
+  lastName: string
+  avatarUrl?: string
   rating?: number
   ratingCount?: number
 }
@@ -619,12 +485,12 @@ export type ServiceFilterResponse = {
   rating?: number
   ratingCount?: number
   price?: number
-  freelancer?: FreelancerMainInfo
-  category?: ECategory
+  freelancer?: FreelancerDto
+  category?: CategoryType
 }
 export type ServiceFilter = {
   title?: string
-  categories?: ECategory[]
+  categories?: CategoryType[]
   location?: string
   rating?: number
   minBudget?: number
@@ -634,19 +500,27 @@ export type ProjectCreateDto = {
   title: string
   description: string
   shortDescription: string
-  categories: ECategory[]
+  categories: CategoryType[]
   location: string
   projectType: ProjectType
   budget?: number
   minSatisfyingBid?: number
   bidStep?: number
 }
+export type AddressDto = {
+  street: string
+  city: string
+  region: string
+  postalCode: string
+  country: string
+  houseNumber: string
+}
 export type EmployerResponseDto = {
   id: number
   companyName: string
   registrationCode: string
   email: string
-  address: string
+  address: AddressDto
   phoneNumber: string
   country: string
   description?: string
@@ -658,7 +532,7 @@ export type ProjectPublicDto = {
   shortDescription?: string
   employer: EmployerResponseDto
   budget?: number
-  categories: ECategory[]
+  categories: CategoryType[]
   status: ProjectStatus
   location: string
   projectType: ProjectType
@@ -668,32 +542,33 @@ export type ProjectPublicDto = {
 }
 export type ProjectFilter = {
   title?: string
-  categories?: ECategory[]
+  categories?: CategoryType[]
   location?: string
   minBudget?: number
   maxBudget?: number
   type?: ProjectType
+}
+export type MessageResponse = {
+  message: string
+  entityId?: number
 }
 export type FreelancerFilterResponse = {
   id?: number
   firstName?: string
   lastName?: string
   description?: string
-  categories?: ECategory[]
-  location?: string
+  categories?: CategoryType[]
+  addressDto?: AddressDto
   rating?: number
   ratingCount?: number
 }
 export type FreelancerFilter = {
   firstName?: string
   lastName?: string
-  categories?: ECategory[]
-  location?: string
+  categories?: CategoryType[]
+  country?: string
+  city?: string
   rating?: number
-}
-export type MessageResponse = {
-  message: string
-  entityId?: number
 }
 export type FileUploadRequest = {
   documentType: DocumentType
@@ -703,9 +578,8 @@ export type EmployerRegistrationRequest = {
   companyName: string
   registrationCode: string
   email: string
-  address: string
+  address: AddressDto
   phoneNumber: string
-  country: string
   description?: string
 }
 export type FormResponse = {
@@ -715,18 +589,15 @@ export type FormResponse = {
 export type BidRequest = {
   amount: number
   coverLetter?: string
-  shortCoverLetter?: string
-  dueDate?: string
+  estimatedCompletionDate?: string
 }
 export type AuthResponse = {
   firstName: string
   lastName: string
-  roles: string[]
-  activeRole: string
+  roles: ERole[]
+  activeRole: ERole
 }
 export type SignupFormRequest = {
-  firstName: string
-  lastName: string
   email: string
   password: string
   role: string
@@ -735,15 +606,48 @@ export type LoginRequest = {
   email: string
   password: string
 }
-export type BidCardDto = {
+export type ClientDto = {
   id: number
+  address: AddressDto
+  firstName: string
+  lastName: string
+  rating: number
+}
+export type EmployerMainInfo = {
+  id?: number
+  companyName?: string
+  profilePicture?: string
+  rating?: number
+  ratingCount?: number
+}
+export type CommentDto = {
+  id: number
+  client?: ClientDto
+  employer?: EmployerMainInfo
+  freelancer?: FreelancerDto
+  body?: string
+}
+export type ServiceDto = {
+  id: number
+  freelancer: FreelancerDto
+  title: string
+  description: string
+  price: number
+  comments: CommentDto[]
+  location: string
+  category: CategoryType
+  rating: number
+  ratingCount: number
+  postedAt: string
+}
+export type BidDto = {
+  id: number
+  freelancer: FreelancerDto
   amount: number
-  bidder: FreelancerMainInfo
-  coverLetter?: string
-  shortCoverLetter?: string
   status: BidStatus
-  dueDate?: string
-  datePosted: string
+  coverLetter: string
+  submittedAt: string
+  estimatedCompletionDate: string
 }
 export type ProjectOwnerDto = {
   id: number
@@ -752,14 +656,31 @@ export type ProjectOwnerDto = {
   shortDescription?: string
   employer: EmployerResponseDto
   budget?: number
-  categories: ECategory[]
+  categories: CategoryType[]
   status: ProjectStatus
   location: string
   projectType: ProjectType
   bidCount?: number
   maxBid?: number
   dueDate?: string
-  bids: BidCardDto[]
+  bids: BidDto[]
+}
+export type EventDto = {
+  id: number
+  clientId?: number
+  freelancerId?: number
+  type: Type
+  createdAt: string
+}
+export type OrderDto = {
+  id: number
+  acceptedBid?: BidDto
+  service?: ServiceDto
+  client?: ClientDto
+  status: Status
+  events: EventDto[]
+  createdAt: string
+  completedAt?: string
 }
 export type FileResponseDto = {
   id: number
@@ -768,22 +689,15 @@ export type FileResponseDto = {
   uploadDate: string
   verified: boolean
 }
-export enum DocumentType {
-  IdCard = "ID_CARD",
-  Passport = "PASSPORT",
-  DrivingLicense = "DRIVING_LICENSE",
-  BusinessLicense = "BUSINESS_LICENSE",
-  CompanyRegistration = "COMPANY_REGISTRATION",
-  BankStatement = "BANK_STATEMENT",
-  Other = "OTHER",
+export enum AccountStatus {
+  Unverified = "UNVERIFIED",
+  Pending = "PENDING",
+  Active = "ACTIVE",
+  Inactive = "INACTIVE",
+  Deleted = "DELETED",
+  Banned = "BANNED",
 }
-export enum ERole {
-  RoleEmployer = "ROLE_EMPLOYER",
-  RoleFreelancer = "ROLE_FREELANCER",
-  RoleAdmin = "ROLE_ADMIN",
-  RoleUnverified = "ROLE_UNVERIFIED",
-}
-export enum ECategory {
+export enum CategoryType {
   WebDesign = "WEB_DESIGN",
   WebDevelopment = "WEB_DEVELOPMENT",
   MobileDevelopment = "MOBILE_DEVELOPMENT",
@@ -801,13 +715,21 @@ export enum ECategory {
   Legal = "LEGAL",
   Other = "OTHER",
 }
-export enum AccountStatus {
-  Unverified = "UNVERIFIED",
-  Pending = "PENDING",
-  Active = "ACTIVE",
-  Inactive = "INACTIVE",
-  Deleted = "DELETED",
-  Banned = "BANNED",
+export enum ERole {
+  RoleEmployer = "ROLE_EMPLOYER",
+  RoleFreelancer = "ROLE_FREELANCER",
+  RoleAdmin = "ROLE_ADMIN",
+  RoleUnverified = "ROLE_UNVERIFIED",
+  RoleClient = "ROLE_CLIENT",
+}
+export enum DocumentType {
+  IdCard = "ID_CARD",
+  Passport = "PASSPORT",
+  DrivingLicense = "DRIVING_LICENSE",
+  BusinessLicense = "BUSINESS_LICENSE",
+  CompanyRegistration = "COMPANY_REGISTRATION",
+  BankStatement = "BANK_STATEMENT",
+  Other = "OTHER",
 }
 export enum ProjectStatus {
   Open = "OPEN",
@@ -824,16 +746,28 @@ export enum BidStatus {
   Approved = "APPROVED",
   Declined = "DECLINED",
 }
+export enum Status {
+  Created = "CREATED",
+  InProgress = "IN_PROGRESS",
+  Completed = "COMPLETED",
+  Canceled = "CANCELED",
+}
+export enum Type {
+  OrderCreated = "ORDER_CREATED",
+  OrderCanceled = "ORDER_CANCELED",
+  OrderCompleted = "ORDER_COMPLETED",
+  OrderPaid = "ORDER_PAID",
+  OrderDisputed = "ORDER_DISPUTED",
+  OrderReviewed = "ORDER_REVIEWED",
+  OrderAccepted = "ORDER_ACCEPTED",
+  OrderDeclined = "ORDER_DECLINED",
+  OrderInProgress = "ORDER_IN_PROGRESS",
+  OrderDelivered = "ORDER_DELIVERED",
+  OrderRefunded = "ORDER_REFUNDED",
+  OrderModified = "ORDER_MODIFIED",
+  OrderResolved = "ORDER_RESOLVED",
+}
 export const {
-  useListAllFormsOfMetadata1Query,
-  useDescriptor111Query,
-  useGetUploadedFilesQuery,
-  usePostUploadedFilesMutation,
-  useGetUploadedFilesSearchFindAllByPrincipalQuery,
-  useGetUploadedFilesByIdQuery,
-  usePutUploadedFilesByIdMutation,
-  useDeleteUploadedFilesByIdMutation,
-  usePatchUploadedFilesByIdMutation,
   useReviewBidMutation,
   useDeclineBidMutation,
   useApproveBidMutation,
@@ -841,6 +775,7 @@ export const {
   useGetFilteredServicesMutation,
   useCreateProjectMutation,
   useGetFilteredProjectsMutation,
+  useBookServiceMutation,
   useGetFilteredFreelancersMutation,
   useUploadFileMutation,
   useRegisterEmployerMutation,
@@ -855,6 +790,7 @@ export const {
   useAdminAccessQuery,
   useGetServiceQuery,
   useGetProjectQuery,
+  useGetOrderQuery,
   useGetFreelancerProfileQuery,
   useGetPrincipalFilesQuery,
   useDownloadFileQuery,

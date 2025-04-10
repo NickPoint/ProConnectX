@@ -10,11 +10,11 @@ import lombok.ToString;
 @ToString
 public class SignupFormRequest {
 
-    @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String lastName;
+//    @NotBlank
+//    private String firstName;
+//
+//    @NotBlank
+//    private String lastName;
 
     @NotBlank
     @Size(max = 50)

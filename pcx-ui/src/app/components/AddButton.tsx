@@ -1,10 +1,7 @@
 import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import { useAppSelector } from '../hooks';
-import { Fab } from '@mui/material';
+import {Fab} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import {userHasRole} from "../../features/auth/authSlice";
-import {ERole} from "../../features/enums";
 import {styled} from "@mui/material/styles";
 
 const StyledFab = styled(Fab)({

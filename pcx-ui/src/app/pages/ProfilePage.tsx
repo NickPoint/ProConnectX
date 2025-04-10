@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
+import {Box, Container, Typography} from '@mui/material';
 import {useAppSelector} from "../hooks";
 import {selectUser} from "../../features/auth/authSlice";
 

@@ -1,9 +1,9 @@
+import * as React from "react";
 import {FC} from "react";
 import {FreelancerFilterResponse} from "../../../features/api/pcxApi";
 import {Box, Chip, Paper, Typography} from "@mui/material";
-import Grid from "@mui/material/Grid2"
+import Grid from "@mui/material/Grid"
 import {Star} from "@mui/icons-material";
-import * as React from "react";
 
 const FreelancerCard: FC<FreelancerFilterResponse> = (props) => {
 

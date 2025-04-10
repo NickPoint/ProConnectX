@@ -1,7 +1,7 @@
-import type { ConfigFile } from '@rtk-query/codegen-openapi'
+import type {ConfigFile} from '@rtk-query/codegen-openapi'
 
 const config: ConfigFile = {
-    schemaFile: 'http://localhost:3000/api/v3/api-docs',
+    schemaFile: 'http://192.168.178.107:3000/api/v3/api-docs',
     apiFile: './emptyApi.ts',
     apiImport: 'emptySplitApi',
     outputFile: './pcxApi.ts',

@@ -1,4 +1,3 @@
-import Grid from "@mui/material/Grid2"
 import {Avatar, Box, Typography} from "@mui/material";
 
 interface ClientInfoProps {

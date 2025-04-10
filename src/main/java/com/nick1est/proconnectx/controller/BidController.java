@@ -4,7 +4,7 @@ import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.BidStatus;
 import com.nick1est.proconnectx.dao.Employer;
 import com.nick1est.proconnectx.dao.Bid;
-import com.nick1est.proconnectx.dto.BidCardDto;
+import com.nick1est.proconnectx.dto.BidDto;
 import com.nick1est.proconnectx.dto.BidRequest;
 import com.nick1est.proconnectx.dto.FormResponse;
 import com.nick1est.proconnectx.service.ProjectService;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,9 @@ public class BidController {
     @PostMapping("{projectId}")
     @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    public FormResponse makeBid(@RequestBody BidRequest bidRequest, @PathVariable Long projectId) {
-        bidService.makeBid(projectId, bidRequest);
+    public FormResponse makeBid(@PathVariable Long projectId, @RequestBody BidRequest bidRequest,
+                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        bidService.makeBid(projectId, userDetails.getFreelancer(), bidRequest);
         return new FormResponse("Bid has been successfully made", true);
     }
 
@@ -63,13 +65,13 @@ public class BidController {
     @GetMapping("/filter")
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    public List<BidCardDto> getFilteredBids(@RequestParam Long projectId,
-                                            @RequestParam(required = false) Integer rating,
-                                            @RequestParam(required = false) String firstName,
-                                            @RequestParam(required = false) String lastName,
-                                            @RequestParam(required = false) Integer minPrice,
-                                            @RequestParam(required = false) Integer maxPrice,
-                                            @RequestParam(required = false) List<BidStatus> statuses) {
+    public List<BidDto> getFilteredBids(@RequestParam Long projectId,
+                                        @RequestParam(required = false) Integer rating,
+                                        @RequestParam(required = false) String firstName,
+                                        @RequestParam(required = false) String lastName,
+                                        @RequestParam(required = false) Integer minPrice,
+                                        @RequestParam(required = false) Integer maxPrice,
+                                        @RequestParam(required = false) List<BidStatus> statuses) {
         checkOwnership(projectId);
         return bidService.findFilteredBids(projectId, rating, firstName, lastName, minPrice, maxPrice, statuses);
     }

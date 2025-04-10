@@ -13,15 +13,17 @@ import java.util.List;
 @RepositoryRestResource(exported = false)
 public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
     @Query("SELECT freelancer FROM Freelancer freelancer " +
-            "WHERE (:firstName is null or freelancer.principal.firstName ILIKE %:firstName%) " +
-            "AND (:lastName is null or freelancer.principal.lastName ILIKE %:lastName%) " +
+            "WHERE (:firstName is null or freelancer.firstName ILIKE %:firstName%) " +
+            "AND (:lastName is null or freelancer.lastName ILIKE %:lastName%) " +
             "AND (:categories is null or EXISTS (SELECT 1 FROM freelancer.categories category WHERE category IN :categories)) " +
-            "AND (:location is null or freelancer.country = :country) " +
+            "AND (:country is null or freelancer.address.country = :country) " +
+            "AND (:city is null or freelancer.address.city = :city) " +
             "AND (:rating is null or freelancer.ratingCount > 5 and freelancer.rating >= :rating or freelancer.ratingCount <= 5)")
     List<Freelancer> findByNameAndFieldAndLocationAndRating(@Param("firstName") String firstName,
                                                         @Param("lastName") String lastName,
                                                         @Param("categories") List<Category> categories,
                                                         @Param("country") String country,
+                                                        @Param("city") String city,
                                                         @Param("rating") Double rating);
 
 }

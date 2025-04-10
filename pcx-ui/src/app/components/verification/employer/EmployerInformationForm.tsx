@@ -1,6 +1,6 @@
 import {Field} from "formik";
 import {TextField} from "formik-mui";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 const EmployerInformationForm = () => {
     return (

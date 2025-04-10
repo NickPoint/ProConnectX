@@ -1,14 +1,8 @@
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch} from "../../hooks";
 import {setData, setLoading} from "../../../features/filter/filterSlice";
 import {useGetFilteredServicesMutation} from "../../../features/api/pcxApi";
-import {
-    debounce, IconButton,
-    MenuItem,
-    Select,
-    Slider, SwipeableDrawer,
-    Typography
-} from "@mui/material";
-import Grid from "@mui/material/Grid2"
+import {debounce, Fab, IconButton, MenuItem, Select, Slider, SwipeableDrawer, Typography} from "@mui/material";
+import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField";
 import {Category} from "../../../features/enums";
 import * as React from "react";
@@ -21,6 +15,8 @@ import theme from "../../theme/theme";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {replaceEmptyStringsWithNull} from "../../../features/filter/formikHelper";
+import GenericSearch from "../GenericSearch.tsx";
+import AddIcon from "@mui/icons-material/Add";
 
 interface FilterValues {
     title: string;
@@ -48,6 +44,12 @@ const DrawerHeader = styled('div')(({theme}) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
+}));
+
+const StyledFab = styled(Fab)(({theme}) => ({
+    position: 'fixed',
+    bottom: theme.spacing(10),
+    right: theme.spacing(2),
 }));
 
 
@@ -81,8 +83,7 @@ const ServicesFilter = () => {
     }, [formik.values]);
 
     return (<>
-        <Button
-            onClick={() => setOpened(true)} startIcon={<FilterAlt/>}>Filter</Button>
+        <GenericSearch filterButtonVisible onClick={() => setOpened(true)}/>
         <SwipeableDrawer
             anchor="right"
             open={opened}

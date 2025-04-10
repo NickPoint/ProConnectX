@@ -1,14 +1,8 @@
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch} from "../../hooks";
 import {setData, setLoading} from "../../../features/filter/filterSlice";
-import {useGetFilteredFreelancersMutation, useGetFilteredServicesMutation} from "../../../features/api/pcxApi";
-import {
-    debounce, IconButton,
-    MenuItem,
-    Select,
-    Slider, SwipeableDrawer,
-    Typography
-} from "@mui/material";
-import Grid from "@mui/material/Grid2"
+import {useGetFilteredFreelancersMutation} from "../../../features/api/pcxApi";
+import {debounce, IconButton, MenuItem, Select, Slider, SwipeableDrawer, Typography} from "@mui/material";
+import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField";
 import {Category} from "../../../features/enums";
 import * as React from "react";

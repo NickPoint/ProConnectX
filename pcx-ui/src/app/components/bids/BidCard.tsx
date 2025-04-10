@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid2"
+import Grid from "@mui/material/Grid"
 import {Divider, Paper, Typography} from "@mui/material";
 import {BidCardDto} from "../../../features/api/pcxApi";
 import Rating from "../Rating";

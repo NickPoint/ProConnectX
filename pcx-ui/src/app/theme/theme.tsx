@@ -1,6 +1,6 @@
 import {createTheme, responsiveFontSizes, styled} from '@mui/material/styles';
 import {grey, red} from "@mui/material/colors";
-import {Grid2 as Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 
 // A custom theme for this app
 let theme = createTheme({
@@ -21,9 +21,15 @@ let theme = createTheme({
     },
     typography: {
         fontFamily: [
-            "Space Grotesk",
+            "Inter",
             "sans-serif"
         ].join(','),
+        h3: {
+            fontWeight: 700,
+        },
+        h4: {
+            fontWeight: 500,
+        },
         body2: {
             color: grey[400]
         }
@@ -40,15 +46,36 @@ let theme = createTheme({
     components: {
         MuiOutlinedInput : {
             styleOverrides: {
-                root: {
-                    borderRadius: 28,
-                }
+                root: ({theme}) => ({
+                    borderRadius: theme.spacing(4),
+                })
             },
         },
         MuiCard: {
             styleOverrides: {
+                root: ({theme}) => ({
+                    borderRadius: theme.spacing(2),
+                })
+            }
+        },
+        MuiFab: {
+            styleOverrides: {
                 root: {
-                    borderRadius: 16,
+                    variants: [{
+                        props: {variant: 'extended', size: 'large'},
+                        style: ({theme}) => ({
+                            paddingInline: theme.spacing(6),
+                        }),
+                    }]
+                }
+            }
+        },
+        MuiAppBar: {
+            styleOverrides: {
+                root: {
+                    variants: [{
+                        props: {variant: 'transparent', color: 'inherit'},
+                    }]
                 }
             }
         }

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useColorScheme } from '@mui/material/styles';
+import {useColorScheme} from '@mui/material/styles';
 
 export default function ColorModeIconDropdown() {
     const { mode, systemMode, setMode } = useColorScheme();

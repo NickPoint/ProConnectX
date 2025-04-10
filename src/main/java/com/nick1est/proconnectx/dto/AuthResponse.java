@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nick1est.proconnectx.dao.ERole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AuthResponse {
     @NotNull
     @JsonIgnore
@@ -20,7 +22,7 @@ public class AuthResponse {
     @NotBlank
     private final String lastName;
     @NotNull
-    private final Set<String> roles;
+    private final Set<ERole> roles;
     @NotBlank
-    private final String activeRole;
+    private final ERole activeRole;
 }

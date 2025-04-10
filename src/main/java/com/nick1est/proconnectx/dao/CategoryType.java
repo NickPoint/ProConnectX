@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 @Schema(enumAsRef = true)
-public enum ECategory {
+public enum CategoryType {
 
     WEB_DESIGN("Web Design"),
     WEB_DEVELOPMENT("Web Development"),
@@ -18,7 +18,7 @@ public enum ECategory {
     TRANSLATION("Translation"),
     MARKETING("Marketing"),
     SALES("Sales"),
-    CUSTOMER_SERVICE("Customer ServiceDao"),
+    CUSTOMER_SERVICE("Customer Service"),
     ADMIN_SUPPORT("Admin Support"),
     DATA_SCIENCE("Data Science"),
     ENGINEERING("Engineering"),

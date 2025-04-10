@@ -1,0 +1,17 @@
+package com.nick1est.proconnectx.dao;
+
+public enum EventType {
+    ORDER_CREATED,
+    ORDER_CANCELED,
+    ORDER_COMPLETED,
+    ORDER_PAID,
+    ORDER_DISPUTED,
+    ORDER_REVIEWED,
+    ORDER_ACCEPTED,
+    ORDER_DECLINED,
+    ORDER_IN_PROGRESS,
+    ORDER_DELIVERED,
+    ORDER_REFUNDED,
+    ORDER_MODIFIED,
+    ORDER_RESOLVED,
+}

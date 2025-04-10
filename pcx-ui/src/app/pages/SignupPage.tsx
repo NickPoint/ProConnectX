@@ -5,13 +5,13 @@ import Container from '@mui/material/Container';
 import {SignupFormRequest, useRegisterUserMutation} from "../../features/api/pcxApi";
 import {object, string} from "yup";
 import {Switch, TextField} from "formik-mui";
-import {Formik, Form, Field} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import Paper from "@mui/material/Paper";
 import {styled} from "@mui/material/styles";
 import {ERole} from "../../features/enums.ts";
 import {FormControlLabel} from "@mui/material";
 import {enqueueSnackbar} from "notistack";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {useAppDispatch} from "../hooks.ts";
 import {setCredentials} from "../../features/auth/authSlice.ts";
 

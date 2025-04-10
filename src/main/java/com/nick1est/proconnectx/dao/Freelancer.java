@@ -18,6 +18,11 @@ public class Freelancer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JoinColumn(nullable = false)
+    @NotNull
+    @OneToOne
+    private Address address;
+
     @Column
     private String description;
 
@@ -31,17 +36,10 @@ public class Freelancer {
 
     @Column(nullable = false)
     @NotBlank
-    private String country;
-
-    @Column(nullable = false)
-    @NotBlank
     private String phoneNumber;
 
     @Column
     private String profilePicture;
-
-    @Column
-    private String address;
 
     @Range(min = 0, max = 5)
     private Double rating;

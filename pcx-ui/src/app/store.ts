@@ -1,6 +1,6 @@
-import type { Action, ThunkAction } from "@reduxjs/toolkit"
-import { combineSlices, configureStore } from "@reduxjs/toolkit"
-import { setupListeners } from "@reduxjs/toolkit/query"
+import type {Action, ThunkAction} from "@reduxjs/toolkit"
+import {combineSlices, configureStore} from "@reduxjs/toolkit"
+import {setupListeners} from "@reduxjs/toolkit/query"
 import {footerSlice} from "../features/footer/footerSlice"
 import {emptySplitApi} from "../features/api/emptyApi";
 import {rtkQueryErrorLogger} from "../features/middleware/errorMiddleware";
@@ -11,12 +11,13 @@ import {serviceFormSlice} from "../features/serviceForm/serviceFormSlice";
 import {filterSlice} from "../features/filter/filterSlice";
 import {headerSlice} from "../features/header/headerSlice";
 import {employerVerificationSlice} from "../features/verification/verificationSlice.ts";
+import {fabSlice} from "../features/fab/fabSlice.ts";
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer =
     combineSlices(footerSlice, snackbarSlice, serviceFormSlice, filterSlice, headerSlice, emptySplitApi, authApi, authSlice,
-        employerVerificationSlice)
+        employerVerificationSlice, fabSlice)
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>
 

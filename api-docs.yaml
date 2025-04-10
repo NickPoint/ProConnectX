@@ -6,213 +6,6 @@ servers:
 - url: http://localhost:3000/api
   description: Generated server url
 paths:
-  /profile:
-    get:
-      tags:
-      - profile-controller
-      operationId: listAllFormsOfMetadata_1
-      responses:
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/RepresentationModelObject'
-  /profile/uploadedFiles:
-    get:
-      tags:
-      - profile-controller
-      operationId: descriptor_1_1_1
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
-            application/alps+json:
-              schema:
-                type: string
-            application/schema+json:
-              schema:
-                $ref: '#/components/schemas/JsonSchema'
-  /uploadedFiles:
-    get:
-      tags:
-      - uploaded-file-entity-controller
-      description: get-uploadedfile
-      operationId: getCollectionResource-uploadedfile-get_1
-      parameters:
-      - name: page
-        in: query
-        description: Zero-based page index (0..N)
-        required: false
-        schema:
-          minimum: 0
-          type: integer
-          default: 0
-      - name: size
-        in: query
-        description: The size of the page to be returned
-        required: false
-        schema:
-          minimum: 1
-          type: integer
-          default: 20
-      - name: sort
-        in: query
-        description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/PagedModelEntityModelUploadedFile'
-            application/x-spring-data-compact+json:
-              schema:
-                $ref: '#/components/schemas/PagedModelEntityModelUploadedFile'
-            text/uri-list:
-              schema:
-                type: string
-    post:
-      tags:
-      - uploaded-file-entity-controller
-      description: create-uploadedfile
-      operationId: postCollectionResource-uploadedfile-post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UploadedFileRequestBody'
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-  /uploadedFiles/search/findAllByPrincipal:
-    get:
-      tags:
-      - uploaded-file-search-controller
-      operationId: executeSearch-uploadedfile-get
-      parameters:
-      - name: principal
-        in: query
-        schema:
-          $ref: '#/components/schemas/Principal'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/CollectionModelEntityModelUploadedFile'
-        "404":
-          description: Not Found
-  /uploadedFiles/{id}:
-    get:
-      tags:
-      - uploaded-file-entity-controller
-      description: get-uploadedfile
-      operationId: getItemResource-uploadedfile-get
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-        "404":
-          description: Not Found
-    put:
-      tags:
-      - uploaded-file-entity-controller
-      description: update-uploadedfile
-      operationId: putItemResource-uploadedfile-put
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UploadedFileRequestBody'
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-        "201":
-          description: Created
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-        "204":
-          description: No Content
-    delete:
-      tags:
-      - uploaded-file-entity-controller
-      description: delete-uploadedfile
-      operationId: deleteItemResource-uploadedfile-delete
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "204":
-          description: No Content
-        "404":
-          description: Not Found
-    patch:
-      tags:
-      - uploaded-file-entity-controller
-      description: patch-uploadedfile
-      operationId: patchItemResource-uploadedfile-patch
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UploadedFileRequestBody'
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-        "204":
-          description: No Content
   /bid/review/{projectId}/{bidId}:
     put:
       tags:
@@ -232,20 +25,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -256,6 +37,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -281,20 +74,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -305,6 +86,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -330,20 +123,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -354,6 +135,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -372,20 +165,8 @@ paths:
               $ref: '#/components/schemas/ServiceCreateDto'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -396,12 +177,24 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ServiceDao'
+                $ref: '#/components/schemas/Service'
   /service/filter:
     post:
       tags:
@@ -414,20 +207,8 @@ paths:
               $ref: '#/components/schemas/ServiceFilter'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -438,6 +219,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -458,20 +251,8 @@ paths:
               $ref: '#/components/schemas/ProjectCreateDto'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -482,6 +263,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "201":
           description: Created
           content:
@@ -500,20 +293,8 @@ paths:
               $ref: '#/components/schemas/ProjectFilter'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -524,6 +305,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -532,6 +325,55 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectPublicDto'
+  /orders/book/{serviceId}:
+    post:
+      tags:
+      - order-controller
+      operationId: bookService
+      parameters:
+      - name: serviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
   /freelancer/filter:
     post:
       tags:
@@ -544,20 +386,8 @@ paths:
               $ref: '#/components/schemas/FreelancerFilter'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -568,6 +398,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -588,20 +430,8 @@ paths:
         schema:
           $ref: '#/components/schemas/FileUploadRequest'
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -612,6 +442,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -630,20 +472,8 @@ paths:
               $ref: '#/components/schemas/EmployerRegistrationRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -654,6 +484,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -679,20 +521,8 @@ paths:
               $ref: '#/components/schemas/BidRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -703,6 +533,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -719,22 +561,10 @@ paths:
         in: query
         required: true
         schema:
-          type: string
+          $ref: '#/components/schemas/ERole'
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -745,6 +575,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -763,20 +605,8 @@ paths:
               $ref: '#/components/schemas/SignupFormRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -787,6 +617,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -799,20 +641,8 @@ paths:
       - auth-controller
       operationId: logoutUser
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -823,6 +653,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -841,20 +683,8 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -865,6 +695,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -877,20 +719,8 @@ paths:
       - test-controller
       operationId: userAccess
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -901,6 +731,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -913,20 +755,8 @@ paths:
       - test-controller
       operationId: moderatorAccess
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -937,6 +767,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -949,20 +791,8 @@ paths:
       - test-controller
       operationId: allAccess
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -973,6 +803,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -985,20 +827,8 @@ paths:
       - test-controller
       operationId: adminAccess
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1009,6 +839,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1028,20 +870,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1052,12 +882,24 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ServiceDao'
+                $ref: '#/components/schemas/ServiceDto'
   /project/{projectId}:
     get:
       tags:
@@ -1071,20 +913,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1095,18 +925,73 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "203":
-          description: Project public info found
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ProjectPublicDto'
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: Project owner info found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ProjectOwnerDto'
+        "203":
+          description: Project public info found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ProjectPublicDto'
+  /orders/{orderId}:
+    get:
+      tags:
+      - order-controller
+      operationId: getOrder
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/OrderDto'
   /freelancer/profile/{id}:
     get:
       tags:
@@ -1120,20 +1005,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1144,6 +1017,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1156,20 +1041,8 @@ paths:
       - file-controller
       operationId: getPrincipalFiles
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1180,6 +1053,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1201,20 +1086,8 @@ paths:
           type: integer
           format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1225,6 +1098,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1238,20 +1123,8 @@ paths:
       - employer-controller
       operationId: getEmployer
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1262,6 +1135,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1316,20 +1201,8 @@ paths:
           items:
             $ref: '#/components/schemas/BidStatus'
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1340,6 +1213,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1347,27 +1232,15 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BidCardDto'
+                  $ref: '#/components/schemas/BidDto'
   /auth:
     get:
       tags:
       - auth-controller
       operationId: getCurrentUser
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
         "401":
           description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1378,6 +1251,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
         "200":
           description: OK
           content:
@@ -1386,6 +1271,14 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
 components:
   schemas:
+    ErrorMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        message:
+          type: string
     FormValidationResponse:
       required:
       - errors
@@ -1398,66 +1291,6 @@ components:
           type: object
           additionalProperties:
             type: string
-    ErrorMessage:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        message:
-          type: string
-    AbstractJsonSchemaPropertyObject:
-      type: object
-      properties:
-        title:
-          type: string
-        readOnly:
-          type: boolean
-    Item:
-      type: object
-      properties:
-        type:
-          type: string
-        properties:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/AbstractJsonSchemaPropertyObject'
-        requiredProperties:
-          type: array
-          items:
-            type: string
-    JsonSchema:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        properties:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/AbstractJsonSchemaPropertyObject'
-        requiredProperties:
-          type: array
-          items:
-            type: string
-        definitions:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Item'
-        type:
-          type: string
-        $schema:
-          type: string
-    Links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/Link'
-    RepresentationModelObject:
-      type: object
-      properties:
-        _links:
-          $ref: '#/components/schemas/Links'
     AccountStatus:
       type: string
       enum:
@@ -1467,6 +1300,75 @@ components:
       - INACTIVE
       - DELETED
       - BANNED
+    Address:
+      required:
+      - city
+      - country
+      - houseNumber
+      - postalCode
+      - region
+      - street
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        country:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        postalCode:
+          type: string
+        houseNumber:
+          type: string
+        region:
+          type: string
+    Bid:
+      required:
+      - amount
+      - coverLetter
+      - freelancer
+      - project
+      - submittedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        project:
+          $ref: '#/components/schemas/Project'
+        freelancer:
+          $ref: '#/components/schemas/Freelancer'
+        amount:
+          type: number
+          format: double
+        status:
+          $ref: '#/components/schemas/BidStatus'
+        coverLetter:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+        estimatedCompletionDate:
+          type: string
+          format: date-time
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        milestones:
+          type: object
+          additionalProperties:
+            type: object
+    BidStatus:
+      type: string
+      enum:
+      - NEW
+      - IN_REVIEW
+      - APPROVED
+      - DECLINED
     Category:
       type: object
       properties:
@@ -1474,7 +1376,46 @@ components:
           type: integer
           format: int64
         name:
-          $ref: '#/components/schemas/ECategory'
+          $ref: '#/components/schemas/CategoryType'
+    CategoryType:
+      type: string
+      enum:
+      - WEB_DESIGN
+      - WEB_DEVELOPMENT
+      - MOBILE_DEVELOPMENT
+      - GRAPHIC_DESIGN
+      - VIDEO_EDITING
+      - WRITING
+      - TRANSLATION
+      - MARKETING
+      - SALES
+      - CUSTOMER_SERVICE
+      - ADMIN_SUPPORT
+      - DATA_SCIENCE
+      - ENGINEERING
+      - ACCOUNTING
+      - LEGAL
+      - OTHER
+    Client:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        principal:
+          $ref: '#/components/schemas/Principal'
+        address:
+          $ref: '#/components/schemas/Address'
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
     Document:
       required:
       - documentName
@@ -1511,25 +1452,6 @@ components:
       - COMPANY_REGISTRATION
       - BANK_STATEMENT
       - OTHER
-    ECategory:
-      type: string
-      enum:
-      - WEB_DESIGN
-      - WEB_DEVELOPMENT
-      - MOBILE_DEVELOPMENT
-      - GRAPHIC_DESIGN
-      - VIDEO_EDITING
-      - WRITING
-      - TRANSLATION
-      - MARKETING
-      - SALES
-      - CUSTOMER_SERVICE
-      - ADMIN_SUPPORT
-      - DATA_SCIENCE
-      - ENGINEERING
-      - ACCOUNTING
-      - LEGAL
-      - OTHER
     ERole:
       type: string
       enum:
@@ -1537,26 +1459,28 @@ components:
       - ROLE_FREELANCER
       - ROLE_ADMIN
       - ROLE_UNVERIFIED
+      - ROLE_CLIENT
     Employer:
       required:
       - accountStatus
       - address
-      - companyName
-      - country
       - phoneNumber
       - principal
-      - registrationCode
       - registrationDate
       type: object
       properties:
         id:
           type: integer
           format: int64
+        address:
+          $ref: '#/components/schemas/Address'
         companyName:
           type: string
-        description:
+        firstName:
           type: string
-        country:
+        lastName:
+          type: string
+        description:
           type: string
         registrationCode:
           type: string
@@ -1565,8 +1489,6 @@ components:
         phoneNumber:
           type: string
         profilePicture:
-          type: string
-        address:
           type: string
         rating:
           type: number
@@ -1588,7 +1510,7 @@ components:
         activationDate:
           type: string
           format: date-time
-    EntityModelUploadedFile:
+    File:
       required:
       - fileName
       - path
@@ -1614,12 +1536,10 @@ components:
         id:
           type: integer
           format: int64
-        _links:
-          $ref: '#/components/schemas/Links'
     Freelancer:
       required:
       - accountStatus
-      - country
+      - address
       - firstName
       - lastName
       - phoneNumber
@@ -1630,19 +1550,17 @@ components:
         id:
           type: integer
           format: int64
+        address:
+          $ref: '#/components/schemas/Address'
         description:
           type: string
         firstName:
           type: string
         lastName:
           type: string
-        country:
-          type: string
         phoneNumber:
           type: string
         profilePicture:
-          type: string
-        address:
           type: string
         rating:
           type: number
@@ -1668,39 +1586,8 @@ components:
         activationDate:
           type: string
           format: date-time
-    PageMetadata:
-      type: object
-      properties:
-        size:
-          type: integer
-          format: int64
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int64
-        number:
-          type: integer
-          format: int64
-    PagedModelEntityModelUploadedFile:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            uploadedFiles:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-        _links:
-          $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
     Principal:
       required:
-      - firstName
-      - lastName
       - password
       type: object
       properties:
@@ -1708,10 +1595,6 @@ components:
           type: integer
           format: int64
         email:
-          type: string
-        firstName:
-          type: string
-        lastName:
           type: string
         password:
           type: string
@@ -1724,87 +1607,8 @@ components:
           $ref: '#/components/schemas/Freelancer'
         employer:
           $ref: '#/components/schemas/Employer'
-    Role:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          $ref: '#/components/schemas/ERole'
-    CollectionModelEntityModelUploadedFile:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            uploadedFiles:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelUploadedFile'
-        _links:
-          $ref: '#/components/schemas/Links'
-    UploadedFileRequestBody:
-      required:
-      - fileName
-      - path
-      - type
-      - uploadDate
-      type: object
-      properties:
-        type:
-          type: string
-        documentType:
-          $ref: '#/components/schemas/DocumentType'
-        path:
-          type: string
-        fileName:
-          type: string
-        verified:
-          type: boolean
-        uploadDate:
-          type: string
-          format: date-time
-        principal:
-          $ref: '#/components/schemas/Principal'
-        id:
-          type: integer
-          format: int64
-    Bid:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        project:
-          $ref: '#/components/schemas/Project'
-        bidder:
-          $ref: '#/components/schemas/Freelancer'
-        amount:
-          type: number
-          format: double
-        status:
-          $ref: '#/components/schemas/BidStatus'
-        coverLetter:
-          type: string
-        shortCoverLetter:
-          type: string
-        datePosted:
-          type: string
-          format: date-time
-        dateSubmitted:
-          type: string
-          format: date-time
-        dueDate:
-          type: string
-          format: date
-    BidStatus:
-      type: string
-      enum:
-      - NEW
-      - IN_REVIEW
-      - APPROVED
-      - DECLINED
+        client:
+          $ref: '#/components/schemas/Client'
     Project:
       required:
       - datePosted
@@ -1865,6 +1669,14 @@ components:
       enum:
       - BID
       - FIXED
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          $ref: '#/components/schemas/ERole'
     ServiceCreateDto:
       required:
       - category
@@ -1884,24 +1696,24 @@ components:
         location:
           type: string
         category:
-          $ref: '#/components/schemas/ECategory'
+          $ref: '#/components/schemas/CategoryType'
     Comment:
       type: object
-    ServiceDao:
+    Service:
       type: object
       properties:
         id:
           type: integer
           format: int64
+        freelancer:
+          $ref: '#/components/schemas/Freelancer'
         title:
           type: string
         description:
           type: string
         price:
-          type: integer
-          format: int32
-        freelancer:
-          $ref: '#/components/schemas/Freelancer'
+          type: number
+          format: double
         comments:
           type: array
           items:
@@ -1909,14 +1721,14 @@ components:
         location:
           type: string
         category:
-          $ref: '#/components/schemas/Category'
+          $ref: '#/components/schemas/CategoryType'
         rating:
           type: number
           format: double
         ratingCount:
           type: integer
           format: int32
-        datePosted:
+        postedAt:
           type: string
           format: date-time
     ServiceFilter:
@@ -1927,7 +1739,7 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
+            $ref: '#/components/schemas/CategoryType'
         location:
           type: string
         rating:
@@ -1939,7 +1751,11 @@ components:
         maxBudget:
           type: number
           format: double
-    FreelancerMainInfo:
+    FreelancerDto:
+      required:
+      - firstName
+      - id
+      - lastName
       type: object
       properties:
         id:
@@ -1949,11 +1765,11 @@ components:
           type: string
         lastName:
           type: string
-        profilePicture:
+        avatarUrl:
           type: string
         rating:
-          type: integer
-          format: int32
+          type: number
+          format: double
         ratingCount:
           type: integer
           format: int32
@@ -1979,9 +1795,9 @@ components:
           type: number
           format: double
         freelancer:
-          $ref: '#/components/schemas/FreelancerMainInfo'
+          $ref: '#/components/schemas/FreelancerDto'
         category:
-          $ref: '#/components/schemas/ECategory'
+          $ref: '#/components/schemas/CategoryType'
     ProjectCreateDto:
       required:
       - categories
@@ -2001,7 +1817,7 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
+            $ref: '#/components/schemas/CategoryType'
         location:
           type: string
         projectType:
@@ -2023,7 +1839,7 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
+            $ref: '#/components/schemas/CategoryType'
         location:
           type: string
         minBudget:
@@ -2034,6 +1850,28 @@ components:
           format: double
         type:
           $ref: '#/components/schemas/ProjectType'
+    AddressDto:
+      required:
+      - city
+      - country
+      - houseNumber
+      - postalCode
+      - region
+      - street
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        houseNumber:
+          type: string
     EmployerResponseDto:
       required:
       - address
@@ -2055,7 +1893,7 @@ components:
         email:
           type: string
         address:
-          type: string
+          $ref: '#/components/schemas/AddressDto'
         phoneNumber:
           type: string
         country:
@@ -2091,7 +1929,7 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
+            $ref: '#/components/schemas/CategoryType'
         status:
           $ref: '#/components/schemas/ProjectStatus'
         location:
@@ -2107,6 +1945,16 @@ components:
         dueDate:
           type: string
           format: date-time
+    MessageResponse:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        entityId:
+          type: integer
+          format: int64
     FreelancerFilter:
       type: object
       properties:
@@ -2117,8 +1965,10 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
-        location:
+            $ref: '#/components/schemas/CategoryType'
+        country:
+          type: string
+        city:
           type: string
         rating:
           type: number
@@ -2138,9 +1988,9 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
-        location:
-          type: string
+            $ref: '#/components/schemas/CategoryType'
+        addressDto:
+          $ref: '#/components/schemas/AddressDto'
         rating:
           type: number
           format: double
@@ -2158,21 +2008,10 @@ components:
         file:
           type: string
           format: binary
-    MessageResponse:
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-        entityId:
-          type: integer
-          format: int64
     EmployerRegistrationRequest:
       required:
       - address
       - companyName
-      - country
       - email
       - phoneNumber
       - registrationCode
@@ -2185,10 +2024,8 @@ components:
         email:
           type: string
         address:
-          type: string
+          $ref: '#/components/schemas/AddressDto'
         phoneNumber:
-          type: string
-        country:
           type: string
         description:
           type: string
@@ -2202,11 +2039,9 @@ components:
           format: double
         coverLetter:
           type: string
-        shortCoverLetter:
+        estimatedCompletionDate:
           type: string
-        dueDate:
-          type: string
-          format: date
+          format: date-time
     FormResponse:
       type: object
       properties:
@@ -2217,16 +2052,10 @@ components:
     SignupFormRequest:
       required:
       - email
-      - firstName
-      - lastName
       - password
       - role
       type: object
       properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
         email:
           maxLength: 50
           minLength: 0
@@ -2253,9 +2082,9 @@ components:
           uniqueItems: true
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/ERole'
         activeRole:
-          type: string
+          $ref: '#/components/schemas/ERole'
     LoginRequest:
       required:
       - email
@@ -2266,33 +2095,130 @@ components:
           type: string
         password:
           type: string
-    BidCardDto:
+    ClientDto:
       required:
-      - amount
-      - bidder
-      - datePosted
+      - address
+      - firstName
       - id
-      - status
+      - lastName
+      - rating
       type: object
       properties:
         id:
           type: integer
           format: int64
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
+    CommentDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        client:
+          $ref: '#/components/schemas/ClientDto'
+        employer:
+          $ref: '#/components/schemas/EmployerMainInfo'
+        freelancer:
+          $ref: '#/components/schemas/FreelancerDto'
+        body:
+          type: string
+    EmployerMainInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        companyName:
+          type: string
+        profilePicture:
+          type: string
+        rating:
+          type: integer
+          format: int32
+        ratingCount:
+          type: integer
+          format: int32
+    ServiceDto:
+      required:
+      - category
+      - comments
+      - description
+      - freelancer
+      - id
+      - location
+      - postedAt
+      - price
+      - rating
+      - ratingCount
+      - title
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        freelancer:
+          $ref: '#/components/schemas/FreelancerDto'
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentDto'
+        location:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryType'
+        rating:
+          type: number
+          format: double
+        ratingCount:
+          type: integer
+          format: int32
+        postedAt:
+          type: string
+          format: date-time
+    BidDto:
+      required:
+      - amount
+      - coverLetter
+      - estimatedCompletionDate
+      - freelancer
+      - id
+      - status
+      - submittedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        freelancer:
+          $ref: '#/components/schemas/FreelancerDto'
         amount:
           type: number
           format: double
-        bidder:
-          $ref: '#/components/schemas/FreelancerMainInfo'
-        coverLetter:
-          type: string
-        shortCoverLetter:
-          type: string
         status:
           $ref: '#/components/schemas/BidStatus'
-        dueDate:
+        coverLetter:
           type: string
-          format: date
-        datePosted:
+        submittedAt:
+          type: string
+          format: date-time
+        estimatedCompletionDate:
           type: string
           format: date-time
     ProjectOwnerDto:
@@ -2325,7 +2251,7 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/ECategory'
+            $ref: '#/components/schemas/CategoryType'
         status:
           $ref: '#/components/schemas/ProjectStatus'
         location:
@@ -2344,7 +2270,76 @@ components:
         bids:
           type: array
           items:
-            $ref: '#/components/schemas/BidCardDto'
+            $ref: '#/components/schemas/BidDto'
+    EventDto:
+      required:
+      - createdAt
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        clientId:
+          type: integer
+          format: int64
+        freelancerId:
+          type: integer
+          format: int64
+        type:
+          type: string
+          enum:
+          - ORDER_CREATED
+          - ORDER_CANCELED
+          - ORDER_COMPLETED
+          - ORDER_PAID
+          - ORDER_DISPUTED
+          - ORDER_REVIEWED
+          - ORDER_ACCEPTED
+          - ORDER_DECLINED
+          - ORDER_IN_PROGRESS
+          - ORDER_DELIVERED
+          - ORDER_REFUNDED
+          - ORDER_MODIFIED
+          - ORDER_RESOLVED
+        createdAt:
+          type: string
+          format: date-time
+    OrderDto:
+      required:
+      - createdAt
+      - events
+      - id
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        acceptedBid:
+          $ref: '#/components/schemas/BidDto'
+        service:
+          $ref: '#/components/schemas/ServiceDto'
+        client:
+          $ref: '#/components/schemas/ClientDto'
+        status:
+          type: string
+          enum:
+          - CREATED
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELED
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDto'
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
     FileResponseDto:
       required:
       - documentType
@@ -2365,23 +2360,4 @@ components:
           type: string
           format: date-time
         verified:
-          type: boolean
-    Link:
-      type: object
-      properties:
-        href:
-          type: string
-        hreflang:
-          type: string
-        title:
-          type: string
-        type:
-          type: string
-        deprecation:
-          type: string
-        profile:
-          type: string
-        name:
-          type: string
-        templated:
           type: boolean

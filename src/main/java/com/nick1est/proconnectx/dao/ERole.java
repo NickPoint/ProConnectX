@@ -7,5 +7,6 @@ public enum ERole {
     ROLE_EMPLOYER,
     ROLE_FREELANCER,
     ROLE_ADMIN,
-    ROLE_UNVERIFIED
+    ROLE_UNVERIFIED,
+    ROLE_CLIENT
 }

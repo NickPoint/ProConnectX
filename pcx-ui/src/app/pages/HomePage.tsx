@@ -1,19 +1,28 @@
-import { Box, Grid2 as Grid, Typography } from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import {Link as RouterLink} from 'react-router-dom';
 import Link from "@mui/material/Link";
 import Search from "../components/GenericSearch.tsx";
-import AnalyticsCards from "../components/AnalyticsCards.tsx";
+import StatCard from "../components/StatCard.tsx";
 import {GridItemFullWidth} from "../theme/theme.tsx";
+import Grid from "@mui/material/Grid";
 
 const HomePage = () => {
     return (
-        <>
-            <GridItemFullWidth>
-                <Search menuButton={true} />
-            </GridItemFullWidth>
-            <GridItemFullWidth>
-                <AnalyticsCards />
-            </GridItemFullWidth>
+        <Grid container spacing={2}>
+            <Grid size={{xs: 12}}>
+                <Search menuButtonVisible={true} />
+            </Grid>
+            <Grid container size={{xs: 12, md: 6}} spacing={1}>
+                <Grid size={{xs: 12}}>
+                    <StatCard title='Total Earnings' value='300' interval='This month' trend='up' data={[1, 2, 3]}/>
+                </Grid>
+                <Grid size={{xs: 6}}>
+                    <StatCard title='' value='300' interval='This month' trend='up' data={[1, 2, 3]}/>
+                </Grid>
+                <Grid size={{xs: 6}}>
+                    <StatCard title='Total Earnings' value='300' interval='This month' trend='up' data={[1, 2, 3]}/>
+                </Grid>
+            </Grid>
             <Box
                 sx={{
                     backgroundColor: '#ece9e9',
@@ -34,7 +43,7 @@ const HomePage = () => {
             </Box>
             <Link component={RouterLink} to='/postService'>Post Service Form</Link>
             <Link component={RouterLink} to='/projects'>Available projects</Link>
-        </>
+        </Grid>
     );
 };
 

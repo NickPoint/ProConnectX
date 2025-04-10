@@ -37,10 +37,10 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, String role) {
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, ERole role) {
         String jwt = Jwts.builder()
                 .subject(userPrincipal.getEmail())
-                .claim("activeRole", role)
+                .claim("activeRole", role.toString())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key())

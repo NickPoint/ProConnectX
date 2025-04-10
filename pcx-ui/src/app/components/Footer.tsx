@@ -1,23 +1,15 @@
-import {
-    Avatar,
-    BottomNavigation,
-    BottomNavigationAction, Fab, Paper, Toolbar,
-} from '@mui/material';
+import {BottomNavigation, BottomNavigationAction, Paper, Toolbar,} from '@mui/material';
 import {useAppDispatch, useAppSelector} from "../hooks";
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import WorkIcon from '@mui/icons-material/Work';
 import SearchIcon from '@mui/icons-material/Search';
 import * as React from "react";
-import {
-    Link as RouterLink,
-} from "react-router-dom";
+import {useEffect} from "react";
+import {Link as RouterLink, useLocation,} from "react-router-dom";
 import {selectUser} from "../../features/auth/authSlice";
 import AddButton from "./AddButton";
 import {useLogoutUserMutation} from "../../features/api/pcxApi";
-import Button from "@mui/material/Button";
-import {useLocation} from "react-router-dom";
-import {useEffect} from "react";
 import {selectAddButtonVisible, setAddButtonVisible} from "../../features/footer/footerSlice";
 
 

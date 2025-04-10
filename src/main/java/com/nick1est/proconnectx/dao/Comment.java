@@ -7,19 +7,26 @@ import org.checkerframework.common.value.qual.IntRange;
 public class Comment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne
-    private Freelancer person;
+    private Freelancer freelancer;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne
-    private ServiceDao service;
+    private Client client;
 
-    private String comment;
+    @JoinColumn
+    @ManyToOne
+    private Service service;
 
-    @IntRange(from = 0, to = 5)
-    private Integer rating;
+    @JoinColumn
+    @ManyToOne
+    private Employer employer;
+
+    @Column
+    @Lob
+    private String body;
 }

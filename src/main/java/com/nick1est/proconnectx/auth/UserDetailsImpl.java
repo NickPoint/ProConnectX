@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nick1est.proconnectx.dao.Principal;
+import com.nick1est.proconnectx.dao.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -25,6 +25,15 @@ public class UserDetailsImpl implements UserDetails {
     private final Long id;
 
     @Getter
+    private final Freelancer freelancer;
+
+    @Getter
+    private final Employer employer;
+
+    @Getter
+    private final Client client;
+
+    @Getter
     @NotBlank
     private final String email;
 
@@ -32,28 +41,46 @@ public class UserDetailsImpl implements UserDetails {
     @NotBlank
     private final String password;
 
-    @NotBlank
     @Getter
-    private final String firstName;
-
-    @NotBlank
-    @Getter
-    private final String lastName;
+    @Setter
+    private String firstName;
 
     @Getter
     @Setter
-    private String activeRole;
+    private String lastName;
+
+    @Getter
+    private ERole activeRole;
 
     @NotNull
     private final Collection<? extends GrantedAuthority> authorities;
+
+    public void setActiveRole(ERole activeRole) {
+        if (ERole.ROLE_CLIENT.equals(activeRole)) {
+            this.firstName = client.getFirstName();
+            this.lastName = client.getLastName();
+        } else if (ERole.ROLE_FREELANCER.equals(activeRole)) {
+            this.firstName = freelancer.getFirstName();
+            this.lastName = freelancer.getLastName();
+        } else if (ERole.ROLE_EMPLOYER.equals(activeRole)) {
+            this.firstName = employer.getFirstName();
+            this.lastName = employer.getLastName();
+        } else {
+            throw new IllegalArgumentException("Invalid role: " + activeRole);
+        }
+        this.activeRole = activeRole;
+    }
 
     public static UserDetailsImpl build(Principal principal) {
         List<GrantedAuthority> authorities = principal.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImpl(principal.getId(), principal.getEmail(), principal.getPassword(),
-                principal.getFirstName(), principal.getLastName(), authorities);
+        val freelancerId = principal.getFreelancer() != null ? principal.getFreelancer().getId() : null;
+        val employerId = principal.getEmployer() != null ? principal.getEmployer().getId() : null;
+        val clientId = principal.getClient() != null ? principal.getClient().getId() : null;
+        return new UserDetailsImpl(principal.getId(), principal.getFreelancer(), principal.getEmployer(),
+                principal.getClient(), principal.getEmail(), principal.getPassword(), authorities);
     }
 
     @Override

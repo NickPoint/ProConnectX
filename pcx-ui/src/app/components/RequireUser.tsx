@@ -1,7 +1,6 @@
-import {useCookies} from "react-cookie";
-import {Navigate, Outlet, useLocation, useNavigate} from "react-router-dom";
+import {Navigate, Outlet, useLocation} from "react-router-dom";
 import {useAuthorizeQuery} from "../../features/api/authApi";
-import {FC, useEffect} from "react";
+import {FC} from "react";
 import {useAppSelector} from "../hooks";
 import {selectUser} from "../../features/auth/authSlice";
 

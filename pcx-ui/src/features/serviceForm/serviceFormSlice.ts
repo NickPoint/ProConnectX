@@ -1,4 +1,3 @@
-import {createSlice} from "@reduxjs/toolkit";
 import {Category} from "../api/pcxApi";
 import {createAppSlice} from "../../app/createAppSlice";
 

@@ -1,8 +1,10 @@
 import TextField from "@mui/material/TextField";
 import {
-    debounce, FormControl,
+    debounce,
+    FormControl,
     IconButton,
-    InputAdornment, InputLabel,
+    InputAdornment,
+    InputLabel,
     MenuItem,
     Select,
     Slider,
@@ -11,7 +13,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {FilterAlt} from "@mui/icons-material";
-import {useEffect, useRef, useState} from "react";
+import * as React from "react";
+import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useFormik} from "formik";
 import {BidStatus} from "../../../features/enums";
@@ -20,8 +23,7 @@ import {setData, setLoading} from "../../../features/filter/filterSlice";
 import theme from "../../theme/theme";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Grid from "@mui/material/Grid2"
-import * as React from "react";
+import Grid from "@mui/material/Grid"
 import {styled} from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import {useLazyGetFilteredBidsQuery} from "../../../features/api/enhancedApi";

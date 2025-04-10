@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.dto;
 
-import com.nick1est.proconnectx.dao.ECategory;
+import com.nick1est.proconnectx.dao.CategoryType;
 import com.nick1est.proconnectx.dao.ProjectType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,7 +18,7 @@ public class ProjectCreateDto {
     @NotBlank
     private String shortDescription;
     @NotEmpty
-    private List<ECategory> categories;
+    private List<CategoryType> categories;
     @NotBlank
     private String location;
     @NotNull

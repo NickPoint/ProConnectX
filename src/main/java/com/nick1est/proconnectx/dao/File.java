@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Getter
 @Setter
-public class UploadedFile {
+public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

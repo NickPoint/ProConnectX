@@ -1,7 +1,5 @@
-import {Box, Card, CardActionArea, CardContent, CircularProgress, Grid2 as Grid, Typography} from "@mui/material";
-import Paper from "@mui/material/Paper";
+import {Box, Card, CardActionArea, CardContent, CircularProgress, Grid, Typography} from "@mui/material";
 import {GridItemFullWidth} from "../../theme/theme.tsx";
-import {AttachMoney} from "@mui/icons-material";
 import circleScatterHaikei from '/src/assets/svg/circle-scatter-haikei.svg';
 import {styled} from "@mui/material/styles";
 

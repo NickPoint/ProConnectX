@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.dto;
 
-import com.nick1est.proconnectx.dao.ECategory;
+import com.nick1est.proconnectx.dao.CategoryType;
 import lombok.Data;
 
 @Data
@@ -12,6 +12,6 @@ public class ServiceFilterResponse {
     private Double rating;
     private Integer ratingCount;
     private Double price;
-    private FreelancerMainInfo freelancer;
-    private ECategory category;
+    private FreelancerDto freelancer;
+    private CategoryType category;
 }

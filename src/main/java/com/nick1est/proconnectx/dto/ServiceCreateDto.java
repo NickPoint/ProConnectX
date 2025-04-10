@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.dto;
 
-import com.nick1est.proconnectx.dao.ECategory;
+import com.nick1est.proconnectx.dao.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -18,8 +18,8 @@ public class ServiceCreateDto {
 
     @NotBlank
     private String location;
-    //TODO: Might be better to use Category id instead of ECategory
+    //TODO: Might be better to use Category id instead of CategoryType
 
     @NotNull
-    private ECategory category;
+    private CategoryType category;
 }

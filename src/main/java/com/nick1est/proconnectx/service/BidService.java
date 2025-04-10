@@ -1,9 +1,9 @@
 package com.nick1est.proconnectx.service;
 
-import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.Bid;
 import com.nick1est.proconnectx.dao.BidStatus;
-import com.nick1est.proconnectx.dto.BidCardDto;
+import com.nick1est.proconnectx.dao.Freelancer;
+import com.nick1est.proconnectx.dto.BidDto;
 import com.nick1est.proconnectx.dto.BidRequest;
 import com.nick1est.proconnectx.mapper.BidMapper;
 import com.nick1est.proconnectx.repository.FreelancerRepository;
@@ -13,7 +13,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,26 +54,15 @@ public class BidService {
         return bid;
     }
 
-    public void makeBid(Long projectId, BidRequest bidRequest) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("Making bid for freelancer with id {} for project with id {}", userDetails.getId(), projectId);
-        val freelancer = freelancerRepository.findById(userDetails.getId()).orElseThrow(
-                () -> new EntityNotFoundException("Freelancer with id " + userDetails.getId() + " not found"));
-        val project = projectRepository.findById(projectId).orElseThrow(
-                () -> new EntityNotFoundException("ProjectCreateDto with id " + projectId + " not found"));
-
-        val bid = Bid.builder()
-                .bidder(freelancer)
-                .project(project)
-                .coverLetter(bidRequest.getCoverLetter())
-                .amount(bidRequest.getAmount())
-                .dueDate(bidRequest.getDueDate()).build();
-
+    public void makeBid(Long projectId, Freelancer freelancer, BidRequest bidRequest) {
+        log.info("Making bid for freelancer with id {} for project with id {}", freelancer.getId(), projectId);
+        val project = projectRepository.getReferenceById(projectId);
+        val bid = bidMapper.toDao(bidRequest, freelancer, project);
         bidRepository.save(bid);
     }
 
-    public List<BidCardDto> findFilteredBids(Long projectId, Integer rating, String firstName,
-                                             String lastName, Integer minPrice, Integer maxPrice, List<BidStatus> statuses) {
+    public List<BidDto> findFilteredBids(Long projectId, Integer rating, String firstName,
+                                         String lastName, Integer minPrice, Integer maxPrice, List<BidStatus> statuses) {
         log.info("Finding filtered bids");
         if (statuses != null && statuses.isEmpty()) {
             statuses = null; //TODO: workaround for empty statuses list because JPA doesn't support checking empty list

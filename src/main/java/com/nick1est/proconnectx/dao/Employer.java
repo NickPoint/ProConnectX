@@ -19,22 +19,24 @@ public class Employer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
+    @JoinColumn(nullable = false)
+    @NotNull
+    @OneToOne
+    private Address address;
+
+    @Column
     private String companyName;
+
+    @Column
+    private String firstName;
+
+    @Column
+    String lastName;
 
     @Column
     private String description;
 
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
-    private String country;
-
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
+    @Column
     private String registrationCode;
 
     @Column(nullable = false)
@@ -48,10 +50,6 @@ public class Employer {
 
     @Column
     private String profilePicture;
-
-    @Column(nullable = false)
-    @NotBlank
-    private String address;
 
     @Range(min = 0, max = 5)
     private Double rating;

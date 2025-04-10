@@ -1,20 +1,19 @@
-import {MuiFileInput} from "mui-file-input";
-import Grid from "@mui/material/Grid2";
-import {DocumentType, useGetPrincipalFilesQuery} from "../../../../features/api/pcxApi.ts";
-import MenuItem from "@mui/material/MenuItem";
-import {Field} from "formik";
-import {fieldToTextField, Select, TextFieldProps} from "formik-mui";
 import {
     ButtonGroup,
     Chip,
     FormControl,
+    Grid,
     IconButton,
     List,
     ListItem,
     ListItemIcon,
     ListItemText,
+    MenuItem,
     Stack
 } from "@mui/material";
+import {DocumentType, useGetPrincipalFilesQuery} from "../../../../features/api/pcxApi.ts";
+import {Field} from "formik";
+import {fieldToTextField, Select, TextFieldProps} from "formik-mui";
 import {Delete, Download, FilePresent} from "@mui/icons-material";
 
 
@@ -61,7 +60,7 @@ const FileUploadForm = () => {
                                     {/*TODO: make dynamic href*/}
                                     {/*TODO: SUS for testing*/}
                                     {/*TODO: Meeting with Lydia at 31 April 13:00 estonia*/}
-                                    <IconButton href={`http://localhost:3000/api/files/download/${file.id}`}>
+                                    <IconButton href={`http://192.168.178.107:3000/api/files/download/${file.id}`}>
                                         <Download/>
                                     </IconButton>
                                     <IconButton >

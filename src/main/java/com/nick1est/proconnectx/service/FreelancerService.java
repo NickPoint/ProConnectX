@@ -34,7 +34,8 @@ public class FreelancerService {
                 filter.getFirstName(),
                 filter.getLastName(),
                 categories,
-                filter.getLocation(),
+                filter.getCountry(),
+                filter.getCity(),
                 filter.getRating());
 
         log.debug("Filtered freelancers: {}", filteredFreelancers);

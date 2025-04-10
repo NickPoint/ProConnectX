@@ -1,4 +1,3 @@
-import * as React from "react";
 import "./App.css"
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Layout from "./app/components/layouts/Layout";
@@ -20,6 +19,7 @@ import ServicePage from "./app/components/services/ServicePage";
 import BidPage from "./app/components/bids/BidPage";
 import VerificationPage from "./app/pages/VerificationPage.tsx";
 import TestPage from "./app/pages/TestPage.tsx";
+import OrderPage from "./app/pages/OrderPage.tsx";
 
 const App = () => {
 
@@ -58,7 +58,8 @@ const App = () => {
                         <Route path='project/:projectId/bids/:id' element={<BidPage/>}/>
                     </Route>
                     <Route path='/' element={<Layout3/>}>
-                            <Route path='service/:id' element={<ServicePage/>}/>
+                        <Route path='service/:id' element={<ServicePage/>}/>
+                        <Route path='order/:id' element={<OrderPage/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

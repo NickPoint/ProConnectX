@@ -1,26 +1,26 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.BidStatus;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Data
-public class BidCardDto {
+public class BidDto {
     @NotNull
     private Long id;
     @NotNull
+    private FreelancerDto freelancer;
+    @NotNull
     private Double amount;
     @NotNull
-    private FreelancerMainInfo bidder;
-    private String coverLetter;
-    private String shortCoverLetter;
-    @NotNull
     private BidStatus status;
-    private LocalDate dueDate;
+    @NotBlank
+    private String coverLetter;
     @NotNull
-
-    private OffsetDateTime datePosted;
+    private OffsetDateTime submittedAt;
+    @NotNull
+    private OffsetDateTime estimatedCompletionDate;
 }

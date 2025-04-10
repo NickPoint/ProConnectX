@@ -1,24 +1,29 @@
 import {useAppDispatch} from "../../hooks";
-import {
-    setData, setLoading
-} from "../../../features/filter/filterSlice";
+import {setData, setLoading} from "../../../features/filter/filterSlice";
 import {useGetFilteredProjectsMutation} from "../../../features/api/pcxApi";
 import {
-    FormControl, FormHelperText, IconButton, InputLabel,
-    MenuItem, Select, Slider, SwipeableDrawer, Typography
+    Button,
+    FormControl,
+    FormHelperText,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    Slider,
+    SwipeableDrawer,
+    Typography,
+    TextField,
+    Grid,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2"
-import TextField from "@mui/material/TextField";
 import {Category, ProjectType} from "../../../features/enums";
 import {useEffect, useState} from "react";
 import {useFormik} from "formik";
-import {FilterAlt} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
-import Button from "@mui/material/Button";
 import theme from "../../theme/theme";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import {ChevronLeft, ChevronRight} from '@mui/icons-material';
+
 import {replaceEmptyStringsWithNull} from "../../../features/filter/formikHelper";
+import GenericSearch from "../GenericSearch.tsx";
 
 interface FilterValues {
     title: string;
@@ -73,8 +78,8 @@ const ProjectsFilter = () => {
     }, []);
 
     return (<>
-        <Button
-            onClick={() => setOpened(true)} startIcon={<FilterAlt/>}>Filter</Button>
+        <GenericSearch filterButtonVisible onClick={() => setOpened(true)}/>
+        {/*TODO: Additional fields can be moved inside GenericSearch and be hidden in Collapse component*/}
         <SwipeableDrawer
             sx={{position: 'relative'}}
             anchor="right"
@@ -86,7 +91,7 @@ const ProjectsFilter = () => {
         >
             <DrawerHeader>
                 <IconButton onClick={() => setOpened(false)}>
-                    {theme.direction === 'ltr' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+                    {theme.direction === 'ltr' ? <ChevronRight/> : <ChevronLeft/>}
                 </IconButton>
             </DrawerHeader>
             <Grid component='form' noValidate onSubmit={formik.handleSubmit} container rowSpacing={3}

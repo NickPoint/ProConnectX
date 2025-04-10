@@ -18,7 +18,7 @@ if (container) {
     root.render(
         <React.StrictMode>
             <Provider store={store}>
-                <CssBaseline/>
+                <CssBaseline enableColorScheme/>
                 <ThemeProvider theme={theme}>
                     <SnackbarProvider maxSnack={3}>
                         <DevSupport ComponentPreviews={ComponentPreviews}

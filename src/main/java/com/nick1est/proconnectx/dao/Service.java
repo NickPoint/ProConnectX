@@ -1,69 +1,56 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@ToString
-@Builder
 public class Service {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private Freelancer freelancer;
+
     @Column(nullable = false)
-    @NotBlank
-    @NotNull
     private String title;
 
     @Column(nullable = false)
-    @NotBlank
-    @NotNull
     private String description;
 
-    private String shortDescription;
-
-    @OneToOne
-    private Freelancer freelancer;
-
-    @NotNull
+    @Column(nullable = false)
     private Double price;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "service_categories",
-            joinColumns = @JoinColumn(name = "service_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories;
-
     @Column
-    private String location;
 
     @Column(nullable = false)
+    @OneToMany(mappedBy = "service")
+    private List<Comment> comments;
+
+    @JoinColumn(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull
-    private ServiceType serviceType;
-
-    private Double minSatisfyingBid;
-
-    private Double bidStep;
+    private CategoryType category;
 
     @Column(nullable = false)
-    @NotNull
-    private OffsetDateTime datePosted;
+    @Range(min = 0, max = 5)
+    private Double rating;
+
+    @Column(nullable = false)
+    @Range(min = 0)
+    private Integer ratingCount;
+
+    @Column(nullable = false)
+    private OffsetDateTime postedAt;
 
     @PrePersist
-    public void prePersist() {
-        datePosted = OffsetDateTime.now();
+    private void prePersist() {
+        postedAt = OffsetDateTime.now();
     }
-
 }

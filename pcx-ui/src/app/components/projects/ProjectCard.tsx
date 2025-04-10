@@ -1,5 +1,5 @@
 import {Avatar, Box, Chip, Paper, Stack, Typography} from "@mui/material";
-import Grid from "@mui/material/Grid2"
+import Grid from "@mui/material/Grid"
 import {useNavigate} from "react-router-dom";
 import {ProjectPublicDto, ProjectType} from "../../../features/api/pcxApi";
 

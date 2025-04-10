@@ -2,7 +2,7 @@ import {Button, Step, StepLabel, Stepper} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks.ts";
 import {nextStep, prevStep, selectActiveStep,} from "../../features/verification/verificationSlice.ts";
 import EmployerInformationForm from "../components/verification/employer/EmployerInformationForm.tsx";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import {Form, Formik} from "formik";
 import {mixed, object, string} from "yup";
 import {

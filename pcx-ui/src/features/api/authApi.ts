@@ -8,7 +8,7 @@ export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
         // base url of backend API
-        baseUrl: 'http://localhost:3000/api',
+        baseUrl: 'http://192.168.178.107:3000/api',
         // prepareHeaders is used to configure the header of every request and gives access to getState which we use to include the token from the store
         credentials: 'include',
     }),

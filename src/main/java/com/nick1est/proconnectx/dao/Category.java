@@ -1,7 +1,6 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.io.Serial;
@@ -25,6 +24,6 @@ public class Category implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NonNull
-    private ECategory name;
+    private CategoryType name;
 
 }

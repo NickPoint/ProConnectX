@@ -1,15 +1,15 @@
 import {Avatar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
-
-;
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import * as React from "react";
+import {MouseEvent, useState} from "react";
 import {styled} from "@mui/material/styles";
 import {useAppSelector} from "../../hooks";
 import {selectPageTitle} from "../../../features/header/headerSlice";
 import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
 import {selectUser} from "../../../features/auth/authSlice";
-import {MouseEvent, useState} from "react";
 import {useLogoutUserMutation} from "../../../features/api/pcxApi";
+
+;
 
 const StyledToolbar = styled('div')(({theme}) => ({
     display: 'flex',

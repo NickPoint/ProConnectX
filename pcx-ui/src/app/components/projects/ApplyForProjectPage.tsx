@@ -1,17 +1,17 @@
-import Grid from "@mui/material/Grid2"
+import Grid from "@mui/material/Grid"
 import {Alert, AlertColor, Collapse, IconButton, Paper, Typography} from "@mui/material";
 import {useAppDispatch} from "../../hooks";
+import * as React from "react";
 import {useEffect, useState} from "react";
 import {setPageTitle} from "../../../features/header/headerSlice";
-import {useGetProjectQuery, useMakeBidMutation} from "../../../features/api/enhancedApi";
+import {useMakeBidMutation} from "../../../features/api/enhancedApi";
 import {useFormik} from "formik";
 import {number, object, string} from "yup";
 import TextField from "@mui/material/TextField";
 import {useNavigate, useParams} from "react-router-dom";
 import {FloatingButton} from "./ProjectPage";
 import CloseIcon from "@mui/icons-material/Close";
-import * as React from "react";
-import {Bid, BidRequest} from "../../../features/api/pcxApi";
+import {BidRequest} from "../../../features/api/pcxApi";
 import Button from "@mui/material/Button";
 
 interface ApplyForProjectPageProps {

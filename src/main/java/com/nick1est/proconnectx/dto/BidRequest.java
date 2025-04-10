@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Data
 public class BidRequest {
     @NotNull
     private Double amount;
     private String coverLetter;
-    private String shortCoverLetter;
-    private LocalDate dueDate;
+    private OffsetDateTime estimatedCompletionDate;
 }

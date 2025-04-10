@@ -1,5 +1,5 @@
-import {useAppDispatch, useAppSelector} from "../hooks";
-import Grid from "@mui/material/Grid2"
+import {useAppSelector} from "../hooks";
+import Grid from "@mui/material/Grid"
 import ProjectCard from "../components/projects/ProjectCard";
 import ProjectsFilter from "../components/projects/ProjectsFilter";
 import {Skeleton} from "@mui/material";
@@ -32,7 +32,7 @@ const FilterPage: FC<FilterPageProps> = ({type}) => {
                 }
             </Grid>
             <Grid size={12}>
-                <Grid container spacing={{xs: 10, sm: 3}}>
+                <Grid container spacing={{xs: 6, sm: 3}}>
                     {loading ? new Array(lastDataSize).fill(0).map((_, index) => (
                         <Grid
                             key={index}

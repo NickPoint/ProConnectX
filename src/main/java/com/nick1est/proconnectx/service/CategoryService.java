@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.dao.Category;
-import com.nick1est.proconnectx.dao.ECategory;
+import com.nick1est.proconnectx.dao.CategoryType;
 import com.nick1est.proconnectx.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Category findByName(ECategory category) {
+    public Category findByName(CategoryType category) {
         return categoryRepository.findByName(category).orElseThrow(() -> new RuntimeException("Category not found"));
     }
 }

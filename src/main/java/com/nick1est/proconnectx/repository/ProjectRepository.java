@@ -16,10 +16,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findByTitle(String title);
 
-    @Query("SELECT p FROM Project p " +
-            "LEFT JOIN p.employer f " +
-            "LEFT JOIN p.bids bid " +
-            "WHERE f.id = :freelancerId OR bid.bidder.id = :employerId")
     List<Project> findByEmployerId(Long employerId);
 
     @Query("SELECT project FROM Project project " +

@@ -1,7 +1,7 @@
 import {useFormik} from "formik";
 import {array, number, object, string} from "yup";
 import {useCreateProjectMutation} from "../../../features/api/pcxApi";
-import Grid from "@mui/material/Grid2"
+import Grid from "@mui/material/Grid"
 import {Alert, FormControl, FormHelperText, IconButton, InputLabel, MenuItem, Select, Typography} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import * as React from "react";

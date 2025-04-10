@@ -1,11 +1,10 @@
-import Grid from "@mui/material/Grid2"
+import Grid from "@mui/material/Grid"
 import {Box, BoxProps, ButtonProps, Chip, Typography} from "@mui/material";
 import {useGetProjectQuery} from "../../../features/api/enhancedApi";
 import {Place, UnfoldMore} from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/material/styles";
-import {useNavigate, useParams} from "react-router-dom";
-import {Link as RouterLink} from "react-router-dom";
+import {Link as RouterLink, useNavigate, useParams} from "react-router-dom";
 import {format} from 'date-fns';
 import {useAppDispatch} from "../../hooks";
 import {useEffect} from "react";

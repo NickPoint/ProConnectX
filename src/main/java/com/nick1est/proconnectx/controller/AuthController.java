@@ -2,6 +2,7 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
+import com.nick1est.proconnectx.dao.ERole;
 import com.nick1est.proconnectx.dto.LoginRequest;
 import com.nick1est.proconnectx.dto.MessageResponse;
 import com.nick1est.proconnectx.dto.SignupFormRequest;
@@ -37,7 +38,6 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AuthResponse> getCurrentUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null) {
             return ResponseEntity.noContent().build();
@@ -76,7 +76,7 @@ public class AuthController {
 
     @PostMapping("/switch-role")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> switchRole(@RequestParam String role, @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
+    public ResponseEntity<?> switchRole(@RequestParam ERole role, @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
         val authResponse = authService.switchRole(userDetails, role);
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, authResponse.toString())

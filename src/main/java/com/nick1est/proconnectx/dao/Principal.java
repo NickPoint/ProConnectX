@@ -25,31 +25,24 @@ public class Principal {
     @NonNull
     private String email;
 
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
-    private String firstName;
-
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
-    private String lastName;
-
     @Column(nullable = false, length = 64)
     @NotBlank
     @NonNull
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "client_roles", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @JoinColumn
-    @OneToOne
+    @OneToOne(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Freelancer freelancer;
 
     @JoinColumn
-    @OneToOne
+    @OneToOne(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Employer employer;
 
+    @JoinColumn
+    @OneToOne(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Client client;
 }

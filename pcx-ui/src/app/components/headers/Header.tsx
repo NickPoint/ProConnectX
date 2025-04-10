@@ -1,6 +1,6 @@
 import {AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
-import {useState, MouseEvent} from "react";
+import {MouseEvent, useState} from "react";
 import {useAppSelector} from "../../hooks";
 import {selectUser} from "../../../features/auth/authSlice";
 import {useLogoutUserMutation} from "../../../features/api/authApi";

@@ -2,7 +2,7 @@ package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.DocumentType;
-import com.nick1est.proconnectx.dao.UploadedFile;
+import com.nick1est.proconnectx.dao.File;
 import com.nick1est.proconnectx.dto.employer.registration.FileResponseDto;
 import com.nick1est.proconnectx.mapper.FileMapper;
 import com.nick1est.proconnectx.repository.FileRepository;
@@ -28,13 +28,13 @@ public class FileService {
 
     public List<FileResponseDto> getUserFiles(UserDetailsImpl userDetails) {
         val principal = principalRepository.getReferenceById(userDetails.getId());
-        List<UploadedFile> files = fileRepository.findAllByPrincipal(principal);
+        List<File> files = fileRepository.findAllByPrincipal(principal);
         //TODO: Not all files should be returned, only the ones that are needed for the account type (employer or employee)
         return fileMapper.toDto(files);
     }
 
     public Long uploadFile(Long principalId, MultipartFile file, DocumentType type) throws IOException {
-        val fileEntity = new UploadedFile();
+        val fileEntity = new File();
         fileEntity.setFileName(file.getOriginalFilename());
         fileEntity.setType(file.getContentType());
         fileEntity.setDocumentType(type);

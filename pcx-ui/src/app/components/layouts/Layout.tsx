@@ -1,7 +1,6 @@
 import {Outlet} from 'react-router-dom';
 import Footer from '../Footer';
 import MobileHeader from "../headers/MobileHeader.tsx";
-import Grid from "@mui/material/Grid2";
 import Container from "@mui/material/Container";
 
 const Layout = () => {

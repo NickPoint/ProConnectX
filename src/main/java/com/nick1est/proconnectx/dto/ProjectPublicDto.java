@@ -22,7 +22,7 @@ public class ProjectPublicDto {
     private EmployerResponseDto employer;
     private Double budget;
     @NotNull
-    private List<ECategory> categories;
+    private List<CategoryType> categories;
     @NotNull
     private ProjectStatus status;
     @NotEmpty
