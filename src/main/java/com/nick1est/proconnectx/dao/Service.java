@@ -1,5 +1,7 @@
 package com.nick1est.proconnectx.dao;
 
+import com.nick1est.proconnectx.dto.WorkflowStep;
+import com.nick1est.proconnectx.converter.WorkflowConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -28,7 +30,9 @@ public class Service {
     @Column(nullable = false)
     private Double price;
 
-    @Column
+    @Column(columnDefinition = "jsonb")
+    @Convert(converter = WorkflowConverter.class)
+    private List<WorkflowStep> workflow;
 
     @Column(nullable = false)
     @OneToMany(mappedBy = "service")

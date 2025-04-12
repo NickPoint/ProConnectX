@@ -60,7 +60,7 @@ const FileUploadForm = () => {
                                     {/*TODO: make dynamic href*/}
                                     {/*TODO: SUS for testing*/}
                                     {/*TODO: Meeting with Lydia at 31 April 13:00 estonia*/}
-                                    <IconButton href={`http://192.168.178.107:3000/api/files/download/${file.id}`}>
+                                    <IconButton href={`${import.meta.env.VITE_API_URL}/api/files/download/${file.id}`}>
                                         <Download/>
                                     </IconButton>
                                     <IconButton >

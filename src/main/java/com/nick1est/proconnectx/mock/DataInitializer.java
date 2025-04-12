@@ -38,7 +38,8 @@ public class DataInitializer {
     public void init() {
         val values = ERole.values();
         for (ERole value : values) {
-            Role role = new Role(value);
+            Role role = new Role();
+            role.setName(value);
             roleRepository.save(role);
         }
 
@@ -152,7 +153,7 @@ public class DataInitializer {
         service.setCategory(CategoryType.WEB_DESIGN);
         service.setRating(4.6);
         service.setRatingCount(10);
-        service.setLocation("Kyiv");
+        service.setWorkflow(Collections.EMPTY_LIST);
         serviceRepository.save(service);
 
 //        val order = new Order();

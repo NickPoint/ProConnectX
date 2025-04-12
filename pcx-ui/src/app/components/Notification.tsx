@@ -15,7 +15,7 @@ const Notification = () => {
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:3000/api/ws');
+        const socket = new SockJS(`${import.meta.env.VITE_API_URL}/api/ws`);
         const stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,

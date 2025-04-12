@@ -16,12 +16,10 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
     @Query("SELECT service FROM Service service " +
             "WHERE (:title is null or service.title ILIKE %:title%) " +
             "and (:categories is null or service.category in :categories) " +
-            "and (:location is null or service.location = :location) " +
             "and (:rating is null or service.ratingCount > 5 and service.rating >= :rating or service.ratingCount <= 5) " +
             "and (:minPrice is null or service.price >= :minPrice) and (:maxPrice is null or service.price <= :maxPrice)")
     List<Service> findByTitleAndCategoryAndLocationAndRatingAndPrice(@Param("title") String title,
                                                                      @Param("categories") List<Category> categories,
-                                                                     @Param("location") String location,
                                                                      @Param("rating") Double rating,
                                                                      @Param("minPrice") Double minPrice,
                                                                      @Param("maxPrice") Double maxPrice);

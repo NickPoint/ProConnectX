@@ -6,19 +6,13 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@RequiredArgsConstructor
-@ToString
 public class Role {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    @NonNull
+    @Enumerated(EnumType.STRING)
     private ERole name;
-
-
 }

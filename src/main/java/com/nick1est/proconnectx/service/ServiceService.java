@@ -58,7 +58,6 @@ public class ServiceService {
         val filteredServices = serviceRepository.findByTitleAndCategoryAndLocationAndRatingAndPrice(
                 serviceFilter.getTitle(),
                 categories,
-                serviceFilter.getLocation(),
                 serviceFilter.getRating(),
                 serviceFilter.getMinBudget(),
                 serviceFilter.getMaxBudget());

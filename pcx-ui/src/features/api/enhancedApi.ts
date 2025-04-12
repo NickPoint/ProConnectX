@@ -57,7 +57,7 @@ const overridenApi = pcxApi.injectEndpoints({
                 { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
             ) {
                 // Create STOMP client with SockJS
-                const socket = new SockJS('http://192.168.178.107:3000/api/ws');
+                const socket = new SockJS(`${import.meta.env.VITE_API_URL}/api/ws`);
                 const stompClient = new Client({
                     webSocketFactory: () => socket,
                     reconnectDelay: 5000, // Auto-reconnect in 5s
