@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.config;
 
 import com.nick1est.proconnectx.auth.AuthEntryPointJwt;
-import com.nick1est.proconnectx.auth.DevAuthTokenFilter;
+import com.nick1est.proconnectx.auth.AuthTokenFilter;
 import com.nick1est.proconnectx.auth.UserDetailsServiceImpl;
 import com.nick1est.proconnectx.repository.PrincipalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@Profile("dev")
-public class DevSecurityConfig {
+@Profile("default")
+public class SecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
@@ -37,8 +37,8 @@ public class DevSecurityConfig {
     private PrincipalRepository principalRepository;
 
     @Bean
-    public DevAuthTokenFilter authenticationJwtTokenFilter() {
-        return new DevAuthTokenFilter(principalRepository);
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter(principalRepository);
     }
 
     @Bean

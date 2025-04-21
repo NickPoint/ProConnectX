@@ -18,8 +18,8 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Profile("dev")
-public class DevDataInitializer {
+@Profile("default")
+public class DataInitializer {
 
     private final Integer NUMBER_OF_CLIENTS = 15;
     private final Integer NUMBER_OF_FREELANCERS = 15;

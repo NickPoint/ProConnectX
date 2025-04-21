@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/proconnectx
+      SPRING_DATASOURCE_USERNAME: proconnectx
+      SPRING_DATASOURCE_PASSWORD: proconnectx
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./pcx-ui
+    ports:
+      - "5173:80"
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: proconnectx
+      POSTGRES_USER: proconnectx
+      POSTGRES_PASSWORD: proconnectx

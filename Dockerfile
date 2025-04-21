@@ -1,0 +1,26 @@
+# 🛠️ Build Stage
+FROM gradle:8.5-jdk17 AS builder
+WORKDIR /app
+
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+RUN gradle war
+
+# 🚀 Runtime Stage with Tomcat
+FROM tomcat:11.0.6-jdk17
+ARG SPRING_DATASOURCE_URL
+ARG SPRING_DATASOURCE_USERNAME
+ARG SPRING_DATASOURCE_PASSWORD
+ARG SPRING_PROFILES_ACTIVE
+
+ENV SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL \
+    SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME \
+    SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD \
+    SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/api.war
+
+EXPOSE 8080

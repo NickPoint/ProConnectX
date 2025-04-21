@@ -17,7 +17,7 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Profile("docker")
+@Profile("prod")
 public class ProdDataInitializer {
 
     private final PrincipalRepository principalRepository;

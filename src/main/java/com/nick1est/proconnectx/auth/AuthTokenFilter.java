@@ -18,10 +18,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@Profile("dev") // only active when spring.profiles.active=dev
+@Profile("default")
 @Slf4j
 @RequiredArgsConstructor
-public class DevAuthTokenFilter extends OncePerRequestFilter {
+public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final PrincipalRepository principalRepository;
 
