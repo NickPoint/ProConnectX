@@ -17,6 +17,11 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+*.env
+uploads/
+ideas/
+PLAN.md
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
