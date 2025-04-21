@@ -13,9 +13,11 @@ import com.nick1est.proconnectx.repository.PrincipalRepository;
 import com.nick1est.proconnectx.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -111,5 +113,4 @@ public class AuthService {
     public Set<RoleType> getUserRoles(UserDetailsImpl userDetails) {
         return userDetails.getAuthorities().stream().map(grantedAuthority -> RoleType.valueOf(grantedAuthority.getAuthority())).collect(Collectors.toSet());
     }
-
 }
