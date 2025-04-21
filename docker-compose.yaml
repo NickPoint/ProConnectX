@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ./
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./pcx-ui
+    ports:
+      - "5173:80"
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: proconnectx
+      POSTGRES_USER: proconnectx
+      POSTGRES_PASSWORD: proconnectx
