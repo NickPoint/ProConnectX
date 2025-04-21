@@ -12,11 +12,10 @@ RUN chmod +x ./gradlew
 RUN ./gradlew clean war
 
 # 🚀 Runtime Stage with Tomcat
-FROM tomcat:10.0-jdk17-openjdk-slim
+FROM tomcat:11.0.6-jdk17
 
-# Clean default apps (optional, makes it cleaner)
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/api.war
 
 EXPOSE 8080
