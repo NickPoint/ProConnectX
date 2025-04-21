@@ -9,6 +9,11 @@
   }
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
 
 .App-link {
   color: rgb(112, 76, 182);

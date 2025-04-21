@@ -1,24 +1,16 @@
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.ERole;
 import com.nick1est.proconnectx.dao.Employer;
-import com.nick1est.proconnectx.dao.Freelancer;
-import com.nick1est.proconnectx.dto.FreelancerFilter;
-import com.nick1est.proconnectx.dto.FreelancerFilterResponse;
 import com.nick1est.proconnectx.dto.employer.registration.EmployerRegistrationRequest;
 import com.nick1est.proconnectx.dto.employer.registration.EmployerResponseDto;
 import com.nick1est.proconnectx.mapper.EmployerMapper;
-import com.nick1est.proconnectx.mapper.FreelancerMapper;
 import com.nick1est.proconnectx.repository.EmployerRepository;
-import com.nick1est.proconnectx.repository.FreelancerRepository;
 import com.nick1est.proconnectx.repository.PrincipalRepository;
-import com.nick1est.proconnectx.repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

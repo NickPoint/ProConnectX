@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"city", "street", "house_number"})
+)
 @Getter
 @Setter
 public class Address {

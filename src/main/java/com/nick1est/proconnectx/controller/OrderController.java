@@ -30,6 +30,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> bookService(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long serviceId, @RequestBody String additionalNotes) {
         orderService.bookService(serviceId, userDetails.getClient(), additionalNotes);
-        return ResponseEntity.ok(MessageResponse.builder().message("Freelancer has received your order and will contact you!").build());
+        return ResponseEntity.ok(MessageResponse.builder()
+                .message("Your order has been sent to freelancer and he/she will contact you soon!").build());
     }
 }

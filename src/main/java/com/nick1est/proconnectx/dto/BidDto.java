@@ -12,7 +12,7 @@ public class BidDto {
     @NotNull
     private Long id;
     @NotNull
-    private FreelancerDto freelancer;
+    private LightWeightFreelancerDto freelancer;
     @NotNull
     private Double amount;
     @NotNull

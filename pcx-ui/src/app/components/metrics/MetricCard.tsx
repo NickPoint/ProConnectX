@@ -21,7 +21,7 @@ const MetricCard = () => {
                   backgroundColor: 'primary.main',
                   }}>
             <CardActionArea>
-                <CardContent sx={{textAlign: 'left'}}>
+                <CardContent>
                     <Grid container spacing={2}>
                         <GridItemFullWidth>
                             <Typography gutterBottom variant='body1'>Total Earnings</Typography>

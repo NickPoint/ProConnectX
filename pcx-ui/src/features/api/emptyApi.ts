@@ -5,6 +5,5 @@ export const emptySplitApi = createApi({
         baseUrl: import.meta.env.VITE_API_URL,
         credentials: "include",
     }),
-    tagTypes: ['Project', 'File'],
     endpoints: () => ({}),
 })

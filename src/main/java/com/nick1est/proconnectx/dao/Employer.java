@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.OffsetDateTime;
@@ -25,23 +27,20 @@ public class Employer {
     private Address address;
 
     @Column
+    @NotBlank
     private String companyName;
 
     @Column
-    private String firstName;
-
-    @Column
-    String lastName;
-
-    @Column
+    @NotBlank
     private String description;
 
     @Column
+    @NotBlank
     private String registrationCode;
 
     @Column(nullable = false)
     @Email
-    @NonNull
+    @NotBlank
     private String email;
 
     @Column(nullable = false)
@@ -49,12 +48,16 @@ public class Employer {
     private String phoneNumber;
 
     @Column
-    private String profilePicture;
+    private String avatarUrl;
 
+    @Column(nullable = false)
     @Range(min = 0, max = 5)
+    @NotNull
     private Double rating;
 
+    @Column(nullable = false)
     @Range(min = 0)
+    @NotNull
     private Integer ratingCount;
 
     @Column(nullable = false)
@@ -62,8 +65,8 @@ public class Employer {
     @NotNull
     private AccountStatus accountStatus;
 
-    @OneToMany(mappedBy = "employer", fetch = FetchType.LAZY)
-    private List<Document> documents;
+    @OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL)
+    private List<File> files;
 
     @JoinColumn(nullable = false)
     @OneToOne
@@ -81,5 +84,7 @@ public class Employer {
     private void prePersist() {
         this.accountStatus = AccountStatus.UNVERIFIED;
         this.registrationDate = OffsetDateTime.now();
+        this.rating = 0.0;
+        this.ratingCount = 0;
     }
 }

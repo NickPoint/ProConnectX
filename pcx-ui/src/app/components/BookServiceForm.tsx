@@ -12,22 +12,15 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {styled} from "@mui/material/styles";
 import {FreelancerDto, useBookServiceMutation} from "../../features/api/pcxApi.ts";
 import Avatar from "@mui/material/Avatar";
 import {enqueueSnackbar} from "notistack";
 
-const FloatingButton = styled(Fab)<FabProps>(({theme}) => ({
-    position: 'fixed',
-    bottom: theme.spacing(5),
-    left: '50%',
-    transform: 'translateX(-50%)'
-}));
-
 interface Props {
-    serviceId: number;
-    serviceName: string;
+    id: number;
+    title: string;
     freelancer: FreelancerDto;
 }
 
@@ -40,13 +33,43 @@ const validationSchema = object({
 })
 
 const BookServiceForm = (props: Props) => {
-    const {serviceId, serviceName, freelancer} = props;
+    const {id, title, freelancer} = props;
     const [dialogOpen, setDialogOpen] = useState(false);
     const [bookService] = useBookServiceMutation();
+    const bottomRef = useRef<HTMLDivElement>(null);
+    const [isBottomVisible, setIsBottomVisible] = useState(false);
+
+    useEffect(() => {
+        if (!bottomRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsBottomVisible(entry.isIntersecting);
+            },
+            {
+                root: null,
+                threshold: 0,
+            }
+        );
+
+        observer.observe(bottomRef.current);
+
+        return () => observer.disconnect();
+    }, []);
+
+    const FloatingButton = styled(Fab)<FabProps>(({theme}) => ({
+        transform: 'translateX(-50%)',
+        position: isBottomVisible ? 'relative' : 'fixed',
+        bottom: isBottomVisible ? undefined :  theme.spacing(5),
+        left: '50%',
+        transition: 'all 0.3s ease', //TODO: animation doesn't work
+    }));
+
     return (
         <>
+            <div ref={bottomRef} style={{ height: '1px' }} />
             <Dialog fullWidth={true} maxWidth='md' open={dialogOpen}>
-                <DialogTitle>{serviceName}</DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
                         <Stack direction="row" spacing={2} sx={{alignItems: 'center'}}>
@@ -62,8 +85,7 @@ const BookServiceForm = (props: Props) => {
                             initialValues={initialState}
                             validationSchema={validationSchema}
                             onSubmit={(values, {setSubmitting}) => {
-                                console.log(serviceId);
-                                bookService({serviceId: serviceId, body: values.additionalNotes}).unwrap()
+                                bookService({serviceId: id, body: values.additionalNotes}).unwrap()
                                     .then((response) => {
                                         enqueueSnackbar(response.message, {variant: 'success'});
                                     })

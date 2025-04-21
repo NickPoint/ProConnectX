@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.auth;
 
-import com.nick1est.proconnectx.dao.ERole;
+import com.nick1est.proconnectx.dao.RoleType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@Profile("prod")
+@Profile("docker")
 @Slf4j
 public class ProdAuthTokenFilter extends OncePerRequestFilter {
     @Autowired
@@ -37,7 +37,7 @@ public class ProdAuthTokenFilter extends OncePerRequestFilter {
                 log.debug("Username from JWT: {}", username);
                 log.debug("Active role from JWT: {}", activeRole);
                 UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
-                userDetails.setActiveRole(ERole.valueOf(activeRole));
+                userDetails.setActiveRoleType(RoleType.valueOf(activeRole));
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

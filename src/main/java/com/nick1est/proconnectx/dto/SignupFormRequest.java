@@ -1,20 +1,14 @@
 package com.nick1est.proconnectx.dto;
 
+import com.nick1est.proconnectx.dao.RoleType;
 import jakarta.validation.constraints.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class SignupFormRequest {
-
-//    @NotBlank
-//    private String firstName;
-//
-//    @NotBlank
-//    private String lastName;
 
     @NotBlank
     @Size(max = 50)
@@ -22,9 +16,9 @@ public class SignupFormRequest {
     private String email;
 
     @NotBlank
-    @Size(min = 6, max = 40)
+    @Size(min = 8, max = 32)
     private String password;
 
-    @NotBlank
-    private String role;
+    @NotNull
+    private RoleType role;
 }

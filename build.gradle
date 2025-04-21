@@ -1,79 +1,96 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.liquibase:liquibase-core:4.29.2'
+    }
+}
+
 plugins {
-	id 'java'
-	id 'war'
-	id 'org.springframework.boot' version '3.2.2'
-	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.openapi.generator' version '6.6.0'
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.openapi.generator' version '6.6.0'
+    id 'org.liquibase.gradle' version '3.0.2'
 }
 
 group = 'com.nick1est'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.session:spring-session-core'
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
-	implementation 'com.google.guava:guava:33.0.0-jre'
-	implementation 'org.postgresql:postgresql'
-	implementation 'net.datafaker:datafaker:2.0.2'
-	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.9.5'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.session:spring-session-core'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+    implementation 'com.google.guava:guava:33.0.0-jre'
+    implementation 'net.datafaker:datafaker:2.0.2'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.9.5'
+    implementation 'commons-io:commons-io:2.19.0'
+    implementation 'org.postgresql:postgresql'
 
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.29.2'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
+    liquibaseRuntime 'info.picocli:picocli:4.6.1'
+    liquibaseRuntime 'org.postgresql:postgresql'
 
-	compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    compileOnly 'org.projectlombok:lombok'
 
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 task generateApi(type: Exec) {
-	commandLine 'powershell', '-ExecutionPolicy', 'Bypass', '-File', './generate-api.ps1'
+    commandLine 'powershell', '-ExecutionPolicy', 'Bypass', '-File', './util/generate-api.ps1'
 }
 build.dependsOn generateApi
 
 
 openApiGenerate {
-	generatorName.set("typescript-redux-query")
-	inputSpec.set("$rootDir/api-docs.yaml")
-	outputDir.set("$rootDir/generated-client")
-	apiPackage.set("org.openapi.proconnectx.api")
-	invokerPackage.set("org.openapi.proconnectx.invoker")
-	modelPackage.set("org.openapi.proconnectx.model")
+    generatorName.set("typescript-redux-query")
+    inputSpec.set("$rootDir/api-docs.yaml")
+    outputDir.set("$rootDir/generated-client")
+    apiPackage.set("org.openapi.proconnectx.api")
+    invokerPackage.set("org.openapi.proconnectx.invoker")
+    modelPackage.set("org.openapi.proconnectx.model")
 }
 

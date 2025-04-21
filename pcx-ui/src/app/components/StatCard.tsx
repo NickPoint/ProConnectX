@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {SparkLineChart} from '@mui/x-charts/SparkLineChart';
 import {areaElementClasses} from '@mui/x-charts/LineChart';
+import {Euro} from "@mui/icons-material";
 
 export type StatCardProps = {
     title: string;
@@ -80,7 +81,7 @@ const StatCard = ({
     return (
         <Card variant="outlined" sx={{height: '100%', flexGrow: 1}}>
             <CardContent>
-                <Typography component="h2" variant="subtitle2" gutterBottom>
+                <Typography component="h2" variant="h5" gutterBottom>
                     {title}
                 </Typography>
                 <Stack
@@ -92,9 +93,11 @@ const StatCard = ({
                             direction="row"
                             sx={{justifyContent: 'space-between', alignItems: 'center'}}
                         >
-                            <Typography variant="h4" component="p">
-                                {value}
-                            </Typography>
+                            <Stack direction="row" sx={{alignItems: 'center'}}>
+                                <Euro />
+                                <Typography variant="h4" component="p">{value}</Typography>
+                            </Stack>
+
                             <Chip size="small" color={color} label={trendValues[trend]}/>
                         </Stack>
                         <Typography variant="caption" sx={{color: 'text.secondary'}}>

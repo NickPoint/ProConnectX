@@ -2,6 +2,7 @@ package com.nick1est.proconnectx.repository;
 
 import com.nick1est.proconnectx.dao.Category;
 import com.nick1est.proconnectx.dao.Project;
+import com.nick1est.proconnectx.dao.ProjectType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,5 +33,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
                                                  @Param("location") String location,
                                                  @Param("minBudget") Double minBudget,
                                                  @Param("maxBudget") Double maxBudget,
-                                                 @Param("type") String type);
+                                                 @Param("type") ProjectType type);
 }

@@ -48,7 +48,13 @@ let theme = createTheme({
             styleOverrides: {
                 root: ({theme}) => ({
                     borderRadius: theme.spacing(4),
-                })
+                    variants: [{
+                        props: {multiline: true},
+                        style: ({theme}) => ({
+                            borderRadius: theme.spacing(2),
+                        }),
+                    }]
+                }),
             },
         },
         MuiCard: {
@@ -77,6 +83,13 @@ let theme = createTheme({
                         props: {variant: 'transparent', color: 'inherit'},
                     }]
                 }
+            }
+        },
+        MuiAvatar: {
+            styleOverrides: {
+                root: ({theme}) => ({
+                    backgroundColor: theme.palette.primary.main,
+                })
             }
         }
     }

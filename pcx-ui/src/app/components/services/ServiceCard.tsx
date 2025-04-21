@@ -1,25 +1,26 @@
 import {
-    Grid,
-    Typography,
     Box,
+    ButtonGroup,
     Card,
+    CardActionArea,
     CardContent,
     CardHeader,
     Chip,
+    ChipProps,
+    Divider,
+    Grid,
     IconButton,
     Stack,
-    Divider,
-    ChipProps,
-    CardActionArea, ButtonGroup
+    Typography
 } from "@mui/material";
-import {ServiceFilterResponse} from "../../../features/api/pcxApi";
+import {LightweightAddressDto, LightweightServiceDto} from "../../../features/api/pcxApi";
 import {useNavigate} from "react-router-dom";
-import background from "../../../assets/background_service.jpg";
 import Avatar from "@mui/material/Avatar";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {styled} from "@mui/material/styles";
 import React from "react";
 import {LocationOn, Star} from "@mui/icons-material";
+import {useFormattedDate} from "../projects/ProjectPage.tsx";
 
 const CustomCardMediaRoot = styled(Box, {
     name: "CustomCardMedia",
@@ -39,8 +40,7 @@ interface CustomCardMediaProps {
     image: string;
 }
 
-interface CustomCardMediaState extends CustomCardMediaProps {
-}
+interface CustomCardMediaState extends CustomCardMediaProps{}
 
 const CustomCardMedia =
     React.forwardRef<HTMLDivElement, CustomCardMediaProps>(
@@ -59,41 +59,52 @@ const CustomCardMedia =
         }
     );
 
+function getAddressAsString(address: LightweightAddressDto | undefined): string {
+    if (!address) {
+        return "Remote";
+    }
+    return `${address.country}, ${address.city}`
+}
 
-const ServiceCard = (props: ServiceFilterResponse) => {
+
+const ServiceCard: React.FC<LightweightServiceDto> = (service) => {
     const navigate = useNavigate();
 
     return (
         <Card>
             <CardHeader color='primary'
-                        avatar={props.freelancer?.profilePicture ?
-                            <Avatar src={props.freelancer?.profilePicture}/> :
+                        avatar={service.freelancer.avatarUrl ?
+                            <Avatar src={service.freelancer.avatarUrl}/> :
                             <Avatar>
-                                {`${props.freelancer?.firstName?.charAt(0)}${props.freelancer?.lastName?.charAt(0)}`}
+                                {`${service.freelancer?.firstName?.charAt(0)}${service.freelancer?.lastName?.charAt(0)}`}
                             </Avatar>}
                         action={<ButtonGroup>
                             <IconButton><Star/></IconButton>
                             <IconButton aria-label="settings"><MoreVertIcon/></IconButton>
                         </ButtonGroup>}
                         title={
-                            <Typography>{`${props.freelancer?.firstName} ${props.freelancer?.lastName}`}</Typography>}
+                            <Typography>{`${service.freelancer?.firstName} ${service.freelancer?.lastName}`}</Typography>}
             />
-            <CardActionArea onClick={() => navigate(`/service/${props.id}`)}>
-                <CustomCardMedia image={background}
+            <CardActionArea onClick={() => navigate(`/service/${service.id}`)}>
+                {/*TODO: remove static chips*/}
+                <CustomCardMedia image={service.thumbnailMeta.path}
                                  chips={[
-                                     {label: props.rating, color: 'primary', icon: <Star/>},
+                                     {label: service.rating, color: 'primary', icon: <Star/>},
                                      {label: 'Easy Work', color: 'secondary'},
                                      {label: 'Chip offer', color: 'secondary'},
                                  ]}/>
                 <CardContent>
                     <Stack spacing={2}>
-                        <Grid container sx={{alignItems: 'center'}}>
+                        <Grid container sx={{alignItems: 'center'}} spacing={2}>
                             <Grid size={{xs: 8}}>
-                                <Typography variant='body1'>{props.title}</Typography>
-                                <Typography variant='body2'>23 minutes ago</Typography>
+                                <Typography variant='h4'>{service.title}</Typography>
+                                <Typography variant='body2'>{useFormattedDate(service.postedAt)}</Typography>
                             </Grid>
                             <Grid size={{xs: 4}} sx={{textAlign: 'right'}}>
-                                <Typography variant='h5'>${props.price}</Typography>
+                                <Typography variant='h5' fontWeight={700}>${service.price}</Typography>
+                            </Grid>
+                            <Grid size={12}>
+                                <Divider />
                             </Grid>
                         </Grid>
                         <Typography variant='body1'
@@ -104,14 +115,13 @@ const ServiceCard = (props: ServiceFilterResponse) => {
                                         textOverflow: 'ellipsis',
                                         WebkitLineClamp: 4,
                                     }}
-                        >{props.description}</Typography>
-                        <Divider/>
+                        >{service.description}</Typography>
+                        {/*<Divider/>*/}
                         <Stack direction='row' spacing={1} sx={{overflowX: 'auto', scrollbarWidth: 'none'}}>
-                            <Chip icon={<LocationOn/>} color='secondary' label={props.location}/>
-                            <Chip variant='outlined' color='primary' label={props.category}/>
-                            <Chip variant='outlined' color='primary' label={props.category}/>
-                            <Chip variant='outlined' color='primary' label={props.category}/>
-                            <Chip variant='outlined' color='primary' label={props.category}/>
+                            <Chip icon={<LocationOn/>} color='secondary' label={getAddressAsString(service.address)}/>
+                            {service.categories.map((item, index) => (
+                                <Chip key={index} label={item} color='primary' variant='outlined' />
+                            ))}
                         </Stack>
                     </Stack>
                 </CardContent>

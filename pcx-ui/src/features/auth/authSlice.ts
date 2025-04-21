@@ -1,7 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {AuthResponse, ERole} from "../api/pcxApi";
-import {useAppSelector} from "../../app/hooks";
-import {RootState} from "../../app/store.ts";
+import {AuthResponse, RoleType} from "../api/pcxApi";
 
 interface AuthState {
     user: AuthResponse | null;
@@ -22,7 +20,7 @@ export const authSlice = createSlice({
     },
     selectors: {
         selectUser: state => state.user,
-        hasClientRole: state => state.user?.roles.includes(ERole.RoleClient),
+        hasClientRole: state => state.user?.roles.includes(RoleType.RoleClient),
     },
 })
 

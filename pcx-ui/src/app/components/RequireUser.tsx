@@ -13,10 +13,6 @@ const RequireUser: FC<RequireUserProps> = ({ allowedRoles }) => {
     const user = useAppSelector(selectUser);
     const { isLoading, isFetching } = useAuthorizeQuery(null);
 
-    if (isLoading || isFetching) {
-        return <div>Loading...</div>;
-    }
-
     return user && user?.roles?.some(role => allowedRoles.includes(role)) ? (
         <Outlet />
     ) : user ? (

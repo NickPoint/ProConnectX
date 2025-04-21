@@ -1,29 +1,52 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 import java.time.OffsetDateTime;
 
 @Entity
-@RequiredArgsConstructor
+@Getter
+@Setter
 public class Review {
-
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne
-    private Freelancer person;
+    private Freelancer freelancer;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne
-    private Project projectId;
+    private Client client;
 
-    private String review;
+    @JoinColumn
+    @ManyToOne
+    private Service service;
 
-    private Integer rating;
+    @JoinColumn
+    @ManyToOne
+    private Employer employer;
 
-    private OffsetDateTime datePosted;
+    @Column
+    @Lob
+    private String body;
+
+    @Column(nullable = false)
+    @Range(min = 0, max = 5)
+    @NotNull
+    private Double rating;
+
+    @Column(nullable = false)
+    @NotNull
+    private OffsetDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = OffsetDateTime.now();
+    }
 }

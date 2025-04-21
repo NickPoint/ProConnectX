@@ -1,16 +1,16 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
-@ToString
+@Setter
 public class Category implements Serializable {
 
     //TODO: Exception on filter projects by category. Why it should be Serializable?
@@ -23,7 +23,7 @@ public class Category implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NonNull
+    @NotNull
     private CategoryType name;
 
 }

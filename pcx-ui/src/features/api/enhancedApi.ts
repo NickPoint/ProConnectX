@@ -1,17 +1,27 @@
-import {pcxApi, UploadFileApiResponse} from "./pcxApi";
+import {
+    addTagTypes, CreateFreelancerApiArg,
+    CreateFreelancerApiResponse,
+    CreateServiceApiArg,
+    CreateServiceApiResponse,
+    pcxApi,
+    UploadFileApiResponse
+} from "./pcxApi";
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import {logout} from "../auth/authSlice";
 
+function createTagsFromList<T extends { id: string | number }>(
+    list: T[] | undefined,
+    tagType: keyof typeof addTagTypes
+) {
+    if (!list) return [{ type: tagType, id: 'LIST' }];
+    return [
+        { type: tagType, id: 'LIST' },
+        ...list.map((item) => ({ type: tagType, id: item.id }))
+    ];
+}
 const enhancedApi = pcxApi.enhanceEndpoints({
-    addTagTypes: ['Project', 'File'],
     endpoints: {
-        getPrincipalFiles: {
-            providesTags: ['File'],
-        },
-        uploadFile: {
-            invalidatesTags: ['File'],
-        },
         makeBid: {
             invalidatesTags: (result, error, arg) => [{type: 'Project', id: arg.projectId}],
         },
@@ -28,6 +38,12 @@ const enhancedApi = pcxApi.enhanceEndpoints({
             },
             invalidatesTags: ['Project'],
         },
+        getFilteredServices: {
+            providesTags: (result) => createTagsFromList(result, 'Service'),
+        },
+        getService: {
+            providesTags: (result, error, arg) => [{ type: 'Service', id: arg.id }],
+        }
     }
 })
 
@@ -49,6 +65,25 @@ const overridenApi = pcxApi.injectEndpoints({
                 body: queryArg,
             }),
             invalidatesTags: ['File'],
+        }),
+        createFreelancer: build.mutation<
+            CreateFreelancerApiResponse,
+            FormData
+        >({
+            query: queryArg => ({
+                url: `/freelancer`,
+                method: "POST",
+                body: queryArg,
+            }),
+            invalidatesTags: ["Freelancer"],
+        }),
+        createService: build.mutation<CreateServiceApiResponse, FormData>({
+            query: queryArg => ({
+                url: `/service`,
+                method: "POST",
+                body: queryArg,
+            }),
+            invalidatesTags: ["Service"],
         }),
         getNotifications: build.query<Message[], Channel>({
             queryFn: () => ({ data: [] }),
@@ -91,9 +126,12 @@ export const {
     useMakeBidMutation,
     useGetProjectQuery,
     useLazyGetFilteredBidsQuery,
+    useLazyGetFilteredServicesQuery,
 } = enhancedApi
 
 export const {
     useUploadFileMutation,
-    useGetNotificationsQuery
+    useGetNotificationsQuery,
+    useCreateServiceMutation,
+    useCreateFreelancerMutation
 } = overridenApi

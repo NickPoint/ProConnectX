@@ -2,29 +2,23 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.ERole;
+import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dto.LoginRequest;
 import com.nick1est.proconnectx.dto.MessageResponse;
 import com.nick1est.proconnectx.dto.SignupFormRequest;
 import com.nick1est.proconnectx.dto.AuthResponse;
-import com.nick1est.proconnectx.repository.PrincipalRepository;
-import com.nick1est.proconnectx.repository.RoleRepository;
 import com.nick1est.proconnectx.service.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -32,6 +26,7 @@ import java.nio.file.AccessDeniedException;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth")
 @Slf4j
 public class AuthController {
     private final AuthService authService;
@@ -46,7 +41,7 @@ public class AuthController {
         val roles = authService.getUserRoles(userDetails);
         return ResponseEntity.ok()
                 .body(new AuthResponse(userDetails.getFirstName(), userDetails.getLastName(),
-                        roles, userDetails.getActiveRole()));
+                        roles, userDetails.getActiveRoleType()));
     }
 
     @PostMapping("/login")
@@ -66,6 +61,12 @@ public class AuthController {
                 .body(authResponse);
     }
 
+    @PostMapping("/check-email")
+    public ResponseEntity<Void> checkEmail(@RequestParam @NotBlank @Email String email) {
+        boolean exists = authService.checkEmailExists(email);
+        return exists ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
         val cookie = jwtUtils.getCleanJwtCookie();
@@ -76,7 +77,7 @@ public class AuthController {
 
     @PostMapping("/switch-role")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> switchRole(@RequestParam ERole role, @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
+    public ResponseEntity<?> switchRole(@RequestParam RoleType role, @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
         val authResponse = authService.switchRole(userDetails, role);
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, authResponse.toString())

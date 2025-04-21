@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(enumAsRef = true)
 public enum ProjectType {
-    BID("Bid"),
-    FIXED("Fixed");
-
-    private final String type;
+    BID,
+    FIXED;
 }

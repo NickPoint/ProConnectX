@@ -10,18 +10,13 @@ import lombok.Data;
 public class EmployerRegistrationRequest {
     @NotBlank
     private String companyName;
-
     @NotBlank
     private String registrationCode;
-
     @NotBlank
     private String email;
-
     @NotNull
     private AddressDto address;
-
     @NotBlank
     private String phoneNumber;
-
     private String description;
 }

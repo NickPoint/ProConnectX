@@ -10,5 +10,7 @@ public enum DocumentType {
     BUSINESS_LICENSE,
     COMPANY_REGISTRATION,
     BANK_STATEMENT,
-    OTHER
+    OTHER,
+    GALLERY,
+    AVATAR
 }

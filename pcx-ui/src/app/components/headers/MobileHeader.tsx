@@ -2,28 +2,31 @@ import {
     AppBar,
     Avatar,
     Box,
-    Container,
+    Button,
     IconButton,
+    Link,
     Menu,
     MenuItem,
-    Slide, Stack,
+    Slide,
+    Stack,
     Toolbar,
     Tooltip,
     Typography,
     useScrollTrigger
 } from "@mui/material";
-import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {MouseEvent, useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../hooks";
-import {selectUser} from "../../../features/auth/authSlice";
+import {useAppDispatch} from "../../hooks";
 import {useLogoutUserMutation} from "../../../features/api/authApi";
 import {styled} from "@mui/material/styles";
 import FabContainer from "../FabContainer.tsx";
 import FabManager from "../FabManager.tsx";
-import {addFab, hideFab, removeFab} from "../../../features/fab/fabSlice.ts";
-import {Notifications} from "@mui/icons-material";
+import {addFab, removeFab} from "../../../features/fab/fabSlice.ts";
 import Notification from "../Notification.tsx";
-import {useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {RoleType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {setOpen, setSignup} from "../../../features/signupDialog/authFormSlice.ts";
+import AuthDialog from "../../pages/AuthDialog.tsx";
+import {useTranslation} from "react-i18next";
 
 const settings = ['Profile', 'Logout'];
 
@@ -62,7 +65,9 @@ const MobileHeader = () => {
     const location = useLocation();
     const [userMenuOpen, setUserMenuOpen] = useState<null | HTMLElement>(null);
     const [logoutUser] = useLogoutUserMutation();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const handleClick = (event: MouseEvent<HTMLElement>) => {
         switch (event.currentTarget.textContent) {
@@ -74,6 +79,15 @@ const MobileHeader = () => {
                 break
             default:
                 console.log('Unknown action');
+        }
+    }
+
+    function getUserName(): string | undefined {
+        if (user) {
+            if (user.activeRoleType === RoleType.RoleUnverified) {
+                return t('header.user.unverified');
+            }
+            return t('header.user.greeting', {firstName: user.firstName});
         }
     }
 
@@ -111,57 +125,46 @@ const MobileHeader = () => {
                                 ))}
                             </Menu>
                             <Box sx={{alignItems: 'flex-start'}}>
-                                <Typography align='left' variant='h6'>Hi, {user?.firstName}</Typography>
-                                <Typography align='left' variant='body2'>Available for new projects</Typography>
+                                <Typography variant='h6'>{getUserName()}</Typography>
+                                {user.status &&
+                                    <Typography variant='body2'>{t(`header.user.status.${user.status}`)}</Typography>
+                                }
                             </Box>
                             <Stack direction='row' spacing={1}>
                                 <Notification/>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={(event) => setUserMenuOpen(event.currentTarget)}
                                                 sx={{p: 0, mr: 1}}>
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                                        <Avatar alt={user.firstName} src="/static/images/avatar/2.jpg"/>
                                     </IconButton>
                                 </Tooltip>
                             </Stack>
 
                         </>
                     ) : (
-                        <Box>
-                            <Typography
-                                sx={{color: 'inherit', textDecoration: 'none', mr: 2}}
-                                variant='body1'
-                                component={RouterLink}
-                                state={{from: location}}
-                                to="/login">Log in</Typography>
-                            <Typography
-                                sx={{color: 'inherit', textDecoration: 'none'}}
-                                variant='body1'
-                                component={RouterLink}
-                                state={{from: location}}
-                                to="/signup">Sign up</Typography>
-                        </Box>
+                        <Stack direction='row' spacing={1} sx={{alignItems: 'center'}}>
+                            <Link sx={{cursor: 'pointer'}} underline='none'
+                                  onClick={() => {
+                                      dispatch(setOpen(true))
+                                      dispatch(setSignup(false))
+                                  }}>
+                                Sign in
+                            </Link>
+                            <Button variant='contained' onClick={() => {
+                                dispatch(setOpen(true))
+                                dispatch(setSignup(true))
+                            }}>
+                                Join
+                            </Button>
+                        </Stack>
                     )}
-                    {/*                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component={RouterLink}
-                            sx={{
-                                fontWeight: 700,
-                                color: 'inherit',
-                                textDecoration: 'none',
-                            }}
-                            to="/"
-                        >
-                            ProConnectX
-                        </Typography>
-                    </Box>*/}
                 </StyledToolbar>
             </AppBar>
         </HideOnScroll>
         <StyledToolbar/>
         <FabManager/>
         <FabContainer/>
+        <AuthDialog/>
     </>);
 }
 

@@ -1,204 +1,253 @@
 import { emptySplitApi as api } from "./emptyApi"
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: build => ({
-    reviewBid: build.mutation<ReviewBidApiResponse, ReviewBidApiArg>({
-      query: queryArg => ({
-        url: `/bid/review/${queryArg.projectId}/${queryArg.bidId}`,
-        method: "PUT",
+export const addTagTypes = [
+  "bid-controller",
+  "Service",
+  "Project",
+  "order-controller",
+  "Freelancer",
+  "employer-controller",
+  "Auth",
+  "test-controller",
+] as const
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: build => ({
+      reviewBid: build.mutation<ReviewBidApiResponse, ReviewBidApiArg>({
+        query: queryArg => ({
+          url: `/bid/review/${queryArg.projectId}/${queryArg.bidId}`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["bid-controller"],
       }),
-    }),
-    declineBid: build.mutation<DeclineBidApiResponse, DeclineBidApiArg>({
-      query: queryArg => ({
-        url: `/bid/decline/${queryArg.projectId}/${queryArg.bidId}`,
-        method: "PUT",
+      declineBid: build.mutation<DeclineBidApiResponse, DeclineBidApiArg>({
+        query: queryArg => ({
+          url: `/bid/decline/${queryArg.projectId}/${queryArg.bidId}`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["bid-controller"],
       }),
-    }),
-    approveBid: build.mutation<ApproveBidApiResponse, ApproveBidApiArg>({
-      query: queryArg => ({
-        url: `/bid/approve/${queryArg.projectId}/${queryArg.bidId}`,
-        method: "PUT",
+      approveBid: build.mutation<ApproveBidApiResponse, ApproveBidApiArg>({
+        query: queryArg => ({
+          url: `/bid/approve/${queryArg.projectId}/${queryArg.bidId}`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["bid-controller"],
       }),
-    }),
-    createService: build.mutation<
-      CreateServiceApiResponse,
-      CreateServiceApiArg
-    >({
-      query: queryArg => ({
-        url: `/service`,
-        method: "POST",
-        body: queryArg.serviceCreateDto,
+      createService: build.mutation<
+        CreateServiceApiResponse,
+        CreateServiceApiArg
+      >({
+        query: queryArg => ({
+          url: `/service`,
+          method: "POST",
+          params: {
+            service: queryArg.service,
+          },
+        }),
+        invalidatesTags: ["Service"],
       }),
-    }),
-    getFilteredServices: build.mutation<
-      GetFilteredServicesApiResponse,
-      GetFilteredServicesApiArg
-    >({
-      query: queryArg => ({
-        url: `/service/filter`,
-        method: "POST",
-        body: queryArg.serviceFilter,
+      getFilteredServices: build.query<
+        GetFilteredServicesApiResponse,
+        GetFilteredServicesApiArg
+      >({
+        query: queryArg => ({
+          url: `/service/filter`,
+          method: "POST",
+          body: queryArg.serviceFilter,
+        }),
+        providesTags: ["Service"],
       }),
-    }),
-    createProject: build.mutation<
-      CreateProjectApiResponse,
-      CreateProjectApiArg
-    >({
-      query: queryArg => ({
-        url: `/project`,
-        method: "POST",
-        body: queryArg.projectCreateDto,
+      createProject: build.mutation<
+        CreateProjectApiResponse,
+        CreateProjectApiArg
+      >({
+        query: queryArg => ({
+          url: `/project`,
+          method: "POST",
+          body: queryArg.projectCreateDto,
+        }),
+        invalidatesTags: ["Project"],
       }),
-    }),
-    getFilteredProjects: build.mutation<
-      GetFilteredProjectsApiResponse,
-      GetFilteredProjectsApiArg
-    >({
-      query: queryArg => ({
-        url: `/project/filter`,
-        method: "POST",
-        body: queryArg.projectFilter,
+      getFilteredProjects: build.mutation<
+        GetFilteredProjectsApiResponse,
+        GetFilteredProjectsApiArg
+      >({
+        query: queryArg => ({
+          url: `/project/filter`,
+          method: "POST",
+          body: queryArg.projectFilter,
+        }),
+        invalidatesTags: ["Project"],
       }),
-    }),
-    bookService: build.mutation<BookServiceApiResponse, BookServiceApiArg>({
-      query: queryArg => ({
-        url: `/orders/book/${queryArg.serviceId}`,
-        method: "POST",
-        body: queryArg.body,
+      bookService: build.mutation<BookServiceApiResponse, BookServiceApiArg>({
+        query: queryArg => ({
+          url: `/orders/book/${queryArg.serviceId}`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["order-controller"],
       }),
-    }),
-    getFilteredFreelancers: build.mutation<
-      GetFilteredFreelancersApiResponse,
-      GetFilteredFreelancersApiArg
-    >({
-      query: queryArg => ({
-        url: `/freelancer/filter`,
-        method: "POST",
-        body: queryArg.freelancerFilter,
+      createFreelancer: build.mutation<
+        CreateFreelancerApiResponse,
+        CreateFreelancerApiArg
+      >({
+        query: queryArg => ({
+          url: `/freelancer`,
+          method: "POST",
+          params: {
+            registrationRequest: queryArg.registrationRequest,
+          },
+        }),
+        invalidatesTags: ["Freelancer"],
       }),
-    }),
-    uploadFile: build.mutation<UploadFileApiResponse, UploadFileApiArg>({
-      query: queryArg => ({
-        url: `/files/upload`,
-        method: "POST",
-        params: {
-          fileUploadRequest: queryArg.fileUploadRequest,
+      getFilteredFreelancers: build.mutation<
+        GetFilteredFreelancersApiResponse,
+        GetFilteredFreelancersApiArg
+      >({
+        query: queryArg => ({
+          url: `/freelancer/filter`,
+          method: "POST",
+          body: queryArg.freelancerFilter,
+        }),
+        invalidatesTags: ["Freelancer"],
+      }),
+      registerEmployer: build.mutation<
+        RegisterEmployerApiResponse,
+        RegisterEmployerApiArg
+      >({
+        query: queryArg => ({
+          url: `/employer/register`,
+          method: "POST",
+          body: queryArg.employerRegistrationRequest,
+        }),
+        invalidatesTags: ["employer-controller"],
+      }),
+      makeBid: build.mutation<MakeBidApiResponse, MakeBidApiArg>({
+        query: queryArg => ({
+          url: `/bid/${queryArg.projectId}`,
+          method: "POST",
+          body: queryArg.bidRequest,
+        }),
+        invalidatesTags: ["bid-controller"],
+      }),
+      switchRole: build.mutation<SwitchRoleApiResponse, SwitchRoleApiArg>({
+        query: queryArg => ({
+          url: `/auth/switch-role`,
+          method: "POST",
+          params: {
+            role: queryArg.role,
+          },
+        }),
+        invalidatesTags: ["Auth"],
+      }),
+      registerUser: build.mutation<RegisterUserApiResponse, RegisterUserApiArg>(
+        {
+          query: queryArg => ({
+            url: `/auth/signup`,
+            method: "POST",
+            body: queryArg.signupFormRequest,
+          }),
+          invalidatesTags: ["Auth"],
         },
+      ),
+      logoutUser: build.mutation<LogoutUserApiResponse, LogoutUserApiArg>({
+        query: () => ({ url: `/auth/logout`, method: "POST" }),
+        invalidatesTags: ["Auth"],
       }),
-    }),
-    registerEmployer: build.mutation<
-      RegisterEmployerApiResponse,
-      RegisterEmployerApiArg
-    >({
-      query: queryArg => ({
-        url: `/employer/register`,
-        method: "POST",
-        body: queryArg.employerRegistrationRequest,
+      authenticateUser: build.mutation<
+        AuthenticateUserApiResponse,
+        AuthenticateUserApiArg
+      >({
+        query: queryArg => ({
+          url: `/auth/login`,
+          method: "POST",
+          body: queryArg.loginRequest,
+        }),
+        invalidatesTags: ["Auth"],
       }),
-    }),
-    makeBid: build.mutation<MakeBidApiResponse, MakeBidApiArg>({
-      query: queryArg => ({
-        url: `/bid/${queryArg.projectId}`,
-        method: "POST",
-        body: queryArg.bidRequest,
+      checkEmail: build.mutation<CheckEmailApiResponse, CheckEmailApiArg>({
+        query: queryArg => ({
+          url: `/auth/check-email`,
+          method: "POST",
+          params: {
+            email: queryArg.email,
+          },
+        }),
+        invalidatesTags: ["Auth"],
       }),
-    }),
-    switchRole: build.mutation<SwitchRoleApiResponse, SwitchRoleApiArg>({
-      query: queryArg => ({
-        url: `/auth/switch-role`,
-        method: "POST",
-        params: {
-          role: queryArg.role,
-        },
+      userAccess: build.query<UserAccessApiResponse, UserAccessApiArg>({
+        query: () => ({ url: `/test/user` }),
+        providesTags: ["test-controller"],
       }),
-    }),
-    registerUser: build.mutation<RegisterUserApiResponse, RegisterUserApiArg>({
-      query: queryArg => ({
-        url: `/auth/signup`,
-        method: "POST",
-        body: queryArg.signupFormRequest,
+      moderatorAccess: build.query<
+        ModeratorAccessApiResponse,
+        ModeratorAccessApiArg
+      >({
+        query: () => ({ url: `/test/freelancer` }),
+        providesTags: ["test-controller"],
       }),
-    }),
-    logoutUser: build.mutation<LogoutUserApiResponse, LogoutUserApiArg>({
-      query: () => ({ url: `/auth/logout`, method: "POST" }),
-    }),
-    authenticateUser: build.mutation<
-      AuthenticateUserApiResponse,
-      AuthenticateUserApiArg
-    >({
-      query: queryArg => ({
-        url: `/auth/login`,
-        method: "POST",
-        body: queryArg.loginRequest,
+      allAccess: build.query<AllAccessApiResponse, AllAccessApiArg>({
+        query: () => ({ url: `/test/all` }),
+        providesTags: ["test-controller"],
       }),
-    }),
-    userAccess: build.query<UserAccessApiResponse, UserAccessApiArg>({
-      query: () => ({ url: `/test/user` }),
-    }),
-    moderatorAccess: build.query<
-      ModeratorAccessApiResponse,
-      ModeratorAccessApiArg
-    >({
-      query: () => ({ url: `/test/freelancer` }),
-    }),
-    allAccess: build.query<AllAccessApiResponse, AllAccessApiArg>({
-      query: () => ({ url: `/test/all` }),
-    }),
-    adminAccess: build.query<AdminAccessApiResponse, AdminAccessApiArg>({
-      query: () => ({ url: `/test/admin` }),
-    }),
-    getService: build.query<GetServiceApiResponse, GetServiceApiArg>({
-      query: queryArg => ({ url: `/service/${queryArg.id}` }),
-    }),
-    getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
-      query: queryArg => ({ url: `/project/${queryArg.projectId}` }),
-    }),
-    getOrder: build.query<GetOrderApiResponse, GetOrderApiArg>({
-      query: queryArg => ({ url: `/orders/${queryArg.orderId}` }),
-    }),
-    getFreelancerProfile: build.query<
-      GetFreelancerProfileApiResponse,
-      GetFreelancerProfileApiArg
-    >({
-      query: queryArg => ({ url: `/freelancer/profile/${queryArg.id}` }),
-    }),
-    getPrincipalFiles: build.query<
-      GetPrincipalFilesApiResponse,
-      GetPrincipalFilesApiArg
-    >({
-      query: () => ({ url: `/files` }),
-    }),
-    downloadFile: build.query<DownloadFileApiResponse, DownloadFileApiArg>({
-      query: queryArg => ({ url: `/files/download/${queryArg.fileId}` }),
-    }),
-    getEmployer: build.query<GetEmployerApiResponse, GetEmployerApiArg>({
-      query: () => ({ url: `/employer` }),
-    }),
-    getFilteredBids: build.query<
-      GetFilteredBidsApiResponse,
-      GetFilteredBidsApiArg
-    >({
-      query: queryArg => ({
-        url: `/bid/filter`,
-        params: {
-          projectId: queryArg.projectId,
-          rating: queryArg.rating,
-          firstName: queryArg.firstName,
-          lastName: queryArg.lastName,
-          minPrice: queryArg.minPrice,
-          maxPrice: queryArg.maxPrice,
-          statuses: queryArg.statuses,
-        },
+      adminAccess: build.query<AdminAccessApiResponse, AdminAccessApiArg>({
+        query: () => ({ url: `/test/admin` }),
+        providesTags: ["test-controller"],
       }),
-    }),
-    getCurrentUser: build.query<
-      GetCurrentUserApiResponse,
-      GetCurrentUserApiArg
-    >({
-      query: () => ({ url: `/auth` }),
-    }),
-  }),
-  overrideExisting: false,
-})
+      getService: build.query<GetServiceApiResponse, GetServiceApiArg>({
+        query: queryArg => ({ url: `/service/${queryArg.id}` }),
+        providesTags: ["Service"],
+      }),
+      getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
+        query: queryArg => ({ url: `/project/${queryArg.projectId}` }),
+        providesTags: ["Project"],
+      }),
+      getOrder: build.query<GetOrderApiResponse, GetOrderApiArg>({
+        query: queryArg => ({ url: `/orders/${queryArg.orderId}` }),
+        providesTags: ["order-controller"],
+      }),
+      getFreelancerProfile: build.query<
+        GetFreelancerProfileApiResponse,
+        GetFreelancerProfileApiArg
+      >({
+        query: queryArg => ({ url: `/freelancer/profile/${queryArg.id}` }),
+        providesTags: ["Freelancer"],
+      }),
+      getEmployer: build.query<GetEmployerApiResponse, GetEmployerApiArg>({
+        query: () => ({ url: `/employer` }),
+        providesTags: ["employer-controller"],
+      }),
+      getFilteredBids: build.query<
+        GetFilteredBidsApiResponse,
+        GetFilteredBidsApiArg
+      >({
+        query: queryArg => ({
+          url: `/bid/filter`,
+          params: {
+            projectId: queryArg.projectId,
+            rating: queryArg.rating,
+            firstName: queryArg.firstName,
+            lastName: queryArg.lastName,
+            minPrice: queryArg.minPrice,
+            maxPrice: queryArg.maxPrice,
+            statuses: queryArg.statuses,
+          },
+        }),
+        providesTags: ["bid-controller"],
+      }),
+        getCurrentUser: build.query<
+          GetCurrentUserApiResponse,
+          GetCurrentUserApiArg
+        >({
+          query: () => ({ url: `/auth` }),
+          providesTags: ["Auth"],
+        }),
+      }),
+    overrideExisting: false,
+  })
 export { injectedRtkApi as pcxApi }
 export type ReviewBidApiResponse = /** status 200 OK */ Bid
 export type ReviewBidApiArg = {
@@ -215,12 +264,12 @@ export type ApproveBidApiArg = {
   projectId: number
   bidId: number
 }
-export type CreateServiceApiResponse = /** status 200 OK */ Service
+export type CreateServiceApiResponse = /** status 201 Created */ FullServiceDto
 export type CreateServiceApiArg = {
-  serviceCreateDto: ServiceCreateDto
+  service: ServiceCreateDto
 }
 export type GetFilteredServicesApiResponse =
-  /** status 200 OK */ ServiceFilterResponse[]
+  /** status 200 OK */ LightweightServiceDto[]
 export type GetFilteredServicesApiArg = {
   serviceFilter: ServiceFilter
 }
@@ -238,14 +287,15 @@ export type BookServiceApiArg = {
   serviceId: number
   body: string
 }
+export type CreateFreelancerApiResponse =
+  /** status 201 Created */ FreelancerDto
+export type CreateFreelancerApiArg = {
+  registrationRequest: FreelancerRegistrationRequest
+}
 export type GetFilteredFreelancersApiResponse =
   /** status 200 OK */ FreelancerFilterResponse[]
 export type GetFilteredFreelancersApiArg = {
   freelancerFilter: FreelancerFilter
-}
-export type UploadFileApiResponse = /** status 200 OK */ MessageResponse
-export type UploadFileApiArg = {
-  fileUploadRequest: FileUploadRequest
 }
 export type RegisterEmployerApiResponse = /** status 200 OK */ MessageResponse
 export type RegisterEmployerApiArg = {
@@ -258,7 +308,7 @@ export type MakeBidApiArg = {
 }
 export type SwitchRoleApiResponse = /** status 200 OK */ object
 export type SwitchRoleApiArg = {
-  role: ERole
+  role: RoleType
 }
 export type RegisterUserApiResponse = /** status 200 OK */ AuthResponse
 export type RegisterUserApiArg = {
@@ -270,6 +320,10 @@ export type AuthenticateUserApiResponse = /** status 200 OK */ AuthResponse
 export type AuthenticateUserApiArg = {
   loginRequest: LoginRequest
 }
+export type CheckEmailApiResponse = unknown
+export type CheckEmailApiArg = {
+  email: string
+}
 export type UserAccessApiResponse = /** status 200 OK */ string
 export type UserAccessApiArg = void
 export type ModeratorAccessApiResponse = /** status 200 OK */ string
@@ -278,7 +332,7 @@ export type AllAccessApiResponse = /** status 200 OK */ string
 export type AllAccessApiArg = void
 export type AdminAccessApiResponse = /** status 200 OK */ string
 export type AdminAccessApiArg = void
-export type GetServiceApiResponse = /** status 200 OK */ ServiceDto
+export type GetServiceApiResponse = /** status 200 OK */ FullServiceDto
 export type GetServiceApiArg = {
   id: number
 }
@@ -292,16 +346,9 @@ export type GetOrderApiResponse = /** status 200 OK */ OrderDto
 export type GetOrderApiArg = {
   orderId: number
 }
-export type GetFreelancerProfileApiResponse = /** status 200 OK */ Freelancer
+export type GetFreelancerProfileApiResponse = /** status 200 OK */ FreelancerDto
 export type GetFreelancerProfileApiArg = {
   id: number
-}
-export type GetPrincipalFilesApiResponse =
-  /** status 200 OK */ FileResponseDto[]
-export type GetPrincipalFilesApiArg = void
-export type DownloadFileApiResponse = /** status 200 OK */ Blob
-export type DownloadFileApiArg = {
-  fileId: number
 }
 export type GetEmployerApiResponse = /** status 200 OK */ EmployerResponseDto
 export type GetEmployerApiArg = void
@@ -326,30 +373,23 @@ export type Address = {
   houseNumber: string
   region: string
 }
-export type Category = {
+export type File = {
+  ownerId: number
+  ownerType: OwnerType
+  documentType?: DocumentType
+  path: string
+  originalFileName: string
+  verified?: boolean
+  uploadAt: string
   id?: number
-  name?: CategoryType
 }
 export type Role = {
   id?: number
-  name?: ERole
+  name?: RoleType
 }
-export type Client = {
+export type Category = {
   id?: number
-  principal?: Principal
-  address?: Address
-  firstName: string
-  lastName: string
-  rating?: number
-}
-export type Principal = {
-  id?: number
-  email?: string
-  password: string
-  roles?: Role[]
-  freelancer?: Freelancer
-  employer?: Employer
-  client?: Client
+  name: CategoryType
 }
 export type Freelancer = {
   id?: number
@@ -358,40 +398,48 @@ export type Freelancer = {
   firstName: string
   lastName: string
   phoneNumber: string
-  profilePicture?: string
-  rating?: number
-  ratingCount?: number
+  avatarUrl?: string
+  rating: number
+  ratingCount: number
   categories?: Category[]
   accountStatus: AccountStatus
-  documents?: Document[]
+  files?: File[]
   principal: Principal
   registrationDate: string
   activationDate?: string
 }
-export type Document = {
+export type Client = {
   id?: number
-  freelancer: Freelancer
-  employer: Employer
-  documentName: DocumentType
-  documentPath: string
-  verified: boolean
-  uploadedDate: string
+  principal?: Principal
+  address?: Address
+  firstName: string
+  lastName: string
+  avatarUrl?: string
+  rating: number
+  ratingCount: number
+}
+export type Principal = {
+  id?: number
+  email: string
+  password: string
+  roles: Role[]
+  freelancer?: Freelancer
+  employer?: Employer
+  client?: Client
 }
 export type Employer = {
   id?: number
   address: Address
-  companyName?: string
-  firstName?: string
-  lastName?: string
-  description?: string
-  registrationCode?: string
-  email?: string
+  companyName: string
+  description: string
+  registrationCode: string
+  email: string
   phoneNumber: string
-  profilePicture?: string
-  rating?: number
-  ratingCount?: number
+  avatarUrl?: string
+  rating: number
+  ratingCount: number
   accountStatus: AccountStatus
-  documents?: Document[]
+  files?: File[]
   principal: Principal
   registrationDate: string
   activationDate?: string
@@ -413,16 +461,6 @@ export type Project = {
   bidStep?: number
   datePosted: string
   dueDate?: string
-}
-export type File = {
-  type: string
-  documentType?: DocumentType
-  path: string
-  fileName: string
-  verified?: boolean
-  uploadDate: string
-  principal?: Principal
-  id?: number
 }
 export type Bid = {
   id?: number
@@ -448,53 +486,104 @@ export type ErrorMessage = {
   id?: string
   message?: string
 }
-export type Comment = object
-export type Service = {
-  id?: number
-  freelancer?: Freelancer
-  title?: string
+export type LightWeightFreelancerDto = {
+  id: number
+  firstName: string
+  lastName: string
+  rating: number
+  avatarUrl?: string
+}
+export type WorkflowStep = {
+  stepNumber: number
+  title: string
   description?: string
-  price?: number
-  comments?: Comment[]
-  location?: string
-  category?: CategoryType
-  rating?: number
-  ratingCount?: number
-  postedAt?: string
+}
+export type Faq = {
+  question: string
+  answer: string
+}
+export type AddressDto = {
+  street: string
+  city: string
+  region: string
+  postalCode: string
+  country: string
+  houseNumber: string
+}
+export type ReviewerDto = {
+  id: number
+  firstName: string
+  lastName?: string
+  rating: number
+  type: Type
+  avatarUrl?: string
+}
+export type ReviewDto = {
+  id: number
+  reviewer: ReviewerDto
+  body?: string
+  rating: number
+  createdAt: string
+}
+export type FileResponseDto = {
+  id: number
+  originalFileName: string
+  documentType: DocumentType
+  path: string
+  uploadDate: string
+  verified: boolean
+}
+export type FullServiceDto = {
+  id: number
+  freelancer: LightWeightFreelancerDto
+  title: string
+  description: string
+  price: number
+  workflow?: WorkflowStep[]
+  faqs?: Faq[]
+  address?: AddressDto
+  reviews?: ReviewDto[]
+  categories: CategoryType[]
+  rating: number
+  ratingCount: number
+  imagesMeta: FileResponseDto[]
+  postedAt: string
 }
 export type ServiceCreateDto = {
   title: string
   description: string
   price: number
   location: string
-  category: CategoryType
+  categories: CategoryType[]
+  images: Blob[]
+  workflowJson?: string
+  faqsJson?: string
 }
-export type FreelancerDto = {
+export type LightweightAddressDto = {
+  city: string
+  postalCode: string
+  country: string
+}
+export type LightweightServiceDto = {
   id: number
-  firstName: string
-  lastName: string
-  avatarUrl?: string
-  rating?: number
-  ratingCount?: number
-}
-export type ServiceFilterResponse = {
-  id?: number
-  title?: string
-  description?: string
-  location?: string
-  rating?: number
-  ratingCount?: number
-  price?: number
-  freelancer?: FreelancerDto
-  category?: CategoryType
+  title: string
+  description: string
+  address?: LightweightAddressDto
+  rating: number
+  ratingCount: number
+  price: number
+  freelancer: LightWeightFreelancerDto
+  categories: CategoryType[]
+  postedAt: string
+  thumbnailMeta: FileResponseDto
 }
 export type ServiceFilter = {
   title?: string
-  categories?: CategoryType[]
+  categories: CategoryType[]
   location?: string
-  rating?: number
-  minBudget?: number
-  maxBudget?: number
+  rating: number
+  minBudget: number
+  maxBudget: number
 }
 export type ProjectCreateDto = {
   title: string
@@ -506,14 +595,6 @@ export type ProjectCreateDto = {
   budget?: number
   minSatisfyingBid?: number
   bidStep?: number
-}
-export type AddressDto = {
-  street: string
-  city: string
-  region: string
-  postalCode: string
-  country: string
-  houseNumber: string
 }
 export type EmployerResponseDto = {
   id: number
@@ -552,6 +633,58 @@ export type MessageResponse = {
   message: string
   entityId?: number
 }
+export type BidDto = {
+  id: number
+  freelancer: LightWeightFreelancerDto
+  amount: number
+  status: BidStatus
+  coverLetter: string
+  submittedAt: string
+  estimatedCompletionDate: string
+}
+export type ClientDto = {
+  id: number
+  address: AddressDto
+  firstName: string
+  lastName: string
+  rating: number
+}
+export type EventDto = {
+  id: number
+  clientId?: number
+  freelancerId?: number
+  type: Type2
+  createdAt: string
+}
+export type OrderDto = {
+  id: number
+  acceptedBid?: BidDto
+  service?: FullServiceDto
+  client?: ClientDto
+  status: Status
+  events: EventDto[]
+  createdAt: string
+  completedAt?: string
+}
+export type FreelancerDto = {
+  id: number
+  address: AddressDto
+  firstName: string
+  lastName: string
+  rating: number
+  ratingCount: number
+  orders?: OrderDto[]
+}
+export type FreelancerRegistrationRequest = {
+  firstName: string
+  lastName: string
+  email: string
+  address: AddressDto
+  phoneNumber: string
+  categories: CategoryType[]
+  avatarImage?: Blob
+  description?: string
+}
 export type FreelancerFilterResponse = {
   id?: number
   firstName?: string
@@ -569,10 +702,6 @@ export type FreelancerFilter = {
   country?: string
   city?: string
   rating?: number
-}
-export type FileUploadRequest = {
-  documentType: DocumentType
-  file: Blob
 }
 export type EmployerRegistrationRequest = {
   companyName: string
@@ -592,62 +721,19 @@ export type BidRequest = {
   estimatedCompletionDate?: string
 }
 export type AuthResponse = {
-  firstName: string
-  lastName: string
-  roles: ERole[]
-  activeRole: ERole
+  firstName?: string
+  lastName?: string
+  roles: RoleType[]
+  activeRoleType: RoleType
 }
 export type SignupFormRequest = {
   email: string
   password: string
-  role: string
+  role: RoleType
 }
 export type LoginRequest = {
   email: string
   password: string
-}
-export type ClientDto = {
-  id: number
-  address: AddressDto
-  firstName: string
-  lastName: string
-  rating: number
-}
-export type EmployerMainInfo = {
-  id?: number
-  companyName?: string
-  profilePicture?: string
-  rating?: number
-  ratingCount?: number
-}
-export type CommentDto = {
-  id: number
-  client?: ClientDto
-  employer?: EmployerMainInfo
-  freelancer?: FreelancerDto
-  body?: string
-}
-export type ServiceDto = {
-  id: number
-  freelancer: FreelancerDto
-  title: string
-  description: string
-  price: number
-  comments: CommentDto[]
-  location: string
-  category: CategoryType
-  rating: number
-  ratingCount: number
-  postedAt: string
-}
-export type BidDto = {
-  id: number
-  freelancer: FreelancerDto
-  amount: number
-  status: BidStatus
-  coverLetter: string
-  submittedAt: string
-  estimatedCompletionDate: string
 }
 export type ProjectOwnerDto = {
   id: number
@@ -665,30 +751,6 @@ export type ProjectOwnerDto = {
   dueDate?: string
   bids: BidDto[]
 }
-export type EventDto = {
-  id: number
-  clientId?: number
-  freelancerId?: number
-  type: Type
-  createdAt: string
-}
-export type OrderDto = {
-  id: number
-  acceptedBid?: BidDto
-  service?: ServiceDto
-  client?: ClientDto
-  status: Status
-  events: EventDto[]
-  createdAt: string
-  completedAt?: string
-}
-export type FileResponseDto = {
-  id: number
-  fileName: string
-  documentType: DocumentType
-  uploadDate: string
-  verified: boolean
-}
 export enum AccountStatus {
   Unverified = "UNVERIFIED",
   Pending = "PENDING",
@@ -696,6 +758,31 @@ export enum AccountStatus {
   Inactive = "INACTIVE",
   Deleted = "DELETED",
   Banned = "BANNED",
+}
+export enum OwnerType {
+  Service = "SERVICE",
+  Project = "PROJECT",
+  Client = "CLIENT",
+  Freelancer = "FREELANCER",
+  Employer = "EMPLOYER",
+}
+export enum DocumentType {
+  IdCard = "ID_CARD",
+  Passport = "PASSPORT",
+  DrivingLicense = "DRIVING_LICENSE",
+  BusinessLicense = "BUSINESS_LICENSE",
+  CompanyRegistration = "COMPANY_REGISTRATION",
+  BankStatement = "BANK_STATEMENT",
+  Other = "OTHER",
+  Gallery = "GALLERY",
+  Avatar = "AVATAR",
+}
+export enum RoleType {
+  RoleEmployer = "ROLE_EMPLOYER",
+  RoleFreelancer = "ROLE_FREELANCER",
+  RoleAdmin = "ROLE_ADMIN",
+  RoleUnverified = "ROLE_UNVERIFIED",
+  RoleClient = "ROLE_CLIENT",
 }
 export enum CategoryType {
   WebDesign = "WEB_DESIGN",
@@ -715,22 +802,6 @@ export enum CategoryType {
   Legal = "LEGAL",
   Other = "OTHER",
 }
-export enum ERole {
-  RoleEmployer = "ROLE_EMPLOYER",
-  RoleFreelancer = "ROLE_FREELANCER",
-  RoleAdmin = "ROLE_ADMIN",
-  RoleUnverified = "ROLE_UNVERIFIED",
-  RoleClient = "ROLE_CLIENT",
-}
-export enum DocumentType {
-  IdCard = "ID_CARD",
-  Passport = "PASSPORT",
-  DrivingLicense = "DRIVING_LICENSE",
-  BusinessLicense = "BUSINESS_LICENSE",
-  CompanyRegistration = "COMPANY_REGISTRATION",
-  BankStatement = "BANK_STATEMENT",
-  Other = "OTHER",
-}
 export enum ProjectStatus {
   Open = "OPEN",
   InProgress = "IN_PROGRESS",
@@ -746,13 +817,18 @@ export enum BidStatus {
   Approved = "APPROVED",
   Declined = "DECLINED",
 }
+export enum Type {
+  Employer = "Employer",
+  Client = "Client",
+  Freelancer = "Freelancer",
+}
 export enum Status {
   Created = "CREATED",
   InProgress = "IN_PROGRESS",
   Completed = "COMPLETED",
   Canceled = "CANCELED",
 }
-export enum Type {
+export enum Type2 {
   OrderCreated = "ORDER_CREATED",
   OrderCanceled = "ORDER_CANCELED",
   OrderCompleted = "ORDER_COMPLETED",
@@ -772,18 +848,19 @@ export const {
   useDeclineBidMutation,
   useApproveBidMutation,
   useCreateServiceMutation,
-  useGetFilteredServicesMutation,
+  useGetFilteredServicesQuery,
   useCreateProjectMutation,
   useGetFilteredProjectsMutation,
   useBookServiceMutation,
+  useCreateFreelancerMutation,
   useGetFilteredFreelancersMutation,
-  useUploadFileMutation,
   useRegisterEmployerMutation,
   useMakeBidMutation,
   useSwitchRoleMutation,
   useRegisterUserMutation,
   useLogoutUserMutation,
   useAuthenticateUserMutation,
+  useCheckEmailMutation,
   useUserAccessQuery,
   useModeratorAccessQuery,
   useAllAccessQuery,
@@ -792,8 +869,6 @@ export const {
   useGetProjectQuery,
   useGetOrderQuery,
   useGetFreelancerProfileQuery,
-  useGetPrincipalFilesQuery,
-  useDownloadFileQuery,
   useGetEmployerQuery,
   useGetFilteredBidsQuery,
   useGetCurrentUserQuery,

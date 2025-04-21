@@ -54,10 +54,6 @@ const ProjectPage = () => {
     const {data, isSuccess, isLoading, isFetching}
         = useGetProjectQuery({projectId: Number.parseInt(id)});
 
-    if (isLoading || isFetching) {
-        return <div>Loading...</div>;
-    }
-
     if (!isSuccess || !data) {
         return <div>Error</div>;
     }

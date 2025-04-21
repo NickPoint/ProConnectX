@@ -7,6 +7,7 @@ import com.nick1est.proconnectx.dao.Project;
 import com.nick1est.proconnectx.dto.ProjectCreateDto;
 import com.nick1est.proconnectx.dto.ProjectFilter;
 import com.nick1est.proconnectx.dto.ProjectPublicDto;
+import com.nick1est.proconnectx.mapper.CategoryMapper;
 import com.nick1est.proconnectx.mapper.ProjectMapper;
 import com.nick1est.proconnectx.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +27,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final EmployerService employerService;
+    private final CategoryMapper categoryMapper;
 
     public Project createProject(ProjectCreateDto project) {
         log.info("Creating project: {}", project);
@@ -74,14 +76,7 @@ public class ProjectService {
 
     public List<ProjectPublicDto> findFilteredProjects(ProjectFilter projectFilter) {
         log.info("Finding projects by filter: {}", projectFilter);
-        List<Category> categories;
-        if (projectFilter.getCategories() != null) {
-            categories = projectMapper.mapECategoriesToCategories(projectFilter.getCategories());
-        }
-        else {
-            categories = null;
-        }
-        log.debug("Categories: {}", categories);
+        val categories = categoryMapper.toDaoList(projectFilter.getCategories());
 
         val filteredProjects = projectRepository.findByFieldAndLocationAndPriceAndType(
                 projectFilter.getTitle(),
@@ -89,7 +84,7 @@ public class ProjectService {
                 projectFilter.getLocation(),
                 projectFilter.getMinBudget(),
                 projectFilter.getMaxBudget(),
-                projectFilter.getType() != null ? projectFilter.getType().name() : null);
+                projectFilter.getType());
         return projectMapper.projectsToProjectPublicDtos(filteredProjects);
     }
 

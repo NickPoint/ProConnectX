@@ -12,7 +12,7 @@ public class OrderDto {
     @NotNull
     private Long id;
     private BidDto acceptedBid;
-    private ServiceDto service;
+    private FullServiceDto service;
     private ClientDto client;
     @NotNull
     private OrderStatus status;

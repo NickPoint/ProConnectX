@@ -50,25 +50,26 @@ public class UserDetailsImpl implements UserDetails {
     private String lastName;
 
     @Getter
-    private ERole activeRole;
+    private RoleType activeRoleType;
 
     @NotNull
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public void setActiveRole(ERole activeRole) {
-        if (ERole.ROLE_CLIENT.equals(activeRole)) {
-            this.firstName = client.getFirstName();
-            this.lastName = client.getLastName();
-        } else if (ERole.ROLE_FREELANCER.equals(activeRole)) {
-            this.firstName = freelancer.getFirstName();
-            this.lastName = freelancer.getLastName();
-        } else if (ERole.ROLE_EMPLOYER.equals(activeRole)) {
-            this.firstName = employer.getFirstName();
-            this.lastName = employer.getLastName();
-        } else {
-            throw new IllegalArgumentException("Invalid role: " + activeRole);
+    public void setActiveRoleType(RoleType activeRoleType) {
+        switch (activeRoleType) {
+            case ROLE_CLIENT -> {
+                this.firstName = client.getFirstName();
+                this.lastName = client.getLastName();
+            }
+            case ROLE_FREELANCER -> {
+                this.firstName = freelancer.getFirstName();
+                this.lastName = freelancer.getLastName();
+            }
+            case ROLE_EMPLOYER -> this.firstName = employer.getCompanyName();
+            case ROLE_UNVERIFIED -> {}
+            default -> throw new IllegalArgumentException("Invalid role: " + activeRoleType);
         }
-        this.activeRole = activeRole;
+        this.activeRoleType = activeRoleType;
     }
 
     public static UserDetailsImpl build(Principal principal) {

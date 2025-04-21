@@ -10,8 +10,8 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class ProjectMapper extends CommonMapper {
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
+public abstract class ProjectMapper {
 
     public abstract Project projectCreateDtoToProject(ProjectCreateDto projectCreateDto);
 

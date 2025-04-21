@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid"
 import {Divider, Paper, Typography} from "@mui/material";
 import {BidCardDto} from "../../../features/api/pcxApi";
-import Rating from "../Rating";
+import Rating from "../Rating.tsx";
 import ClientInfo from "../ClientInfo";
 import {useLocation, useNavigate} from "react-router-dom";
 

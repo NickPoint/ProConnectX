@@ -9,6 +9,7 @@ import theme from "./app/theme/theme";
 import {SnackbarProvider} from "notistack";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
+import './i18n'
 
 const container = document.getElementById("root")
 

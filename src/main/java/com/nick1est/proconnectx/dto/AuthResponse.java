@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nick1est.proconnectx.dao.ERole;
+import com.nick1est.proconnectx.dao.RoleType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -17,12 +17,10 @@ public class AuthResponse {
     @NotNull
     @JsonIgnore
     private ResponseCookie token;
-    @NotBlank
     private final String firstName;
-    @NotBlank
     private final String lastName;
     @NotNull
-    private final Set<ERole> roles;
+    private final Set<RoleType> roles;
     @NotBlank
-    private final ERole activeRole;
+    private final RoleType activeRoleType;
 }

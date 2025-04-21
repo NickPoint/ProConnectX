@@ -12,14 +12,18 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 public class File {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @Column(nullable = false)
-    @NotBlank
-    private String type;
+    @NotNull
+    private Long ownerId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private OwnerType ownerType;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -31,22 +35,21 @@ public class File {
 
     @Column(nullable = false)
     @NotBlank
-    private String fileName;
+    private String originalFileName;
 
-    @Column(nullable = false)
-    private boolean verified;
+    @Column
+    private Boolean verified;
 
     @Column(nullable = false)
     @NotNull
-    private OffsetDateTime uploadDate;
-
-    @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Principal principal;
+    private OffsetDateTime uploadAt;
 
     @PrePersist
     public void prePersist() {
-        uploadDate = OffsetDateTime.now();
+        if (verified == null) {
+            verified = false;
+        }
+        uploadAt = OffsetDateTime.now();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.repository;
 
-import com.nick1est.proconnectx.dao.ERole;
+import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dao.Role;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +13,6 @@ import java.util.Optional;
 @RepositoryRestResource(exported = false)
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-    Optional<Role> findByName(@NonNull ERole name);
+    Optional<Role> findByName(@NonNull RoleType name);
 
 }

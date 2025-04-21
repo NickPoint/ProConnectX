@@ -1,0 +1,98 @@
+{
+  "platform": {
+    "slogan": "Work Smarter, Connect Faster"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for doesn’t exist or has been moved.",
+    "backToHome": "Back to Home",
+    "errorCode": "404"
+  },
+  "header": {
+    "user": {
+      "greeting": "Hi, {{firstName}}!",
+      "unverified": "Hi, Rookie!",
+      "status": {
+        "freelancer": {
+          "available": "Available for new projects!",
+          "busy": "Working hard to make you happy!"
+        }
+      }
+    }
+  },
+  "join": {
+    "page": {
+      "title": "Choose your role and start your journey",
+      "client": {
+        "title": "Client",
+        "description": "Discover top talent to bring your ideas to life."
+      },
+      "freelancer": {
+        "title": "Freelancer",
+        "description": "Showcase your skills and find exciting projects to work on."
+      },
+      "switchRole": "No worries if you change your mind later—you’ll always have the option to switch roles as your needs evolve."
+    }
+  },
+  "service": {
+    "page": {
+      "title": ""
+    },
+    "create": {
+      "successful": "",
+      "error": ""
+    },
+    "notFound": ""
+  },
+  "order": {
+    "create": "",
+    "error": ""
+  },
+  "signIn": {
+    "form": {
+      "success": "Welcome back!"
+    }
+  },
+  "userRegistration": {
+    "succes": ""
+  },
+  "verification": {
+    "title": "Verification",
+    "description": {
+      "header": "Hey there, welcome to the verification zone\uD83D\uDEE1\uFE0F",
+      "body": "Before we get you up and running, we need a few things to make sure you're legit."
+    },
+    "form": {
+      "steps": {
+        "yourDetails": "Your Details",
+        "aboutYourself": "About Yourself",
+        "avatar": "Avatar",
+        "step1": {
+          "firstName": "Your first name - make it official, not your favorite alias!",
+          "lastName": "Your last name, exactly how it appears on your ID.",
+          "email": "Your go-to email for updates and news. Don't worry, no spam here!",
+          "address": {
+            "fullAddress": "Your full address, street, city, and more. We like to keep things clear!"
+          },
+          "phoneNumber": "Your main contact number. We'll only use it if we absolutely need to!"
+        },
+          "undefined": "Start filling out your details, and we’ll guide you through the process step by step - it’s super easy!"
+      },
+      "companyName": "The name of your company or brand. Keep it official but recognizable!",
+      "registrationCode": "Your company’s unique registration or tax code. Helps us stay compliant!",
+      "email": "Your main contact email. We’ll send you updates and important info here.",
+      "address": {
+        "street": "The street name where your office is located. Make it precise!",
+        "city": "The city where your office or HQ is based. E.g., Berlin, New York.",
+        "state": "Your state or province. Skip it if it’s not applicable!",
+        "region": "The broader region for your location. Helps for global users!",
+        "postalCode": "Your postal or ZIP code to ensure accurate deliveries (if needed).",
+        "country": "Your country of operation. Let us know where you’re working from!",
+        "houseNumber": "Your building or house number. Optional, but can be helpful!"
+      },
+      "phoneNumber": "Your primary phone number. We might call to verify your details.",
+      "country": "The country you’ll mostly operate in. Feel free to specify here again!",
+      "description": "A short, snappy description of your company or what you do. Sell yourself here!"
+    }
+  }
+}

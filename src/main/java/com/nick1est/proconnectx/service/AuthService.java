@@ -2,12 +2,13 @@ package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.ERole;
+import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dao.Principal;
 import com.nick1est.proconnectx.dto.AuthResponse;
 import com.nick1est.proconnectx.dto.LoginRequest;
 import com.nick1est.proconnectx.dto.SignupFormRequest;
-import com.nick1est.proconnectx.exception.FormValidationEx;
+import com.nick1est.proconnectx.exception.EmailAlreadyExistsException;
+import com.nick1est.proconnectx.exception.FormValidationException;
 import com.nick1est.proconnectx.repository.PrincipalRepository;
 import com.nick1est.proconnectx.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,10 @@ public class AuthService {
     private final PrincipalRepository principalRepository;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
+    private final ClientService clientService;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
+    private final FreelancerService freelancerService;
 
     public AuthResponse signInUser(LoginRequest loginRequest) {
         val authentication = authenticationManager
@@ -40,58 +43,73 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         val userDetails = (UserDetailsImpl) authentication.getPrincipal();
         chooseActiveRole(userDetails);
-        val jwtCookie = jwtUtils.generateJwtCookie(userDetails, userDetails.getActiveRole());
+        val jwtCookie = jwtUtils.generateJwtCookie(userDetails, userDetails.getActiveRoleType());
         val roles = getUserRoles(userDetails);
         return new AuthResponse(jwtCookie, userDetails.getFirstName(), userDetails.getLastName(),
-                roles, userDetails.getActiveRole());
+                roles, userDetails.getActiveRoleType());
+    }
+
+    public boolean checkEmailExists(String email) {
+        return principalRepository.findByEmail(email).isPresent();
     }
 
     @Transactional
     public AuthResponse signupUser(SignupFormRequest signupFormRequest) {
         if (principalRepository.existsByEmail(signupFormRequest.getEmail())) {
-            throw new FormValidationEx(Map.of("email", "Email is already in use."));
+            throw new EmailAlreadyExistsException("error.signup.email_exists", signupFormRequest.getEmail());
         }
 
-        val principal = new Principal(signupFormRequest.getEmail(), encoder.encode(signupFormRequest.getPassword()));
-        principal.setRoles(Set.of(roleRepository.findByName(ERole.ROLE_UNVERIFIED).orElseThrow(() -> new RuntimeException("Error: Role is not found."))));
-        principalRepository.save(principal);
+        val principal = new Principal();
+        principal.setEmail(signupFormRequest.getEmail());
+        principal.setPassword(encoder.encode(signupFormRequest.getPassword()));
+        val roleUnverified = roleRepository.findByName(RoleType.ROLE_UNVERIFIED)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        val roleFromRequest = roleRepository.findByName(signupFormRequest.getRole())
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        principal.setRoles(Set.of(roleUnverified));
+
+        if (RoleType.ROLE_CLIENT.equals(roleFromRequest)) {
+            clientService.initClient(principal);
+        } else {
+            freelancerService.initFreelancer(principal);
+        }
+
         return signInUser(new LoginRequest(signupFormRequest.getEmail(), signupFormRequest.getPassword()));
     }
 
-    public AuthResponse switchRole(UserDetailsImpl userDetails, ERole role) {
+    public AuthResponse switchRole(UserDetailsImpl userDetails, RoleType role) {
         if (!userDetails.getAuthorities().contains(new SimpleGrantedAuthority(role.toString()))) {
             throw new AccessDeniedException("You don't have access to this role: " + role);
         }
         val jwtCookie = jwtUtils.generateJwtCookie(userDetails, role);
-        userDetails.setActiveRole(role);
+        userDetails.setActiveRoleType(role);
         val roles = getUserRoles(userDetails);
         return new AuthResponse(jwtCookie, userDetails.getFirstName(), userDetails.getLastName(),
-                roles, userDetails.getActiveRole());
+                roles, userDetails.getActiveRoleType());
     }
 
     private void chooseActiveRole(UserDetailsImpl userDetails) {
         val roles = getUserRoles(userDetails);
-        if (roles.contains(ERole.ROLE_FREELANCER)) {
+        if (roles.contains(RoleType.ROLE_UNVERIFIED)) {
+            userDetails.setActiveRoleType(RoleType.ROLE_UNVERIFIED);
+        } else if (roles.contains(RoleType.ROLE_FREELANCER)) {
             userDetails.setFirstName(userDetails.getFreelancer().getFirstName());
             userDetails.setLastName(userDetails.getFreelancer().getLastName());
-            userDetails.setActiveRole(ERole.ROLE_FREELANCER);
-        } else if (roles.contains(ERole.ROLE_EMPLOYER)) {
-            userDetails.setFirstName(userDetails.getEmployer().getFirstName());
-            userDetails.setLastName(userDetails.getEmployer().getLastName());
-            userDetails.setActiveRole(ERole.ROLE_EMPLOYER);
-        } else if (roles.contains(ERole.ROLE_CLIENT)) {
+            userDetails.setActiveRoleType(RoleType.ROLE_FREELANCER);
+        } else if (roles.contains(RoleType.ROLE_EMPLOYER)) {
+            userDetails.setFirstName(userDetails.getEmployer().getCompanyName());
+            userDetails.setActiveRoleType(RoleType.ROLE_EMPLOYER);
+        } else if (roles.contains(RoleType.ROLE_CLIENT)) {
             userDetails.setFirstName(userDetails.getClient().getFirstName());
             userDetails.setLastName(userDetails.getClient().getLastName());
-            userDetails.setActiveRole(ERole.ROLE_CLIENT);
-        } else if (roles.contains(ERole.ROLE_UNVERIFIED)) {
-            userDetails.setActiveRole(ERole.ROLE_UNVERIFIED);
+            userDetails.setActiveRoleType(RoleType.ROLE_CLIENT);
         } else {
             throw new RuntimeException("User has no role assigned!");
         }
     }
 
-    public Set<ERole> getUserRoles(UserDetailsImpl userDetails) {
-        return userDetails.getAuthorities().stream().map(grantedAuthority -> ERole.valueOf(grantedAuthority.getAuthority())).collect(Collectors.toSet());
+    public Set<RoleType> getUserRoles(UserDetailsImpl userDetails) {
+        return userDetails.getAuthorities().stream().map(grantedAuthority -> RoleType.valueOf(grantedAuthority.getAuthority())).collect(Collectors.toSet());
     }
 
 }

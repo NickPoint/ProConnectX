@@ -9,8 +9,6 @@ import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
 import {selectUser} from "../../../features/auth/authSlice";
 import {useLogoutUserMutation} from "../../../features/api/pcxApi";
 
-;
-
 const StyledToolbar = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
@@ -43,7 +41,7 @@ const Header2 = () => {
     }
 
     return (
-        (<Toolbar disableGutters>
+        (<StyledToolbar disableGutters>
             <Box
                 sx={{
                     display: 'flex',
@@ -116,7 +114,7 @@ const Header2 = () => {
                     </Box>
                 )}
             </Box>
-        </Toolbar>)
+        </StyledToolbar>)
     );
 }
 

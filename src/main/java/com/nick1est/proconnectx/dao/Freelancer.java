@@ -3,7 +3,8 @@ package com.nick1est.proconnectx.dao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.OffsetDateTime;
@@ -19,32 +20,35 @@ public class Freelancer {
     private Long id;
 
     @JoinColumn(nullable = false)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @NotNull
+    private Principal principal;
+
+    @JoinColumn
     @OneToOne
     private Address address;
 
     @Column
     private String description;
 
-    @Column(nullable = false)
-    @NotBlank
+    @Column
     private String firstName;
 
-    @Column(nullable = false)
-    @NotBlank
+    @Column
     private String lastName;
 
-    @Column(nullable = false)
-    @NotBlank
+    @Column
     private String phoneNumber;
 
     @Column
-    private String profilePicture;
+    private String avatarUrl;
 
     @Range(min = 0, max = 5)
+    @NotNull
     private Double rating;
 
     @Range(min = 0)
+    @NotNull
     private Integer ratingCount;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -58,24 +62,23 @@ public class Freelancer {
     @NotNull
     private AccountStatus accountStatus;
 
-    @OneToMany(mappedBy = "freelancer", fetch = FetchType.LAZY)
-    private List<Document> documents;
-
-    @JoinColumn(nullable = false)
-    @OneToOne
-    @NotNull
-    private Principal principal;
+    @OneToMany(mappedBy = "ownerId", fetch = FetchType.LAZY)
+    private List<File> files;
 
     @Column(nullable = false)
     @NotNull
     private OffsetDateTime registrationDate;
 
-    @Column(nullable = false)
+    @Column
     private OffsetDateTime activationDate;
 
     @PrePersist
     public void prePersist() {
-        this.accountStatus = AccountStatus.UNVERIFIED;
+        if (accountStatus == null) {
+            accountStatus = AccountStatus.UNVERIFIED;
+        }
+        this.rating = 0.0;
+        this.ratingCount = 0;
         this.registrationDate = OffsetDateTime.now();
     }
 }

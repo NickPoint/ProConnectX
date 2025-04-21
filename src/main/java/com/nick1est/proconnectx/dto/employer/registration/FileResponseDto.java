@@ -12,10 +12,12 @@ public class FileResponseDto {
     @NotNull
     private Long id;
     @NotBlank
-    private String fileName;
+    private String originalFileName;
     @NotNull
     private DocumentType documentType;
     @NotBlank
+    private String path;
+    @NotNull
     private OffsetDateTime uploadDate;
     @NotNull
     private Boolean verified;

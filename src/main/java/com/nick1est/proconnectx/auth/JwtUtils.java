@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.auth;
 
-import com.nick1est.proconnectx.dao.ERole;
+import com.nick1est.proconnectx.dao.RoleType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -37,10 +37,10 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, ERole role) {
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, RoleType role) {
         String jwt = Jwts.builder()
                 .subject(userPrincipal.getEmail())
-                .claim("activeRole", role.toString())
+                .claim("activeRoleType", role.toString())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key())
@@ -59,7 +59,7 @@ public class JwtUtils {
 
     public String getActiveRoleFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().get("activeRole", String.class);
+                .parseClaimsJws(token).getBody().get("activeRoleType", String.class);
     }
 
     private Key key() {

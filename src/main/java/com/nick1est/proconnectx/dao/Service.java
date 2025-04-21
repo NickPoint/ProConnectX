@@ -1,9 +1,16 @@
 package com.nick1est.proconnectx.dao;
 
+import com.nick1est.proconnectx.dto.Faq;
 import com.nick1est.proconnectx.dto.WorkflowStep;
-import com.nick1est.proconnectx.converter.WorkflowConverter;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.OffsetDateTime;
@@ -30,24 +37,41 @@ public class Service {
     @Column(nullable = false)
     private Double price;
 
+    @Type(JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    @Convert(converter = WorkflowConverter.class)
     private List<WorkflowStep> workflow;
 
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "service")
-    private List<Comment> comments;
+    @Type(JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<Faq> faqs;
 
-    @JoinColumn(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private CategoryType category;
+    @JoinColumn
+    @OneToOne
+    private Address address;
+
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @NotEmpty
+    private List<File> imagesMeta;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "service_categories",
+            joinColumns = @JoinColumn(name = "service_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories;
 
     @Column(nullable = false)
     @Range(min = 0, max = 5)
+    @NotNull
     private Double rating;
 
     @Column(nullable = false)
     @Range(min = 0)
+    @NotNull
     private Integer ratingCount;
 
     @Column(nullable = false)
@@ -55,6 +79,8 @@ public class Service {
 
     @PrePersist
     private void prePersist() {
+        ratingCount = 0;
+        rating = 0.0;
         postedAt = OffsetDateTime.now();
     }
 }

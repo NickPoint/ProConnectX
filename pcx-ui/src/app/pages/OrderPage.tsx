@@ -1,17 +1,9 @@
-import {
-    ClientDto,
-    ERole,
-    EventDto,
-    FreelancerDto,
-    useGetCurrentUserQuery,
-    useGetOrderQuery
-} from "../../features/api/pcxApi.ts";
+import {RoleType, EventDto, useGetCurrentUserQuery, useGetOrderQuery} from "../../features/api/pcxApi.ts";
 import {useParams} from "react-router-dom";
 import {useAppDispatch} from "../hooks.ts";
 import Grid from "@mui/material/Grid";
-import {Box, Chip, Stack} from "@mui/material";
+import {Chip} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import React from "react";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
@@ -58,10 +50,6 @@ const OrderPage = () => {
     const {data: order, isSuccess, isLoading, isFetching}
         = useGetOrderQuery({orderId: Number.parseInt(id)});
 
-    if (isLoading || isFetching) {
-        return <div>Loading...</div>;
-    }
-
     return (
         <Container component={Paper} maxWidth='sm' sx={{p: 2}}>
             <Grid container spacing={4}>
@@ -85,12 +73,12 @@ const OrderPage = () => {
                 </Grid>
                 <Grid container size={12} spacing={1}>
                     <Grid size={{xs: 12}}>
-                        {user?.activeRole === ERole.RoleClient ?
+                        {user?.activeRoleType === RoleType.RoleClient ?
                             <Typography variant='h6'>Freelancer</Typography> :
                             <Typography variant='h6'>Client</Typography>}
                     </Grid>
                     <Grid size={{xs: 12}}>
-                        {user?.activeRole === ERole.RoleClient
+                        {user?.activeRoleType === RoleType.RoleClient
                             ? <UserCard variant='paper' {...order.service?.freelancer} />
                             : <UserCard variant='paper' {...order.client}/>}
                     </Grid>

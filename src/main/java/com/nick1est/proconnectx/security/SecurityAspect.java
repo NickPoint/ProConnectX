@@ -22,7 +22,7 @@ public class SecurityAspect {
     @Before("@annotation(checkOrderOwner) && args(orderId, userDetails,..)")
     public void checkOrderOwnership(CheckOrderOwner checkOrderOwner, Long orderId, UserDetailsImpl userDetails) {
         log.debug("checkOrderOwnership");
-        val activeRole = userDetails.getActiveRole();
+        val activeRole = userDetails.getActiveRoleType();
         switch (activeRole) {
             case ROLE_CLIENT -> orderRepository.existsByIdAndClient(orderId, userDetails.getClient());
             case ROLE_FREELANCER -> orderRepository.existsByIdAndServiceFreelancer(orderId, userDetails.getFreelancer());

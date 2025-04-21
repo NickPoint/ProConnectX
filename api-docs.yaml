@@ -25,14 +25,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -74,14 +88,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -123,14 +151,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -156,23 +198,37 @@ paths:
   /service:
     post:
       tags:
-      - service-controller
+      - Service
       operationId: createService
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ServiceCreateDto'
+      parameters:
+      - name: service
+        in: query
         required: true
+        schema:
+          $ref: '#/components/schemas/ServiceCreateDto'
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -189,16 +245,16 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/FormValidationResponse'
-        "200":
-          description: OK
+        "201":
+          description: Created
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Service'
+                $ref: '#/components/schemas/FullServiceDto'
   /service/filter:
     post:
       tags:
-      - service-controller
+      - Service
       operationId: getFilteredServices
       requestBody:
         content:
@@ -207,14 +263,28 @@ paths:
               $ref: '#/components/schemas/ServiceFilter'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -238,11 +308,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ServiceFilterResponse'
+                  $ref: '#/components/schemas/LightweightServiceDto'
   /project:
     post:
       tags:
-      - projects-controller
+      - Project
       operationId: createProject
       requestBody:
         content:
@@ -251,14 +321,28 @@ paths:
               $ref: '#/components/schemas/ProjectCreateDto'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -284,7 +368,7 @@ paths:
   /project/filter:
     post:
       tags:
-      - projects-controller
+      - Project
       operationId: getFilteredProjects
       requestBody:
         content:
@@ -293,14 +377,28 @@ paths:
               $ref: '#/components/schemas/ProjectFilter'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -344,14 +442,28 @@ paths:
               type: string
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -374,10 +486,66 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/MessageResponse'
+  /freelancer:
+    post:
+      tags:
+      - Freelancer
+      operationId: createFreelancer
+      parameters:
+      - name: registrationRequest
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/FreelancerRegistrationRequest'
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
+        "201":
+          description: Created
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FreelancerDto'
   /freelancer/filter:
     post:
       tags:
-      - freelancer-controller
+      - Freelancer
       operationId: getFilteredFreelancers
       requestBody:
         content:
@@ -386,14 +554,28 @@ paths:
               $ref: '#/components/schemas/FreelancerFilter'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -418,48 +600,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/FreelancerFilterResponse'
-  /files/upload:
-    post:
-      tags:
-      - file-controller
-      operationId: uploadFile
-      parameters:
-      - name: fileUploadRequest
-        in: query
-        required: true
-        schema:
-          $ref: '#/components/schemas/FileUploadRequest'
-      responses:
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "500":
-          description: Internal Server Error
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
   /employer/register:
     post:
       tags:
@@ -472,14 +612,28 @@ paths:
               $ref: '#/components/schemas/EmployerRegistrationRequest'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -521,14 +675,28 @@ paths:
               $ref: '#/components/schemas/BidRequest'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -554,23 +722,37 @@ paths:
   /auth/switch-role:
     post:
       tags:
-      - auth-controller
+      - Auth
       operationId: switchRole
       parameters:
       - name: role
         in: query
         required: true
         schema:
-          $ref: '#/components/schemas/ERole'
+          $ref: '#/components/schemas/RoleType'
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -596,7 +778,7 @@ paths:
   /auth/signup:
     post:
       tags:
-      - auth-controller
+      - Auth
       operationId: registerUser
       requestBody:
         content:
@@ -605,14 +787,28 @@ paths:
               $ref: '#/components/schemas/SignupFormRequest'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -638,17 +834,31 @@ paths:
   /auth/logout:
     post:
       tags:
-      - auth-controller
+      - Auth
       operationId: logoutUser
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -674,7 +884,7 @@ paths:
   /auth/login:
     post:
       tags:
-      - auth-controller
+      - Auth
       operationId: authenticateUser
       requestBody:
         content:
@@ -683,14 +893,28 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
         required: true
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -713,20 +937,86 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
-  /test/user:
-    get:
+  /auth/check-email:
+    post:
       tags:
-      - test-controller
-      operationId: userAccess
+      - Auth
+      operationId: checkEmail
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/FormValidationResponse'
+        "200":
+          description: OK
+  /test/user:
+    get:
+      tags:
+      - test-controller
+      operationId: userAccess
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -755,14 +1045,28 @@ paths:
       - test-controller
       operationId: moderatorAccess
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -791,14 +1095,28 @@ paths:
       - test-controller
       operationId: allAccess
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -827,14 +1145,28 @@ paths:
       - test-controller
       operationId: adminAccess
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -860,7 +1192,7 @@ paths:
   /service/{id}:
     get:
       tags:
-      - service-controller
+      - Service
       operationId: getService
       parameters:
       - name: id
@@ -870,14 +1202,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -899,11 +1245,11 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ServiceDto'
+                $ref: '#/components/schemas/FullServiceDto'
   /project/{projectId}:
     get:
       tags:
-      - projects-controller
+      - Project
       operationId: getProject
       parameters:
       - name: projectId
@@ -913,14 +1259,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -962,14 +1322,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -995,7 +1369,7 @@ paths:
   /freelancer/profile/{id}:
     get:
       tags:
-      - freelancer-controller
+      - Freelancer
       operationId: getFreelancerProfile
       parameters:
       - name: id
@@ -1005,14 +1379,28 @@ paths:
           type: integer
           format: int64
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -1034,103 +1422,35 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Freelancer'
-  /files:
-    get:
-      tags:
-      - file-controller
-      operationId: getPrincipalFiles
-      responses:
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "500":
-          description: Internal Server Error
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FileResponseDto'
-  /files/download/{fileId}:
-    get:
-      tags:
-      - file-controller
-      operationId: downloadFile
-      parameters:
-      - name: fileId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "500":
-          description: Internal Server Error
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/FormValidationResponse'
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                type: string
-                format: binary
+                $ref: '#/components/schemas/FreelancerDto'
   /employer:
     get:
       tags:
       - employer-controller
       operationId: getEmployer
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -1201,14 +1521,28 @@ paths:
           items:
             $ref: '#/components/schemas/BidStatus'
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -1236,17 +1570,31 @@ paths:
   /auth:
     get:
       tags:
-      - auth-controller
+      - Auth
       operationId: getCurrentUser
       responses:
-        "401":
-          description: Unauthorized
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "409":
+          description: Conflict
           content:
             application/hal+json:
               schema:
@@ -1370,6 +1718,8 @@ components:
       - APPROVED
       - DECLINED
     Category:
+      required:
+      - name
       type: object
       properties:
         id:
@@ -1400,6 +1750,8 @@ components:
       required:
       - firstName
       - lastName
+      - rating
+      - ratingCount
       type: object
       properties:
         id:
@@ -1413,35 +1765,14 @@ components:
           type: string
         lastName:
           type: string
+        avatarUrl:
+          type: string
         rating:
           type: number
           format: double
-    Document:
-      required:
-      - documentName
-      - documentPath
-      - employer
-      - freelancer
-      - uploadedDate
-      - verified
-      type: object
-      properties:
-        id:
+        ratingCount:
           type: integer
-          format: int64
-        freelancer:
-          $ref: '#/components/schemas/Freelancer'
-        employer:
-          $ref: '#/components/schemas/Employer'
-        documentName:
-          $ref: '#/components/schemas/DocumentType'
-        documentPath:
-          type: string
-        verified:
-          type: boolean
-        uploadedDate:
-          type: string
-          format: date-time
+          format: int32
     DocumentType:
       type: string
       enum:
@@ -1452,20 +1783,20 @@ components:
       - COMPANY_REGISTRATION
       - BANK_STATEMENT
       - OTHER
-    ERole:
-      type: string
-      enum:
-      - ROLE_EMPLOYER
-      - ROLE_FREELANCER
-      - ROLE_ADMIN
-      - ROLE_UNVERIFIED
-      - ROLE_CLIENT
+      - GALLERY
+      - AVATAR
     Employer:
       required:
       - accountStatus
       - address
+      - companyName
+      - description
+      - email
       - phoneNumber
       - principal
+      - rating
+      - ratingCount
+      - registrationCode
       - registrationDate
       type: object
       properties:
@@ -1476,10 +1807,6 @@ components:
           $ref: '#/components/schemas/Address'
         companyName:
           type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
         description:
           type: string
         registrationCode:
@@ -1488,7 +1815,7 @@ components:
           type: string
         phoneNumber:
           type: string
-        profilePicture:
+        avatarUrl:
           type: string
         rating:
           type: number
@@ -1498,10 +1825,10 @@ components:
           format: int32
         accountStatus:
           $ref: '#/components/schemas/AccountStatus'
-        documents:
+        files:
           type: array
           items:
-            $ref: '#/components/schemas/Document'
+            $ref: '#/components/schemas/File'
         principal:
           $ref: '#/components/schemas/Principal'
         registrationDate:
@@ -1512,27 +1839,35 @@ components:
           format: date-time
     File:
       required:
-      - fileName
+      - originalFileName
+      - ownerId
+      - ownerType
       - path
-      - type
-      - uploadDate
+      - uploadAt
       type: object
       properties:
-        type:
+        ownerId:
+          type: integer
+          format: int64
+        ownerType:
           type: string
+          enum:
+          - SERVICE
+          - PROJECT
+          - CLIENT
+          - FREELANCER
+          - EMPLOYER
         documentType:
           $ref: '#/components/schemas/DocumentType'
         path:
           type: string
-        fileName:
+        originalFileName:
           type: string
         verified:
           type: boolean
-        uploadDate:
+        uploadAt:
           type: string
           format: date-time
-        principal:
-          $ref: '#/components/schemas/Principal'
         id:
           type: integer
           format: int64
@@ -1544,6 +1879,8 @@ components:
       - lastName
       - phoneNumber
       - principal
+      - rating
+      - ratingCount
       - registrationDate
       type: object
       properties:
@@ -1560,7 +1897,7 @@ components:
           type: string
         phoneNumber:
           type: string
-        profilePicture:
+        avatarUrl:
           type: string
         rating:
           type: number
@@ -1574,10 +1911,10 @@ components:
             $ref: '#/components/schemas/Category'
         accountStatus:
           $ref: '#/components/schemas/AccountStatus'
-        documents:
+        files:
           type: array
           items:
-            $ref: '#/components/schemas/Document'
+            $ref: '#/components/schemas/File'
         principal:
           $ref: '#/components/schemas/Principal'
         registrationDate:
@@ -1588,7 +1925,9 @@ components:
           format: date-time
     Principal:
       required:
+      - email
       - password
+      - roles
       type: object
       properties:
         id:
@@ -1676,11 +2015,20 @@ components:
           type: integer
           format: int64
         name:
-          $ref: '#/components/schemas/ERole'
+          $ref: '#/components/schemas/RoleType'
+    RoleType:
+      type: string
+      enum:
+      - ROLE_EMPLOYER
+      - ROLE_FREELANCER
+      - ROLE_ADMIN
+      - ROLE_UNVERIFIED
+      - ROLE_CLIENT
     ServiceCreateDto:
       required:
-      - category
+      - categories
       - description
+      - images
       - location
       - price
       - title
@@ -1695,18 +2043,94 @@ components:
           format: int32
         location:
           type: string
-        category:
-          $ref: '#/components/schemas/CategoryType'
-    Comment:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryType'
+        images:
+          type: array
+          items:
+            type: string
+            format: binary
+        workflowJson:
+          type: string
+        faqsJson:
+          type: string
+    AddressDto:
+      required:
+      - city
+      - country
+      - houseNumber
+      - postalCode
+      - region
+      - street
       type: object
-    Service:
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        houseNumber:
+          type: string
+    Faq:
+      required:
+      - answer
+      - question
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+    FileResponseDto:
+      required:
+      - documentType
+      - id
+      - originalFileName
+      - path
+      - uploadDate
+      - verified
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        originalFileName:
+          type: string
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+        path:
+          type: string
+        uploadDate:
+          type: string
+          format: date-time
+        verified:
+          type: boolean
+    FullServiceDto:
+      required:
+      - categories
+      - description
+      - freelancer
+      - id
+      - imagesMeta
+      - postedAt
+      - price
+      - rating
+      - ratingCount
+      - title
       type: object
       properties:
         id:
           type: integer
           format: int64
         freelancer:
-          $ref: '#/components/schemas/Freelancer'
+          $ref: '#/components/schemas/LightWeightFreelancerDto'
         title:
           type: string
         description:
@@ -1714,24 +2138,123 @@ components:
         price:
           type: number
           format: double
-        comments:
+        workflow:
           type: array
           items:
-            $ref: '#/components/schemas/Comment'
-        location:
-          type: string
-        category:
-          $ref: '#/components/schemas/CategoryType'
+            $ref: '#/components/schemas/WorkflowStep'
+        faqs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Faq'
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewDto'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryType'
         rating:
           type: number
           format: double
         ratingCount:
           type: integer
           format: int32
+        imagesMeta:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileResponseDto'
         postedAt:
           type: string
           format: date-time
+    LightWeightFreelancerDto:
+      required:
+      - firstName
+      - id
+      - lastName
+      - rating
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
+        avatarUrl:
+          type: string
+    ReviewDto:
+      required:
+      - createdAt
+      - id
+      - rating
+      - reviewer
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        reviewer:
+          $ref: '#/components/schemas/ReviewerDto'
+        body:
+          type: string
+        rating:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+    ReviewerDto:
+      required:
+      - firstName
+      - id
+      - rating
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
+        type:
+          type: string
+          enum:
+          - Employer
+          - Client
+          - Freelancer
+        avatarUrl:
+          type: string
+    WorkflowStep:
+      required:
+      - stepNumber
+      - title
+      type: object
+      properties:
+        stepNumber:
+          type: integer
+          format: int32
+        title:
+          type: string
+        description:
+          type: string
     ServiceFilter:
+      required:
+      - categories
+      - maxBudget
+      - minBudget
+      - rating
       type: object
       properties:
         title:
@@ -1751,29 +2274,31 @@ components:
         maxBudget:
           type: number
           format: double
-    FreelancerDto:
+    LightweightAddressDto:
       required:
-      - firstName
-      - id
-      - lastName
+      - city
+      - country
+      - postalCode
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        firstName:
+        city:
           type: string
-        lastName:
+        postalCode:
           type: string
-        avatarUrl:
+        country:
           type: string
-        rating:
-          type: number
-          format: double
-        ratingCount:
-          type: integer
-          format: int32
-    ServiceFilterResponse:
+    LightweightServiceDto:
+      required:
+      - categories
+      - description
+      - freelancer
+      - id
+      - postedAt
+      - price
+      - rating
+      - ratingCount
+      - thumbnailMeta
+      - title
       type: object
       properties:
         id:
@@ -1783,8 +2308,8 @@ components:
           type: string
         description:
           type: string
-        location:
-          type: string
+        address:
+          $ref: '#/components/schemas/LightweightAddressDto'
         rating:
           type: number
           format: double
@@ -1795,9 +2320,16 @@ components:
           type: number
           format: double
         freelancer:
-          $ref: '#/components/schemas/FreelancerDto'
-        category:
-          $ref: '#/components/schemas/CategoryType'
+          $ref: '#/components/schemas/LightWeightFreelancerDto'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryType'
+        postedAt:
+          type: string
+          format: date-time
+        thumbnailMeta:
+          $ref: '#/components/schemas/FileResponseDto'
     ProjectCreateDto:
       required:
       - categories
@@ -1850,28 +2382,6 @@ components:
           format: double
         type:
           $ref: '#/components/schemas/ProjectType'
-    AddressDto:
-      required:
-      - city
-      - country
-      - houseNumber
-      - postalCode
-      - region
-      - street
-      type: object
-      properties:
-        street:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        houseNumber:
-          type: string
     EmployerResponseDto:
       required:
       - address
@@ -1955,6 +2465,183 @@ components:
         entityId:
           type: integer
           format: int64
+    FreelancerRegistrationRequest:
+      required:
+      - address
+      - categories
+      - email
+      - firstName
+      - lastName
+      - phoneNumber
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        phoneNumber:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryType'
+        avatarImage:
+          type: string
+          format: binary
+        description:
+          type: string
+    BidDto:
+      required:
+      - amount
+      - coverLetter
+      - estimatedCompletionDate
+      - freelancer
+      - id
+      - status
+      - submittedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        freelancer:
+          $ref: '#/components/schemas/LightWeightFreelancerDto'
+        amount:
+          type: number
+          format: double
+        status:
+          $ref: '#/components/schemas/BidStatus'
+        coverLetter:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+        estimatedCompletionDate:
+          type: string
+          format: date-time
+    ClientDto:
+      required:
+      - address
+      - firstName
+      - id
+      - lastName
+      - rating
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
+    EventDto:
+      required:
+      - createdAt
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        clientId:
+          type: integer
+          format: int64
+        freelancerId:
+          type: integer
+          format: int64
+        type:
+          type: string
+          enum:
+          - ORDER_CREATED
+          - ORDER_CANCELED
+          - ORDER_COMPLETED
+          - ORDER_PAID
+          - ORDER_DISPUTED
+          - ORDER_REVIEWED
+          - ORDER_ACCEPTED
+          - ORDER_DECLINED
+          - ORDER_IN_PROGRESS
+          - ORDER_DELIVERED
+          - ORDER_REFUNDED
+          - ORDER_MODIFIED
+          - ORDER_RESOLVED
+        createdAt:
+          type: string
+          format: date-time
+    FreelancerDto:
+      required:
+      - address
+      - firstName
+      - id
+      - lastName
+      - rating
+      - ratingCount
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
+        ratingCount:
+          type: integer
+          format: int32
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderDto'
+    OrderDto:
+      required:
+      - createdAt
+      - events
+      - id
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        acceptedBid:
+          $ref: '#/components/schemas/BidDto'
+        service:
+          $ref: '#/components/schemas/FullServiceDto'
+        client:
+          $ref: '#/components/schemas/ClientDto'
+        status:
+          type: string
+          enum:
+          - CREATED
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELED
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDto'
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
     FreelancerFilter:
       type: object
       properties:
@@ -1997,17 +2684,6 @@ components:
         ratingCount:
           type: integer
           format: int32
-    FileUploadRequest:
-      required:
-      - documentType
-      - file
-      type: object
-      properties:
-        documentType:
-          $ref: '#/components/schemas/DocumentType'
-        file:
-          type: string
-          format: binary
     EmployerRegistrationRequest:
       required:
       - address
@@ -2061,16 +2737,14 @@ components:
           minLength: 0
           type: string
         password:
-          maxLength: 40
-          minLength: 6
+          maxLength: 32
+          minLength: 8
           type: string
         role:
-          type: string
+          $ref: '#/components/schemas/RoleType'
     AuthResponse:
       required:
-      - activeRole
-      - firstName
-      - lastName
+      - activeRoleType
       - roles
       type: object
       properties:
@@ -2082,9 +2756,9 @@ components:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/ERole'
-        activeRole:
-          $ref: '#/components/schemas/ERole'
+            $ref: '#/components/schemas/RoleType'
+        activeRoleType:
+          $ref: '#/components/schemas/RoleType'
     LoginRequest:
       required:
       - email
@@ -2095,132 +2769,6 @@ components:
           type: string
         password:
           type: string
-    ClientDto:
-      required:
-      - address
-      - firstName
-      - id
-      - lastName
-      - rating
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        address:
-          $ref: '#/components/schemas/AddressDto'
-        firstName:
-          type: string
-        lastName:
-          type: string
-        rating:
-          type: number
-          format: double
-    CommentDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        client:
-          $ref: '#/components/schemas/ClientDto'
-        employer:
-          $ref: '#/components/schemas/EmployerMainInfo'
-        freelancer:
-          $ref: '#/components/schemas/FreelancerDto'
-        body:
-          type: string
-    EmployerMainInfo:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        companyName:
-          type: string
-        profilePicture:
-          type: string
-        rating:
-          type: integer
-          format: int32
-        ratingCount:
-          type: integer
-          format: int32
-    ServiceDto:
-      required:
-      - category
-      - comments
-      - description
-      - freelancer
-      - id
-      - location
-      - postedAt
-      - price
-      - rating
-      - ratingCount
-      - title
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        freelancer:
-          $ref: '#/components/schemas/FreelancerDto'
-        title:
-          type: string
-        description:
-          type: string
-        price:
-          type: number
-          format: double
-        comments:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommentDto'
-        location:
-          type: string
-        category:
-          $ref: '#/components/schemas/CategoryType'
-        rating:
-          type: number
-          format: double
-        ratingCount:
-          type: integer
-          format: int32
-        postedAt:
-          type: string
-          format: date-time
-    BidDto:
-      required:
-      - amount
-      - coverLetter
-      - estimatedCompletionDate
-      - freelancer
-      - id
-      - status
-      - submittedAt
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        freelancer:
-          $ref: '#/components/schemas/FreelancerDto'
-        amount:
-          type: number
-          format: double
-        status:
-          $ref: '#/components/schemas/BidStatus'
-        coverLetter:
-          type: string
-        submittedAt:
-          type: string
-          format: date-time
-        estimatedCompletionDate:
-          type: string
-          format: date-time
     ProjectOwnerDto:
       required:
       - bids
@@ -2271,93 +2819,3 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BidDto'
-    EventDto:
-      required:
-      - createdAt
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        clientId:
-          type: integer
-          format: int64
-        freelancerId:
-          type: integer
-          format: int64
-        type:
-          type: string
-          enum:
-          - ORDER_CREATED
-          - ORDER_CANCELED
-          - ORDER_COMPLETED
-          - ORDER_PAID
-          - ORDER_DISPUTED
-          - ORDER_REVIEWED
-          - ORDER_ACCEPTED
-          - ORDER_DECLINED
-          - ORDER_IN_PROGRESS
-          - ORDER_DELIVERED
-          - ORDER_REFUNDED
-          - ORDER_MODIFIED
-          - ORDER_RESOLVED
-        createdAt:
-          type: string
-          format: date-time
-    OrderDto:
-      required:
-      - createdAt
-      - events
-      - id
-      - status
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        acceptedBid:
-          $ref: '#/components/schemas/BidDto'
-        service:
-          $ref: '#/components/schemas/ServiceDto'
-        client:
-          $ref: '#/components/schemas/ClientDto'
-        status:
-          type: string
-          enum:
-          - CREATED
-          - IN_PROGRESS
-          - COMPLETED
-          - CANCELED
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventDto'
-        createdAt:
-          type: string
-          format: date-time
-        completedAt:
-          type: string
-          format: date-time
-    FileResponseDto:
-      required:
-      - documentType
-      - fileName
-      - id
-      - uploadDate
-      - verified
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        fileName:
-          type: string
-        documentType:
-          $ref: '#/components/schemas/DocumentType'
-        uploadDate:
-          type: string
-          format: date-time
-        verified:
-          type: boolean

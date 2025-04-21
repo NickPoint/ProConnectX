@@ -10,14 +10,18 @@ import {authSlice} from "../features/auth/authSlice";
 import {serviceFormSlice} from "../features/serviceForm/serviceFormSlice";
 import {filterSlice} from "../features/filter/filterSlice";
 import {headerSlice} from "../features/header/headerSlice";
-import {employerVerificationSlice} from "../features/verification/verificationSlice.ts";
+import {verificationPage} from "../features/verification/verificationSlice.ts";
 import {fabSlice} from "../features/fab/fabSlice.ts";
+import {pageSlice} from "../features/page/pageSlice.ts";
+import {placesAutocompleteSlice} from "../features/placeAutocomplete/placeAutocompleteSlice.ts";
+import {loadingSlice} from "../features/loading/loadingSlice.ts";
+import {authFormSlice} from "../features/signupDialog/authFormSlice.ts";
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer =
     combineSlices(footerSlice, snackbarSlice, serviceFormSlice, filterSlice, headerSlice, emptySplitApi, authApi, authSlice,
-        employerVerificationSlice, fabSlice)
+        verificationPage, fabSlice, pageSlice, placesAutocompleteSlice, loadingSlice, authFormSlice)
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>
 

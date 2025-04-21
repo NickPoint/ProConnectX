@@ -1,34 +1,29 @@
-import {useAppDispatch} from "../../hooks";
-import {setData, setLoading} from "../../../features/filter/filterSlice";
-import {useGetFilteredServicesMutation} from "../../../features/api/pcxApi";
-import {debounce, Fab, IconButton, MenuItem, Select, Slider, SwipeableDrawer, Typography} from "@mui/material";
+import {useLazyGetFilteredServicesQuery} from "../../../features/api/enhancedApi";
+import {
+    Collapse,
+    debounce,
+    Divider,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectProps,
+    Slider,
+    Typography
+} from "@mui/material";
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField";
 import {Category} from "../../../features/enums";
-import * as React from "react";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useFormik} from "formik";
-import {FilterAlt} from "@mui/icons-material";
-import {styled} from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import theme from "../../theme/theme";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {replaceEmptyStringsWithNull} from "../../../features/filter/formikHelper";
 import GenericSearch from "../GenericSearch.tsx";
-import AddIcon from "@mui/icons-material/Add";
+import {ServiceFilter} from "../../../features/api/pcxApi.ts";
+import CardList from "../../pages/CardList.tsx";
+import ServiceCard from "./ServiceCard.tsx";
 
-interface FilterValues {
-    title: string;
-    categories: Category[];
-    location: string;
-    rating: number;
-    minBudget: number;
-    maxBudget: number;
-}
-
-// TODO: hardcoded values
-const initialValues: FilterValues = {
+//TODO: Hardcoded values
+const initialValues: ServiceFilter = {
     title: '',
     categories: [],
     location: '',
@@ -37,44 +32,38 @@ const initialValues: FilterValues = {
     maxBudget: 1000,
 }
 
-const DrawerHeader = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
-}));
-
-const StyledFab = styled(Fab)(({theme}) => ({
-    position: 'fixed',
-    bottom: theme.spacing(10),
-    right: theme.spacing(2),
-}));
-
+const SelectWithLabel = React.forwardRef<HTMLDivElement, SelectProps>(
+    function SelectWithLabel(props, ref) {
+        const {children, label, error, fullWidth, ...other} = props;
+        return (
+            <FormControl ref={ref} fullWidth={fullWidth} error={error}>
+                <InputLabel id={label as string}>{label}</InputLabel>
+                <Select label={label} {...other}>
+                    {children}
+                </Select>
+            </FormControl>
+        );
+    });
 
 const ServicesFilter = () => {
-    const dispatch = useAppDispatch();
     const [budgetValues, setBudgetValues] = useState({min: 0, max: 1000});
     const [ratingValue, setRatingValue] = useState(3);
-    const [opened, setOpened] = useState(false);
+    const [getFilteredServices, {data, error, isLoading}] = useLazyGetFilteredServicesQuery();
+    const [filterOpened, setFilterOpened] = React.useState(false);
 
-    const [getFilteredServices] = useGetFilteredServicesMutation();
+    const handleFilterToggle = () => {
+        setFilterOpened((prev) => !prev);
+    };
 
     const formik = useFormik({
         initialValues,
         onSubmit: values => {
             const convertedValues = replaceEmptyStringsWithNull(values);
             getFilteredServices({serviceFilter: convertedValues}).unwrap()
-                .then((response) => {
-                    dispatch(setData(response));
-                    dispatch(setLoading(false));
-                });
         }
     });
 
     useEffect(() => {
-        dispatch(setLoading(true));
         const debounce1 = debounce(() => {
             formik.handleSubmit();
         }, 1000);
@@ -82,98 +71,94 @@ const ServicesFilter = () => {
         return debounce1.clear;
     }, [formik.values]);
 
-    return (<>
-        <GenericSearch filterButtonVisible onClick={() => setOpened(true)}/>
-        <SwipeableDrawer
-            anchor="right"
-            open={opened}
-            onClose={() => setOpened(false)}
-            onOpen={() => setOpened(true)}
-            disableSwipeToOpen={false}
-            allowSwipeInChildren={true}
-        >
-            <DrawerHeader>
-                <IconButton onClick={() => setOpened(false)}>
-                    {theme.direction === 'ltr' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                </IconButton>
-            </DrawerHeader>
-            <Grid component='form' noValidate container rowSpacing={3} sx={{px: 3, my: 1}}>
+    return (
+        <Grid container spacing={4}>
+            <Grid size={12} component='form' noValidate container spacing={2}>
                 <Grid size={12}>
-                    <TextField
-                        fullWidth
-                        label='Title'
+                    <GenericSearch
                         name='title'
+                        fullWidth
                         value={formik.values.title}
                         onChange={formik.handleChange}
                         error={formik.touched.title && Boolean(formik.errors.title)}
-                        helperText={formik.touched.title && formik.errors.title}
-                    />
+                        placeholder='Marketing strategy'
+                        onEndButtonClick={handleFilterToggle}
+                        filterButtonVisible/>
                 </Grid>
-                <Grid id='rating' size={12}>
-                    <Typography gutterBottom>Rating</Typography>
-                    <Slider
-                        name='rating'
-                        getAriaLabel={() => 'Rating range'}
-                        value={ratingValue}
-                        onChange={(_, value) => setRatingValue(value)}
-                        onChangeCommitted={(_, value) => {
-                            formik.setFieldValue('rating', value);
-                        }}
-                        valueLabelDisplay="auto"
-                        getAriaValueText={value => `${value}`}
-                        min={0}
-                        max={5}
-                        step={0.1}
-                    />
-                </Grid>
-                <Grid size={12}>
-                    <Select
-                        label='Categories'
-                        name='categories'
-                        multiple
-                        fullWidth
-                        value={formik.values.categories}
-                        onChange={formik.handleChange('categories')}
-                        error={formik.touched.categories && Boolean(formik.errors.categories)}
-                    >
-                        {Object.values(Category).map((category, index) => (
-                            <MenuItem key={index} value={category}>
-                                {category}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </Grid>
-                <Grid size={12}>
-                    <TextField
-                        label='Location'
-                        name='location'
-                        fullWidth
-                        value={formik.values.location}
-                        onChange={formik.handleChange}
-                        error={formik.touched.location && Boolean(formik.errors.location)}
-                        helperText={formik.touched.location && formik.errors.location}
-                    />
-                </Grid>
-                <Grid id='budget' size={12}>
-                    <Typography gutterBottom>Budget</Typography>
-                    <Slider
-                        name='budget'
-                        getAriaLabel={() => 'Budget range'}
-                        value={[budgetValues.min, budgetValues.max]}
-                        onChange={(_, value) => setBudgetValues({min: value[0], max: value[1]})}
-                        onChangeCommitted={(_, value) => {
-                            formik.setFieldValue('minBudget', value[0]);
-                            formik.setFieldValue('maxBudget', value[1]);
-                        }}
-                        valueLabelDisplay="auto"
-                        getAriaValueText={value => `${value}`}
-                        min={0}
-                        max={1000}
-                    />
-                </Grid>
+                <Collapse unmountOnExit in={filterOpened} sx={{width: '100%'}}>
+                    <Grid container spacing={2}>
+                        <Grid size={12}>
+                            <SelectWithLabel fullWidth
+                                             error={formik.touched.categories && Boolean(formik.errors.categories)}
+                                             label='Categories'
+                                             name='categories'
+                                             multiple
+                                             value={formik.values.categories}
+                                             onChange={formik.handleChange}
+                            >
+                                {Object.values(Category).map((category, index) => (
+                                    <MenuItem key={index} value={category}>
+                                        {category}
+                                    </MenuItem>
+                                ))}
+                            </SelectWithLabel>
+                        </Grid>
+                        <Grid size={12}>
+                            <TextField
+                                label='Location'
+                                name='location'
+                                fullWidth
+                                value={formik.values.location}
+                                onChange={formik.handleChange}
+                                error={formik.touched.location && Boolean(formik.errors.location)}
+                                helperText={formik.touched.location && formik.errors.location}
+                            />
+                        </Grid>
+                        <Grid id='rating' size={12}>
+                            <Typography gutterBottom>Rating</Typography>
+                            <Slider
+                                name='rating'
+                                getAriaLabel={() => 'Rating range'}
+                                value={ratingValue}
+                                onChange={(_, value) => setRatingValue(value)}
+                                onChangeCommitted={(_, value) => {
+                                    formik.setFieldValue('rating', value);
+                                }}
+                                valueLabelDisplay="auto"
+                                getAriaValueText={value => `${value}`}
+                                min={0}
+                                max={5}
+                                step={0.1}
+                            />
+                        </Grid>
+                        <Grid id='budget' size={12}>
+                            <Typography gutterBottom>Budget</Typography>
+                            <Slider
+                                name='budget'
+                                getAriaLabel={() => 'Budget range'}
+                                value={[budgetValues.min, budgetValues.max]}
+                                onChange={(_, value) => setBudgetValues({min: value[0], max: value[1]})}
+                                onChangeCommitted={(_, value) => {
+                                    formik.setFieldValue('minBudget', value[0]);
+                                    formik.setFieldValue('maxBudget', value[1]);
+                                }}
+                                valueLabelDisplay="auto"
+                                getAriaValueText={value => `${value}`}
+                                min={0}
+                                max={1000}
+                            />
+                        </Grid>
+                    </Grid>
+                </Collapse>
             </Grid>
-        </SwipeableDrawer>
-    </>);
+            <Grid size={12}>
+                <Divider/>
+            </Grid>
+            <Grid size={12}>
+                <CardList lastListSize={1} isLoading={isLoading} data={data} />
+            </Grid>
+        </Grid>
+    );
 };
 
 export default ServicesFilter;
