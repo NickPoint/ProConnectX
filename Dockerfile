@@ -13,6 +13,6 @@ ENV CATALINA_OPTS="-Djava.util.logging.ConsoleHandler.level=FINE -Dorg.apache.ca
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/api.war
+COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
