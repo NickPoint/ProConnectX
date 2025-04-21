@@ -1,13 +1,16 @@
-FROM tomcat:10.0-jdk17-openjdk-slim
-
-# Set working directory
+FROM gradle:8.5-jdk17 AS builder
 WORKDIR /app
 
-# Copy the WAR file
-COPY build/libs/*.war /usr/local/tomcat/webapps/api.war
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
 
-# Expose the default Tomcat port
+RUN chmod +x ./gradlew
+RUN ./gradlew clean war
+
+FROM tomcat:10.0-jdk17-openjdk-slim
+COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/api.war
 EXPOSE 8080
-
-# Start Tomcat (this is the default behavior of the Tomcat image)
 CMD ["catalina.sh", "run"]
