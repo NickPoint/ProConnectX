@@ -24,7 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@Profile("docker")
+@Profile("prod")
 public class ProdSecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;

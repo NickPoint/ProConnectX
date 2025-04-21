@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@Profile("docker")
+@Profile("prod")
 @Slf4j
 public class ProdAuthTokenFilter extends OncePerRequestFilter {
     @Autowired
