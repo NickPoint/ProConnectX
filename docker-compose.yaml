@@ -5,7 +5,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: postgresql://postgres:5432/proconnectx
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/proconnectx
       SPRING_DATASOURCE_USERNAME: proconnectx
       SPRING_DATASOURCE_PASSWORD: proconnectx
     depends_on:
