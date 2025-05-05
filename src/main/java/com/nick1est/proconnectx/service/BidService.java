@@ -1,6 +1,6 @@
+/*
 package com.nick1est.proconnectx.service;
 
-import com.nick1est.proconnectx.dao.Bid;
 import com.nick1est.proconnectx.dao.BidStatus;
 import com.nick1est.proconnectx.dao.Freelancer;
 import com.nick1est.proconnectx.dto.BidDto;
@@ -8,7 +8,7 @@ import com.nick1est.proconnectx.dto.BidRequest;
 import com.nick1est.proconnectx.mapper.BidMapper;
 import com.nick1est.proconnectx.repository.FreelancerRepository;
 import com.nick1est.proconnectx.repository.ProjectRepository;
-import com.nick1est.proconnectx.repository.BidRepository;
+//import com.nick1est.proconnectx.repository.BidRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,3 +73,4 @@ public class BidService {
     }
 
 }
+*/

@@ -1,26 +1,26 @@
-import type {Middleware, MiddlewareAPI} from '@reduxjs/toolkit'
-import {isRejectedWithValue} from '@reduxjs/toolkit'
-import {enqueueSnackbar} from "notistack";
-import {FormValidationResponse} from "../api/pcxApi.ts";
+import { isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
+import { enqueueSnackbar } from 'notistack';
 
-/**
- * Log a warning and show a toast!
- */
 export const rtkQueryErrorLogger: Middleware =
     (api: MiddlewareAPI) => (next) => (action) => {
 
         if (isRejectedWithValue(action)) {
-            const {status, data} = action.payload;
-            if (status === 'FETCH_ERROR') {
-                enqueueSnackbar('Something went wrong, try a bit latter', { variant: 'error' });
+            const { status, data } = action.payload;
+
+            if (status === 'FETCH_ERROR' || status === 'PARSING_ERROR') {
+                // Network errors or JSON parse issues
+                enqueueSnackbar('Network error, please try again later.', { variant: 'error' });
             }
-            else if (data as FormValidationResponse) {
-                enqueueSnackbar(data.message, {variant: 'error'});
+            else if ((status === 400 || status === 401 || status === 403) && data?.message) {
+                enqueueSnackbar(data.message, { variant: 'error' });
+            }
+            else if (status !== 400 && status !== 401 && status !== 403) {
+                enqueueSnackbar('Unexpected runtime error.', { variant: 'error' });
             }
             else {
-                enqueueSnackbar(`Something went wrong: ${payload.data.id}`, {variant: 'error'});
+                enqueueSnackbar('An unexpected error occurred.', { variant: 'error' });
             }
         }
 
         return next(action);
-    }
+    };

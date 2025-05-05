@@ -1,12 +1,19 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.Instant;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class Transaction {
@@ -14,37 +21,27 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn
-    @ManyToOne
+    @JoinColumn(nullable = false)
+    @OneToOne
+    @NotNull
     private Order order;
 
-    @JoinColumn
-    @ManyToOne
-    private Employer employer;
-
-    @JoinColumn
-    @ManyToOne
-    private Freelancer freelancer;
-
-    @JoinColumn
-    @ManyToOne
-    private Client client;
-
-    @Column(nullable = false)
-    private Double amount;
-
-    @Column
-    private String description;
+    @Column(precision = 19, scale = 4, nullable = false)
+    @NotNull
+    private BigDecimal amount;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    @NotNull
+    private TransactionStatus status;
 
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    @NotNull
+    private Instant createdAt;
+
+    @LastModifiedDate
     @Column(nullable = false)
-    private OffsetDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = OffsetDateTime.now();
-    }
+    @NotNull
+    private Instant updatedAt;
 }

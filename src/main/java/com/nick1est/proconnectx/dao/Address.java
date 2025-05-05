@@ -24,16 +24,13 @@ public class Address {
     @NotBlank
     private String city;
 
-    @Column(nullable = false)
-    @NotBlank
+    @Column
     private String street;
 
-    @Column(nullable = false)
-    @NotBlank
+    @Column
     private String postalCode;
 
-    @Column(nullable = false)
-    @NotBlank
+    @Column
     private String houseNumber;
 
     @Column(nullable = false)

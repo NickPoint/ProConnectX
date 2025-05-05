@@ -17,13 +17,12 @@ import {
 import {useLocation, useNavigate} from "react-router-dom";
 import {MouseEvent, useEffect, useState} from "react";
 import {useAppDispatch} from "../../hooks";
-import {useLogoutUserMutation} from "../../../features/api/authApi";
 import {styled} from "@mui/material/styles";
 import FabContainer from "../FabContainer.tsx";
 import FabManager from "../FabManager.tsx";
 import {addFab, removeFab} from "../../../features/fab/fabSlice.ts";
 import Notification from "../Notification.tsx";
-import {RoleType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {RoleType, useGetCurrentUserQuery, useLogoutUserMutation} from "../../../features/api/pcxApi.ts";
 import {setOpen, setSignup} from "../../../features/signupDialog/authFormSlice.ts";
 import AuthDialog from "../../pages/AuthDialog.tsx";
 import {useTranslation} from "react-i18next";
@@ -72,7 +71,7 @@ const MobileHeader = () => {
     const handleClick = (event: MouseEvent<HTMLElement>) => {
         switch (event.currentTarget.textContent) {
             case 'Profile':
-                navigate('/profile');
+                navigate('/dashboard/home');
                 break;
             case 'Logout':
                 logoutUser();
@@ -84,7 +83,7 @@ const MobileHeader = () => {
 
     function getUserName(): string | undefined {
         if (user) {
-            if (user.activeRoleType === RoleType.RoleUnverified) {
+            if (user.activeRole === RoleType.RoleUnverified) {
                 return t('header.user.unverified');
             }
             return t('header.user.greeting', {firstName: user.firstName});
@@ -135,13 +134,13 @@ const MobileHeader = () => {
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={(event) => setUserMenuOpen(event.currentTarget)}
                                                 sx={{p: 0, mr: 1}}>
-                                        <Avatar alt={user.firstName} src="/static/images/avatar/2.jpg"/>
+                                        <Avatar alt={user.firstName} src={user.avatarImageUrl}/>
                                     </IconButton>
                                 </Tooltip>
                             </Stack>
 
                         </>
-                    ) : (
+                    ) : (location.pathname !== '/auth' &&
                         <Stack direction='row' spacing={1} sx={{alignItems: 'center'}}>
                             <Link sx={{cursor: 'pointer'}} underline='none'
                                   onClick={() => {
@@ -164,7 +163,7 @@ const MobileHeader = () => {
         <StyledToolbar/>
         <FabManager/>
         <FabContainer/>
-        <AuthDialog/>
+        {location.pathname !== 'auth' && <AuthDialog/>}
     </>);
 }
 

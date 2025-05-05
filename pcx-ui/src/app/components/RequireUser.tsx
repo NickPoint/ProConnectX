@@ -1,25 +1,53 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
-import {useAuthorizeQuery} from "../../features/api/authApi";
 import {FC} from "react";
-import {useAppSelector} from "../hooks";
-import {selectUser} from "../../features/auth/authSlice";
+import {AccountStatus, AccountType, AuthResponse, RoleType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
+import {GlobalLoadingBackdrop} from "./GlobalLoadingBackdrop.tsx";
 
 interface RequireUserProps {
-    allowedRoles: string[];
+    allowedRoles: RoleType[];
+    dissalowedAccountsStatuses?: {
+        type: AccountType;
+        status?: AccountStatus;
+    }[]
+    children?: React.ReactNode;
 }
 
-const RequireUser: FC<RequireUserProps> = ({ allowedRoles }) => {
+const RequireUser: FC<RequireUserProps> = ({ allowedRoles, children, dissalowedAccountsStatuses }) => {
     const location = useLocation();
-    const user = useAppSelector(selectUser);
-    const { isLoading, isFetching } = useAuthorizeQuery(null);
+    const { data: user, isLoading, isFetching } = useGetCurrentUserQuery();
 
-    return user && user?.roles?.some(role => allowedRoles.includes(role)) ? (
-        <Outlet />
-    ) : user ? (
-        <Navigate to='/unauthorized' state={{ from: location }} replace />
-    ) : (
-        <Navigate to='/login' state={{ from: location }} replace />
-    );
+    const loading = isLoading || isFetching;
+
+    if (loading) {
+        return <GlobalLoadingBackdrop />;
+    }
+
+    if (!user) {
+        return <Navigate to="/auth" state={{ from: location }} replace />;
+    }
+
+    function checkUserAllowed(user: AuthResponse) {
+        if (user.activeRole === RoleType.RoleAdmin) {
+            return true;
+        }
+        if (allowedRoles.includes(user.activeRole)) {
+            if (dissalowedAccountsStatuses) {
+                for (const disallowed of dissalowedAccountsStatuses) {
+                    for (const account of user.accounts) {
+                        if (account.accountType === disallowed.type) {
+                            if (!disallowed.status || account.accountStatus === disallowed.status) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    return checkUserAllowed(user) ? (children ? children : <Outlet />) : <Navigate to="/unauthorized" state={{ from: location }} replace />;
 };
 
 export default RequireUser;

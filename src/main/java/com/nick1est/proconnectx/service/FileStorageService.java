@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.dao.OwnerType;
+import com.nick1est.proconnectx.exception.FileStorageException;
 import lombok.val;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,6 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    @Transactional
     public String uploadFile(MultipartFile file, Long ownerId, OwnerType ownerType) throws IOException {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String safeFileName = UUID.randomUUID() + "." + extension;
@@ -33,6 +33,16 @@ public class FileStorageService {
         file.transferTo(filePath);
         return filePath.toString();
     }
+
+    public void deleteFile(String path) {
+        try {
+            Path filePath = Path.of(path).normalize();
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new FileStorageException("Failed to delete file: " + path, e);
+        }
+    }
+
 
     public Resource loadFileAsResource(String path) {
         try {
@@ -51,6 +61,8 @@ public class FileStorageService {
     private Path generateFilePath(Long ownerId, OwnerType ownerType) {
         return switch (ownerType) {
             case SERVICE -> Paths.get("uploads", "service", ownerId.toString());
+            case FREELANCER -> Paths.get("uploads", "freelancer", ownerId.toString());
+            case CLIENT -> Paths.get("uploads", "freelancer", ownerId.toString());
             default -> Paths.get("uploads", "undefined", ownerId.toString());
         };
     }

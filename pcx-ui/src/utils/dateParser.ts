@@ -1,6 +1,6 @@
 import { format, toZonedTime } from 'date-fns-tz';
 
-const DEFAULT_FORMAT = 'MMMM d, yyyy'; // or whatever you want
+export const DEFAULT_FORMAT = 'MMMM d, yyyy';
 
 export function parseOffsetDateTime(
     dateString: string | null | undefined,

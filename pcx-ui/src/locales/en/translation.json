@@ -1,4 +1,316 @@
 {
+  "general": {
+    "submittedAt": "Submitted at",
+    "actions": "Actions",
+    "new": "New",
+    "nothingToDisplay": "Nothing to display😊"
+  },
+  "user": {
+    "fullName": "Full name",
+    "email": "Email",
+    "phoneNumber": "Phone number"
+  },
+  "buttons": {
+    "approve": "Approve",
+    "accept": "Accept",
+    "finish": "Finish",
+    "submit": "Submit",
+    "complete": "Complete",
+    "save": "Save",
+    "imageUpload": "Image Upload",
+    "change": "Change",
+    "submitForReview": "Submit for review",
+    "connect": "Connect",
+    "sendRequest": "Send Request",
+    "dispute": "Dispute",
+    "back": "Back",
+    "next": "Next",
+    "cancel": "Cancel",
+    "reject": "Reject",
+    "close": "Close"
+  },
+  "enum": {
+    "categories": {
+      "WEB_DESIGN": "Web Design",
+      "WEB_DEVELOPMENT": "Web Development",
+      "FRONTEND_DEVELOPMENT": "Frontend Development",
+      "BACKEND_DEVELOPMENT": "Backend Development",
+      "MOBILE_APP_DEVELOPMENT": "Mobile App Development",
+      "GAME_DEVELOPMENT": "Game Development",
+      "WORDPRESS_DEVELOPMENT": "WordPress Development",
+      "ECOMMERCE_DEVELOPMENT": "E-commerce Development",
+      "SOFTWARE_DEVELOPMENT": "Software Development",
+      "API_DEVELOPMENT": "API Development",
+      "GRAPHIC_DESIGN": "Graphic Design",
+      "UI_UX_DESIGN": "UI/UX Design",
+      "LOGO_DESIGN": "Logo Design",
+      "BRAND_IDENTITY_DESIGN": "Brand Identity Design",
+      "VIDEO_EDITING": "Video Editing",
+      "ANIMATION": "Animation",
+      "ILLUSTRATION": "Illustration",
+      "THREE_D_MODELING": "3D Modeling",
+      "PRESENTATION_DESIGN": "Presentation Design",
+      "INTERIOR_DESIGN": "Interior Design",
+      "CONTENT_WRITING": "Content Writing",
+      "COPYWRITING": "Copywriting",
+      "GHOSTWRITING": "Ghostwriting",
+      "TECHNICAL_WRITING": "Technical Writing",
+      "RESUME_WRITING": "Resume Writing",
+      "GRANT_WRITING": "Grant Writing",
+      "CREATIVE_WRITING": "Creative Writing",
+      "SEO_WRITING": "SEO Writing",
+      "SCRIPTWRITING": "Scriptwriting",
+      "EDITING_PROOFREADING": "Editing & Proofreading",
+      "TRANSLATION": "Translation",
+      "TRANSCRIPTION": "Transcription",
+      "LANGUAGE_TUTORING": "Language Tutoring",
+      "SUBTITLING_CAPTIONING": "Subtitling & Captioning",
+      "LOCALIZATION_SERVICES": "Localization Services",
+      "DIGITAL_MARKETING": "Digital Marketing",
+      "SOCIAL_MEDIA_MARKETING": "Social Media Marketing",
+      "SEO_SEM": "SEO & SEM",
+      "EMAIL_MARKETING": "Email Marketing",
+      "AFFILIATE_MARKETING": "Affiliate Marketing",
+      "INFLUENCER_MARKETING": "Influencer Marketing",
+      "LEAD_GENERATION": "Lead Generation",
+      "TELEMARKETING": "Telemarketing",
+      "BRAND_STRATEGY": "Brand Strategy",
+      "CUSTOMER_SUPPORT": "Customer Support",
+      "TECHNICAL_SUPPORT": "Technical Support",
+      "VIRTUAL_ASSISTANT": "Virtual Assistant",
+      "CHAT_SUPPORT": "Chat Support",
+      "HELPDESK_SERVICES": "Helpdesk Services",
+      "DATA_ENTRY": "Data Entry",
+      "WEB_RESEARCH": "Web Research",
+      "PROJECT_MANAGEMENT": "Project Management",
+      "CALENDAR_MANAGEMENT": "Calendar Management",
+      "DOCUMENT_PREPARATION": "Document Preparation",
+      "DATA_ANALYSIS": "Data Analysis",
+      "DATA_ENGINEERING": "Data Engineering",
+      "MACHINE_LEARNING": "Machine Learning",
+      "AI_DEVELOPMENT": "AI Development",
+      "BUSINESS_INTELLIGENCE": "Business Intelligence",
+      "DATA_VISUALIZATION": "Data Visualization",
+      "BIG_DATA_SERVICES": "Big Data Services",
+      "CIVIL_ENGINEERING": "Civil Engineering",
+      "MECHANICAL_ENGINEERING": "Mechanical Engineering",
+      "ELECTRICAL_ENGINEERING": "Electrical Engineering",
+      "STRUCTURAL_ENGINEERING": "Structural Engineering",
+      "CAD_DRAFTING": "CAD Drafting",
+      "ARCHITECTURE_DESIGN": "Architecture Design",
+      "PRODUCT_DESIGN": "Product Design",
+      "ACCOUNTING": "Accounting",
+      "BOOKKEEPING": "Bookkeeping",
+      "FINANCIAL_ANALYSIS": "Financial Analysis",
+      "BUSINESS_CONSULTING": "Business Consulting",
+      "TAX_PREPARATION": "Tax Preparation",
+      "HR_CONSULTING": "HR Consulting",
+      "FINANCIAL_MODELING": "Financial Modeling",
+      "LEGAL_CONSULTING": "Legal Consulting",
+      "CONTRACT_DRAFTING": "Contract Drafting",
+      "INTELLECTUAL_PROPERTY": "Intellectual Property",
+      "CORPORATE_LAW": "Corporate Law",
+      "FAMILY_LAW_SERVICES": "Family Law Services",
+      "COACHING_MENTORING": "Coaching & Mentoring",
+      "FITNESS_TRAINING": "Fitness Training",
+      "MUSIC_PRODUCTION": "Music Production",
+      "PODCAST_EDITING": "Podcast Editing",
+      "CAREER_COUNSELING": "Career Counseling",
+      "EVENT_PLANNING": "Event Planning",
+      "LIFE_COACHING": "Life Coaching",
+      "PLUMBING_SERVICES": "Plumbing Services",
+      "ELECTRICAL_REPAIR": "Electrical Repair",
+      "CARPENTRY_SERVICES": "Carpentry Services",
+      "AUTO_REPAIR": "Auto Repair",
+      "HOUSE_CLEANING": "House Cleaning",
+      "MOVING_HELP": "Moving Help",
+      "GARDENING_LANDSCAPING": "Gardening & Landscaping",
+      "CONSTRUCTION_WORK": "Construction Work",
+      "PEST_CONTROL": "Pest Control",
+      "LOCKSMITH_SERVICES": "Locksmith Services",
+      "PAINTING_SERVICES": "Painting Services",
+      "HVAC_REPAIR": "HVAC Repair",
+      "APPLIANCE_REPAIR": "Appliance Repair",
+      "FURNITURE_ASSEMBLY": "Furniture Assembly",
+      "PET_SITTING": "Pet Sitting",
+      "DOG_WALKING": "Dog Walking",
+      "BABYSITTING": "Babysitting",
+      "ELDERLY_CARE": "Elderly Care",
+      "SECURITY_SERVICES": "Security Services",
+      "WINDOW_CLEANING": "Window Cleaning",
+      "WASTE_REMOVAL": "Waste Removal",
+      "RECYCLING_SERVICES": "Recycling Services",
+      "CAR_WASHING": "Car Washing",
+      "CAR_SCRAPING": "Car Scraping",
+      "BIKE_REPAIR": "Bike Repair",
+      "FLOORING_INSTALLATION": "Flooring Installation",
+      "ROOFING_SERVICES": "Roofing Services",
+      "WATER_DAMAGE_RESTORATION": "Water Damage Restoration",
+      "POOL_CLEANING": "Pool Cleaning",
+      "SNOW_REMOVAL": "Snow Removal",
+      "EVENT_STAFFING": "Event Staffing",
+      "CATERING_SERVICES": "Catering Services",
+      "PHOTOGRAPHY_SERVICES": "Photography Services",
+      "MAKEUP_ARTIST": "Makeup Artist",
+      "TATTOO_ARTIST": "Tattoo Artist",
+      "OTHER": "Other"
+    },
+    "accountStatus": {
+      "UNVERIFIED": "Unverified",
+      "PENDING": "Pending",
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "DELETED": "Deleted",
+      "BANNED": "Banned",
+      "REJECTED": "Rejected"
+    },
+    "accountType": {
+      "FREELANCER": "Freelancer",
+      "CLIENT": "Client"
+    },
+    "statistics": {
+      "DAILY_TOTAL_EARNINGS": "Total Earnings",
+      "ORDERS_COMPLETED": "Orders Completed",
+      "ORDER_SUCCESS_RATE": "Order Success Rate",
+      "ACTIVE_ORDERS": "Active Orders"
+    },
+    "paymentStatus": {
+    },
+    "orderStatus": {
+      "CREATED": "Created",
+      "IN_PROGRESS": "In Progress",
+      "SUBMITTED_FOR_REVIEW": "Await approval",
+      "APPROVED": "Approved",
+      "DISPUTED": "Disputed",
+      "COMPLETED": "Completed",
+      "CANCELED": "Canceled"
+    },
+    "transactionStatus": {
+      "PENDING": "Pending",
+      "ESCROWED": "Escrowed",
+      "RELEASED": "Released",
+      "APPROVED": "Approved",
+      "CANCELED": "Canceled",
+      "DISPUTED": "Disputed",
+      "REFUNDED": "Refunded",
+      "FAILED": "Failed",
+      "SETTLED": "Settled",
+      "IN_PROCESS": "In Process",
+      "ON_HOLD": "On Hold"
+    },
+    "eventType": {
+      "ACCOUNT_CREATED": "Account created",
+      "VERIFICATION_SUBMITTED": "Verification submitted",
+      "ACCOUNT_APPROVED": "Account approved",
+      "ACCOUNT_REJECTED": "Account rejected",
+      "ORDER_CREATED": "Order created",
+      "ORDER_ACCEPTED": "Order accepted",
+      "ORDER_REJECTED": "Order rejected",
+      "ORDER_COMPLETED": "Order completed",
+      "ORDER_SUBMITTED_FOR_REVIEW": "Order submitted for review",
+      "ORDER_APPROVED": "Order approved",
+      "ORDER_APPROVED_BY_ADMIN": "Order approved by admin",
+      "ORDER_DISPUTED": "Order disputed",
+      "ORDER_CANCELED": "Order canceled",
+      "ORDER_CANCELED_WITH_REFUND_BY_ADMIN": "Order canceled with refund by admin",
+      "DISPUTE_CREATED": "Dispute created",
+      "DISPUTE_RESOLVED": "Dispute resolved",
+      "DISPUTE_REJECTED": "Dispute rejected",
+      "PROPOSAL_CREATED": "Proposal created",
+      "PROPOSAL_ACCEPTED": "Proposal accepted",
+      "PROPOSAL_REJECTED": "Proposal rejected",
+      "TRANSACTION_CREATED": "Transaction created",
+      "TRANSACTION_ESCROWED": "Transaction escrowed",
+      "TRANSACTION_RELEASED": "Transaction released",
+      "REVIEW_SUBMITTED": "Review submitted",
+      "FILE_UPLOADED": "File uploaded",
+      "ROLE_SWITCHED": "Role switched"
+    },
+    "disputeStatus": {
+      "OPEN":  "Open",
+      "IN_REVIEW": "In Review",
+      "RESOLVED_REFUNDED": "Refunded",
+      "RESOLVED_FREELANCER_PAID": "Solved",
+      "REJECTED": "Rejected"
+    }
+  },
+  "rating": {
+    "reviews": "Reviews",
+    "noRating": "No rating",
+    "poor": "Poor",
+    "average": "Average",
+    "good": "Good",
+    "veryGood": "Very good",
+    "excellent": "Excellent"
+  },
+  "form": {
+    "fields": {
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "address": "Address",
+      "houseNumber": "House Number",
+      "street": "Street Name",
+      "city": "City",
+      "region": "Region/State",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "description": "Project Description",
+      "shortDescription": "Short description",
+      "categories": "Categories",
+      "avatarImage": "Profile Avatar",
+      "idDocument": "Identification Document",
+      "title": "Project Title",
+      "price": "Project Budget",
+      "images": "Project Images",
+      "workflow": "Project Workflow",
+      "stepNumber": "Workflow Step Number",
+      "faqs": "Frequently Asked Questions",
+      "question": "FAQ Question",
+      "answer": "FAQ Answer",
+      "workflowTitle": "Title",
+      "workflowDescription": "Description",
+      "status": "Status",
+      "registrationDate": "Registration Date",
+      "accountType": "Account Type",
+      "accountStatus": "Account Status",
+      "rejectionReason": "Rejection reason",
+      "disputeReason": "Dispute reason",
+      "deadlineDate": "Deadline date",
+      "proposal": "Proposal"
+    },
+    "fileUpload": {
+      "uploaded": "Uploaded",
+      "placeholder": "Drag & drop files here, or click to select",
+      "error": {
+        "typeNotAllowed": "File {{fileName}} is not an accepted type.",
+        "isAreadyLoaded": "File {{fileName}} has already been added.",
+        "fileTooLarge": "The maximum files size is 50mb."
+      },
+      "address": {
+        "error": {
+          "fullAddress": "Address is required. Please provide a complete formatted address.",
+          "street": "Street name is required. Ensure it is correctly specified.",
+          "city": "City name is required. Please enter a valid city.",
+          "region": "Region or state is required. Specify the administrative area.",
+          "postalCode": "Postal code is required. Provide a valid postal or ZIP code.",
+          "country": "Country is required. Enter a valid country name.",
+          "houseNumber": "House number is required. Ensure it's included in the address."
+        }
+      }
+    },
+    "error": {
+      "required": "{{field}} is required.",
+      "email": "Invalid email format.",
+      "min": "At least {{number}} {{field}} required.",
+      "minValue": "The minimum possible values is {{number}}",
+      "max": "Maximum allowed is {{number}} {{field}}.",
+      "dateMinValue": "Date can't be in past."
+    },
+    "undefined": "Start filling out your details, and we’ll guide you through the process step by step - it’s super easy!"
+  },
   "platform": {
     "slogan": "Work Smarter, Connect Faster"
   },
@@ -7,6 +319,44 @@
     "description": "The page you are looking for doesn’t exist or has been moved.",
     "backToHome": "Back to Home",
     "errorCode": "404"
+  },
+  "homePage": {
+    "yourActiveOrders": "Your active orders"
+  },
+  "dashboard": {
+    "registrations": {
+      "freelancersRegistrationRequests": "Freelancers registration requests",
+      "clientsRegistrationRequests": "Clients registration requests",
+      "title": "Registration requests",
+      "empty": "Seems like nothing to show here",
+      "accountStatus": "Account status",
+      "rejectionReasonDialogText": "Please provide a clear reason for rejection.",
+      "registrationRequestRejected": "Registration request has been declined.",
+      "registrationRequestApproved": "Registration request has been approved."
+    },
+    "settings": {
+      "title": "Settings",
+      "userProfile": {
+        "success": "Profile has been successfully updated!"
+      }
+    },
+    "menu": {
+      "home": {
+        "title": "Home"
+      },
+      "clients": {
+        "title": "Clients"
+      },
+      "orders": {
+        "title": "Orders"
+      },
+      "settings": {
+        "title": "Settings"
+      }
+    },
+    "stats": {
+      "last30Days": "Last 30 days"
+    }
   },
   "header": {
     "user": {
@@ -36,17 +386,62 @@
   },
   "service": {
     "page": {
-      "title": ""
+      "title": "Service",
+      "description": "Description",
+      "workflow": "Workflow",
+      "faq": "FAQ"
     },
-    "create": {
-      "successful": "",
-      "error": ""
+    "form": {
+      "success": "Your order has been successfully created! \uD83C\uDF89 We're getting things ready—sit back and track the progress in your dashboard."
+    },
+    "package": {
+      "basic": "Basic"
     },
     "notFound": ""
   },
   "order": {
-    "create": "",
-    "error": ""
+    "title": "Order Details",
+    "createdAt": "Created at",
+    "payment": "Payment",
+    "status": "Status",
+    "timeline": "Timeline",
+    "additionalNotes": "Additional Notes",
+    "rejectionReason": "Rejection Reason",
+    "disputeReason": "Dispute Reason",
+    "deadline": "Deadline",
+    "dispute": {
+      "title": "Dispute order",
+      "success": "Order has been disputed!"
+    },
+    "accept": {
+      "title": "Accept order",
+      "success": "Order has been accepted!"
+    },
+    "reject": {
+      "title": "Reject order",
+      "success": "Order has been rejected!"
+    },
+    "submitForReview": {
+      "success": "Order has been submitted for review. Wait for client approval!"
+    },
+    "approve": {
+      "success": "Order has been approved!"
+    }
+  },
+  "dispute": {
+    "title": "Dispute",
+    "reason": "Reason of dispute",
+    "proposal": {
+      "title": "Freelancer's proposal",
+      "submitted": "Proposal has been submitted!"
+    },
+    "accept": {
+      "success": "Proposal has been accepted!"
+    },
+    "reject": {
+      "title": "Rejection reason",
+      "success": "Proposal has been rejected!"
+    }
   },
   "signIn": {
     "form": {
@@ -66,33 +461,100 @@
       "steps": {
         "yourDetails": "Your Details",
         "aboutYourself": "About Yourself",
-        "avatar": "Avatar",
+        "avatar": "Avatar & Documents",
         "step1": {
-          "firstName": "Your first name - make it official, not your favorite alias!",
-          "lastName": "Your last name, exactly how it appears on your ID.",
-          "email": "Your go-to email for updates and news. Don't worry, no spam here!",
+          "firstName": "Enter your first name as it appears on official documents.",
+          "lastName": "Provide your last name—make sure it matches your identification.",
+          "email": "Add your best email address so we can reach you if needed.",
           "address": {
-            "fullAddress": "Your full address, street, city, and more. We like to keep things clear!"
+            "fullAddress": "Type your full address, including street and house number.",
+            "street": "Specify your street name.",
+            "city": "Enter your city for location verification.",
+            "region": "State or region—help us locate you more precisely.",
+            "postalCode": "Your postal or ZIP code for complete address verification.",
+            "country": "Select the country where you're based.",
+            "houseNumber": "Include your house or apartment number."
           },
-          "phoneNumber": "Your main contact number. We'll only use it if we absolutely need to!"
+          "phoneNumber": "Add your phone number for verification and security purposes.",
+          "error": {
+            "firstName": "First name is required. Please enter your legal first name.",
+            "lastName": "Last name is required. Ensure it matches your official documents.",
+            "email": "Email address is required. Provide a valid email for communication.",
+            "phoneNumber": "Phone number is required. Provide a valid contact number."
+          }
         },
-          "undefined": "Start filling out your details, and we’ll guide you through the process step by step - it’s super easy!"
+        "step2": {
+          "description": "Tell us about yourself—what makes you a great freelancer?",
+          "categories": "Pick the services or industries where you specialize.",
+          "avatarImage": "Upload a professional profile picture—make a great first impression!",
+          "idDocument": "Securely upload an official identification document for verification.",
+          "error": {
+            "description": "A description is required. Tell us about yourself and your expertise.",
+            "categories": "At least one category must be selected. Choose the areas where you specialize.",
+            "avatarImage": "Profile picture is required. Upload a clear and professional image.",
+            "idDocument": "Identity document is required. Upload a valid ID for verification."
+          }
+        },
+        "step3": {
+          "avatarImage": "Upload a professional profile picture—make a great first impression!",
+          "idDocument": "Securely upload an official identification document for verification.",
+          "error": {
+            "avatarImage": "Profile picture is required. Upload a clear and professional image.",
+            "idDocument": "Identity document is required. Upload a valid ID for verification."
+          }
+        },
+        "undefined": "Start filling out your details, and we’ll guide you through the process step by step - it’s super easy!"
       },
-      "companyName": "The name of your company or brand. Keep it official but recognizable!",
-      "registrationCode": "Your company’s unique registration or tax code. Helps us stay compliant!",
-      "email": "Your main contact email. We’ll send you updates and important info here.",
-      "address": {
-        "street": "The street name where your office is located. Make it precise!",
-        "city": "The city where your office or HQ is based. E.g., Berlin, New York.",
-        "state": "Your state or province. Skip it if it’s not applicable!",
-        "region": "The broader region for your location. Helps for global users!",
-        "postalCode": "Your postal or ZIP code to ensure accurate deliveries (if needed).",
-        "country": "Your country of operation. Let us know where you’re working from!",
-        "houseNumber": "Your building or house number. Optional, but can be helpful!"
+      "success": "Your verification form has been submitted successfully! 🎉 Our team is reviewing your details—hang tight, and we’ll notify you once your account is approved."
+    }
+  },
+  "postService": {
+    "title": "Post Service",
+    "description": {
+      "header": "Welcome to the service hub! 🚀",
+      "body": "Let's get your service out there. Just a few details, and you're ready to connect with the right clients!"
+    },
+    "form": {
+      "steps": {
+        "serviceDetails": "Service Details",
+        "description": "Description",
+        "workflow": "Workflow",
+        "faqs": "FAQs",
+        "step1": {
+          "title": "Give Your Project a Name",
+          "price": "Set a fair budget — what’s this service worth?",
+          "address": {
+            "fullAddress": "Where should this work happen? Remote or a specific location? If remote, then left this field empty."
+          },
+          "categories": "Help freelancers find you! Pick the right project categories.",
+          "images": "A picture is worth a thousand words — upload some visuals!"
+        },
+        "step2": {
+          "description": "Make it shine! Describe your project in detail so freelancers know exactly what you need."
+        },
+        "step3": {
+          "workflow": "Break it down: Define the key steps to get your project done smoothly."
+        },
+        "step4": {
+          "faqs": "Anticipate questions before they pop up—answer what freelancers might ask!"
+        },
+        "undefined": "Start filling out your details, and we’ll guide you through the process step by step - it’s super easy!"
       },
-      "phoneNumber": "Your primary phone number. We might call to verify your details.",
-      "country": "The country you’ll mostly operate in. Feel free to specify here again!",
-      "description": "A short, snappy description of your company or what you do. Sell yourself here!"
+      "success": "Huraaa! Service created successfully."
+    }
+  },
+  "notifications": {
+    "REGISTRATION_REQUEST": {
+      "title": "New registration request!",
+      "description": "{{fullName}} would like to register as {{role}}"
+    },
+    "unfinishedVerification": {
+      "title": "Unfinished verification",
+      "message": "You have unfinished verification process."
+    },
+    "rejectedRegistration": {
+      "title": "Rejected registration",
+      "message": "Admin has declined your registration request as {{role}}."
     }
   }
 }

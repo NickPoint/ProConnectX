@@ -22,7 +22,12 @@
         </encoder>
     </appender>
 
-    <root level="ALL">
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="org.hibernate.SQL" level="INFO"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="INFO"/>
+    <logger name="org.springframework.orm.jpa" level="INFO"/>
+
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>

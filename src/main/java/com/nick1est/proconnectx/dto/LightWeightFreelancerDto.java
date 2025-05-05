@@ -14,5 +14,9 @@ public class LightWeightFreelancerDto {
     private String lastName;
     @NotNull
     private Double rating;
-    private String avatarUrl;
+    @NotNull
+    private String email;
+    @NotNull
+    private String phoneNumber;
+    private String avatarImageUrl;
 }

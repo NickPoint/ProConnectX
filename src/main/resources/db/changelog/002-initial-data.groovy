@@ -1,0 +1,56 @@
+package db.changelog
+
+databaseChangeLog {
+    changeSet(id: '002-insert-initial-data', author: 'Mykyta Voievudskyi') {
+
+        // Insert Roles
+        ['ROLE_ADMIN', 'ROLE_CLIENT', 'ROLE_FREELANCER', 'ROLE_UNVERIFIED'].each { roleName ->
+            insert(tableName: 'role') {
+                column(name: 'name', value: roleName)
+            }
+        }
+
+        // Insert Categories
+        [
+                // Remote / Digital Jobs
+                'WEB_DESIGN', 'WEB_DEVELOPMENT', 'FRONTEND_DEVELOPMENT', 'BACKEND_DEVELOPMENT', 'MOBILE_APP_DEVELOPMENT', 'GAME_DEVELOPMENT', 'WORDPRESS_DEVELOPMENT', 'ECOMMERCE_DEVELOPMENT', 'SOFTWARE_DEVELOPMENT', 'API_DEVELOPMENT',
+                'GRAPHIC_DESIGN', 'UI_UX_DESIGN', 'LOGO_DESIGN', 'BRAND_IDENTITY_DESIGN', 'VIDEO_EDITING', 'ANIMATION', 'ILLUSTRATION', 'THREE_D_MODELING', 'PRESENTATION_DESIGN', 'INTERIOR_DESIGN',
+                'CONTENT_WRITING', 'COPYWRITING', 'GHOSTWRITING', 'TECHNICAL_WRITING', 'RESUME_WRITING', 'GRANT_WRITING', 'CREATIVE_WRITING', 'SEO_WRITING', 'SCRIPTWRITING', 'EDITING_PROOFREADING',
+                'TRANSLATION', 'TRANSCRIPTION', 'LANGUAGE_TUTORING', 'SUBTITLING_CAPTIONING', 'LOCALIZATION_SERVICES',
+                'DIGITAL_MARKETING', 'SOCIAL_MEDIA_MARKETING', 'SEO_SEM', 'EMAIL_MARKETING', 'AFFILIATE_MARKETING', 'INFLUENCER_MARKETING', 'LEAD_GENERATION', 'TELEMARKETING', 'BRAND_STRATEGY',
+                'CUSTOMER_SUPPORT', 'TECHNICAL_SUPPORT', 'VIRTUAL_ASSISTANT', 'CHAT_SUPPORT', 'HELPDESK_SERVICES',
+                'DATA_ENTRY', 'WEB_RESEARCH', 'PROJECT_MANAGEMENT', 'CALENDAR_MANAGEMENT', 'DOCUMENT_PREPARATION',
+                'DATA_ANALYSIS', 'DATA_ENGINEERING', 'MACHINE_LEARNING', 'AI_DEVELOPMENT', 'BUSINESS_INTELLIGENCE', 'DATA_VISUALIZATION', 'BIG_DATA_SERVICES',
+                'CIVIL_ENGINEERING', 'MECHANICAL_ENGINEERING', 'ELECTRICAL_ENGINEERING', 'STRUCTURAL_ENGINEERING', 'CAD_DRAFTING', 'ARCHITECTURE_DESIGN', 'PRODUCT_DESIGN',
+                'ACCOUNTING', 'BOOKKEEPING', 'FINANCIAL_ANALYSIS', 'BUSINESS_CONSULTING', 'TAX_PREPARATION', 'HR_CONSULTING', 'FINANCIAL_MODELING',
+                'LEGAL_CONSULTING', 'CONTRACT_DRAFTING', 'INTELLECTUAL_PROPERTY', 'CORPORATE_LAW', 'FAMILY_LAW_SERVICES',
+                'COACHING_MENTORING', 'FITNESS_TRAINING', 'MUSIC_PRODUCTION', 'PODCAST_EDITING', 'CAREER_COUNSELING', 'EVENT_PLANNING', 'LIFE_COACHING',
+
+                // Manual / Local Services
+                'PLUMBING_SERVICES', 'ELECTRICAL_REPAIR', 'CARPENTRY_SERVICES', 'AUTO_REPAIR', 'HOUSE_CLEANING', 'MOVING_HELP', 'GARDENING_LANDSCAPING', 'CONSTRUCTION_WORK', 'PEST_CONTROL', 'LOCKSMITH_SERVICES',
+                'PAINTING_SERVICES', 'HVAC_REPAIR', 'APPLIANCE_REPAIR', 'FURNITURE_ASSEMBLY', 'PET_SITTING', 'DOG_WALKING', 'BABYSITTING', 'ELDERLY_CARE', 'SECURITY_SERVICES', 'WINDOW_CLEANING',
+                'WASTE_REMOVAL', 'RECYCLING_SERVICES', 'CAR_WASHING', 'CAR_SCRAPING', 'BIKE_REPAIR', 'FLOORING_INSTALLATION', 'ROOFING_SERVICES', 'WATER_DAMAGE_RESTORATION', 'POOL_CLEANING', 'SNOW_REMOVAL',
+                'EVENT_STAFFING', 'CATERING_SERVICES', 'PHOTOGRAPHY_SERVICES', 'MAKEUP_ARTIST', 'TATTOO_ARTIST',
+
+                // Catch-All
+                'OTHER'
+        ].each { categoryName ->
+            insert(tableName: 'category') {
+                column(name: 'name', value: categoryName)
+            }
+        }
+
+        // Insert Admin User
+        insert(tableName: 'principal') {
+            column(name: 'email', value: 'admin@gmail.com')
+            column(name: 'password', value: '$2a$10$Wwx8NxkWdzIKAEuhjmfPHOo9rQfxiW6Yrt2N3DK9jnBpIZi0xutii') // This seems like an already hashed password
+            column(name: 'last_active_role', value: 'ROLE_ADMIN')
+        }
+
+        // Link Admin User with Role
+        insert(tableName: 'principal_role') {
+            column(name: 'principal_id', value: '1')
+            column(name: 'role_id', value: '1')
+        }
+    }
+}

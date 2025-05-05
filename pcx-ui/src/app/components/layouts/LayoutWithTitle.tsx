@@ -44,7 +44,7 @@ const LayoutWithTitle = () => {
                         <Typography variant="h2" component='h1'>{title}</Typography>
                     </Grid>
                     <Grid size={12}>
-                        <Outlet/>
+                        <Outlet />
                     </Grid>
                 </Grid>
             </Container>

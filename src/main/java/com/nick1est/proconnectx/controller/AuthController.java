@@ -2,12 +2,12 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
+import com.nick1est.proconnectx.dao.Event;
+import com.nick1est.proconnectx.dao.EventType;
 import com.nick1est.proconnectx.dao.RoleType;
-import com.nick1est.proconnectx.dto.LoginRequest;
-import com.nick1est.proconnectx.dto.MessageResponse;
-import com.nick1est.proconnectx.dto.SignupFormRequest;
-import com.nick1est.proconnectx.dto.AuthResponse;
-import com.nick1est.proconnectx.service.AuthService;
+import com.nick1est.proconnectx.dto.*;
+import com.nick1est.proconnectx.exception.EmailAlreadyExistsException;
+import com.nick1est.proconnectx.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -15,6 +15,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,17 +34,24 @@ import java.nio.file.AccessDeniedException;
 public class AuthController {
     private final AuthService authService;
     private final JwtUtils jwtUtils;
+    private final RoleService roleService;
 
     @GetMapping
     public ResponseEntity<AuthResponse> getCurrentUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("Getting active session user: {}", userDetails);
         if (userDetails == null) {
             return ResponseEntity.noContent().build();
         }
-        log.debug("Getting current user: {}", userDetails);
-        val roles = authService.getUserRoles(userDetails);
-        return ResponseEntity.ok()
-                .body(new AuthResponse(userDetails.getFirstName(), userDetails.getLastName(),
-                        roles, userDetails.getActiveRoleType()));
+        val activeRole = roleService.getByName(userDetails.getActiveRole());
+        val authResponse = new AuthResponse(userDetails, authService.getAvatarUrl(userDetails));
+        if (!userDetails.getPrincipal().getRoles().contains(activeRole)) {
+            userDetails.chooseActiveRole();
+            val jwtCookie = jwtUtils.generateJwtCookie(userDetails, userDetails.getActiveRole());
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .body(authResponse);
+        }
+        return ResponseEntity.ok().body(authResponse);
     }
 
     @PostMapping("/login")
@@ -54,7 +64,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody SignupFormRequest signUpFormRequest) throws AccessDeniedException {
+    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody SignupFormRequest signUpFormRequest) {
         val authResponse = authService.signupUser(signUpFormRequest);
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, authResponse.getToken().toString())
@@ -64,7 +74,10 @@ public class AuthController {
     @PostMapping("/check-email")
     public ResponseEntity<Void> checkEmail(@RequestParam @NotBlank @Email String email) {
         boolean exists = authService.checkEmailExists(email);
-        return exists ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
+        if (exists) {
+            throw new EmailAlreadyExistsException(email);
+        }
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/logout")
@@ -80,9 +93,24 @@ public class AuthController {
     public ResponseEntity<?> switchRole(@RequestParam RoleType role, @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
         val authResponse = authService.switchRole(userDetails, role);
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, authResponse.toString())
+                .header(HttpHeaders.SET_COOKIE, authResponse.getToken().toString())
                 .body(authResponse);
     }
 
+    @GetMapping("/freelancer-registrations")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<LightweightRegistrationRequestDto>> getFreelancerRegistrationRequests(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        val registrations = authService.getFreelancerRegistrationRequests(userDetails);
+        return ResponseEntity.ok().body(registrations);
+    }
+
+    @GetMapping("/client-registrations")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<LightweightRegistrationRequestDto>> getClientRegistrationRequests(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        val registrations = authService.getClientRegistrationRequests(userDetails);
+        return ResponseEntity.ok().body(registrations);
+    }
 
 }

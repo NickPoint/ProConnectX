@@ -8,8 +8,8 @@ import java.util.Map;
 public class EmailAlreadyExistsException extends RuntimeException {
     private Object[] args;
 
-    public EmailAlreadyExistsException(String message, Object ...args) {
-        super(message);
+    public EmailAlreadyExistsException(Object ...args) {
+        super("error.signup.email_exists");
         this.args = args;
     }
 }

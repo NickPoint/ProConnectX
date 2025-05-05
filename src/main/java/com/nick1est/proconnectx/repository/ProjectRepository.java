@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.repository;
 
 import com.nick1est.proconnectx.dao.Category;
@@ -35,3 +36,4 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
                                                  @Param("maxBudget") Double maxBudget,
                                                  @Param("type") ProjectType type);
 }
+*/

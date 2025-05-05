@@ -7,7 +7,7 @@ interface UserCardProps extends ReviewerDto{
     withRating?: boolean;
 }
 
-const UserCard = ({id, firstName, lastName, avatarUrl, rating, variant = 'paper', withRating}: UserCardProps) => {
+const UserCard = ({id, firstName, lastName, avatarImageUrl, rating, variant = 'paper', withRating}: UserCardProps) => {
     const Container: React.ElementType = variant === 'paper' ? Paper : Box;
 
     return (
@@ -17,9 +17,8 @@ const UserCard = ({id, firstName, lastName, avatarUrl, rating, variant = 'paper'
             alignItems: "center",
         }}>
             <Stack direction='row' spacing={1} sx={{alignItems: 'center'}}>
-                {avatarUrl ? <Avatar sx={{width:56, height: 56}} src={avatarUrl}/>
-                    : <Avatar sx={{width:56, height: 56}}>{`${firstName.charAt(0)}${lastName?.charAt(0)}`}</Avatar>}
-                <Typography variant='h6'>{`${firstName} ${lastName}`}</Typography>
+                <Avatar alt={firstName} src={avatarImageUrl}/>
+                <Typography variant='body1'>{`${firstName} ${lastName}`}</Typography>
             </Stack>
             {withRating &&
                 <Rating rating={rating}/>

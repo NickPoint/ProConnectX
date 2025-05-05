@@ -17,9 +17,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetailsImpl loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetailsImpl loadUserByUsername(String email) {
         val user = principalRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Person Not Found with username: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("Principal with username: " + email  + " not found"));
         return UserDetailsImpl.build(user);
     }
 

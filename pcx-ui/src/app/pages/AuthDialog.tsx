@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import {
+    LoginRequest,
     RoleType,
     SignupFormRequest,
     useAuthenticateUserMutation,
@@ -13,7 +14,6 @@ import {CardActionArea, Dialog, DialogContent, Grid, Link, Stack, Typography} fr
 import {enqueueSnackbar} from "notistack";
 import {useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from "../hooks.ts";
-import {setCredentials} from "../../features/auth/authSlice.ts";
 import signupImage from "../../assets/signup.jpg"
 import {AnimatePresence, motion} from "motion/react"
 import {
@@ -34,6 +34,7 @@ const Hero = () => {
         <Stack color='white' sx={{
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupImage})`,
             backgroundPosition: '0 10%',
+            backgroundSize: 'cover',
             height: '100%',
             p: 2
         }}>
@@ -63,9 +64,14 @@ const signUpInitialValues: SignupFormRequest = {
     role: '' as RoleType,
 }
 
-const SignupForm = () => {
+
+interface SignupFormProps {
+    onSubmit: (values: SignupFormRequest) => Promise<any>
+}
+
+
+export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
     const dispatch = useAppDispatch();
-    const [registerUser] = useRegisterUserMutation();
     const [checkEmail] = useCheckEmailMutation();
     const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
@@ -78,11 +84,11 @@ const SignupForm = () => {
             onSubmit={(values, helpers) => {
                 if (activeStep === 0) {
                     checkEmail({email: values.email}).unwrap()
-                        .then((result) => {
+                        .then(() => {
                             setActiveStep((prev) => prev + 1);
                         })
-                        .catch(({status, data}) => {
-                            if (status === 204) {
+                        .catch(({status}) => {
+                            if (status === 400) {
                                 dispatch(setEmail(values.email));
                                 dispatch(setSignup(false));
                             }
@@ -90,17 +96,22 @@ const SignupForm = () => {
                         .finally(() => helpers.setSubmitting(false));
                     return;
                 }
-                registerUser({signupFormRequest: values}).unwrap().then((response) => {
-                    dispatch(setCredentials(response))
-                    enqueueSnackbar('Registration successful', {variant: 'success'});
-                    navigate('/verification');
-                })
+                onSubmit(values)
+                    .then(() => {
+                        enqueueSnackbar('Registration successful', {variant: 'success'});
+                        if (values.role === RoleType.RoleFreelancer) {
+                            navigate('/freelancer-verification');
+                        } else {
+                            navigate('/client-verification');
+                        }
+                    })
                     .catch(({status, data}) => {
-                        if (status === 409) {
+                        if (status === 400) {
                             dispatch(setEmail(values.email));
                             dispatch(setSignup(false));
                         } else if (data !== undefined) {
                             helpers.setErrors(data.errors);
+                            setActiveStep((prev) => prev - 1);
                         }
                     })
                     .finally(() => {
@@ -219,9 +230,12 @@ const loginSchema = object({
         .max(32, 'Password must be less than 32 characters'),
 });
 
-const SigninForm = () => {
+interface SigninFormProps {
+    onSubmit: (values: LoginRequest) => Promise<any>
+}
+
+export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
     const dispatch = useAppDispatch();
-    const [authenticateUser] = useAuthenticateUserMutation();
     const email = useAppSelector(selectEmail);
     const {t} = useTranslation();
 
@@ -244,11 +258,9 @@ const SigninForm = () => {
                         initialValues={signInInitialValues}
                         validationSchema={loginSchema}
                         onSubmit={(values, formikHelpers) => {
-                            authenticateUser({loginRequest: values}).unwrap()
-                                .then((response) => {
-                                    dispatch(setCredentials(response));
+                            onSubmit(values)
+                                .then(() => {
                                     enqueueSnackbar(t('signIn.form.success'), {variant: 'success'});
-                                    dispatch(setOpen(false));
                                 })
                                 .catch((error) => {
                                     //TODO: better way to handle error if no connection with BE or if errorMiddleware is already handling it
@@ -298,6 +310,9 @@ const AuthDialog = () => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(selectOpen);
     const isSignUp = useAppSelector(selectSignup);
+    const [authenticateUser] = useAuthenticateUserMutation();
+    const [registerUser] = useRegisterUserMutation();
+
 
     return (
         <Dialog fullWidth maxWidth='md' open={open}
@@ -313,7 +328,10 @@ const AuthDialog = () => {
                                 exit={{opacity: 0, x: -50}}
                                 transition={{duration: 0.3}}
                             >
-                                <SigninForm/>
+                                <SigninForm
+                                    onSubmit={(values: LoginRequest) =>
+                                        authenticateUser({loginRequest: values}).unwrap()
+                                            .then(() => dispatch(setOpen(false)))}/>
                             </motion.div>
                         ) : (
                             <motion.div
@@ -323,7 +341,9 @@ const AuthDialog = () => {
                                 exit={{opacity: 0, x: 50}}
                                 transition={{duration: 0.3}}
                             >
-                                <SignupForm/>
+                                <SignupForm onSubmit={(values) =>
+                                    registerUser({signupFormRequest: values}).unwrap()
+                                        .then(() => dispatch(setOpen(false)))}/>
                             </motion.div>
                         )}
                     </AnimatePresence>

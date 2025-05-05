@@ -1,57 +1,58 @@
 import type {Action, ThunkAction} from "@reduxjs/toolkit"
 import {combineSlices, configureStore} from "@reduxjs/toolkit"
 import {setupListeners} from "@reduxjs/toolkit/query"
-import {footerSlice} from "../features/footer/footerSlice"
 import {emptySplitApi} from "../features/api/emptyApi";
 import {rtkQueryErrorLogger} from "../features/middleware/errorMiddleware";
 import {snackbarSlice} from "../features/snackbar/snackbarSlice";
-import {authApi} from "../features/api/authApi";
-import {authSlice} from "../features/auth/authSlice";
 import {serviceFormSlice} from "../features/serviceForm/serviceFormSlice";
 import {filterSlice} from "../features/filter/filterSlice";
 import {headerSlice} from "../features/header/headerSlice";
-import {verificationPage} from "../features/verification/verificationSlice.ts";
+import {formSlise} from "../features/form/formSlice.ts";
 import {fabSlice} from "../features/fab/fabSlice.ts";
 import {pageSlice} from "../features/page/pageSlice.ts";
 import {placesAutocompleteSlice} from "../features/placeAutocomplete/placeAutocompleteSlice.ts";
 import {loadingSlice} from "../features/loading/loadingSlice.ts";
 import {authFormSlice} from "../features/signupDialog/authFormSlice.ts";
+import {dashboardSlice} from "../features/dashboard/dashboardSlice.ts";
+import {notificationsSlice} from "../features/notifications/notificationSlice.ts";
 
-// `combineSlices` automatically combines the reducers using
-// their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer =
-    combineSlices(footerSlice, snackbarSlice, serviceFormSlice, filterSlice, headerSlice, emptySplitApi, authApi, authSlice,
-        verificationPage, fabSlice, pageSlice, placesAutocompleteSlice, loadingSlice, authFormSlice)
-// Infer the `RootState` type from the root reducer
+    combineSlices(snackbarSlice, serviceFormSlice, filterSlice, headerSlice, emptySplitApi,
+        formSlise, fabSlice, pageSlice, placesAutocompleteSlice, loadingSlice, authFormSlice, dashboardSlice,
+        notificationsSlice)
 export type RootState = ReturnType<typeof rootReducer>
 
-// The store setup is wrapped in `makeStore` to allow reuse
-// when setting up tests that need the same store config
 export const makeStore = (preloadedState?: Partial<RootState>) => {
-  const store = configureStore({
-    reducer: rootReducer,
-    // Adding the api middleware enables caching, invalidation, polling,
-    // and other useful features of `rtk-query`.
-    middleware: getDefaultMiddleware => {
-      return getDefaultMiddleware().concat([emptySplitApi.middleware, rtkQueryErrorLogger, authApi.middleware])
-    },
-    preloadedState,
-  })
-  // configure listeners using the provided defaults
-  // optional, but required for `refetchOnFocus`/`refetchOnReconnect` behaviors
-  setupListeners(store.dispatch)
-  return store
+    const store = configureStore({
+        reducer: rootReducer,
+        middleware: getDefaultMiddleware => {
+            return getDefaultMiddleware().concat([emptySplitApi.middleware, rtkQueryErrorLogger])
+        },
+        preloadedState,
+    })
+    setupListeners(store.dispatch)
+    return store
 }
 
-export const store = makeStore()
+const preloadedState: Partial<RootState> = {
+    form: {
+        ...JSON.parse(localStorage.getItem('form') || '{}'),
+        activeField: undefined
+    }
+}
 
-// Infer the type of `store`
+export const store = makeStore(preloadedState);
+
+store.subscribe(() => {
+    const {form} = store.getState();
+    localStorage.setItem('form', JSON.stringify(form));
+})
+
 export type AppStore = typeof store
-// Infer the `AppDispatch` type from the store itself
 export type AppDispatch = AppStore["dispatch"]
 export type AppThunk<ThunkReturnType = void> = ThunkAction<
-  ThunkReturnType,
-  RootState,
-  unknown,
-  Action
+    ThunkReturnType,
+    RootState,
+    unknown,
+    Action
 >

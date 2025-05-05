@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.mapper;
 
 import com.nick1est.proconnectx.dao.Employer;
@@ -11,3 +12,4 @@ public interface EmployerMapper {
 
     EmployerResponseDto toDto(Employer employer);
 }
+*/

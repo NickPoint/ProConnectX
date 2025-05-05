@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.dao;
 
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -48,14 +49,14 @@ public class Bid {
 
     @Column(nullable = false)
     @NotNull
-    private OffsetDateTime submittedAt;
+    private Instant submittedAt;
 
     @Column
-    private OffsetDateTime estimatedCompletionDate;
+    private Instant estimatedCompletionDate;
 
-    @JoinColumn
-    @OneToMany
-    private List<File> attachments;
+//    @JoinColumn
+//    @OneToMany
+//    private List<File> attachments;
 
     @Type(JsonBinaryType.class)
     @JdbcTypeCode(SqlTypes.JSON)
@@ -65,7 +66,8 @@ public class Bid {
     @PrePersist
     public void prePersist() {
         status = BidStatus.NEW;
-        submittedAt = OffsetDateTime.now();
+        submittedAt = Instant.now();
     }
 
 }
+*/

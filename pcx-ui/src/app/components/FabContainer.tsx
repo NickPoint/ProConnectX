@@ -24,8 +24,9 @@ const FabContainer = () => {
     const navigate = useNavigate();
 
     const fabHandlers: Record<string, () => void> = {
-        addService: () => navigate('/services/add'),
-        editService: () => navigate('/services/edit'),
+        addService: () => navigate('/service/add'),
+        editService: () => navigate('/service/edit'),
+        scrollUp: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
     };
 
     return (

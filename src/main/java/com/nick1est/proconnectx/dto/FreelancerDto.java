@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class FreelancerDto {
     @NotNull
@@ -16,9 +14,13 @@ public class FreelancerDto {
     private String firstName;
     @NotBlank
     private String lastName;
+    @NotBlank
+    private String phoneNumber;
+    @NotBlank
+    private String email;
     @NotNull
     private Double rating;
     @NotNull
     private Integer ratingCount;
-    private List<OrderDto> orders;
+    private String avatarImageUrl;
 }

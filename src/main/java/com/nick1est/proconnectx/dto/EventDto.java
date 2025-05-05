@@ -4,19 +4,18 @@ import com.nick1est.proconnectx.dao.EventType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Data
 public class EventDto {
     @NotNull
     private Long id;
 
-    private Long clientId;
-    private Long freelancerId;
-
     @NotNull
     private EventType type;
 
     @NotNull
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
+
+    private Long disputeId;
 }

@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.repository;
 
 import com.nick1est.proconnectx.dao.Bid;
@@ -33,3 +34,4 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
                          @Param("maxPrice") Integer maxPrice,
                          @Param("statuses") List<BidStatus> statuses);
 }
+*/

@@ -104,13 +104,13 @@ const Header2 = () => {
                             variant='body1'
                             component={RouterLink}
                             state={{from: location}}
-                            to="/login">Log in</Typography>
+                            to="/auth">Log in</Typography>
                         <Typography
                             sx={{color: 'inherit', textDecoration: 'none'}}
                             variant='body1'
                             component={RouterLink}
                             state={{from: location}}
-                            to="/signup">Sign up</Typography>
+                            to="/auth">Sign up</Typography>
                     </Box>
                 )}
             </Box>

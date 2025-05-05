@@ -5,10 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.Instant;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class Review {
@@ -28,9 +32,9 @@ public class Review {
     @ManyToOne
     private Service service;
 
-    @JoinColumn
+/*    @JoinColumn
     @ManyToOne
-    private Employer employer;
+    private Employer employer;*/
 
     @Column
     @Lob
@@ -41,12 +45,8 @@ public class Review {
     @NotNull
     private Double rating;
 
-    @Column(nullable = false)
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     @NotNull
-    private OffsetDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = OffsetDateTime.now();
-    }
+    private Instant createdAt;
 }

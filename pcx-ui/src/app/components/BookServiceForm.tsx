@@ -17,6 +17,8 @@ import {styled} from "@mui/material/styles";
 import {FreelancerDto, useBookServiceMutation} from "../../features/api/pcxApi.ts";
 import Avatar from "@mui/material/Avatar";
 import {enqueueSnackbar} from "notistack";
+import { useTranslation } from 'react-i18next';
+import {useNavigate} from "react-router-dom";
 
 interface Props {
     id: number;
@@ -38,6 +40,8 @@ const BookServiceForm = (props: Props) => {
     const [bookService] = useBookServiceMutation();
     const bottomRef = useRef<HTMLDivElement>(null);
     const [isBottomVisible, setIsBottomVisible] = useState(false);
+    const navigate = useNavigate();
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (!bottomRef.current) return;
@@ -73,12 +77,7 @@ const BookServiceForm = (props: Props) => {
                 <DialogContent>
                     <Stack spacing={2}>
                         <Stack direction="row" spacing={2} sx={{alignItems: 'center'}}>
-                            {freelancer.avatarUrl !== undefined ?
-                                <Avatar src={freelancer.avatarUrl}/> :
-                                <Avatar>
-                                    {`${freelancer.firstName.charAt(0)}${freelancer.lastName.charAt(0)}`}
-                                </Avatar>
-                            }
+                            <Avatar alt={freelancer.firstName} src={freelancer.avatarImageUrl}/>
                             <Typography>{`${freelancer.firstName} ${freelancer.lastName}`}</Typography>
                         </Stack>
                         <Formik
@@ -86,8 +85,9 @@ const BookServiceForm = (props: Props) => {
                             validationSchema={validationSchema}
                             onSubmit={(values, {setSubmitting}) => {
                                 bookService({serviceId: id, body: values.additionalNotes}).unwrap()
-                                    .then((response) => {
-                                        enqueueSnackbar(response.message, {variant: 'success'});
+                                    .then((id) => {
+                                        enqueueSnackbar(t('service.form.success'), {variant: 'success'});
+                                        navigate('/dashboard/home');
                                     })
                                     .finally(() => {
                                         setDialogOpen(false);
@@ -107,10 +107,10 @@ const BookServiceForm = (props: Props) => {
                                     />
                                     <DialogActions>
                                         <Button onClick={() => setDialogOpen(false)} color="primary">
-                                            Cancel
+                                            {t('buttons.cancel')}
                                         </Button>
                                         <Button onClick={submitForm} disabled={isSubmitting} color="primary">
-                                            Send Request
+                                            {t('buttons.sendRequest')}
                                         </Button>
                                     </DialogActions>
                                 </Form>
@@ -120,7 +120,7 @@ const BookServiceForm = (props: Props) => {
                 </DialogContent>
             </Dialog>
             <FloatingButton size='large' color='primary' variant='extended' onClick={() => setDialogOpen(true)}>
-                Connect</FloatingButton>
+                {t('buttons.connect')}</FloatingButton>
         </>
     );
 };

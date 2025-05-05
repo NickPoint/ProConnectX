@@ -4,21 +4,29 @@ import com.nick1est.proconnectx.dao.OrderStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 
 @Data
 public class OrderDto {
     @NotNull
     private Long id;
-    private BidDto acceptedBid;
-    private FullServiceDto service;
-    private ClientDto client;
+//    private BidDto acceptedBid;
+    @NotNull
+    private LightweightServiceDto service;
+    @NotNull
+    private LightweightClientDto client;
     @NotNull
     private OrderStatus status;
     @NotNull
-    private List<EventDto> events;
+    private LightweightTransactionDto transaction;
     @NotNull
-    private OffsetDateTime createdAt;
-    private OffsetDateTime completedAt;
+    private List<EventDto> events;
+    private String additionalNotes;
+    private String rejectionReason;
+    @NotNull
+    private Instant createdAt;
+    private LocalDate deadlineDate;
+    private Instant updatedAt;
 }

@@ -18,9 +18,6 @@ public class FreelancerRegistrationRequest {
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
-    @Email
-    private String email;
     @NotNull
     private AddressDto address;
     @NotBlank
@@ -28,5 +25,8 @@ public class FreelancerRegistrationRequest {
     @NotEmpty
     private List<CategoryType> categories;
     private MultipartFile avatarImage;
+    @NotEmpty
     private String description;
+    @NotEmpty
+    private List<MultipartFile> idDocument;
 }

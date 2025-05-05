@@ -5,10 +5,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.Instant;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class File {
@@ -16,9 +20,14 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(nullable = false)
-    @NotNull
-    private Long ownerId;
+    @Column
+    private Long serviceId;
+
+    @Column
+    private Long clientId;
+
+    @Column
+    private Long freelancerId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -42,14 +51,11 @@ public class File {
 
     @Column(nullable = false)
     @NotNull
-    private OffsetDateTime uploadAt;
+    private Boolean isPublic = false;
 
-    @PrePersist
-    public void prePersist() {
-        if (verified == null) {
-            verified = false;
-        }
-        uploadAt = OffsetDateTime.now();
-    }
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    @NotNull
+    private Instant uploadedAt;
 
 }

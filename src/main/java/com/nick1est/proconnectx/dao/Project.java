@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
@@ -5,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -67,14 +68,15 @@ public class Project {
 
     @Column(nullable = false)
     @NotNull
-    private OffsetDateTime datePosted;
+    private Instant datePosted;
 
-    private OffsetDateTime dueDate;
+    private Instant dueDate;
 
     @PrePersist
     public void prePersist() {
         status = ProjectStatus.OPEN;
-        datePosted = OffsetDateTime.now();
+        datePosted = Instant.now();
     }
 
 }
+*/

@@ -5,7 +5,7 @@ import {
     Divider,
     FormControl,
     InputLabel,
-    MenuItem,
+    MenuItem, Pagination,
     Select,
     SelectProps,
     Slider,
@@ -13,14 +13,13 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField";
-import {Category} from "../../../features/enums";
 import React, {useEffect, useState} from "react";
 import {useFormik} from "formik";
 import {replaceEmptyStringsWithNull} from "../../../features/filter/formikHelper";
 import GenericSearch from "../GenericSearch.tsx";
-import {ServiceFilter} from "../../../features/api/pcxApi.ts";
+import {CategoryType, ServiceFilter} from "../../../features/api/pcxApi.ts";
 import CardList from "../../pages/CardList.tsx";
-import ServiceCard from "./ServiceCard.tsx";
+import {useTranslation} from "react-i18next";
 
 //TODO: Hardcoded values
 const initialValues: ServiceFilter = {
@@ -50,6 +49,8 @@ const ServicesFilter = () => {
     const [ratingValue, setRatingValue] = useState(3);
     const [getFilteredServices, {data, error, isLoading}] = useLazyGetFilteredServicesQuery();
     const [filterOpened, setFilterOpened] = React.useState(false);
+    const [page, setPage] = useState(0);
+    const {t} = useTranslation();
 
     const handleFilterToggle = () => {
         setFilterOpened((prev) => !prev);
@@ -58,8 +59,7 @@ const ServicesFilter = () => {
     const formik = useFormik({
         initialValues,
         onSubmit: values => {
-            const convertedValues = replaceEmptyStringsWithNull(values);
-            getFilteredServices({serviceFilter: convertedValues}).unwrap()
+            getFilteredServices({page: page, serviceFilter: values}).unwrap()
         }
     });
 
@@ -72,8 +72,8 @@ const ServicesFilter = () => {
     }, [formik.values]);
 
     return (
-        <Grid container spacing={4}>
-            <Grid size={12} component='form' noValidate container spacing={2}>
+        <Grid container spacing={4} sx={{justifyContent: "center"}}>
+            <Grid size={{xs: 12, md: 6}} component='form' noValidate container spacing={2}>
                 <Grid size={12}>
                     <GenericSearch
                         name='title'
@@ -96,9 +96,9 @@ const ServicesFilter = () => {
                                              value={formik.values.categories}
                                              onChange={formik.handleChange}
                             >
-                                {Object.values(Category).map((category, index) => (
+                                {Object.values(CategoryType).map((category, index) => (
                                     <MenuItem key={index} value={category}>
-                                        {category}
+                                        {t(`enum.categories.${category}`)}
                                     </MenuItem>
                                 ))}
                             </SelectWithLabel>
@@ -155,7 +155,14 @@ const ServicesFilter = () => {
                 <Divider/>
             </Grid>
             <Grid size={12}>
-                <CardList lastListSize={1} isLoading={isLoading} data={data} />
+                <CardList lastListSize={4} isLoading={isLoading} data={data?.content} />
+            </Grid>
+            <Grid size={12}>
+                <Pagination
+                    count={data?.totalPages || 0}
+                    page={page + 1}
+                    onChange={(event, value) => setPage(value - 1)}
+                />
             </Grid>
         </Grid>
     );

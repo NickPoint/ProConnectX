@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
@@ -48,3 +49,4 @@ public class EmployerService {
     }
 
 }
+*/

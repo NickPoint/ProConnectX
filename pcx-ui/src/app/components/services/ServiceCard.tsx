@@ -1,6 +1,5 @@
 import {
     Box,
-    ButtonGroup,
     Card,
     CardActionArea,
     CardContent,
@@ -9,18 +8,17 @@ import {
     ChipProps,
     Divider,
     Grid,
-    IconButton,
     Stack,
     Typography
 } from "@mui/material";
 import {LightweightAddressDto, LightweightServiceDto} from "../../../features/api/pcxApi";
 import {useNavigate} from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {styled} from "@mui/material/styles";
 import React from "react";
 import {LocationOn, Star} from "@mui/icons-material";
-import {useFormattedDate} from "../projects/ProjectPage.tsx";
+import {useTranslation} from "react-i18next";
+import {parseOffsetDateTime} from "../../../utils/dateParser.ts";
 
 const CustomCardMediaRoot = styled(Box, {
     name: "CustomCardMedia",
@@ -69,36 +67,32 @@ function getAddressAsString(address: LightweightAddressDto | undefined): string 
 
 const ServiceCard: React.FC<LightweightServiceDto> = (service) => {
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     return (
         <Card>
             <CardHeader color='primary'
-                        avatar={service.freelancer.avatarUrl ?
-                            <Avatar src={service.freelancer.avatarUrl}/> :
-                            <Avatar>
-                                {`${service.freelancer?.firstName?.charAt(0)}${service.freelancer?.lastName?.charAt(0)}`}
-                            </Avatar>}
-                        action={<ButtonGroup>
+                        avatar={<Avatar alt={service.freelancer.firstName} src={service.freelancer.avatarImageUrl}/>}
+/*                        action={<ButtonGroup>
                             <IconButton><Star/></IconButton>
                             <IconButton aria-label="settings"><MoreVertIcon/></IconButton>
-                        </ButtonGroup>}
+                        </ButtonGroup>}*/
                         title={
                             <Typography>{`${service.freelancer?.firstName} ${service.freelancer?.lastName}`}</Typography>}
             />
             <CardActionArea onClick={() => navigate(`/service/${service.id}`)}>
-                {/*TODO: remove static chips*/}
-                <CustomCardMedia image={service.thumbnailMeta.path}
+                <CustomCardMedia image={service.thumbnailUrl}
                                  chips={[
-                                     {label: service.rating, color: 'primary', icon: <Star/>},
-                                     {label: 'Easy Work', color: 'secondary'},
-                                     {label: 'Chip offer', color: 'secondary'},
+                                     {label: service.ratingCount === 0 ? t('general.new') : service.rating, color: 'primary', icon: service.ratingCount !== 0 ? <Star/> : undefined}
+                                     // {label: 'Easy Work', color: 'secondary'},
+                                     // {label: 'Chip offer', color: 'secondary'},
                                  ]}/>
                 <CardContent>
                     <Stack spacing={2}>
                         <Grid container sx={{alignItems: 'center'}} spacing={2}>
                             <Grid size={{xs: 8}}>
                                 <Typography variant='h4'>{service.title}</Typography>
-                                <Typography variant='body2'>{useFormattedDate(service.postedAt)}</Typography>
+                                <Typography variant='body2'>{parseOffsetDateTime(service.postedAt)}</Typography>
                             </Grid>
                             <Grid size={{xs: 4}} sx={{textAlign: 'right'}}>
                                 <Typography variant='h5' fontWeight={700}>${service.price}</Typography>
@@ -115,7 +109,7 @@ const ServiceCard: React.FC<LightweightServiceDto> = (service) => {
                                         textOverflow: 'ellipsis',
                                         WebkitLineClamp: 4,
                                     }}
-                        >{service.description}</Typography>
+                        >{service.shortDescription}</Typography>
                         {/*<Divider/>*/}
                         <Stack direction='row' spacing={1} sx={{overflowX: 'auto', scrollbarWidth: 'none'}}>
                             <Chip icon={<LocationOn/>} color='secondary' label={getAddressAsString(service.address)}/>

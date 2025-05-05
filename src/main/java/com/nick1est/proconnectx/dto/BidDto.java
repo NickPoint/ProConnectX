@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Data
 public class BidDto {
@@ -20,7 +20,7 @@ public class BidDto {
     @NotBlank
     private String coverLetter;
     @NotNull
-    private OffsetDateTime submittedAt;
+    private Instant submittedAt;
     @NotNull
-    private OffsetDateTime estimatedCompletionDate;
+    private Instant estimatedCompletionDate;
 }

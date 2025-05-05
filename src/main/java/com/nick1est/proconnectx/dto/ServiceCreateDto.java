@@ -20,11 +20,13 @@ public class ServiceCreateDto {
     @NotBlank
     private String description;
 
+    @NotBlank
+    private String shortDescription;
+
     @NotNull
     private Integer price;
 
-    @NotBlank
-    private String location;
+    private ServiceAddressDto address;
 
     @NotEmpty
     private List<CategoryType> categories;

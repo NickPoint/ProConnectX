@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,19 +30,22 @@ public class Principal {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "client_roles", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "principal_role", joinColumns = @JoinColumn(name = "principal_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @NotEmpty
     private Set<Role> roles = new HashSet<>();
 
-    @JoinColumn
-    @OneToOne(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Freelancer freelancer;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private RoleType lastActiveRole =  RoleType.ROLE_UNVERIFIED;
 
-    @JoinColumn
-    @OneToOne(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Employer employer;
+    @OneToMany(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Freelancer> freelancerAccounts = new ArrayList<>();
 
-    @JoinColumn
+/*    @JoinColumn
     @OneToOne(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Client client;
+    private Employer employer;*/
+
+    @OneToMany(mappedBy = "principal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Client> clientAccounts = new ArrayList<>();
 }

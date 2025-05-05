@@ -3,7 +3,7 @@ package com.nick1est.proconnectx.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Data
 public class ReviewDto {
@@ -16,5 +16,5 @@ public class ReviewDto {
     private Double rating;
     //TODO: Avatar url
     @NotNull
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 }

@@ -37,9 +37,8 @@ const CardList = <T,>({lastListSize, isLoading, data}: CardListProps<T>) => {
                         xs: 12,
                         sm: 6,
                         md: 4,
-                        lg: 3
                     }}>
-                    {/*Here can be other cards too*/}
+                    {/*TODO: Here can be other cards too*/}
                     {props &&
                         <ServiceCard {...props}/>
                     }

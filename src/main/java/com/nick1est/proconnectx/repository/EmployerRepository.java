@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.repository;
 
 import com.nick1est.proconnectx.dao.*;
@@ -16,3 +17,4 @@ import java.util.Optional;
 public interface EmployerRepository extends JpaRepository<Employer, Long> {
     Optional<Employer> findByPrincipal(@NotNull Principal principal);
 }
+*/

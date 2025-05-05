@@ -2,8 +2,7 @@ import {AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Too
 import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
 import {MouseEvent, useState} from "react";
 import {useAppSelector} from "../../hooks";
-import {selectUser} from "../../../features/auth/authSlice";
-import {useLogoutUserMutation} from "../../../features/api/authApi";
+import {useLogoutUserMutation} from "../../../features/api/pcxApi";
 
 const settings = ['Profile', 'Logout'];
 
@@ -98,13 +97,13 @@ const Header = () => {
                                     variant='body1'
                                     component={RouterLink}
                                     state={{from: location}}
-                                    to="/login">Log in</Typography>
+                                    to="/auth">Log in</Typography>
                                 <Typography
                                     sx={{color: 'inherit', textDecoration: 'none'}}
                                     variant='body1'
                                     component={RouterLink}
                                     state={{from: location}}
-                                    to="/signup">Sign up</Typography>
+                                    to="/auth">Sign up</Typography>
                             </Box>
                         )}
                     </Box>

@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.controller;
 
 
@@ -5,7 +6,7 @@ import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dto.MessageResponse;
 import com.nick1est.proconnectx.dto.employer.registration.EmployerRegistrationRequest;
 import com.nick1est.proconnectx.dto.employer.registration.EmployerResponseDto;
-import com.nick1est.proconnectx.service.EmployerService;
+//import com.nick1est.proconnectx.service.EmployerService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -34,3 +35,4 @@ public class EmployerController {
                 .entityId(employer.getId()).build();
     }
 }
+*/

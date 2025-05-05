@@ -57,7 +57,7 @@ let theme = createTheme({
                 }),
             },
         },
-        MuiCard: {
+        MuiPaper: {
             styleOverrides: {
                 root: ({theme}) => ({
                     borderRadius: theme.spacing(2),

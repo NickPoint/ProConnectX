@@ -1,9 +1,8 @@
+/*
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.Category;
-import com.nick1est.proconnectx.dao.Employer;
-import com.nick1est.proconnectx.dao.Project;
 import com.nick1est.proconnectx.dto.ProjectCreateDto;
 import com.nick1est.proconnectx.dto.ProjectFilter;
 import com.nick1est.proconnectx.dto.ProjectPublicDto;
@@ -90,3 +89,4 @@ public class ProjectService {
 
 
 }
+*/

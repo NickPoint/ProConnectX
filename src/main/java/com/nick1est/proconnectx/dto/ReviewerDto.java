@@ -15,7 +15,7 @@ public class ReviewerDto {
     private Double rating;
     @NotNull
     private ReviewerType type;
-    private String avatarUrl;
+    private String avatarImageUrl;
 
     public enum ReviewerType {
         Employer,

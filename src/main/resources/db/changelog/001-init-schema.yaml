@@ -1,0 +1,1373 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1745839303759-1
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: address_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: city
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: country
+                  type: VARCHAR(255)
+              - column:
+                  name: house_number
+                  type: VARCHAR(255)
+              - column:
+                  name: postal_code
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: region
+                  type: VARCHAR(255)
+              - column:
+                  name: street
+                  type: VARCHAR(255)
+            tableName: address
+  - changeSet:
+      id: 1745839303759-2
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: category_pkey
+                  name: id
+                  startWith: 1
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: category
+  - changeSet:
+      id: 1745839303759-3
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating
+                  type: FLOAT8
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_count
+                  type: INTEGER
+              - column:
+                  name: activation_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: address_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: client_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: principal_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: registration_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: account_status
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  name: rejection_reason
+                  type: VARCHAR(255)
+            tableName: client
+  - changeSet:
+      id: 1745839303759-4
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: dispute_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  constraints:
+                    nullable: false
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: proposal
+                  type: OID
+              - column:
+                  name: proposal_status
+                  type: VARCHAR(255)
+              - column:
+                  name: proposal_rejection_reason
+                  type: OID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: reason
+                  type: OID
+            tableName: dispute
+  - changeSet:
+      id: 1745839303759-5
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: event_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: BIGINT
+              - column:
+                  name: dispute_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(255)
+            tableName: event
+  - changeSet:
+      id: 1745839303759-6
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: verified
+                  type: BOOLEAN
+              - column:
+                  name: is_public
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: file_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  name: freelancer_id
+                  type: BIGINT
+              - column:
+                  name: service_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: uploaded_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: document_type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: original_file_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: owner_type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: path
+                  type: VARCHAR(255)
+            tableName: file
+  - changeSet:
+      id: 1745839303759-7
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating
+                  type: FLOAT8
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_count
+                  type: INTEGER
+              - column:
+                  name: activation_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: address_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: freelancer_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: principal_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: registration_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: account_status
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: OID
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  name: rejection_reason
+                  type: VARCHAR(255)
+            tableName: freelancer
+  - changeSet:
+      id: 1745839303759-8
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: notification_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  name: freelancer_id
+                  type: BIGINT
+              - column:
+                  name: principal_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: payload
+                  type: JSONB
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: read_at
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: notification
+  - changeSet:
+      id: 1745839303759-9
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  constraints:
+                    nullable: false
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: deadline_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: orders_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: service_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: additional_notes
+                  type: OID
+              - column:
+                  name: rejection_reason
+                  type: OID
+            tableName: orders
+  - changeSet:
+      id: 1745839303759-10
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: principal_pkey
+                  name: id
+                  startWith: 1
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(64)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_active_role
+                  type: VARCHAR(255)
+            tableName: principal
+  - changeSet:
+      id: 1745839303759-11
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating
+                  type: FLOAT8
+              - column:
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: freelancer_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: review_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: service_id
+                  type: BIGINT
+              - column:
+                  name: body
+                  type: OID
+            tableName: review
+  - changeSet:
+      id: 1745839303759-12
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: role_pkey
+                  name: id
+                  startWith: 1
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+            tableName: role
+  - changeSet:
+      id: 1745839303759-13
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: amount
+                  type: NUMERIC(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: transaction_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+            tableName: transaction
+  - changeSet:
+      id: 1745839303759-14
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: NUMERIC(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating
+                  type: FLOAT8
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_count
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                  name: visit_counter
+                  type: INTEGER
+              - column:
+                  name: address_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: freelancer_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: service_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: posted_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: description
+                  type: OID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: short_description
+                  type: OID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: faqs
+                  type: JSONB
+              - column:
+                  name: workflow
+                  type: JSONB
+            tableName: service
+  - changeSet:
+      id: 1745839303759-16
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            columnNames: address_id
+            constraintName: client_address_id_key
+            tableName: client
+  - changeSet:
+      id: 1745839303759-18
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            columnNames: address_id
+            constraintName: freelancer_address_id_key
+            tableName: freelancer
+  - changeSet:
+      id: 1745839303759-20
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            columnNames: order_id
+            constraintName: orders_transaction_id_key
+            tableName: transaction
+  - changeSet:
+      id: 1745839303759-21
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: principal_email_key
+            tableName: principal
+  - changeSet:
+      id: 1745839303759-22
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            columnNames: address_id
+            constraintName: service_address_id_key
+            tableName: service
+  - changeSet:
+      id: 1745839303759-24
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: category_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: freelancer_id
+                  type: BIGINT
+            tableName: freelancer_categories
+  - changeSet:
+      id: 1745839303759-25
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: principal_role_pkey
+                  name: principal_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: principal_role_pkey
+                  name: role_id
+                  type: BIGINT
+            tableName: principal_role
+  - changeSet:
+      id: 1745839303759-26
+      author: Mykyta Voievudskyi
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: category_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: service_id
+                  type: BIGINT
+            tableName: service_categories
+  - changeSet:
+      id: 1745839303759-27
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: client_id
+            baseTableName: orders
+            constraintName: fk17yo6gry2nuwg2erwhbaxqbs9
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: client
+            validate: true
+  - changeSet:
+      id: 1745839303759-28
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: service
+            constraintName: fk4qrnpkptesumeg08s77vx11v9
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: address
+            validate: true
+  - changeSet:
+      id: 1745839303759-29
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: principal_id
+            baseTableName: principal_role
+            constraintName: fk4vhf7xp8lqxgali9dpnj5ul2
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: principal
+            validate: true
+  - changeSet:
+      id: 1745839303759-30
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: orders
+            constraintName: fk5ub7b6xk7d44jmd230rs95o1y
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: service
+            validate: true
+  - changeSet:
+      id: 1745839303759-31
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: dispute
+            constraintName: fk8qkreeroiabokfr56v7lgwldf
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: orders
+            validate: true
+  - changeSet:
+      id: 1745839303759-32
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: client
+            constraintName: fkb137u2cl2ec0otae32lk5pcl2
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: address
+            validate: true
+  - changeSet:
+      id: 1745839303759-33
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: service_categories
+            constraintName: fkdtkfxxqgfbecnygkorkulqj9s
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: service
+            validate: true
+  - changeSet:
+      id: 1745839303759-34
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: service_categories
+            constraintName: fkf0u94wpnw9wbg1yhkyswpm3ol
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: category
+            validate: true
+  - changeSet:
+      id: 1745839303759-35
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: review
+            constraintName: fkgwdirtrjebp7388pfmhblp1k1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: service
+            validate: true
+  - changeSet:
+      id: 1745839303759-36
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: client_id
+            baseTableName: review
+            constraintName: fkhr2oxqr7hu3upmi4hvg9g0ghp
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: client
+            validate: true
+  - changeSet:
+      id: 1745839303759-37
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: client_id
+            baseTableName: notification
+            constraintName: fki632mmj44t1ofv24dgvqbth1r
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: client
+            validate: true
+  - changeSet:
+      id: 1745839303759-38
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: freelancer_categories
+            constraintName: fkioub5ym2bk8jfh49g94fnrtgk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: category
+            validate: true
+  - changeSet:
+      id: 1745839303759-39
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: freelancer_id
+            baseTableName: freelancer_categories
+            constraintName: fkj4txgvo0gohl078uog80tsu3c
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: freelancer
+            validate: true
+  - changeSet:
+      id: 1745839303759-40
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: principal_id
+            baseTableName: freelancer
+            constraintName: fkjh803f5yxmsx89lr1sqvf91bx
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: principal
+            validate: true
+  - changeSet:
+      id: 1745839303759-41
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: freelancer_id
+            baseTableName: service
+            constraintName: fkjq95sym9whav81t1n9ir83d5t
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: freelancer
+            validate: true
+  - changeSet:
+      id: 1745839303759-42
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: freelancer_id
+            baseTableName: review
+            constraintName: fkkd6dipjpp0n8vr6hmj6ban4xs
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: freelancer
+            validate: true
+  - changeSet:
+      id: 1745839303759-43
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: freelancer
+            constraintName: fklssexeesbg1inciodlb4tna2t
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: address
+            validate: true
+  - changeSet:
+      id: 1745839303759-44
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: freelancer_id
+            baseTableName: notification
+            constraintName: fkm01tnrt9tpogutpvoom3shpbb
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: freelancer
+            validate: true
+  - changeSet:
+      id: 1745839303759-45
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: event
+            constraintName: fkpsa3o1kh95njs6pdt09to7u85
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: orders
+            validate: true
+  - changeSet:
+      id: 1745839303759-46
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: principal_role
+            constraintName: fkram84dkl1sfl8t2a40hi78lcu
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: role
+            validate: true
+  - changeSet:
+      id: 1745839303759-47
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: transaction
+            constraintName: fkrylnffj7sn97iepyqadlfnsg0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: orders
+            validate: true
+  - changeSet:
+      id: 1745839303759-48
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: principal_id
+            baseTableName: client
+            constraintName: fkslrgmp3omhy1vdjw9tfsolel6
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: principal
+            validate: true
+  - changeSet:
+      id: 1745924617125-49
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: client_id
+            baseTableName: file
+            constraintName: fk_file_client
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: client
+            validate: true
+
+  - changeSet:
+      id: 1745924617125-50
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: freelancer_id
+            baseTableName: file
+            constraintName: fk_file_freelancer
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: freelancer
+            validate: true
+
+  - changeSet:
+      id: 1745924617125-51
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: file
+            constraintName: fk_file_service
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: service
+            validate: true
+
+  - changeSet:
+      id: 1745924617125-52
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_orders_client_id
+            tableName: orders
+            columns:
+              - column:
+                  name: client_id
+
+  - changeSet:
+      id: 1745924617125-53
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_orders_service_id
+            tableName: orders
+            columns:
+              - column:
+                  name: service_id
+
+  - changeSet:
+      id: 1745924617125-54
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_orders_status
+            tableName: orders
+            columns:
+              - column:
+                  name: status
+
+  - changeSet:
+      id: 1745924617125-55
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_review_freelancer_id
+            tableName: review
+            columns:
+              - column:
+                  name: freelancer_id
+
+  - changeSet:
+      id: 1745924617125-56
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_review_service_id
+            tableName: review
+            columns:
+              - column:
+                  name: service_id
+
+  - changeSet:
+      id: 1745924617125-57
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_file_client
+            tableName: file
+            columns:
+              - column:
+                  name: client_id
+
+  - changeSet:
+      id: 1745924617125-58
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_file_freelancer
+            tableName: file
+            columns:
+              - column:
+                  name: freelancer_id
+
+  - changeSet:
+      id: 1745924617125-59
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_file_service
+            tableName: file
+            columns:
+              - column:
+                  name: service_id
+
+  - changeSet:
+      id: 1745924617125-60
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_freelancer_principal
+            tableName: freelancer
+            columns:
+              - column:
+                  name: principal_id
+
+  - changeSet:
+      id: 1745924617125-61
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_client_principal
+            tableName: client
+            columns:
+              - column:
+                  name: principal_id
+
+  - changeSet:
+      id: 1745924617125-62
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_freelancer
+            tableName: service
+            columns:
+              - column:
+                  name: freelancer_id
+
+  - changeSet:
+      id: 1745924617125-63
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_notification_freelancer
+            tableName: notification
+            columns:
+              - column:
+                  name: freelancer_id
+
+    # Index for filtering services by title
+  - changeSet:
+      id: 1745924617125-64
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_title
+            tableName: service
+            columns:
+              - column: { name: title }
+
+  # Index for filtering services by rating
+  - changeSet:
+      id: 1745924617125-65
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_rating
+            tableName: service
+            columns:
+              - column: { name: rating }
+
+  # Index for filtering services by price (for minBudget / maxBudget)
+  - changeSet:
+      id: 1745924617125-66
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_price
+            tableName: service
+            columns:
+              - column: { name: price }
+
+  # Index for filtering services by category (via service_categories)
+  - changeSet:
+      id: 1745924617125-67
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_categories_category
+            tableName: service_categories
+            columns:
+              - column: { name: category_id }
+
+  # Index for filtering services by address/location
+  - changeSet:
+      id: 1745924617125-68
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_address
+            tableName: service
+            columns:
+              - column: { name: address_id }
+
+  # Compound index: orders - status + created_at
+  - changeSet:
+      id: 1745924617125-69
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_orders_status_created
+            tableName: orders
+            columns:
+              - column: { name: status }
+              - column: { name: created_at }
+
+  # Compound index: service - freelancer_id + posted_at
+  - changeSet:
+      id: 1745924617125-70
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_service_freelancer_posted
+            tableName: service
+            columns:
+              - column: { name: freelancer_id }
+              - column: { name: posted_at }
+
+  # Unique constraint: principal email
+  - changeSet:
+      id: 1745924617125-71
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            tableName: principal
+            columnNames: email
+            constraintName: uq_principal_email
+
+  # Unique constraint: principal-role mapping
+  - changeSet:
+      id: 1745924617125-72
+      author: Mykyta Voievudskyi
+      changes:
+        - addUniqueConstraint:
+            tableName: principal_role
+            columnNames: principal_id, role_id
+            constraintName: uq_principal_role
+
+  # Compound index: file - owner_type + is_public
+  - changeSet:
+      id: 1745924617125-73
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_file_owner_type_public
+            tableName: file
+            columns:
+              - column: { name: owner_type }
+              - column: { name: is_public }
+
+  # Compound index: review - freelancer_id + service_id
+  - changeSet:
+      id: 1745924617125-74
+      author: Mykyta Voievudskyi
+      changes:
+        - createIndex:
+            indexName: idx_review_freelancer_service
+            tableName: review
+            columns:
+              - column: { name: freelancer_id }
+              - column: { name: service_id }
+
+  - changeSet:
+      id: 1745839303759-75
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: principal_id
+            baseTableName: notification
+            constraintName: fk_notification_principal
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: principal
+            validate: true
+
+  - changeSet:
+      id: 1745839303759-76
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: dispute_id
+            baseTableName: event
+            constraintName: fk_event_dispute
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: dispute
+            validate: true

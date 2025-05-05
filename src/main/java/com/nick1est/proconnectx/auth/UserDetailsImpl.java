@@ -1,10 +1,17 @@
 package com.nick1est.proconnectx.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nick1est.proconnectx.dao.*;
+import com.nick1est.proconnectx.dao.Client;
+import com.nick1est.proconnectx.dao.Freelancer;
+import com.nick1est.proconnectx.dao.Principal;
+import com.nick1est.proconnectx.dao.RoleType;
+import com.nick1est.proconnectx.mapper.FileMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,10 +32,13 @@ public class UserDetailsImpl implements UserDetails {
     private final Long id;
 
     @Getter
-    private final Freelancer freelancer;
+    private final Principal principal;
 
     @Getter
-    private final Employer employer;
+    private final Freelancer freelancer;
+
+/*    @Getter
+    private final Employer employer;*/
 
     @Getter
     private final Client client;
@@ -50,38 +60,77 @@ public class UserDetailsImpl implements UserDetails {
     private String lastName;
 
     @Getter
-    private RoleType activeRoleType;
+    private RoleType activeRole;
 
     @NotNull
     private final Collection<? extends GrantedAuthority> authorities;
-
-    public void setActiveRoleType(RoleType activeRoleType) {
-        switch (activeRoleType) {
-            case ROLE_CLIENT -> {
-                this.firstName = client.getFirstName();
-                this.lastName = client.getLastName();
-            }
-            case ROLE_FREELANCER -> {
-                this.firstName = freelancer.getFirstName();
-                this.lastName = freelancer.getLastName();
-            }
-            case ROLE_EMPLOYER -> this.firstName = employer.getCompanyName();
-            case ROLE_UNVERIFIED -> {}
-            default -> throw new IllegalArgumentException("Invalid role: " + activeRoleType);
-        }
-        this.activeRoleType = activeRoleType;
-    }
 
     public static UserDetailsImpl build(Principal principal) {
         List<GrantedAuthority> authorities = principal.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        val freelancerId = principal.getFreelancer() != null ? principal.getFreelancer().getId() : null;
-        val employerId = principal.getEmployer() != null ? principal.getEmployer().getId() : null;
-        val clientId = principal.getClient() != null ? principal.getClient().getId() : null;
-        return new UserDetailsImpl(principal.getId(), principal.getFreelancer(), principal.getEmployer(),
-                principal.getClient(), principal.getEmail(), principal.getPassword(), authorities);
+        UserDetailsImpl userDetails = new UserDetailsImpl(
+                principal.getId(),
+                principal,
+                principal.getFreelancerAccounts().stream().findFirst().orElse(null), //TODO: Maybe wrong sorting
+                principal.getClientAccounts().stream().findFirst().orElse(null),
+                principal.getEmail(),
+                principal.getPassword(),
+                authorities
+        );
+
+        userDetails.chooseActiveRole();
+        return userDetails;
+    }
+
+    public void chooseActiveRole() {
+        RoleType lastActiveRole = principal.getLastActiveRole();
+
+        if (lastActiveRole != null && hasRole(lastActiveRole)) {
+            setActiveRole(lastActiveRole);
+            return;
+        }
+
+        if (hasRole(RoleType.ROLE_UNVERIFIED)) {
+            setActiveRole(RoleType.ROLE_UNVERIFIED);
+        } else if (hasRole(RoleType.ROLE_FREELANCER)) {
+            setActiveRole(RoleType.ROLE_FREELANCER);
+        } else if (hasRole(RoleType.ROLE_EMPLOYER)) {
+            setActiveRole(RoleType.ROLE_EMPLOYER);
+        } else if (hasRole(RoleType.ROLE_CLIENT)) {
+            setActiveRole(RoleType.ROLE_CLIENT);
+        } else if (hasRole(RoleType.ROLE_ADMIN)) {
+            setActiveRole(RoleType.ROLE_ADMIN);
+        } else {
+            throw new RuntimeException("User has no valid roles");
+        }
+    }
+
+    public boolean hasRole(RoleType roleType) {
+        return principal.getRoles().stream().anyMatch(r -> r.getName() == roleType);
+    }
+
+    public void setActiveRole(RoleType role) {
+        this.activeRole = role;
+        this.getPrincipal().setLastActiveRole(role);
+
+        switch (role) {
+            case ROLE_CLIENT -> {
+                this.firstName = client != null ? client.getFirstName() : null;
+                this.lastName = client != null ? client.getLastName() : null;
+            }
+            case ROLE_FREELANCER -> {
+                this.firstName = freelancer != null ? freelancer.getFirstName() : null;
+                this.lastName = freelancer != null ? freelancer.getLastName() : null;
+            }
+            case ROLE_ADMIN -> this.firstName = "Admin";
+            case ROLE_UNVERIFIED -> {
+                this.firstName = null;
+                this.lastName = null;
+            }
+            default -> throw new IllegalArgumentException("Invalid role: " + role);
+        }
     }
 
     @Override

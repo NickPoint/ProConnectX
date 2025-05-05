@@ -1,10 +1,15 @@
-import { useFormikContext, useField } from 'formik';
-import { useState, useCallback } from 'react';
-import { Box, Typography, Card, CardMedia, CardContent, CardActions, IconButton, LinearProgress } from '@mui/material';
-import { DndContext, closestCenter, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
-import {SortableContext, verticalListSortingStrategy, useSortable, arrayMove} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import {Field, useField, useFormikContext} from 'formik';
+import {useCallback, useState} from 'react';
+import {Box, Card, CardActions, CardContent, CardMedia, IconButton, LinearProgress, Typography} from '@mui/material';
+import {closestCenter, DndContext, PointerSensor, useSensor, useSensors} from '@dnd-kit/core';
+import {arrayMove, SortableContext, useSortable, verticalListSortingStrategy} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 import {Delete} from '@mui/icons-material';
+import {useTranslation} from "react-i18next";
+import {enqueueSnackbar} from "notistack";
+import {useAppDispatch} from "../hooks.ts";
+import {setActiveField} from "../../features/form/formSlice.ts";
+import {t} from "i18next";
 
 interface UploadingFile {
     file: File;
@@ -13,39 +18,64 @@ interface UploadingFile {
     id: string;
 }
 
-interface FileUploadProps {
+export interface FileUploadProps {
     name: string;
+    label: string;
+    multiple?: boolean;
+    allowedMimeTypes?: string[];
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ name }) => {
+export const FileUpload: React.FC<FileUploadProps> = ({ name, label, multiple = false, allowedMimeTypes}) => {
+    const dispatch = useAppDispatch();
     const { setFieldValue } = useFormikContext<any>();
-    const [field, meta] = useField(name);
-    const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
+    const [field, meta, helpers] = useField(name);
+    const initialUploads: UploadingFile[] = (field.value || []).map((file: File) => ({
+        file,
+        preview: URL.createObjectURL(file),
+        progress: 100,
+        id: URL.createObjectURL(file) + Math.random(),
+    }));
+    const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([...initialUploads]);
+    const {t} = useTranslation();
 
     const handleFiles = (filesList: FileList | File[]) => {
         const files = Array.from(filesList);
-        const imageFiles = files.filter(file => file.type.startsWith('image/'));
+        const existingFileNames = uploadingFiles.map(f => f.file.name);
 
-        if (imageFiles.length === 0) {
-            alert('Only image files are allowed!');
-            return;
+        const validFiles: File[] = [];
+        const errors: string[] = [];
+
+        files.forEach(file => {
+            const isAllowed = allowedMimeTypes?.some(type => file.type.startsWith(type));
+            const isDuplicate = existingFileNames.includes(file.name);
+
+            if (!isAllowed && allowedMimeTypes && allowedMimeTypes.length > 0) {
+                errors.push(t('form.fileUpload.error.typeNotAllowed', {fileName: file.name}));
+            } else if (isDuplicate) {
+                errors.push(t('form.fileUpload.error.isAreadyLoaded', {fileName: file.name}));
+            } else {
+                validFiles.push(file);
+            }
+        });
+
+        if (errors.length > 0) {
+            enqueueSnackbar(errors.join('\n'));
         }
 
-        const uploads: UploadingFile[] = imageFiles.map(file => ({
+        if (validFiles.length === 0) return;
+
+        const uploads: UploadingFile[] = validFiles.map(file => ({
             file,
             preview: URL.createObjectURL(file),
             progress: 0,
-            id: URL.createObjectURL(file) + Math.random(), // generate a unique id
+            id: URL.createObjectURL(file) + Math.random(),
         }));
 
         setUploadingFiles(prev => [...prev, ...uploads]);
-
-        uploads.forEach((upload, index) => {
-            simulateUpload(upload);
-        });
+        uploads.forEach(upload => simulateUpload(upload, [...uploadingFiles, ...uploads]))
     };
 
-    const simulateUpload = (upload: UploadingFile) => {
+    const simulateUpload = (upload: UploadingFile, resultingList: UploadingFile[]) => {
         const interval = setInterval(() => {
             setUploadingFiles(prevUploads => {
                 const index = prevUploads.findIndex(u => u.id === upload.id);
@@ -54,26 +84,21 @@ export const FileUpload: React.FC<FileUploadProps> = ({ name }) => {
                 const updated = [...prevUploads];
                 if (updated[index].progress >= 100) {
                     clearInterval(interval);
-                    setFieldValue(name, updated.map(u => u.file));
                     return updated;
                 }
+
                 updated[index].progress += 10;
                 return updated;
             });
         }, 200);
+        setFieldValue(name, resultingList.map(u => u.file));
     };
 
     const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        const files = e.dataTransfer.files;
-        handleFiles(files);
-    }, []);
-
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-    };
+        handleFiles(e.dataTransfer.files);
+    }, [multiple, uploadingFiles]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -82,11 +107,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({ name }) => {
     };
 
     const handleRemove = (id: string) => {
-        setUploadingFiles(prev => {
-            const updated = prev.filter(u => u.id !== id);
-            setFieldValue(name, updated.map(u => u.file));
-            return updated;
-        });
+        const updated = uploadingFiles.filter(u => u.id !== id);
+        setUploadingFiles(updated);
+        setFieldValue(name, updated.map(u => u.file));
     };
 
     const sensors = useSensors(useSensor(PointerSensor));
@@ -94,21 +117,23 @@ export const FileUpload: React.FC<FileUploadProps> = ({ name }) => {
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
         if (active.id !== over?.id) {
-            setUploadingFiles(prev => {
-                const oldIndex = prev.findIndex(f => f.id === active.id);
-                const newIndex = prev.findIndex(f => f.id === over.id);
-                const reordered = arrayMove(prev, oldIndex, newIndex);
-                setFieldValue(name, reordered.map(u => u.file));
-                return reordered;
-            });
+            const oldIndex = uploadingFiles.findIndex(f => f.id === active.id);
+            const newIndex = uploadingFiles.findIndex(f => f.id === over.id);
+            const reordered = arrayMove(uploadingFiles, oldIndex, newIndex);
+            setUploadingFiles(reordered);
+            setFieldValue(name, reordered.map(u => u.file));
         }
     };
 
     return (
-        <Box>
+        <Box onPointerEnter={() => dispatch(setActiveField(name))}>
+            <Typography>{label}</Typography>
             <Box
                 onDrop={handleDrop}
-                onDragOver={handleDragOver}
+                onDragOver={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
                 sx={{
                     border: '2px dashed',
                     borderColor: 'grey.400',
@@ -122,12 +147,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({ name }) => {
                 onClick={() => document.getElementById(`fileInput-${name}`)?.click()}
             >
                 <Typography variant="body1" color="textSecondary">
-                    Drag & drop images here, or click to select
+                    {t('form.fileUpload.placeholder')}
                 </Typography>
                 <input
                     id={`fileInput-${name}`}
+                    name={name}
                     type="file"
-                    multiple
+                    multiple={multiple}
                     accept="image/*"
                     style={{ display: 'none' }}
                     onChange={handleFileSelect}
@@ -191,7 +217,7 @@ const SortableImage: React.FC<SortableImageProps> = ({ upload, onRemove }) => {
                 ) : (
                     <>
                         <Typography variant="caption" color="success.main">
-                            Uploaded
+                            {t('form.fileUpload.uploaded')}
                         </Typography>
                         <IconButton size="small" onClick={() => onRemove(upload.id)}>
                             <Delete fontSize="small" />

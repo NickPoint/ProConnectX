@@ -1,14 +1,16 @@
 import {
-    addTagTypes, CreateFreelancerApiArg,
+    AccountStatus, AccountType,
+    addTagTypes,
     CreateFreelancerApiResponse,
-    CreateServiceApiArg,
-    CreateServiceApiResponse,
-    pcxApi,
-    UploadFileApiResponse
+    CreateServiceApiResponse, EventType, GetEventTypesApiArg,
+    GetEventTypesApiResponse,
+    pcxApi, UpdateAvatarApiArg, UpdateAvatarApiResponse,
 } from "./pcxApi";
-import { Client } from '@stomp/stompjs';
+import {Client} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import {logout} from "../auth/authSlice";
+import {useAppDispatch} from "../../app/hooks.ts";
+import {pushNotification} from "../notifications/notificationSlice.ts";
+import {useTranslation} from "react-i18next";
 
 function createTagsFromList<T extends { id: string | number }>(
     list: T[] | undefined,
@@ -28,15 +30,31 @@ const enhancedApi = pcxApi.enhanceEndpoints({
         getProject: {
             providesTags: (result, error, arg) => [{type: 'Project', id: arg.projectId}],
         },
+        // getCurrentUser: {
+        //     async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        //         const {data} = await queryFulfilled;
+        //         const {t} = useTranslation();
+        //         const notifications: NotificationDto[] = []
+        //         data.accounts.forEach(account => {
+        //             if (account.accountStatus === AccountStatus.Pending) {
+        //                 notifications.push({title: t('notifications.unfinishedVerification.title'),
+        //                     fullName: `${data.firstName} ${data.lastName}`,
+        //                     message: t('notifications.unfinishedVerification.message'),
+        //                     eventType: EventType.AccountUnverified});
+        //             } else if (account.accountStatus === AccountStatus.Rejected) {
+        //                 notifications.push({title: t('notifications.rejectedRegistration.title'),
+        //                     fullName: `${data.firstName} ${data.lastName}`,
+        //                     message: t('notifications.rejectedRegistration.message', {role: t(`enum.accountType.${account.accountType}`)}),
+        //                     eventType: EventType.RegistrationRejected});
+        //             }
+        //         })
+        //     }
+        // },
         authenticateUser: {
-            invalidatesTags: ['Project'],
+            invalidatesTags: ['Auth', 'Freelancer', 'Order'],
         },
         logoutUser: {
-            onQueryStarted: async (arg, {dispatch, queryFulfilled}) => {
-                await queryFulfilled;
-                dispatch(logout());
-            },
-            invalidatesTags: ['Project'],
+            invalidatesTags: ['Auth', 'Freelancer', 'Order'],
         },
         getFilteredServices: {
             providesTags: (result) => createTagsFromList(result, 'Service'),
@@ -47,13 +65,18 @@ const enhancedApi = pcxApi.enhanceEndpoints({
     }
 })
 
-export type Channel = 'redux' | 'general' | 'notifications/freelancer/1'
+export type Channel = 'redux' | 'notifications/general' | 'notifications/admin' | 'notifications/client' | 'notifications/freelancer' | 'notifications/unverified';
 
-export interface Message {
-    id: number
-    channel: Channel
-    userName: string
-    text: string
+export interface NotificationDto {
+    id: number;
+    type: string;
+    payload: {
+        entityType: string;
+        entityId: number;
+        data: Record<string, any>;
+    };
+    status: string;
+    createdAt: string;
 }
 
 const overridenApi = pcxApi.injectEndpoints({
@@ -77,6 +100,17 @@ const overridenApi = pcxApi.injectEndpoints({
             }),
             invalidatesTags: ["Freelancer"],
         }),
+        createClient: build.mutation<
+            CreateFreelancerApiResponse,
+            FormData
+        >({
+            query: queryArg => ({
+                url: `/client`,
+                method: "POST",
+                body: queryArg,
+            }),
+            invalidatesTags: ["Client"],
+        }),
         createService: build.mutation<CreateServiceApiResponse, FormData>({
             query: queryArg => ({
                 url: `/service`,
@@ -85,26 +119,27 @@ const overridenApi = pcxApi.injectEndpoints({
             }),
             invalidatesTags: ["Service"],
         }),
-        getNotifications: build.query<Message[], Channel>({
+        getNotifications: build.query<NotificationDto[], Channel>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 arg,
-                { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+                { updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch}
             ) {
-                // Create STOMP client with SockJS
-                const socket = new SockJS(`${import.meta.env.VITE_API_URL}/api/ws`);
+                const socket = new SockJS(`${import.meta.env.VITE_API_URL}ws`);
                 const stompClient = new Client({
                     webSocketFactory: () => socket,
-                    reconnectDelay: 5000, // Auto-reconnect in 5s
+                    reconnectDelay: 5000,
                     onConnect: () => {
                         console.log('WebSocket connected');
 
                         // Subscribe to the correct channel
-                        stompClient.subscribe(`/topic/${arg}`, (message) => {
+                        stompClient.subscribe("/user/queue/notifications", (message) => {
                             const data = JSON.parse(message.body);
                             updateCachedData((draft) => {
                                 draft.push(data);
                             });
+
+                            dispatch(pushNotification(data));
                         });
                     },
                     onDisconnect: () => console.log('WebSocket disconnected'),
@@ -117,6 +152,16 @@ const overridenApi = pcxApi.injectEndpoints({
                 stompClient.deactivate(); // Close connection when cache is removed
             }
         }),
+        updateAvatar: build.mutation<UpdateAvatarApiResponse, FormData>(
+            {
+                query: queryArg => ({
+                    url: `/files/avatar`,
+                    method: "POST",
+                    body: queryArg,
+                }),
+                invalidatesTags: ["File"],
+            },
+        ),
     }),
     overrideExisting: true
 })
@@ -133,5 +178,7 @@ export const {
     useUploadFileMutation,
     useGetNotificationsQuery,
     useCreateServiceMutation,
-    useCreateFreelancerMutation
+    useCreateFreelancerMutation,
+    useCreateClientMutation,
+    useUpdateAvatarMutation,
 } = overridenApi

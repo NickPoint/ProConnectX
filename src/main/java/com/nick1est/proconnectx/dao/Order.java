@@ -4,11 +4,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "orders")
 @Getter
 @Setter
@@ -17,12 +23,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn
+/*    @JoinColumn
     @OneToOne
-    private Bid acceptedBid;
+    private Bid acceptedBid;*/
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<Event> events;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.PERSIST)
+    @NotNull
+    private Transaction transaction;
 
     @JoinColumn
     @ManyToOne
@@ -34,7 +44,7 @@ public class Order {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status =  OrderStatus.CREATED;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -44,19 +54,20 @@ public class Order {
     @Lob
     private String additionalNotes;
 
-    @Column(nullable = false)
+    @Column
+    @Lob
+    private String rejectionReason;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     @NotNull
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     @Column
-    private OffsetDateTime completedAt;
+    private LocalDate deadlineDate;
 
-    @OneToMany
-    private List<Transaction> transaction;
-
-    @PrePersist
-    public void prePersist() {
-        status = OrderStatus.CREATED;
-        createdAt = OffsetDateTime.now();
-    }
+    @LastModifiedDate
+    @Column(nullable = false)
+    @NotNull
+    private Instant updatedAt;
 }

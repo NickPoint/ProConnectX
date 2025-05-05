@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
@@ -9,7 +10,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -75,16 +76,17 @@ public class Employer {
 
     @Column(nullable = false)
     @NotNull
-    private OffsetDateTime registrationDate;
+    private Instant registrationDate;
 
     @Column(nullable = false)
-    private OffsetDateTime activationDate;
+    private Instant activationDate;
 
     @PrePersist
     private void prePersist() {
         this.accountStatus = AccountStatus.UNVERIFIED;
-        this.registrationDate = OffsetDateTime.now();
+        this.registrationDate = Instant.now();
         this.rating = 0.0;
         this.ratingCount = 0;
     }
 }
+*/

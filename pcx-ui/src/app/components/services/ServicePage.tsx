@@ -4,11 +4,10 @@ import {
     AccordionDetails,
     AccordionSummary,
     Box,
-    BoxProps,
     Chip,
     Container,
     Divider,
-    Fab,
+    Fab, GlobalStyles,
     Step,
     StepButton,
     StepContent,
@@ -16,31 +15,26 @@ import {
     Typography
 } from "@mui/material";
 import {ExpandMore, Message, Place} from "@mui/icons-material";
-import {styled, useTheme} from "@mui/material/styles";
 import {useNavigate, useParams} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch} from "../../hooks";
 import React, {useEffect} from "react";
 import {setPageTitle} from "../../../features/header/headerSlice";
-import {useGetServiceQuery} from "../../../features/api/pcxApi";
-import background from "../../../assets/background_service.jpg";
+import {RoleType, useGetCurrentUserQuery, useGetServiceQuery} from "../../../features/api/pcxApi";
 import BookServiceForm from "../BookServiceForm.tsx";
-import {hasClientRole} from "../../../features/auth/authSlice.ts";
 import UserCard from "../UserCard.tsx";
-import Carousel from "react-material-ui-carousel";
 import Paper from "@mui/material/Paper";
 import VerticallyScrollingContainer from "../VerticallyScrollingContainer.tsx";
 import Rating from "../Rating.tsx";
 import Reviews from "../Reviews.tsx";
 import {Swiper, SwiperSlide} from "swiper/react";
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-
-const BoxMainInfo = styled(Box)<BoxProps>(({theme}) => ({
-    borderRadius: theme.spacing(2),
-    borderColor: theme.palette.grey["400"],
-    borderStyle: 'solid',
-    borderWidth: theme.spacing(0.3),
-    height: '100%',
-}));
+import {Autoplay, Navigation, Pagination} from 'swiper/modules';
+import {useTranslation} from "react-i18next";
+import {GlobalLoadingBackdrop} from "../GlobalLoadingBackdrop.tsx";
+import DOMPurify from 'dompurify';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import useMediaQuery from "@mui/material/useMediaQuery";
+import {useTheme} from "@mui/material/styles";
 
 type GridWithDividersProps = GridProps & {
     children: React.ReactNode;
@@ -67,45 +61,69 @@ const GridWithDividers = React.forwardRef<HTMLDivElement, GridWithDividersProps>
 );
 
 const ServicePage = () => {
-    const theme = useTheme();
-    const userHasClientRole = useAppSelector(hasClientRole);
     const dispatch = useAppDispatch();
     const [activeStep, setActiveStep] = React.useState(0);
     const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const {t} = useTranslation();
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    if (!id) {
+        navigate('/404')
+        return;
+    }
 
     useEffect(() => {
-        dispatch(setPageTitle('Service'));
+        dispatch(setPageTitle(t('service.page.title')));
     }, [dispatch]);
 
-    const {data: service, isSuccess, isLoading, isFetching}
+    const {data: user} = useGetCurrentUserQuery();
+    const {data: service, isLoading, isFetching}
         = useGetServiceQuery({id: Number.parseInt(id)});
 
-    if (!isSuccess || !service) {
+    if (isLoading || isFetching) {
+        return <GlobalLoadingBackdrop/>
+    }
+
+
+    if (!service) {
         navigate('/404')
+        return;
     }
 
     return (<>
         <Grid container>
-            <Grid size={{xs: 12}} sx={{
-                position: 'relative',
-            }}>
+            <Grid size={12} sx={{position: 'relative', overflow: 'hidden'}}>
+                <GlobalStyles
+                    styles={{
+                        '.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic': {
+                            bottom: '110px',
+                        },
+                    }}
+                />
                 <Swiper
                     modules={[Navigation, Pagination, Autoplay]}
-                    spaceBetween={30}
+                    spaceBetween={16}
                     slidesPerView={1}
                     navigation
-                    pagination={{ clickable: true }}
-                    autoplay={{ delay: 3000 }}
+
+                    pagination={{
+                        clickable: true,
+                        dynamicBullets: true,
+                    }}
+                    autoplay={{delay: 3500}}
                     loop
-                    style={{ width: '100%', height: '400px' }}
+                    style={{
+                        aspectRatio: isSmallScreen ? '1 / 1' : '16 / 7',
+                    }}
                 >
-                    {service.imagesMeta.map((meta, index) => (
+                    {service.galleryUrls.map((url, index) => (
                         <SwiperSlide key={index}>
                             <img
-                                src={meta.path}
+                                src={url}
                                 alt={`Slide ${index}`}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                style={{width: '100%', height: '100%', objectFit: 'cover'}}
                             />
                         </SwiperSlide>
                     ))}
@@ -118,7 +136,7 @@ const ServicePage = () => {
                     bottom: 0,
                     zIndex: 1,
                     pointerEvents: 'none',
-                    background: `linexar-gradient(to bottom, transparent 85%, #000)`,
+                    background: `linear-gradient(to bottom, transparent 75%, #000)`,
                 }}>
                 </Box>
             </Grid>
@@ -139,32 +157,32 @@ const ServicePage = () => {
                 </Grid>
                 <Grid container size={12} spacing={2}>
                     <Grid size={12}>
-                        <Typography sx={{textTransform: 'capitalize'}} variant='h3' component='h1'>{service.title}</Typography>
+                        <Typography sx={{textTransform: 'capitalize'}} variant='h3'
+                                    component='h1'>{service.title}</Typography>
                     </Grid>
                     <Grid size={6}>
                         <Rating {...service} withRatingCount/>
                     </Grid>
                     <Grid size={6} textAlign='right'>
                         <Typography variant='h4' fontWeight='700'>${service.price}</Typography>
-                        <Typography variant='body2'>Basic</Typography>
+                        <Typography variant='body2'>{t('service.package.basic')}</Typography>
                     </Grid>
                 </Grid>
                 <Grid container size={12} spacing={2}>
                     <Grid size={12}>
-                        <Typography variant='h4' component='h2'>Description</Typography>
+                        <Typography variant='h4' component='h2'>{t('service.page.description')}</Typography>
                     </Grid>
-                    <Grid size={12}>
-                        <Typography variant='body1'>{service.description}</Typography>
-                    </Grid>
+                    <Grid size={12} dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(service.description)}}/>
                     <Grid size={12}>
                         <VerticallyScrollingContainer>
                             {service.address &&
                                 <Chip color='secondary' icon={<Place/>} variant='filled'
-                                      label={`${service.address.city}, ${service.address.postalCode}`}/>
+                                      label={`${service.address.city}, ${service.address.country}`}/>
                             }
                             {
                                 service.categories.map((category, index) => (
-                                    <Chip key={index} color='primary' variant='outlined' label={category}/>
+                                    <Chip key={index} color='primary' variant='outlined'
+                                          label={t(`enum.categories.${category}`)}/>
                                 ))
                             }
                         </VerticallyScrollingContainer>
@@ -174,7 +192,7 @@ const ServicePage = () => {
                 {service.workflow && service.workflow.length > 0 &&
                     <Grid container size={12} spacing={2}>
                         <Grid size={12}>
-                            <Typography variant='h4' component='h2'>Workflow</Typography>
+                            <Typography variant='h4' component='h2'>{t('service.page.workflow')}</Typography>
                         </Grid>
                         <Grid size={12} component={Paper} sx={{p: 2}}>
                             <Stepper nonLinear orientation="vertical" activeStep={activeStep}>
@@ -200,7 +218,7 @@ const ServicePage = () => {
                 {service.faqs && service.faqs.length > 0 &&
                     <Grid container size={12} spacing={2}>
                         <Grid size={12}>
-                            <Typography variant='h4' component='h2'>FAQ</Typography>
+                            <Typography variant='h4' component='h2'>{t('service.page.faq')}</Typography>
                         </Grid>
                         <Grid size={12}>
                             {service.faqs.map((faq, index) => (
@@ -227,7 +245,7 @@ const ServicePage = () => {
                     </Grid>
                 }
             </GridWithDividers>
-            {userHasClientRole &&
+            {user?.activeRole === RoleType.RoleClient &&
                 <Grid size={12}>
                     <BookServiceForm {...service}/>
                 </Grid>}

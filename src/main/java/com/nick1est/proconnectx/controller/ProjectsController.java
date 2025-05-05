@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
@@ -68,7 +69,10 @@ public class ProjectsController {
         return ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).body(projectEntity);
     }
 
+*/
 /*    @GetMapping("/client/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProjectProfile>*/
+    public List<ProjectProfile>*//*
+
 }
+*/

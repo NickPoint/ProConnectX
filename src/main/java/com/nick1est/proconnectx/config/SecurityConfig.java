@@ -3,14 +3,13 @@ package com.nick1est.proconnectx.config;
 import com.nick1est.proconnectx.auth.AuthEntryPointJwt;
 import com.nick1est.proconnectx.auth.AuthTokenFilter;
 import com.nick1est.proconnectx.auth.UserDetailsServiceImpl;
-import com.nick1est.proconnectx.repository.PrincipalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,7 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@Profile("default")
+@EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
@@ -33,12 +32,9 @@ public class SecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
-    @Autowired
-    private PrincipalRepository principalRepository;
-
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter(principalRepository);
+        return new AuthTokenFilter();
     }
 
     @Bean
@@ -72,9 +68,8 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/project/**").permitAll()
                                 .requestMatchers("/service/**").permitAll()
-                                .requestMatchers("/test/**").permitAll()
-                                .requestMatchers(("/employer/register")).permitAll()
-                                .requestMatchers(("/files/upload")).permitAll()
+                                .requestMatchers(("/files/**")).permitAll()
+                                .requestMatchers(("/ws/**")).permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -89,8 +84,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://192.168.178.107:5173", "http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

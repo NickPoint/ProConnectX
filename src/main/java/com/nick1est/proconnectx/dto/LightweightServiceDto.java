@@ -1,13 +1,13 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.CategoryType;
-import com.nick1est.proconnectx.dto.employer.registration.FileResponseDto;
+import com.nick1est.proconnectx.dto.employer.registration.FileDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -17,7 +17,7 @@ public class LightweightServiceDto {
     @NotBlank
     private String title;
     @NotBlank
-    private String description;
+    private String shortDescription;
     private LightweightAddressDto address;
     @NotNull
     private Double rating;
@@ -30,7 +30,7 @@ public class LightweightServiceDto {
     @NotEmpty
     private List<CategoryType> categories;
     @NotNull
-    private OffsetDateTime postedAt;
+    private Instant postedAt;
     @NotNull
-    private FileResponseDto thumbnailMeta;
+    private String thumbnailUrl;
 }

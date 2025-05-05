@@ -1,13 +1,15 @@
 import { emptySplitApi as api } from "./emptyApi"
 export const addTagTypes = [
-  "bid-controller",
-  "Service",
-  "Project",
-  "order-controller",
+  "Order",
   "Freelancer",
-  "employer-controller",
+  "Dispute",
+  "Registration",
+  "Service",
+  "File",
+  "Client",
   "Auth",
   "test-controller",
+  "Statistics",
 ] as const
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -15,26 +17,132 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: build => ({
-      reviewBid: build.mutation<ReviewBidApiResponse, ReviewBidApiArg>({
+      submitOrderForReview: build.mutation<
+        SubmitOrderForReviewApiResponse,
+        SubmitOrderForReviewApiArg
+      >({
         query: queryArg => ({
-          url: `/bid/review/${queryArg.projectId}/${queryArg.bidId}`,
+          url: `/orders/${queryArg.orderId}/submit-for-review`,
           method: "PUT",
         }),
-        invalidatesTags: ["bid-controller"],
+        invalidatesTags: ["Order"],
       }),
-      declineBid: build.mutation<DeclineBidApiResponse, DeclineBidApiArg>({
+      disputeOrder: build.mutation<DisputeOrderApiResponse, DisputeOrderApiArg>(
+        {
+          query: queryArg => ({
+            url: `/orders/${queryArg.orderId}/dispute`,
+            method: "PUT",
+            body: queryArg.body,
+          }),
+          invalidatesTags: ["Order"],
+        },
+      ),
+      cancelOrder: build.mutation<CancelOrderApiResponse, CancelOrderApiArg>({
         query: queryArg => ({
-          url: `/bid/decline/${queryArg.projectId}/${queryArg.bidId}`,
+          url: `/orders/${queryArg.orderId}/cancel`,
           method: "PUT",
+          body: queryArg.body,
         }),
-        invalidatesTags: ["bid-controller"],
+        invalidatesTags: ["Order"],
       }),
-      approveBid: build.mutation<ApproveBidApiResponse, ApproveBidApiArg>({
+      approveOrder: build.mutation<ApproveOrderApiResponse, ApproveOrderApiArg>(
+        {
+          query: queryArg => ({
+            url: `/orders/${queryArg.orderId}/approve`,
+            method: "PUT",
+          }),
+          invalidatesTags: ["Order"],
+        },
+      ),
+      acceptOrder: build.mutation<AcceptOrderApiResponse, AcceptOrderApiArg>({
         query: queryArg => ({
-          url: `/bid/approve/${queryArg.projectId}/${queryArg.bidId}`,
+          url: `/orders/${queryArg.orderId}/accept`,
+          method: "PUT",
+          params: {
+            deadlineDate: queryArg.deadlineDate,
+          },
+        }),
+        invalidatesTags: ["Order"],
+      }),
+      updateFreelancer: build.mutation<
+        UpdateFreelancerApiResponse,
+        UpdateFreelancerApiArg
+      >({
+        query: queryArg => ({
+          url: `/freelancer/profile`,
+          method: "PUT",
+          body: queryArg.userProfileUpdateDto,
+        }),
+        invalidatesTags: ["Freelancer"],
+      }),
+      rejectProposal: build.mutation<
+        RejectProposalApiResponse,
+        RejectProposalApiArg
+      >({
+        query: queryArg => ({
+          url: `/dispute/${queryArg.disputeId}/reject-proposal`,
+          method: "PUT",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Dispute"],
+      }),
+      proposeSolution: build.mutation<
+        ProposeSolutionApiResponse,
+        ProposeSolutionApiArg
+      >({
+        query: queryArg => ({
+          url: `/dispute/${queryArg.disputeId}/propose`,
+          method: "PUT",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Dispute"],
+      }),
+      forceRelease: build.mutation<ForceReleaseApiResponse, ForceReleaseApiArg>(
+        {
+          query: queryArg => ({
+            url: `/dispute/${queryArg.disputeId}/force-release`,
+            method: "PUT",
+          }),
+          invalidatesTags: ["Dispute"],
+        },
+      ),
+      forceRefund: build.mutation<ForceRefundApiResponse, ForceRefundApiArg>({
+        query: queryArg => ({
+          url: `/dispute/${queryArg.disputeId}/force-refund`,
           method: "PUT",
         }),
-        invalidatesTags: ["bid-controller"],
+        invalidatesTags: ["Dispute"],
+      }),
+      acceptProposal: build.mutation<
+        AcceptProposalApiResponse,
+        AcceptProposalApiArg
+      >({
+        query: queryArg => ({
+          url: `/dispute/${queryArg.disputeId}/accept-proposal`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["Dispute"],
+      }),
+      rejectRegistrationRequest: build.mutation<
+        RejectRegistrationRequestApiResponse,
+        RejectRegistrationRequestApiArg
+      >({
+        query: queryArg => ({
+          url: `/admin/registration/${queryArg["type"]}/${queryArg.id}/reject`,
+          method: "PUT",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Registration"],
+      }),
+      approveRegistrationRequest: build.mutation<
+        ApproveRegistrationRequestApiResponse,
+        ApproveRegistrationRequestApiArg
+      >({
+        query: queryArg => ({
+          url: `/admin/registration/${queryArg["type"]}/${queryArg.id}/approve`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["Registration"],
       }),
       createService: build.mutation<
         CreateServiceApiResponse,
@@ -57,30 +165,12 @@ const injectedRtkApi = api
           url: `/service/filter`,
           method: "POST",
           body: queryArg.serviceFilter,
+          params: {
+            page: queryArg.page,
+            size: queryArg.size,
+          },
         }),
         providesTags: ["Service"],
-      }),
-      createProject: build.mutation<
-        CreateProjectApiResponse,
-        CreateProjectApiArg
-      >({
-        query: queryArg => ({
-          url: `/project`,
-          method: "POST",
-          body: queryArg.projectCreateDto,
-        }),
-        invalidatesTags: ["Project"],
-      }),
-      getFilteredProjects: build.mutation<
-        GetFilteredProjectsApiResponse,
-        GetFilteredProjectsApiArg
-      >({
-        query: queryArg => ({
-          url: `/project/filter`,
-          method: "POST",
-          body: queryArg.projectFilter,
-        }),
-        invalidatesTags: ["Project"],
       }),
       bookService: build.mutation<BookServiceApiResponse, BookServiceApiArg>({
         query: queryArg => ({
@@ -88,8 +178,14 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.body,
         }),
-        invalidatesTags: ["order-controller"],
+        invalidatesTags: ["Order"],
       }),
+      getFreelancer: build.query<GetFreelancerApiResponse, GetFreelancerApiArg>(
+        {
+          query: () => ({ url: `/freelancer` }),
+          providesTags: ["Freelancer"],
+        },
+      ),
       createFreelancer: build.mutation<
         CreateFreelancerApiResponse,
         CreateFreelancerApiArg
@@ -103,36 +199,32 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Freelancer"],
       }),
-      getFilteredFreelancers: build.mutation<
-        GetFilteredFreelancersApiResponse,
-        GetFilteredFreelancersApiArg
-      >({
-        query: queryArg => ({
-          url: `/freelancer/filter`,
-          method: "POST",
-          body: queryArg.freelancerFilter,
-        }),
-        invalidatesTags: ["Freelancer"],
+      updateAvatar: build.mutation<UpdateAvatarApiResponse, UpdateAvatarApiArg>(
+        {
+          query: queryArg => ({
+            url: `/files/avatar`,
+            method: "POST",
+            body: queryArg.body,
+          }),
+          invalidatesTags: ["File"],
+        },
+      ),
+      getClient: build.query<GetClientApiResponse, GetClientApiArg>({
+        query: () => ({ url: `/client` }),
+        providesTags: ["Client"],
       }),
-      registerEmployer: build.mutation<
-        RegisterEmployerApiResponse,
-        RegisterEmployerApiArg
-      >({
-        query: queryArg => ({
-          url: `/employer/register`,
-          method: "POST",
-          body: queryArg.employerRegistrationRequest,
-        }),
-        invalidatesTags: ["employer-controller"],
-      }),
-      makeBid: build.mutation<MakeBidApiResponse, MakeBidApiArg>({
-        query: queryArg => ({
-          url: `/bid/${queryArg.projectId}`,
-          method: "POST",
-          body: queryArg.bidRequest,
-        }),
-        invalidatesTags: ["bid-controller"],
-      }),
+      createClient: build.mutation<CreateClientApiResponse, CreateClientApiArg>(
+        {
+          query: queryArg => ({
+            url: `/client`,
+            method: "POST",
+            params: {
+              registrationRequest: queryArg.registrationRequest,
+            },
+          }),
+          invalidatesTags: ["Client"],
+        },
+      ),
       switchRole: build.mutation<SwitchRoleApiResponse, SwitchRoleApiArg>({
         query: queryArg => ({
           url: `/auth/switch-role`,
@@ -197,114 +289,192 @@ const injectedRtkApi = api
         query: () => ({ url: `/test/admin` }),
         providesTags: ["test-controller"],
       }),
+      getStatsOverview: build.query<
+        GetStatsOverviewApiResponse,
+        GetStatsOverviewApiArg
+      >({
+        query: queryArg => ({
+          url: `/statistics/overview`,
+          params: {
+            start: queryArg.start,
+            end: queryArg.end,
+            zoneId: queryArg.zoneId,
+          },
+        }),
+        providesTags: ["Statistics"],
+      }),
       getService: build.query<GetServiceApiResponse, GetServiceApiArg>({
         query: queryArg => ({ url: `/service/${queryArg.id}` }),
         providesTags: ["Service"],
       }),
-      getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
-        query: queryArg => ({ url: `/project/${queryArg.projectId}` }),
-        providesTags: ["Project"],
+      getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
+        query: queryArg => ({
+          url: `/orders`,
+          params: {
+            page: queryArg.page,
+            size: queryArg.size,
+          },
+        }),
+        providesTags: ["Order"],
       }),
       getOrder: build.query<GetOrderApiResponse, GetOrderApiArg>({
         query: queryArg => ({ url: `/orders/${queryArg.orderId}` }),
-        providesTags: ["order-controller"],
+        providesTags: ["Order"],
       }),
-      getFreelancerProfile: build.query<
-        GetFreelancerProfileApiResponse,
-        GetFreelancerProfileApiArg
-      >({
-        query: queryArg => ({ url: `/freelancer/profile/${queryArg.id}` }),
-        providesTags: ["Freelancer"],
-      }),
-      getEmployer: build.query<GetEmployerApiResponse, GetEmployerApiArg>({
-        query: () => ({ url: `/employer` }),
-        providesTags: ["employer-controller"],
-      }),
-      getFilteredBids: build.query<
-        GetFilteredBidsApiResponse,
-        GetFilteredBidsApiArg
+      getActiveOrders: build.query<
+        GetActiveOrdersApiResponse,
+        GetActiveOrdersApiArg
       >({
         query: queryArg => ({
-          url: `/bid/filter`,
+          url: `/orders/active`,
           params: {
-            projectId: queryArg.projectId,
-            rating: queryArg.rating,
-            firstName: queryArg.firstName,
-            lastName: queryArg.lastName,
-            minPrice: queryArg.minPrice,
-            maxPrice: queryArg.maxPrice,
-            statuses: queryArg.statuses,
+            page: queryArg.page,
+            size: queryArg.size,
           },
         }),
-        providesTags: ["bid-controller"],
+        providesTags: ["Order"],
       }),
-        getCurrentUser: build.query<
-          GetCurrentUserApiResponse,
-          GetCurrentUserApiArg
-        >({
-          query: () => ({ url: `/auth` }),
-          providesTags: ["Auth"],
-        }),
+      getFile: build.query<GetFileApiResponse, GetFileApiArg>({
+        query: queryArg => ({ url: `/files/${queryArg.fileId}` }),
+        providesTags: ["File"],
       }),
+      getDispute: build.query<GetDisputeApiResponse, GetDisputeApiArg>({
+        query: queryArg => ({ url: `/dispute/${queryArg.disputeId}` }),
+        providesTags: ["Dispute"],
+      }),
+      getCurrentUser: build.query<
+        GetCurrentUserApiResponse,
+        GetCurrentUserApiArg
+      >({
+        query: () => ({ url: `/auth` }),
+        providesTags: ["Auth"],
+      }),
+      getFreelancerRegistrationRequests: build.query<
+        GetFreelancerRegistrationRequestsApiResponse,
+        GetFreelancerRegistrationRequestsApiArg
+      >({
+        query: () => ({ url: `/auth/freelancer-registrations` }),
+        providesTags: ["Auth"],
+      }),
+      getClientRegistrationRequests: build.query<
+        GetClientRegistrationRequestsApiResponse,
+        GetClientRegistrationRequestsApiArg
+      >({
+        query: () => ({ url: `/auth/client-registrations` }),
+        providesTags: ["Auth"],
+      }),
+      getFreelancersRegistrationRequests: build.query<
+        GetFreelancersRegistrationRequestsApiResponse,
+        GetFreelancersRegistrationRequestsApiArg
+      >({
+        query: () => ({ url: `/admin/freelancer-registrations` }),
+        providesTags: ["Registration"],
+      }),
+      getClientsRegistrationRequests: build.query<
+        GetClientsRegistrationRequestsApiResponse,
+        GetClientsRegistrationRequestsApiArg
+      >({
+        query: () => ({ url: `/admin/client-registrations` }),
+        providesTags: ["Registration"],
+      }),
+    }),
     overrideExisting: false,
   })
 export { injectedRtkApi as pcxApi }
-export type ReviewBidApiResponse = /** status 200 OK */ Bid
-export type ReviewBidApiArg = {
-  projectId: number
-  bidId: number
+export type SubmitOrderForReviewApiResponse = unknown
+export type SubmitOrderForReviewApiArg = {
+  orderId: number
 }
-export type DeclineBidApiResponse = /** status 200 OK */ Bid
-export type DeclineBidApiArg = {
-  projectId: number
-  bidId: number
+export type DisputeOrderApiResponse = unknown
+export type DisputeOrderApiArg = {
+  orderId: number
+  body: string
 }
-export type ApproveBidApiResponse = /** status 200 OK */ Bid
-export type ApproveBidApiArg = {
-  projectId: number
-  bidId: number
+export type CancelOrderApiResponse = unknown
+export type CancelOrderApiArg = {
+  orderId: number
+  body: string
 }
-export type CreateServiceApiResponse = /** status 201 Created */ FullServiceDto
+export type ApproveOrderApiResponse = unknown
+export type ApproveOrderApiArg = {
+  orderId: number
+}
+export type AcceptOrderApiResponse = unknown
+export type AcceptOrderApiArg = {
+  orderId: number
+  deadlineDate: string
+}
+export type UpdateFreelancerApiResponse = unknown
+export type UpdateFreelancerApiArg = {
+  userProfileUpdateDto: UserProfileUpdateDto
+}
+export type RejectProposalApiResponse = unknown
+export type RejectProposalApiArg = {
+  disputeId: number
+  body: string
+}
+export type ProposeSolutionApiResponse = unknown
+export type ProposeSolutionApiArg = {
+  disputeId: number
+  body: string
+}
+export type ForceReleaseApiResponse = unknown
+export type ForceReleaseApiArg = {
+  disputeId: number
+}
+export type ForceRefundApiResponse = unknown
+export type ForceRefundApiArg = {
+  disputeId: number
+}
+export type AcceptProposalApiResponse = unknown
+export type AcceptProposalApiArg = {
+  disputeId: number
+}
+export type RejectRegistrationRequestApiResponse = /** status 200 OK */ object
+export type RejectRegistrationRequestApiArg = {
+  id: number
+  type: "ADMIN" | "CLIENT" | "FREELANCER"
+  body: string
+}
+export type ApproveRegistrationRequestApiResponse = /** status 200 OK */ object
+export type ApproveRegistrationRequestApiArg = {
+  id: number
+  type: "ADMIN" | "CLIENT" | "FREELANCER"
+}
+export type CreateServiceApiResponse = /** status 201 Created */ number
 export type CreateServiceApiArg = {
   service: ServiceCreateDto
 }
 export type GetFilteredServicesApiResponse =
-  /** status 200 OK */ LightweightServiceDto[]
+  /** status 200 OK */ PageLightweightServiceDto
 export type GetFilteredServicesApiArg = {
+  page?: number
+  size?: number
   serviceFilter: ServiceFilter
 }
-export type CreateProjectApiResponse = /** status 201 Created */ Project
-export type CreateProjectApiArg = {
-  projectCreateDto: ProjectCreateDto
-}
-export type GetFilteredProjectsApiResponse =
-  /** status 200 OK */ ProjectPublicDto[]
-export type GetFilteredProjectsApiArg = {
-  projectFilter: ProjectFilter
-}
-export type BookServiceApiResponse = /** status 200 OK */ MessageResponse
+export type BookServiceApiResponse = /** status 200 OK */ number
 export type BookServiceApiArg = {
   serviceId: number
   body: string
 }
+export type GetFreelancerApiResponse = /** status 200 OK */ FreelancerDto
+export type GetFreelancerApiArg = void
 export type CreateFreelancerApiResponse =
   /** status 201 Created */ FreelancerDto
 export type CreateFreelancerApiArg = {
   registrationRequest: FreelancerRegistrationRequest
 }
-export type GetFilteredFreelancersApiResponse =
-  /** status 200 OK */ FreelancerFilterResponse[]
-export type GetFilteredFreelancersApiArg = {
-  freelancerFilter: FreelancerFilter
+export type UpdateAvatarApiResponse = /** status 200 OK */ object
+export type UpdateAvatarApiArg = {
+  body: {
+    avatar: Blob
+  }
 }
-export type RegisterEmployerApiResponse = /** status 200 OK */ MessageResponse
-export type RegisterEmployerApiArg = {
-  employerRegistrationRequest: EmployerRegistrationRequest
-}
-export type MakeBidApiResponse = /** status 200 OK */ FormResponse
-export type MakeBidApiArg = {
-  projectId: number
-  bidRequest: BidRequest
+export type GetClientApiResponse = /** status 200 OK */ ClientDto
+export type GetClientApiArg = void
+export type CreateClientApiResponse = /** status 201 Created */ ClientDto
+export type CreateClientApiArg = {
+  registrationRequest: ClientRegistrationRequest
 }
 export type SwitchRoleApiResponse = /** status 200 OK */ object
 export type SwitchRoleApiArg = {
@@ -332,175 +502,57 @@ export type AllAccessApiResponse = /** status 200 OK */ string
 export type AllAccessApiArg = void
 export type AdminAccessApiResponse = /** status 200 OK */ string
 export type AdminAccessApiArg = void
-export type GetServiceApiResponse = /** status 200 OK */ FullServiceDto
+export type GetStatsOverviewApiResponse = /** status 200 OK */ {
+  [key: string]: StatisticsDto
+}
+export type GetStatsOverviewApiArg = {
+  start: string
+  end: string
+  zoneId: string
+}
+export type GetServiceApiResponse = /** status 200 OK */ ServiceDto
 export type GetServiceApiArg = {
   id: number
 }
-export type GetProjectApiResponse = /** status 200 Project owner info found */
-  | ProjectOwnerDto
-  | /** status 203 Project public info found */ ProjectPublicDto
-export type GetProjectApiArg = {
-  projectId: number
+export type GetOrdersApiResponse = /** status 200 OK */ PageOrderDto
+export type GetOrdersApiArg = {
+  page?: number
+  size?: number
 }
 export type GetOrderApiResponse = /** status 200 OK */ OrderDto
 export type GetOrderApiArg = {
   orderId: number
 }
-export type GetFreelancerProfileApiResponse = /** status 200 OK */ FreelancerDto
-export type GetFreelancerProfileApiArg = {
-  id: number
+export type GetActiveOrdersApiResponse = /** status 200 OK */ PageOrderDto
+export type GetActiveOrdersApiArg = {
+  page?: number
+  size?: number
 }
-export type GetEmployerApiResponse = /** status 200 OK */ EmployerResponseDto
-export type GetEmployerApiArg = void
-export type GetFilteredBidsApiResponse = /** status 200 OK */ BidDto[]
-export type GetFilteredBidsApiArg = {
-  projectId: number
-  rating?: number
-  firstName?: string
-  lastName?: string
-  minPrice?: number
-  maxPrice?: number
-  statuses?: BidStatus[]
+export type GetFileApiResponse = /** status 200 OK */ Blob
+export type GetFileApiArg = {
+  fileId: number
+}
+export type GetDisputeApiResponse = /** status 200 OK */ DisputeDto
+export type GetDisputeApiArg = {
+  disputeId: number
 }
 export type GetCurrentUserApiResponse = /** status 200 OK */ AuthResponse
 export type GetCurrentUserApiArg = void
-export type Address = {
-  id?: number
-  country: string
-  city: string
-  street: string
-  postalCode: string
-  houseNumber: string
-  region: string
-}
-export type File = {
-  ownerId: number
-  ownerType: OwnerType
-  documentType?: DocumentType
-  path: string
-  originalFileName: string
-  verified?: boolean
-  uploadAt: string
-  id?: number
-}
-export type Role = {
-  id?: number
-  name?: RoleType
-}
-export type Category = {
-  id?: number
-  name: CategoryType
-}
-export type Freelancer = {
-  id?: number
-  address: Address
-  description?: string
-  firstName: string
-  lastName: string
-  phoneNumber: string
-  avatarUrl?: string
-  rating: number
-  ratingCount: number
-  categories?: Category[]
-  accountStatus: AccountStatus
-  files?: File[]
-  principal: Principal
-  registrationDate: string
-  activationDate?: string
-}
-export type Client = {
-  id?: number
-  principal?: Principal
-  address?: Address
-  firstName: string
-  lastName: string
-  avatarUrl?: string
-  rating: number
-  ratingCount: number
-}
-export type Principal = {
-  id?: number
-  email: string
-  password: string
-  roles: Role[]
-  freelancer?: Freelancer
-  employer?: Employer
-  client?: Client
-}
-export type Employer = {
-  id?: number
-  address: Address
-  companyName: string
-  description: string
-  registrationCode: string
-  email: string
-  phoneNumber: string
-  avatarUrl?: string
-  rating: number
-  ratingCount: number
-  accountStatus: AccountStatus
-  files?: File[]
-  principal: Principal
-  registrationDate: string
-  activationDate?: string
-}
-export type Project = {
-  id?: number
-  title?: string
-  description: string
-  shortDescription?: string
-  employer?: Employer
-  freelancer?: Freelancer
-  budget?: number
-  categories?: Category[]
-  status?: ProjectStatus
-  location?: string
-  bids?: Bid[]
-  projectType: ProjectType
-  minSatisfyingBid?: number
-  bidStep?: number
-  datePosted: string
-  dueDate?: string
-}
-export type Bid = {
-  id?: number
-  project: Project
-  freelancer: Freelancer
-  amount: number
-  status?: BidStatus
-  coverLetter: string
-  submittedAt: string
-  estimatedCompletionDate?: string
-  attachments?: File[]
-  milestones?: {
-    [key: string]: object
-  }
-}
-export type FormValidationResponse = {
-  message: string
-  errors: {
-    [key: string]: string
-  }
-}
+export type GetFreelancerRegistrationRequestsApiResponse =
+  /** status 200 OK */ LightweightRegistrationRequestDto[]
+export type GetFreelancerRegistrationRequestsApiArg = void
+export type GetClientRegistrationRequestsApiResponse =
+  /** status 200 OK */ LightweightRegistrationRequestDto[]
+export type GetClientRegistrationRequestsApiArg = void
+export type GetFreelancersRegistrationRequestsApiResponse =
+  /** status 200 OK */ RegistrationRequestDto[]
+export type GetFreelancersRegistrationRequestsApiArg = void
+export type GetClientsRegistrationRequestsApiResponse =
+  /** status 200 OK */ RegistrationRequestDto[]
+export type GetClientsRegistrationRequestsApiArg = void
 export type ErrorMessage = {
   id?: string
   message?: string
-}
-export type LightWeightFreelancerDto = {
-  id: number
-  firstName: string
-  lastName: string
-  rating: number
-  avatarUrl?: string
-}
-export type WorkflowStep = {
-  stepNumber: number
-  title: string
-  description?: string
-}
-export type Faq = {
-  question: string
-  answer: string
 }
 export type AddressDto = {
   street: string
@@ -510,64 +562,64 @@ export type AddressDto = {
   country: string
   houseNumber: string
 }
-export type ReviewerDto = {
-  id: number
+export type UserProfileUpdateDto = {
   firstName: string
-  lastName?: string
-  rating: number
-  type: Type
-  avatarUrl?: string
+  lastName: string
+  address: AddressDto
+  phoneNumber: string
 }
-export type ReviewDto = {
-  id: number
-  reviewer: ReviewerDto
-  body?: string
-  rating: number
-  createdAt: string
-}
-export type FileResponseDto = {
-  id: number
-  originalFileName: string
-  documentType: DocumentType
-  path: string
-  uploadDate: string
-  verified: boolean
-}
-export type FullServiceDto = {
-  id: number
-  freelancer: LightWeightFreelancerDto
-  title: string
-  description: string
-  price: number
-  workflow?: WorkflowStep[]
-  faqs?: Faq[]
-  address?: AddressDto
-  reviews?: ReviewDto[]
-  categories: CategoryType[]
-  rating: number
-  ratingCount: number
-  imagesMeta: FileResponseDto[]
-  postedAt: string
+export type ServiceAddressDto = {
+  street?: string
+  city: string
+  region: string
+  postalCode?: string
+  country: string
+  houseNumber?: string
 }
 export type ServiceCreateDto = {
   title: string
   description: string
+  shortDescription: string
   price: number
-  location: string
+  address?: ServiceAddressDto
   categories: CategoryType[]
   images: Blob[]
   workflowJson?: string
   faqsJson?: string
+}
+export type SortObject = {
+  direction?: string
+  nullHandling?: string
+  ascending?: boolean
+  property?: string
+  ignoreCase?: boolean
+}
+export type PageableObject = {
+  paged?: boolean
+  unpaged?: boolean
+  pageNumber?: number
+  pageSize?: number
+  offset?: number
+  sort?: SortObject[]
 }
 export type LightweightAddressDto = {
   city: string
   postalCode: string
   country: string
 }
+export type LightWeightFreelancerDto = {
+  id: number
+  firstName: string
+  lastName: string
+  rating: number
+  email: string
+  phoneNumber: string
+  avatarImageUrl?: string
+}
 export type LightweightServiceDto = {
   id: number
   title: string
-  description: string
+  shortDescription: string
   address?: LightweightAddressDto
   rating: number
   ratingCount: number
@@ -575,7 +627,20 @@ export type LightweightServiceDto = {
   freelancer: LightWeightFreelancerDto
   categories: CategoryType[]
   postedAt: string
-  thumbnailMeta: FileResponseDto
+  thumbnailUrl: string
+}
+export type PageLightweightServiceDto = {
+  totalPages?: number
+  totalElements?: number
+  numberOfElements?: number
+  pageable?: PageableObject
+  first?: boolean
+  last?: boolean
+  size?: number
+  content?: LightweightServiceDto[]
+  number?: number
+  sort?: SortObject[]
+  empty?: boolean
 }
 export type ServiceFilter = {
   title?: string
@@ -585,146 +650,59 @@ export type ServiceFilter = {
   minBudget: number
   maxBudget: number
 }
-export type ProjectCreateDto = {
-  title: string
-  description: string
-  shortDescription: string
-  categories: CategoryType[]
-  location: string
-  projectType: ProjectType
-  budget?: number
-  minSatisfyingBid?: number
-  bidStep?: number
-}
-export type EmployerResponseDto = {
+export type FreelancerDto = {
   id: number
-  companyName: string
-  registrationCode: string
+  address: AddressDto
+  firstName: string
+  lastName: string
+  phoneNumber: string
   email: string
+  rating: number
+  ratingCount: number
+  avatarImageUrl?: string
+}
+export type FreelancerRegistrationRequest = {
+  firstName: string
+  lastName: string
   address: AddressDto
   phoneNumber: string
-  country: string
-  description?: string
-}
-export type ProjectPublicDto = {
-  id: number
-  title: string
-  description: string
-  shortDescription?: string
-  employer: EmployerResponseDto
-  budget?: number
   categories: CategoryType[]
-  status: ProjectStatus
-  location: string
-  projectType: ProjectType
-  bidCount?: number
-  maxBid?: number
-  dueDate?: string
-}
-export type ProjectFilter = {
-  title?: string
-  categories?: CategoryType[]
-  location?: string
-  minBudget?: number
-  maxBudget?: number
-  type?: ProjectType
-}
-export type MessageResponse = {
-  message: string
-  entityId?: number
-}
-export type BidDto = {
-  id: number
-  freelancer: LightWeightFreelancerDto
-  amount: number
-  status: BidStatus
-  coverLetter: string
-  submittedAt: string
-  estimatedCompletionDate: string
+  avatarImage?: Blob
+  description: string
+  idDocument: Blob[]
 }
 export type ClientDto = {
   id: number
   address: AddressDto
   firstName: string
   lastName: string
-  rating: number
-}
-export type EventDto = {
-  id: number
-  clientId?: number
-  freelancerId?: number
-  type: Type2
-  createdAt: string
-}
-export type OrderDto = {
-  id: number
-  acceptedBid?: BidDto
-  service?: FullServiceDto
-  client?: ClientDto
-  status: Status
-  events: EventDto[]
-  createdAt: string
-  completedAt?: string
-}
-export type FreelancerDto = {
-  id: number
-  address: AddressDto
-  firstName: string
-  lastName: string
+  phoneNumber: string
+  email: string
   rating: number
   ratingCount: number
-  orders?: OrderDto[]
+  avatarImageUrl?: string
 }
-export type FreelancerRegistrationRequest = {
+export type ClientRegistrationRequest = {
   firstName: string
   lastName: string
-  email: string
   address: AddressDto
   phoneNumber: string
-  categories: CategoryType[]
   avatarImage?: Blob
-  description?: string
+  idDocument: Blob[]
 }
-export type FreelancerFilterResponse = {
-  id?: number
-  firstName?: string
-  lastName?: string
-  description?: string
-  categories?: CategoryType[]
-  addressDto?: AddressDto
-  rating?: number
-  ratingCount?: number
-}
-export type FreelancerFilter = {
-  firstName?: string
-  lastName?: string
-  categories?: CategoryType[]
-  country?: string
-  city?: string
-  rating?: number
-}
-export type EmployerRegistrationRequest = {
-  companyName: string
-  registrationCode: string
-  email: string
-  address: AddressDto
-  phoneNumber: string
-  description?: string
-}
-export type FormResponse = {
-  message?: string
-  success?: boolean
-}
-export type BidRequest = {
-  amount: number
-  coverLetter?: string
-  estimatedCompletionDate?: string
+export type Account = {
+  userId?: number
+  accountStatus?: AccountStatus
+  accountType?: AccountType
 }
 export type AuthResponse = {
   firstName?: string
   lastName?: string
+  email: string
+  accounts: Account[]
   roles: RoleType[]
-  activeRoleType: RoleType
+  activeRole: RoleType
+  avatarImageUrl?: string
 }
 export type SignupFormRequest = {
   email: string
@@ -735,47 +713,254 @@ export type LoginRequest = {
   email: string
   password: string
 }
-export type ProjectOwnerDto = {
+export type StatisticsDto = {
+  value: number
+  trend?: string
+  percentGrow?: number
+  data?: number[]
+}
+export type WorkflowStep = {
+  stepNumber: number
+  title: string
+  description?: string
+}
+export type Faq = {
+  question: string
+  answer: string
+}
+export type ReviewerDto = {
   id: number
+  firstName: string
+  lastName?: string
+  rating: number
+  type: Type
+  avatarImageUrl?: string
+}
+export type ReviewDto = {
+  id: number
+  reviewer: ReviewerDto
+  body?: string
+  rating: number
+  createdAt: string
+}
+export type ServiceDto = {
+  id: number
+  freelancer: LightWeightFreelancerDto
   title: string
   description: string
-  shortDescription?: string
-  employer: EmployerResponseDto
-  budget?: number
+  shortDescription: string
+  price: number
+  workflow?: WorkflowStep[]
+  faqs?: Faq[]
+  address?: ServiceAddressDto
+  reviews?: ReviewDto[]
   categories: CategoryType[]
-  status: ProjectStatus
-  location: string
-  projectType: ProjectType
-  bidCount?: number
-  maxBid?: number
-  dueDate?: string
-  bids: BidDto[]
+  rating: number
+  ratingCount: number
+  galleryUrls: string[]
+  postedAt: string
 }
-export enum AccountStatus {
-  Unverified = "UNVERIFIED",
-  Pending = "PENDING",
-  Active = "ACTIVE",
-  Inactive = "INACTIVE",
-  Deleted = "DELETED",
-  Banned = "BANNED",
+export type LightweightClientDto = {
+  id: number
+  firstName: string
+  lastName: string
+  rating: number
+  ratingCount: number
+  email: string
+  phoneNumber: string
+  avatarImageUrl?: string
 }
-export enum OwnerType {
-  Service = "SERVICE",
-  Project = "PROJECT",
-  Client = "CLIENT",
-  Freelancer = "FREELANCER",
-  Employer = "EMPLOYER",
+export type LightweightTransactionDto = {
+  id: number
+  status: TransactionStatus
 }
-export enum DocumentType {
-  IdCard = "ID_CARD",
-  Passport = "PASSPORT",
-  DrivingLicense = "DRIVING_LICENSE",
-  BusinessLicense = "BUSINESS_LICENSE",
-  CompanyRegistration = "COMPANY_REGISTRATION",
-  BankStatement = "BANK_STATEMENT",
+export type EventDto = {
+  id: number
+  type: EventType
+  createdAt: string
+  disputeId?: number
+}
+export type OrderDto = {
+  id: number
+  service: LightweightServiceDto
+  client: LightweightClientDto
+  status: OrderStatus
+  transaction: LightweightTransactionDto
+  events: EventDto[]
+  additionalNotes?: string
+  rejectionReason?: string
+  createdAt: string
+  deadlineDate?: string
+  updatedAt?: string
+}
+export type PageOrderDto = {
+  totalPages?: number
+  totalElements?: number
+  numberOfElements?: number
+  pageable?: PageableObject
+  first?: boolean
+  last?: boolean
+  size?: number
+  content?: OrderDto[]
+  number?: number
+  sort?: SortObject[]
+  empty?: boolean
+}
+export type DisputeDto = {
+  id: number
+  status: DisputeStatus
+  reason: string
+  proposalStatus?: ProposalStatus
+  proposal?: string
+  proposalRejectionReason?: string
+}
+export type LightweightRegistrationRequestDto = {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: string
+  accountStatus: AccountStatus
+  rejectionReason?: string
+  registrationDate: string
+  accountType: AccountType
+}
+export type RegistrationRequestDto = {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  avatarImageUrl?: string
+  phoneNumber: string
+  accountStatus: AccountStatus
+  rejectionReason?: string
+  registrationDate: string
+  accountType: AccountType
+}
+export enum CategoryType {
+  WebDesign = "WEB_DESIGN",
+  WebDevelopment = "WEB_DEVELOPMENT",
+  FrontendDevelopment = "FRONTEND_DEVELOPMENT",
+  BackendDevelopment = "BACKEND_DEVELOPMENT",
+  MobileAppDevelopment = "MOBILE_APP_DEVELOPMENT",
+  GameDevelopment = "GAME_DEVELOPMENT",
+  WordpressDevelopment = "WORDPRESS_DEVELOPMENT",
+  EcommerceDevelopment = "ECOMMERCE_DEVELOPMENT",
+  SoftwareDevelopment = "SOFTWARE_DEVELOPMENT",
+  ApiDevelopment = "API_DEVELOPMENT",
+  GraphicDesign = "GRAPHIC_DESIGN",
+  UiUxDesign = "UI_UX_DESIGN",
+  LogoDesign = "LOGO_DESIGN",
+  BrandIdentityDesign = "BRAND_IDENTITY_DESIGN",
+  VideoEditing = "VIDEO_EDITING",
+  Animation = "ANIMATION",
+  Illistration = "ILLISTRATION",
+  ThreeDModeling = "THREE_D_MODELING",
+  PresentationDesign = "PRESENTATION_DESIGN",
+  InteriorDesign = "INTERIOR_DESIGN",
+  ContentWriting = "CONTENT_WRITING",
+  Copywriting = "COPYWRITING",
+  Ghostwriting = "GHOSTWRITING",
+  TechnicalWriting = "TECHNICAL_WRITING",
+  ResumeWriting = "RESUME_WRITING",
+  GrantWriting = "GRANT_WRITING",
+  CreativeWriting = "CREATIVE_WRITING",
+  SeoWriting = "SEO_WRITING",
+  Scriptwriting = "SCRIPTWRITING",
+  EditingProofreading = "EDITING_PROOFREADING",
+  Translation = "TRANSLATION",
+  Transcription = "TRANSCRIPTION",
+  LanguageTutoring = "LANGUAGE_TUTORING",
+  SubtitlingCaptioning = "SUBTITLING_CAPTIONING",
+  LocalizationServices = "LOCALIZATION_SERVICES",
+  DigitalMarketing = "DIGITAL_MARKETING",
+  SocialMediaMarketing = "SOCIAL_MEDIA_MARKETING",
+  SeoSem = "SEO_SEM",
+  EmailMarketing = "EMAIL_MARKETING",
+  AffiliateMarketing = "AFFILIATE_MARKETING",
+  InfluencerMarketing = "INFLUENCER_MARKETING",
+  LeadGeneration = "LEAD_GENERATION",
+  Telemarketing = "TELEMARKETING",
+  BrandStrategy = "BRAND_STRATEGY",
+  CustomerSupport = "CUSTOMER_SUPPORT",
+  TechnicalSupport = "TECHNICAL_SUPPORT",
+  VirtualAssistant = "VIRTUAL_ASSISTANT",
+  ChatSupport = "CHAT_SUPPORT",
+  HelpdeskServices = "HELPDESK_SERVICES",
+  DataEntry = "DATA_ENTRY",
+  WebResearch = "WEB_RESEARCH",
+  ProjectManagement = "PROJECT_MANAGEMENT",
+  CalendarManagement = "CALENDAR_MANAGEMENT",
+  DocumentPreparation = "DOCUMENT_PREPARATION",
+  DataAnalysis = "DATA_ANALYSIS",
+  DataEngineering = "DATA_ENGINEERING",
+  MachineLearning = "MACHINE_LEARNING",
+  AiDevelopment = "AI_DEVELOPMENT",
+  BusinessIntelligence = "BUSINESS_INTELLIGENCE",
+  DataVisualization = "DATA_VISUALIZATION",
+  BigDataServices = "BIG_DATA_SERVICES",
+  CivilEngineering = "CIVIL_ENGINEERING",
+  MechanicalEngineering = "MECHANICAL_ENGINEERING",
+  ElectricalEngineering = "ELECTRICAL_ENGINEERING",
+  StructuralEngineering = "STRUCTURAL_ENGINEERING",
+  CadDrafting = "CAD_DRAFTING",
+  ArchitectureDesign = "ARCHITECTURE_DESIGN",
+  ProductDesign = "PRODUCT_DESIGN",
+  Accounting = "ACCOUNTING",
+  Bookkeeping = "BOOKKEEPING",
+  FinancialAnalysis = "FINANCIAL_ANALYSIS",
+  BusinessConsulting = "BUSINESS_CONSULTING",
+  TaxPreparation = "TAX_PREPARATION",
+  HrConsulting = "HR_CONSULTING",
+  FinancialModeling = "FINANCIAL_MODELING",
+  LegalConsulting = "LEGAL_CONSULTING",
+  ContractDrafting = "CONTRACT_DRAFTING",
+  IntellectualProperty = "INTELLECTUAL_PROPERTY",
+  CorporateLaw = "CORPORATE_LAW",
+  FamilyLawServices = "FAMILY_LAW_SERVICES",
+  CoachingMentoring = "COACHING_MENTORING",
+  FitnessTraining = "FITNESS_TRAINING",
+  MusicProduction = "MUSIC_PRODUCTION",
+  PodcastEditing = "PODCAST_EDITING",
+  CareerCounseling = "CAREER_COUNSELING",
+  EventPlanning = "EVENT_PLANNING",
+  LifeCoaching = "LIFE_COACHING",
+  PlumbingServices = "PLUMBING_SERVICES",
+  ElectricalRepair = "ELECTRICAL_REPAIR",
+  CarpentryServices = "CARPENTRY_SERVICES",
+  AutoRepair = "AUTO_REPAIR",
+  HouseCleaning = "HOUSE_CLEANING",
+  MovingHelp = "MOVING_HELP",
+  GardeningLandscaping = "GARDENING_LANDSCAPING",
+  ConstructionWork = "CONSTRUCTION_WORK",
+  PestControl = "PEST_CONTROL",
+  LocksmithServices = "LOCKSMITH_SERVICES",
+  PaintingServices = "PAINTING_SERVICES",
+  HvacRepair = "HVAC_REPAIR",
+  ApplianceRepair = "APPLIANCE_REPAIR",
+  FurnitureAssembly = "FURNITURE_ASSEMBLY",
+  PetSitting = "PET_SITTING",
+  DogWalking = "DOG_WALKING",
+  Babysitting = "BABYSITTING",
+  ElderlyCare = "ELDERLY_CARE",
+  SecurityServices = "SECURITY_SERVICES",
+  WindowCleaning = "WINDOW_CLEANING",
+  WasteRemoval = "WASTE_REMOVAL",
+  RecyclingServices = "RECYCLING_SERVICES",
+  CarWashing = "CAR_WASHING",
+  CarScraping = "CAR_SCRAPING",
+  BikeRepair = "BIKE_REPAIR",
+  FlooringInstallation = "FLOORING_INSTALLATION",
+  RoofingServices = "ROOFING_SERVICES",
+  WaterDamageRestoration = "WATER_DAMAGE_RESTORATION",
+  PoolCleaning = "POOL_CLEANING",
+  SnowRemoval = "SNOW_REMOVAL",
+  EventStaffing = "EVENT_STAFFING",
+  CateringServices = "CATERING_SERVICES",
+  PhotographyServices = "PHOTOGRAPHY_SERVICES",
+  MakeupArtist = "MAKEUP_ARTIST",
+  TattooArtist = "TATTOO_ARTIST",
   Other = "OTHER",
-  Gallery = "GALLERY",
-  Avatar = "AVATAR",
 }
 export enum RoleType {
   RoleEmployer = "ROLE_EMPLOYER",
@@ -784,78 +969,105 @@ export enum RoleType {
   RoleUnverified = "ROLE_UNVERIFIED",
   RoleClient = "ROLE_CLIENT",
 }
-export enum CategoryType {
-  WebDesign = "WEB_DESIGN",
-  WebDevelopment = "WEB_DEVELOPMENT",
-  MobileDevelopment = "MOBILE_DEVELOPMENT",
-  GraphicDesign = "GRAPHIC_DESIGN",
-  VideoEditing = "VIDEO_EDITING",
-  Writing = "WRITING",
-  Translation = "TRANSLATION",
-  Marketing = "MARKETING",
-  Sales = "SALES",
-  CustomerService = "CUSTOMER_SERVICE",
-  AdminSupport = "ADMIN_SUPPORT",
-  DataScience = "DATA_SCIENCE",
-  Engineering = "ENGINEERING",
-  Accounting = "ACCOUNTING",
-  Legal = "LEGAL",
-  Other = "OTHER",
+export enum AccountStatus {
+  Unverified = "UNVERIFIED",
+  Pending = "PENDING",
+  Active = "ACTIVE",
+  Inactive = "INACTIVE",
+  Deleted = "DELETED",
+  Banned = "BANNED",
+  Rejected = "REJECTED",
 }
-export enum ProjectStatus {
-  Open = "OPEN",
-  InProgress = "IN_PROGRESS",
-  Closed = "CLOSED",
-}
-export enum ProjectType {
-  Bid = "BID",
-  Fixed = "FIXED",
-}
-export enum BidStatus {
-  New = "NEW",
-  InReview = "IN_REVIEW",
-  Approved = "APPROVED",
-  Declined = "DECLINED",
+export enum AccountType {
+  Admin = "ADMIN",
+  Client = "CLIENT",
+  Freelancer = "FREELANCER",
 }
 export enum Type {
   Employer = "Employer",
   Client = "Client",
   Freelancer = "Freelancer",
 }
-export enum Status {
+export enum OrderStatus {
   Created = "CREATED",
   InProgress = "IN_PROGRESS",
+  SubmittedForReview = "SUBMITTED_FOR_REVIEW",
+  Approved = "APPROVED",
   Completed = "COMPLETED",
+  Disputed = "DISPUTED",
   Canceled = "CANCELED",
 }
-export enum Type2 {
+export enum TransactionStatus {
+  Pending = "PENDING",
+  Escrowed = "ESCROWED",
+  Released = "RELEASED",
+  Canceled = "CANCELED",
+  Refunded = "REFUNDED",
+  Disputed = "DISPUTED",
+}
+export enum EventType {
+  AccountCreated = "ACCOUNT_CREATED",
+  VerificationSubmitted = "VERIFICATION_SUBMITTED",
+  AccountApproved = "ACCOUNT_APPROVED",
+  AccountRejected = "ACCOUNT_REJECTED",
   OrderCreated = "ORDER_CREATED",
-  OrderCanceled = "ORDER_CANCELED",
-  OrderCompleted = "ORDER_COMPLETED",
-  OrderPaid = "ORDER_PAID",
-  OrderDisputed = "ORDER_DISPUTED",
-  OrderReviewed = "ORDER_REVIEWED",
   OrderAccepted = "ORDER_ACCEPTED",
-  OrderDeclined = "ORDER_DECLINED",
-  OrderInProgress = "ORDER_IN_PROGRESS",
-  OrderDelivered = "ORDER_DELIVERED",
-  OrderRefunded = "ORDER_REFUNDED",
-  OrderModified = "ORDER_MODIFIED",
-  OrderResolved = "ORDER_RESOLVED",
+  OrderRejected = "ORDER_REJECTED",
+  OrderSubmittedForReview = "ORDER_SUBMITTED_FOR_REVIEW",
+  OrderApproved = "ORDER_APPROVED",
+  OrderCompleted = "ORDER_COMPLETED",
+  OrderApprovedByAdmin = "ORDER_APPROVED_BY_ADMIN",
+  OrderDisputed = "ORDER_DISPUTED",
+  OrderCanceled = "ORDER_CANCELED",
+  OrderCanceledWithRefundByAdmin = "ORDER_CANCELED_WITH_REFUND_BY_ADMIN",
+  DisputeCreated = "DISPUTE_CREATED",
+  DisputeResolved = "DISPUTE_RESOLVED",
+  DisputeRejected = "DISPUTE_REJECTED",
+  ProposalCreated = "PROPOSAL_CREATED",
+  ProposalAccepted = "PROPOSAL_ACCEPTED",
+  ProposalRejected = "PROPOSAL_REJECTED",
+  TransactionCreated = "TRANSACTION_CREATED",
+  TransactionEscrowed = "TRANSACTION_ESCROWED",
+  TransactionReleased = "TRANSACTION_RELEASED",
+  ReviewSubmitted = "REVIEW_SUBMITTED",
+  FileUploaded = "FILE_UPLOADED",
+  RoleSwitched = "ROLE_SWITCHED",
+}
+export enum DisputeStatus {
+  Open = "OPEN",
+  InReview = "IN_REVIEW",
+  ResolvedRefunded = "RESOLVED_REFUNDED",
+  ResolvedFreelancerPaid = "RESOLVED_FREELANCER_PAID",
+  Rejected = "REJECTED",
+}
+export enum ProposalStatus {
+  None = "NONE",
+  Pending = "PENDING",
+  Accepted = "ACCEPTED",
+  Rejected = "REJECTED",
 }
 export const {
-  useReviewBidMutation,
-  useDeclineBidMutation,
-  useApproveBidMutation,
+  useSubmitOrderForReviewMutation,
+  useDisputeOrderMutation,
+  useCancelOrderMutation,
+  useApproveOrderMutation,
+  useAcceptOrderMutation,
+  useUpdateFreelancerMutation,
+  useRejectProposalMutation,
+  useProposeSolutionMutation,
+  useForceReleaseMutation,
+  useForceRefundMutation,
+  useAcceptProposalMutation,
+  useRejectRegistrationRequestMutation,
+  useApproveRegistrationRequestMutation,
   useCreateServiceMutation,
   useGetFilteredServicesQuery,
-  useCreateProjectMutation,
-  useGetFilteredProjectsMutation,
   useBookServiceMutation,
+  useGetFreelancerQuery,
   useCreateFreelancerMutation,
-  useGetFilteredFreelancersMutation,
-  useRegisterEmployerMutation,
-  useMakeBidMutation,
+  useUpdateAvatarMutation,
+  useGetClientQuery,
+  useCreateClientMutation,
   useSwitchRoleMutation,
   useRegisterUserMutation,
   useLogoutUserMutation,
@@ -865,11 +1077,16 @@ export const {
   useModeratorAccessQuery,
   useAllAccessQuery,
   useAdminAccessQuery,
+  useGetStatsOverviewQuery,
   useGetServiceQuery,
-  useGetProjectQuery,
+  useGetOrdersQuery,
   useGetOrderQuery,
-  useGetFreelancerProfileQuery,
-  useGetEmployerQuery,
-  useGetFilteredBidsQuery,
+  useGetActiveOrdersQuery,
+  useGetFileQuery,
+  useGetDisputeQuery,
   useGetCurrentUserQuery,
+  useGetFreelancerRegistrationRequestsQuery,
+  useGetClientRegistrationRequestsQuery,
+  useGetFreelancersRegistrationRequestsQuery,
+  useGetClientsRegistrationRequestsQuery,
 } = injectedRtkApi

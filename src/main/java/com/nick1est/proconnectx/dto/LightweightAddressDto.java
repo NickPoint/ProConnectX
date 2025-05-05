@@ -1,14 +1,15 @@
 package com.nick1est.proconnectx.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
 public class LightweightAddressDto {
-    @NotEmpty
+    @NotBlank
     private String city;
-    @NotEmpty
+    @NotBlank
     private String postalCode;
-    @NotEmpty
+    @NotBlank
     private String country;
 }

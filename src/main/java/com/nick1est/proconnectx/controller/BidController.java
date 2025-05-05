@@ -1,9 +1,8 @@
+/*
 package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.BidStatus;
-import com.nick1est.proconnectx.dao.Employer;
-import com.nick1est.proconnectx.dao.Bid;
 import com.nick1est.proconnectx.dto.BidDto;
 import com.nick1est.proconnectx.dto.BidRequest;
 import com.nick1est.proconnectx.dto.FormResponse;
@@ -90,3 +89,4 @@ public class BidController {
     }
 
 }
+*/

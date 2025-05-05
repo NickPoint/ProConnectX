@@ -1,49 +1,74 @@
 import {Autocomplete, CircularProgress, Grid, Slide} from "@mui/material";
 import {TextField} from "formik-mui";
-import {Field, useField, useFormikContext} from "formik";
-import {useRef, useState} from "react";
+import {Field, getIn, useField, useFormikContext} from "formik";
+import {useRef} from "react";
 import {selectLoading, selectSuggestions} from "../../features/placeAutocomplete/placeAutocompleteSlice";
 import {useAppSelector} from "../hooks";
 import usePlacesAutocomplete from "../hooks/usePlaceAutocomplete.ts";
 import {AddressDto} from "../../features/api/pcxApi.ts";
 import {useTranslation} from "react-i18next";
-import {FieldWithHelperText} from "../pages/VerificationPage.tsx";
 
 interface Props {
     name: string;
     label: string;
     onFocus?: (e) => void;
+    childs?: string[];
 }
 
 export interface ExtendedAddress extends AddressDto {
     fullAddress: string
 }
 
-const AddressAutocomplete = ({name, label, onFocus}: Props) => {
-    const [field, , helpers] = useField(`${name}.fullAddress`);
-    const {setTouched, setFieldValue} = useFormikContext<any>();
-    const [inputValue, setInputValue] = useState<string>('');
-    const [value, setValue] = useState(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [houseNumberEmpty, setHouseNumberEmpty] = useState<boolean>(false);
-    const {t} = useTranslation();
+interface Props {
+    name: string;
+    label: string;
+    onFocus?: (e: any) => void;
+    childs?: string[];
+    fullAddressFieldName?: string;
+    required?: boolean;
+    houseNumberRequired?: boolean;
+    disabled?: boolean;
+}
 
+const AddressAutocomplete = ({
+                                 name,
+                                 label,
+                                 onFocus,
+                                 childs = ['street', 'city', 'region', 'postalCode', 'country'],
+                                 fullAddressFieldName = 'fullAddress',
+                                 required = true,
+                                 houseNumberRequired = true,
+                                 disabled = false,
+                             }: Props) => {
+    const [fullAddressField, {touched}] = useField(`${name}.${fullAddressFieldName}`);
+    const [houseNumberMissing] = useField(`${name}._houseNumberMissing`);
+    const {setFieldValue, errors} = useFormikContext<any>();
     const suggestions = useAppSelector(selectSuggestions);
     const loading = useAppSelector(selectLoading);
     const fetchSuggestions = usePlacesAutocomplete();
+    const containerRef = useRef<HTMLDivElement>(null);
+    const {t} = useTranslation();
+
+    const addressErrors = getIn(errors, name) || {};
+    const addressTouched = getIn(touched, name) || {};
+
+    const generalFields = childs.filter(child => child !== 'houseNumber');
+
+    const hasGeneralAddressError = generalFields.some(field => getIn(addressErrors, field) && touched);
+    const combinedErrors = generalFields
+        .map(field => getIn(addressErrors, field))
+        .filter(Boolean)
+        .join(', ');
 
     const handlePlaceSelect = async (placeId: string, label: string) => {
         try {
             const {Place} = await google.maps.importLibrary("places") as google.maps.PlacesLibrary;
 
             const place = new Place({id: placeId, requestedLanguage: "et"});
-            await place.fetchFields({
-                fields: ["addressComponents", "formattedAddress"],
-            });
+            await place.fetchFields({fields: ["addressComponents", "formattedAddress"]});
 
             const components = place.addressComponents || [];
-            const get = (type: string) =>
-                components.find((c: any) => c.types.includes(type))?.longText || "";
+            const get = (type: string) => components.find((c: any) => c.types.includes(type))?.longText || "";
 
             const houseNumber = get("street_number");
 
@@ -57,15 +82,11 @@ const AddressAutocomplete = ({name, label, onFocus}: Props) => {
                 houseNumber: houseNumber,
             };
 
-            console.log(parsedAddress);
-
             Object.entries(parsedAddress).forEach(([key, val]) => {
                 setFieldValue(`${name}.${key}`, val);
             });
 
-            if (houseNumber === "") {
-                setHouseNumberEmpty(true);
-            }
+            setFieldValue(`${name}._houseNumberMissing`, !houseNumber);
         } catch (err) {
             console.error("Address parsing failed", err);
         }
@@ -77,9 +98,10 @@ const AddressAutocomplete = ({name, label, onFocus}: Props) => {
                 <Autocomplete
                     freeSolo
                     options={suggestions}
+                    disabled={disabled}
                     getOptionLabel={(option) => option.label}
                     loading={loading}
-                    inputValue={field.value}
+                    inputValue={fullAddressField.value}
                     onInputChange={(_, value) => {
                         fetchSuggestions(value);
                     }}
@@ -93,7 +115,9 @@ const AddressAutocomplete = ({name, label, onFocus}: Props) => {
                             component={TextField}
                             {...params}
                             label={label}
-                            name={`${name}.fullAddress`}
+                            name={`${name}.${fullAddressFieldName}`}
+                            error={hasGeneralAddressError}
+                            helperText={hasGeneralAddressError ? combinedErrors || t('form.error.address') : undefined}
                             InputProps={{
                                 ...params.InputProps,
                                 endAdornment: (
@@ -103,16 +127,24 @@ const AddressAutocomplete = ({name, label, onFocus}: Props) => {
                                     </>
                                 ),
                             }}
-                            required
+                            required={required}
                             onFocus={onFocus}
                         />
                     )}
                 />
             </Grid>
-            <Slide unmountOnExit in={houseNumberEmpty} container={containerRef.current}>
+
+            <Slide unmountOnExit direction='left'
+                   in={houseNumberMissing.value && childs?.some(child => child === 'houseNumber')}
+                   container={containerRef.current}>
                 <Grid size={4}>
-                    <FieldWithHelperText name={`${name}.houseNumber`} label={t('address.houseNumber')}
-                           component={TextField} fullWidth required />
+                    <Field
+                        name={`${name}.houseNumber`}
+                        label={t('form.fields.houseNumber')}
+                        component={TextField}
+                        fullWidth
+                        required={houseNumberRequired}
+                    />
                 </Grid>
             </Slide>
         </Grid>
