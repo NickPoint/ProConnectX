@@ -5,7 +5,6 @@ import com.nick1est.proconnectx.dao.Freelancer;
 import com.nick1est.proconnectx.dao.Review;
 import com.nick1est.proconnectx.dto.ReviewDto;
 import com.nick1est.proconnectx.dto.ReviewerDto;
-import lombok.val;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

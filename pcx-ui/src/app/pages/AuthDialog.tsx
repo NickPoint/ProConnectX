@@ -1,10 +1,12 @@
 import Button from '@mui/material/Button';
 import {
+    AccountType,
     LoginRequest,
-    RoleType,
     SignupFormRequest,
+    useAddAccountMutation,
     useAuthenticateUserMutation,
     useCheckEmailMutation,
+    useGetCurrentUserQuery,
     useRegisterUserMutation
 } from "../../features/api/pcxApi";
 import {object, string} from "yup";
@@ -28,6 +30,77 @@ import {useTranslation} from "react-i18next";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {useState} from "react";
+
+interface AddAccountProps {
+    open: boolean;
+    onClose: () => void;
+}
+
+export const AddAccountDialog: React.FC<AddAccountProps> = ({open, onClose}) => {
+    const {t} = useTranslation();
+    const navigate = useNavigate();
+    const {data: user} = useGetCurrentUserQuery();
+    const [addAccount] = useAddAccountMutation();
+
+    const hasClientAccount = user?.accounts.some((account) => account.accountType === AccountType.Client);
+    const hasFreelancerAccount = user?.accounts.some((account) => account.accountType === AccountType.Freelancer);
+
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogContent>
+                <Grid container spacing={4}>
+                    <Grid size={12}>
+                        <Typography variant='h3'>{t('join.page.title')}</Typography>
+                    </Grid>
+                    <Grid container spacing={2} size={12}>
+                        {!hasClientAccount &&
+                            <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
+                                <CardActionArea
+                                    sx={{height: '100%'}}
+                                    onClick={() => addAccount({accountType: AccountType.Client}).unwrap()
+                                                .then(() => {
+                                                    enqueueSnackbar(t('registration.addAccount.success', {accountType: t(`enum.accountType.${AccountType.Client}`)}), {variant: 'success'});
+                                                    onClose();
+                                                    navigate('/client-verification');
+                                                })}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            variant="h4">{t('join.page.client.title')}</Typography>
+                                        <Typography
+                                            variant="body1">{t('join.page.client.description')}</Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Grid>
+                        }
+                        {!hasFreelancerAccount &&
+                            <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
+                                <Card>
+                                    <CardActionArea
+                                        sx={{height: '100%'}}
+                                        onClick={() => addAccount({accountType: AccountType.Freelancer}).unwrap()
+                                            .then(() => {
+                                                enqueueSnackbar(t('registration.addAccount.success', {accountType: t(`enum.accountType.${AccountType.Freelancer}`)}), {variant: 'success'});
+                                                onClose();
+                                                navigate('/freelancer-verification');
+                                            })}
+                                    >
+                                        <CardContent>
+                                            <Typography
+                                                variant="h4">{t('join.page.freelancer.title')}</Typography>
+                                            <Typography
+                                                variant="body1">{t('join.page.freelancer.description')}</Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        }
+                    </Grid>
+                </Grid>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 const Hero = () => {
     return (
@@ -61,9 +134,8 @@ const signUpSchema = object({
 const signUpInitialValues: SignupFormRequest = {
     email: '',
     password: '',
-    role: '' as RoleType,
+    accountType: '' as AccountType,
 }
-
 
 interface SignupFormProps {
     onSubmit: (values: SignupFormRequest) => Promise<any>
@@ -98,8 +170,8 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                 }
                 onSubmit(values)
                     .then(() => {
-                        enqueueSnackbar('Registration successful', {variant: 'success'});
-                        if (values.role === RoleType.RoleFreelancer) {
+                        enqueueSnackbar(t('registration.addAccount.success', {accountType: t(`enum.accountType.${values.accountType}`)}), {variant: 'success'});
+                        if (values.accountType === AccountType.Freelancer) {
                             navigate('/freelancer-verification');
                         } else {
                             navigate('/client-verification');
@@ -132,7 +204,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                     transition={{duration: 0.3}}
                                 >
                                     <Grid container>
-                                        <Grid size={{xs: null, md: 6}}>
+                                        <Grid size={6} display={{xs: 'none', md: 'block'}}>
                                             <Hero/>
                                         </Grid>
                                         <Grid size={{xs: 12, md: 6}} container spacing={4} padding={4}>
@@ -180,7 +252,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                         <Grid container spacing={2} size={12}>
                                             <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
                                                 <CardActionArea sx={{height: '100%'}}
-                                                                onClick={() => setFieldValue('role', RoleType.RoleClient)}
+                                                                onClick={() => setFieldValue('accountType', AccountType.Client)}
                                                                 type='submit'>
                                                     <CardContent>
                                                         <Typography
@@ -193,7 +265,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                             <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
                                                 <Card>
                                                     <CardActionArea sx={{height: '100%'}}
-                                                                    onClick={() => setFieldValue('role', RoleType.RoleFreelancer)}
+                                                                    onClick={() => setFieldValue('accountType', AccountType.Freelancer)}
                                                                     type='submit'>
                                                         <CardContent>
                                                             <Typography
@@ -246,7 +318,7 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
 
     return (
         <Grid container>
-            <Grid size={{xs: null, md: 6}}>
+            <Grid size={6} display={{xs: 'none', md: 'block'}}>
                 <Hero/>
             </Grid>
             <Grid size={{xs: 12, md: 6}} container spacing={4} padding={4}>
@@ -306,6 +378,7 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
     );
 }
 
+// TODO: Easier make props and controlled component
 const AuthDialog = () => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(selectOpen);

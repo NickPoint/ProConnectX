@@ -1,4 +1,4 @@
-import { format, toZonedTime } from 'date-fns-tz';
+import {format, toZonedTime} from 'date-fns-tz';
 
 export const DEFAULT_FORMAT = 'MMMM d, yyyy';
 

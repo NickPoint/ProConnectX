@@ -18,8 +18,8 @@ const CardList = <T,>({lastListSize, isLoading, data}: CardListProps<T>) => {
                         key={index}
                         size={{
                             xs: 12,
-                            md: 6,
-                            lg: 3
+                            sm: 6,
+                            lg: 4
                         }}>
                         <Skeleton variant='rectangular' height={300}/>
                     </Grid>
@@ -36,7 +36,7 @@ const CardList = <T,>({lastListSize, isLoading, data}: CardListProps<T>) => {
                     size={{
                         xs: 12,
                         sm: 6,
-                        md: 4,
+                        lg: 4,
                     }}>
                     {/*TODO: Here can be other cards too*/}
                     {props &&

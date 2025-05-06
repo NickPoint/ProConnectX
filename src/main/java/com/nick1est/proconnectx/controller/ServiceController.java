@@ -11,8 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,12 +53,18 @@ public class ServiceController {
         return serviceService.createService(service, workflow, faqs, userDetails.getFreelancer());
     }
 
-    @PostMapping("/filter")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<LightweightServiceDto> getFilteredServices(@Valid @RequestBody ServiceFilter serviceFilter,
-                                                           @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "12") int size) {
-        val pageable = PageRequest.of(page, size);
-        return serviceService.findFilteredServices(serviceFilter, pageable);
+    public Page<LightweightServiceDto> getServices(@ParameterObject ServiceFilter serviceFilter,
+                                                   @ParameterObject Pageable pageable) {
+        return serviceService.getServices(serviceFilter, pageable);
+    }
+
+    @GetMapping("user-services")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyRole('FREELANCER','ADMIN')")
+    public Page<LightweightServiceDto> getUserServices(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                       @ParameterObject Pageable pageable) {
+        return serviceService.getUserServices(userDetails, pageable);
     }
 }

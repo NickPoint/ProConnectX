@@ -5,7 +5,6 @@ import com.nick1est.proconnectx.dao.Client;
 import com.nick1est.proconnectx.dao.Freelancer;
 import com.nick1est.proconnectx.dao.Principal;
 import com.nick1est.proconnectx.dao.RoleType;
-import com.nick1est.proconnectx.mapper.FileMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

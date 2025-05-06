@@ -1,7 +1,6 @@
-import {Divider, FormControl, IconButton, InputAdornment, OutlinedInput, OutlinedInputProps} from "@mui/material";
+import {IconButton, InputAdornment, OutlinedInput, OutlinedInputProps} from "@mui/material";
 import {FilterAlt, Menu, SearchRounded} from '@mui/icons-material';
 import React from "react";
-import Grid from "@mui/material/Grid";
 
 function chooseEndAdornment(menuButtonVisible: boolean | undefined, filterButtonVisible: boolean | undefined,
                             onClick: ((() => void) | undefined)) {

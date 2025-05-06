@@ -1,6 +1,6 @@
-import {Divider, Grid, Paper, Rating, Stack} from "@mui/material";
+import {Divider, Grid, Rating, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {Review, ReviewDto} from "../../features/api/pcxApi.ts";
+import {ReviewDto} from "../../features/api/pcxApi.ts";
 import Box from "@mui/material/Box";
 import ReviewCard from "./ReviewCard.tsx";
 

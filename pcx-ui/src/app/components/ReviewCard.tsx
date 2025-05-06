@@ -1,5 +1,5 @@
-import {Card, Box, Avatar, CardContent, Typography, Rating, Divider, Stack} from "@mui/material";
-import {ClientDto, EmployerResponseDto, FreelancerDto, ReviewDto} from "../../features/api/pcxApi.ts";
+import {Card, CardContent, Divider, Rating, Stack, Typography} from "@mui/material";
+import {ReviewDto} from "../../features/api/pcxApi.ts";
 import UserCard from "./UserCard.tsx";
 import {parseOffsetDateTime} from "../../utils/dateParser.ts";
 

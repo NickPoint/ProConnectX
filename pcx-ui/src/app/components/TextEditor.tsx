@@ -1,7 +1,8 @@
 import {useField} from "formik";
 import {useRef} from "react";
 import {
-    MenuButtonBold, MenuButtonItalic,
+    MenuButtonBold,
+    MenuButtonItalic,
     MenuControlsContainer,
     MenuDivider,
     MenuSelectHeading,
@@ -9,7 +10,7 @@ import {
     RichTextEditorRef
 } from "mui-tiptap";
 import {useAppDispatch} from "../hooks.ts";
-import {FormControl, FormHelperText, InputLabel} from "@mui/material";
+import {FormControl, FormHelperText} from "@mui/material";
 import StarterKit from "@tiptap/starter-kit";
 import {setActiveField} from "../../features/form/formSlice.ts";
 

@@ -2,7 +2,7 @@ package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.AccountStatus;
+import com.nick1est.proconnectx.dao.AccountType;
 import com.nick1est.proconnectx.dao.Principal;
 import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dto.AuthResponse;
@@ -18,7 +18,6 @@ import com.nick1est.proconnectx.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -70,16 +68,25 @@ public class AuthService {
         val roleUnverified = roleRepository.findByName(RoleType.ROLE_UNVERIFIED)
                 .orElseThrow(() -> new NotFoundException("error.role.not_found"));
         principal.setRoles(Set.of(roleUnverified));
-
-        if (RoleType.ROLE_CLIENT.equals(signupFormRequest.getRole())) {
-            clientService.initUser(principal);
-        } else if (RoleType.ROLE_FREELANCER.equals(signupFormRequest.getRole())) {
-            freelancerService.initUser(principal);
-        } else {
-            throw new NotFoundException("error.role.not_found");
-        }
+        addAccount(principal, signupFormRequest.getAccountType());
 
         return signInUser(new LoginRequest(signupFormRequest.getEmail(), signupFormRequest.getPassword()));
+    }
+
+    @Transactional
+    public void addAccount(Long principalId, AccountType accountType) {
+        val principal = getById(principalId);
+        addAccount(principal, accountType);
+    }
+
+    public void addAccount(Principal principal, AccountType accountType) {
+        if (AccountType.CLIENT.equals(accountType)) {
+            clientService.initUser(principal);
+        } else if (AccountType.FREELANCER.equals(accountType)) {
+            freelancerService.initUser(principal);
+        } else {
+            throw new NotFoundException("error.account.not_allowed", accountType);
+        }
     }
 
     public AuthResponse switchRole(UserDetailsImpl userDetails, RoleType role) {
@@ -108,6 +115,11 @@ public class AuthService {
                     .getAvatarUrl(clientService.getById(userDetails.getClient().getId()));
             default -> null;
         };
+    }
+
+    public Principal getById(Long principalId) {
+        return principalRepository.findById(principalId)
+                .orElseThrow(() -> new NotFoundException("error.principal.not_found", principalId));
     }
 
 }

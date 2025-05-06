@@ -1,9 +1,7 @@
 package com.nick1est.proconnectx.listeners;
 
 import com.nick1est.proconnectx.dao.EntityType;
-import com.nick1est.proconnectx.dao.Notification;
 import com.nick1est.proconnectx.dao.NotificationType;
-import com.nick1est.proconnectx.dto.NotificationDto;
 import com.nick1est.proconnectx.dto.NotificationPayload;
 import com.nick1est.proconnectx.events.FreelancerRegisteredEvent;
 import com.nick1est.proconnectx.events.ServiceOrderEvent;

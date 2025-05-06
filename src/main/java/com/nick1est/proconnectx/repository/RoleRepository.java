@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.repository;
 
-import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dao.Role;
+import com.nick1est.proconnectx.dao.RoleType;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

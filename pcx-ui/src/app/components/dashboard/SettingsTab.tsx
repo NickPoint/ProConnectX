@@ -5,7 +5,9 @@ import {
     RoleType,
     useGetClientQuery,
     useGetCurrentUserQuery,
-    useGetFreelancerQuery, useUpdateFreelancerMutation
+    useGetFreelancerQuery,
+    useUpdateClientMutation,
+    useUpdateFreelancerMutation
 } from "../../../features/api/pcxApi.ts";
 import {GlobalLoadingBackdrop} from "../GlobalLoadingBackdrop.tsx";
 import {Form, Formik} from "formik";
@@ -15,12 +17,10 @@ import {useTranslation} from "react-i18next";
 import {useLoadScript} from "@react-google-maps/api";
 import {libraries} from "../../pages/ClientVerificationPage.tsx";
 import {useMemo, useState} from "react";
-import { CloudUpload } from "@mui/icons-material";
+import {CloudUpload} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 import {useUpdateAvatarMutation} from "../../../features/api/enhancedApi.ts";
 import {enqueueSnackbar} from "notistack";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
 
 const formConf = {
     firstName: { label: 'firstName', required: true, type: 'text', size: 6 },
@@ -94,6 +94,7 @@ const SettingsTab = () => {
         libraries,
     })
     const [updateFreelancer] = useUpdateFreelancerMutation();
+    const [updateClient] = useUpdateClientMutation();
     const controlledFormConf = useMemo(() => {
         const addDisabled = (fields) => {
             return Object.fromEntries(
@@ -112,10 +113,15 @@ const SettingsTab = () => {
     }
 
     let accountData: ClientDto | FreelancerDto | undefined;
+    let onSubmit: any
     if (user.activeRole === RoleType.RoleFreelancer) {
-        accountData = useGetFreelancerQuery().data;
+        const {data, refetch} = useGetFreelancerQuery();
+        accountData = data;
+        onSubmit = updateFreelancer;
     } else if (user.activeRole === RoleType.RoleClient) {
-        accountData = useGetClientQuery().data
+        const {data, refetch} = useGetClientQuery()
+        accountData = data;
+        onSubmit = updateClient;
     }
 
     if (!accountData) {
@@ -138,7 +144,7 @@ const SettingsTab = () => {
     }
 
     return (
-        <Grid container alignItems="center" spacing={2}>
+        <Grid container alignItems="center" spacing={4}>
             <Grid container size={{xs: 12, md: 4}} spacing={1}>
                 <Grid size={12} display="flex" alignItems="center" justifyContent="center">
                     <Avatar sx={{
@@ -162,10 +168,13 @@ const SettingsTab = () => {
                 <Formik initialValues={initialValues}
                             validationSchema={generateValidationSchema(formConf)}
                             onSubmit={(values, formikHelpers) => {
-                                updateFreelancer({userProfileUpdateDto: values}).unwrap()
-                                    .then(() => enqueueSnackbar(t('settings.userProfile.success')))
+                                onSubmit({userProfileUpdateDto: values}).unwrap()
+                                    .then(() => enqueueSnackbar(t('dashboard.settings.userProfile.success'), {variant: 'success'}))
+                                    .finally(() => {
+                                        setIsReadOnly(true);
+                                    });
                             }}>
-                    {({resetForm}) =>
+                    {({resetForm, isSubmitting}) =>
                         <Form noValidate>
                             <Grid container size={12} spacing={2}>
                             <Grid container size={12} spacing={1}>
@@ -180,7 +189,7 @@ const SettingsTab = () => {
                                         <Button onClick={() => {
                                             setIsReadOnly(true)
                                             resetForm({ values: initialValues })}}>{t('buttons.cancel')}</Button>
-                                        <Button color='success' variant='contained' type='submit'>{t('buttons.save')}</Button>
+                                        <Button loading={isSubmitting} color='success' variant='contained' type='submit'>{t('buttons.save')}</Button>
                                     </>
                                 }
                             </Grid>

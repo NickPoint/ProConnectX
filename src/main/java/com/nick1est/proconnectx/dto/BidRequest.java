@@ -3,7 +3,6 @@ package com.nick1est.proconnectx.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.Instant;
 
 @Data

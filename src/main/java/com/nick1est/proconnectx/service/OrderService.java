@@ -3,6 +3,7 @@ package com.nick1est.proconnectx.service;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.*;
 import com.nick1est.proconnectx.dto.OrderDto;
+import com.nick1est.proconnectx.dto.OrdersFilter;
 import com.nick1est.proconnectx.mapper.OrderMapper;
 import com.nick1est.proconnectx.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,15 +125,9 @@ public class OrderService {
     }
 
     @Transactional
-    public Page<OrderDto> getUserOrders(UserDetailsImpl userDetails, Pageable pageable) {
-        Page<Order> orders;
-        if (RoleType.ROLE_FREELANCER.equals(userDetails.getActiveRole())) {
-            orders = orderRepository.findByService_Freelancer(userDetails.getFreelancer(), pageable);
-        } else if (userDetails.getActiveRole().equals(RoleType.ROLE_CLIENT)) {
-            orders = orderRepository.findByClient(userDetails.getClient(), pageable);
-        } else {
-            throw new IllegalArgumentException("User with role " + userDetails.getActiveRole() + " doesn't have any relation to orders");
-        }
+    public Page<OrderDto> getUserOrders(UserDetailsImpl userDetails, OrdersFilter filter, Pageable pageable) {
+        Specification<Order> spec = OrderSpecifications.buildSpecification(userDetails, filter);
+        Page<Order> orders = orderRepository.findAll(spec, pageable);
 
         return orders.map(orderMapper::toDto);
     }
@@ -148,6 +144,33 @@ public class OrderService {
         }
 
         return orders.map(orderMapper::toDto);
+    }
+
+    public class OrderSpecifications {
+
+        public static Specification<Order> filterByUser(UserDetailsImpl userDetails) {
+            return (root, query, cb) -> {
+                if (RoleType.ROLE_ADMIN.equals(userDetails.getActiveRole())) {
+                    return cb.conjunction();
+                } else if (RoleType.ROLE_FREELANCER.equals(userDetails.getActiveRole())) {
+                    return cb.equal(root.get("freelancer"), userDetails.getFreelancer());
+                } else if (userDetails.getActiveRole().equals(RoleType.ROLE_CLIENT)) {
+                    return cb.equal(root.get("client"), userDetails.getClient());
+                } else {
+                    return cb.disjunction();
+                }
+            };
+        }
+
+        public static Specification<Order> filterByStatuses(List<OrderStatus> statuses) {
+            return (root, query, cb) -> (statuses != null && !statuses.isEmpty())
+                    ? root.get("status").in(statuses)
+                    : cb.conjunction();
+        }
+
+        public static Specification<Order> buildSpecification(UserDetailsImpl userDetails, OrdersFilter filter) {
+            return Specification.where(filterByUser(userDetails)).and(filterByStatuses(filter.getStatuses()));
+        }
     }
 
 }

@@ -1,12 +1,12 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.CategoryType;
-import com.nick1est.proconnectx.dto.employer.registration.FileDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class ServiceDto {
     @NotBlank
     private String shortDescription;
     @NotNull
-    private Double price;
+    private BigDecimal price;
     private List<WorkflowStep> workflow;
     private List<Faq> faqs;
     private ServiceAddressDto address;

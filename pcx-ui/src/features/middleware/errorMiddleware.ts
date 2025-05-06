@@ -1,5 +1,5 @@
-import { isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
-import { enqueueSnackbar } from 'notistack';
+import {isRejectedWithValue, Middleware, MiddlewareAPI} from '@reduxjs/toolkit';
+import {enqueueSnackbar} from 'notistack';
 
 export const rtkQueryErrorLogger: Middleware =
     (api: MiddlewareAPI) => (next) => (action) => {

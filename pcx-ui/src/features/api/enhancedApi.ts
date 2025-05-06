@@ -1,16 +1,13 @@
 import {
-    AccountStatus, AccountType,
     addTagTypes,
     CreateFreelancerApiResponse,
-    CreateServiceApiResponse, EventType, GetEventTypesApiArg,
-    GetEventTypesApiResponse,
-    pcxApi, UpdateAvatarApiArg, UpdateAvatarApiResponse,
+    CreateServiceApiResponse,
+    pcxApi,
+    UpdateAvatarApiResponse,
 } from "./pcxApi";
 import {Client} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import {useAppDispatch} from "../../app/hooks.ts";
 import {pushNotification} from "../notifications/notificationSlice.ts";
-import {useTranslation} from "react-i18next";
 
 function createTagsFromList<T extends { id: string | number }>(
     list: T[] | undefined,
@@ -53,15 +50,18 @@ const enhancedApi = pcxApi.enhanceEndpoints({
         authenticateUser: {
             invalidatesTags: ['Auth', 'Freelancer', 'Order'],
         },
-        logoutUser: {
-            invalidatesTags: ['Auth', 'Freelancer', 'Order'],
+        getServices: {
+            providesTags: (result) => createTagsFromList(result?.content, 'Service'),
         },
-        getFilteredServices: {
-            providesTags: (result) => createTagsFromList(result, 'Service'),
+        getUserServices: {
+            providesTags: (result) => createTagsFromList(result?.content, 'Service'),
         },
         getService: {
             providesTags: (result, error, arg) => [{ type: 'Service', id: arg.id }],
-        }
+        },
+        getOrders: {
+            providesTags: (result, error, arg) =>createTagsFromList(result?.content, 'Order'),
+        },
     }
 })
 
@@ -171,7 +171,7 @@ export const {
     useMakeBidMutation,
     useGetProjectQuery,
     useLazyGetFilteredBidsQuery,
-    useLazyGetFilteredServicesQuery,
+    useLazyGetServicesQuery,
 } = enhancedApi
 
 export const {

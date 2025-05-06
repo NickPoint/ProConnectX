@@ -20,18 +20,22 @@ import AuthPage from "./app/pages/AuthPage.tsx";
 import ClientVerificationPage from "./app/pages/ClientVerificationPage.tsx";
 import OrdersTab from "./app/components/dashboard/OrdersTab.tsx";
 import SettingsTab from "./app/components/dashboard/SettingsTab.tsx";
+import HomePageLayout from "./app/components/layouts/HomePageLayout.tsx";
+import ServicesTab from "./app/components/dashboard/ServicesTab.tsx";
 
 const App = () => {
 
-    useGetCurrentUserQuery();
+    const {data: user} = useGetCurrentUserQuery();
 
     return (
         <div className="App">
             <BrowserRouter>
                 <GlobalLoadingBackdrop />
                 <Routes>
-                    <Route path='/' element={<Layout/>}>
+                    <Route path='/' element={<HomePageLayout/>}>
                         <Route index element={<HomePage/>}/>
+                    </Route>
+                    <Route path='/' element={<Layout />}>
                         {/*<Route path='projects' element={<FilterPage type={FilterType.PROJETCS}/>}/>*/}
                         {/*<Route element={<RequireUser allowedRoles={['ROLE_CLIENT', 'ROLE_ADMIN']}/>}>*/}
                         {/*    <Route path='projects/add' element={<PostProjectPage/>}/>*/}
@@ -39,15 +43,13 @@ const App = () => {
                         {/*TODO: <Route path='freelancers' element={<FilterPage type={FilterType.FREELANCERS}/>}/>*/}
                         <Route path='auth' element={<AuthPage />}/>
                         <Route path='freelancer-verification' element={
-                            <RequireUser allowedRoles={[RoleType.RoleUnverified, RoleType.RoleAdmin]}
-                                         dissalowedAccountsStatuses={[{type: AccountType.Client, status: AccountStatus.Pending},
-                                             {type: AccountType.Freelancer, status: AccountStatus.Pending}]}>
+                            <RequireUser allowedRoles={[RoleType.RoleUnverified, RoleType.RoleClient, RoleType.RoleAdmin]}
+                                         dissalowedAccountsStatuses={[{type: AccountType.Freelancer, status: AccountStatus.Pending}]}>
                                 <FreelancerVerificationPage/>
                             </RequireUser>}/>
                         <Route path='client-verification' element={
-                            <RequireUser allowedRoles={[RoleType.RoleUnverified, RoleType.RoleAdmin]}
-                                         dissalowedAccountsStatuses={[{type: AccountType.Client, status: AccountStatus.Pending},
-                                             {type: AccountType.Freelancer, status: AccountStatus.Pending}]}>
+                            <RequireUser allowedRoles={[RoleType.RoleUnverified, RoleType.RoleFreelancer, RoleType.RoleAdmin]}
+                                         dissalowedAccountsStatuses={[{type: AccountType.Client, status: AccountStatus.Pending}]}>
                                 <ClientVerificationPage/>
                             </RequireUser>}/>
                         <Route path='service/add' element={
@@ -78,6 +80,7 @@ const App = () => {
                     </RequireUser>}>
                         <Route path='home' element={<DashboardOverviewTab />} />
                         <Route path='registrations' element={<RegistrationRequestTab />} />
+                        <Route path='services' element={<ServicesTab />} />
                         <Route path='orders' element={<OrdersTab />} />
                         <Route path='settings' element={<SettingsTab />} />
                     </Route>

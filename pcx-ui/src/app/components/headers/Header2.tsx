@@ -1,4 +1,4 @@
-import {Avatar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
+import {Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import * as React from "react";
 import {MouseEvent, useState} from "react";

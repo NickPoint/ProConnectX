@@ -37,15 +37,25 @@ const formFields: FormStepsConfig = {
         },
         address: {
             type: 'addressGroup',
-            required: false,
             fields: {
-                fullAddress: {label: 'address', required: false, type: 'text', size: 12},
-                houseNumber: {label: 'houseNumber', required: false, type: 'text', size: 4},
-                street: {label: 'street', required: false, type: 'text', size: 12},
-                city: {label: 'city', required: true, type: 'text', size: 6},
-                region: {label: 'region', required: true, type: 'text', size: 6},
-                postalCode: {label: 'postalCode', required: false, type: 'text', size: 6},
-                country: {label: 'country', required: true, type: 'text', size: 6},
+                fullAddress: { label: 'address', type: 'text', required: false },
+                houseNumber: { label: 'houseNumber', type: 'text' },
+                street: { label: 'street', type: 'text' },
+                city: {
+                    label: 'city',
+                    type: 'text',
+                    dependsOn: { field: 'fullAddress' }
+                },
+                region: {
+                    label: 'region',
+                    type: 'text',
+                    dependsOn: { field: 'fullAddress' }
+                },
+                country: {
+                    label: 'country',
+                    type: 'text',
+                    dependsOn: { field: 'fullAddress' }
+                },
             }
         },
         categories: {
@@ -197,12 +207,11 @@ const mapFormToRequest = (values: PostServiceFormValues): FormData => {
     formData.append('description', values.step2.description);
     formData.append('shortDescription', values.step2.shortDescription);
     formData.append('price', values.step1.price.toString());
-    formData.append('address.street', values.step1.address.street);
-    formData.append('address.city', values.step1.address.city);
-    formData.append('address.region', values.step1.address.region);
-    formData.append('address.postalCode', values.step1.address.postalCode);
-    formData.append('address.country', values.step1.address.country);
-    formData.append('address.houseNumber', values.step1.address.houseNumber);
+    Object.entries(values.step1.address).map(([fieldName, fieldValue]) => {
+        if (fieldValue !== '') {
+            formData.append(`address.${fieldName}`, fieldValue);
+        }
+    })
     formData.append('categories', values.step1.categories.toString());
     formData.append('workflowJson', JSON.stringify(values.step3.workflow));
     formData.append('faqsJson', JSON.stringify(values.step4.faqs));

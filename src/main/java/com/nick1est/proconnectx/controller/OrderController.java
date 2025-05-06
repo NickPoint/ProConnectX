@@ -2,17 +2,16 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.annotations.CheckOwnership;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.OrderStatus;
-import com.nick1est.proconnectx.dao.OrderType;
 import com.nick1est.proconnectx.dao.OwnershipType;
 import com.nick1est.proconnectx.dto.OrderDto;
+import com.nick1est.proconnectx.dto.OrdersFilter;
 import com.nick1est.proconnectx.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Tag(name = "Order")
 @RestController
@@ -33,20 +31,9 @@ public class OrderController {
     @GetMapping
     @PreAuthorize("hasRole('CLIENT') or hasRole('FREELANCER') or hasRole('ADMIN')")
     public ResponseEntity<Page<OrderDto>> getOrders(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                    @RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "12") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        val userOrders = orderService.getUserOrders(userDetails, pageable);
-        return ResponseEntity.ok(userOrders);
-    }
-
-    @GetMapping("/active")
-    @PreAuthorize("hasRole('CLIENT') or hasRole('FREELANCER') or hasRole('ADMIN')")
-    public ResponseEntity<Page<OrderDto>> getActiveOrders(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                        @RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "12") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        val userOrders = orderService.getActiveUserOrders(userDetails, pageable);
+                                                    @ParameterObject OrdersFilter filter,
+                                                    @ParameterObject Pageable pageable) {
+        val userOrders = orderService.getUserOrders(userDetails, filter, pageable);
         return ResponseEntity.ok(userOrders);
     }
 

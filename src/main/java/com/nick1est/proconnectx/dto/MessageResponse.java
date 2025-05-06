@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder

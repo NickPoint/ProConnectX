@@ -1,4 +1,4 @@
-import { PayloadAction } from "@reduxjs/toolkit";
+import {PayloadAction} from "@reduxjs/toolkit";
 import {createAppSlice} from "../../app/createAppSlice.ts";
 
 interface PlaceSuggestion {

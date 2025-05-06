@@ -1,6 +1,6 @@
-import { Box, Typography, Button } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import {Box, Button, Typography} from '@mui/material';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
 
 export default function NotFound() {
     const navigate = useNavigate();

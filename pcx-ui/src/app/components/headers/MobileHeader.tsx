@@ -1,31 +1,15 @@
-import {
-    AppBar,
-    Avatar,
-    Box,
-    Button,
-    IconButton,
-    Link,
-    Menu,
-    MenuItem,
-    Slide,
-    Stack,
-    Toolbar,
-    Tooltip,
-    Typography,
-    useScrollTrigger
-} from "@mui/material";
+import {AppBar, Box, Slide, Stack, Toolbar, Typography, useScrollTrigger} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
-import {MouseEvent, useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useAppDispatch} from "../../hooks";
 import {styled} from "@mui/material/styles";
 import FabContainer from "../FabContainer.tsx";
 import FabManager from "../FabManager.tsx";
 import {addFab, removeFab} from "../../../features/fab/fabSlice.ts";
-import Notification from "../Notification.tsx";
-import {RoleType, useGetCurrentUserQuery, useLogoutUserMutation} from "../../../features/api/pcxApi.ts";
-import {setOpen, setSignup} from "../../../features/signupDialog/authFormSlice.ts";
+import {RoleType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
 import AuthDialog from "../../pages/AuthDialog.tsx";
 import {useTranslation} from "react-i18next";
+import UserMenu from "../UserMenu.tsx";
 
 const settings = ['Profile', 'Logout'];
 
@@ -62,24 +46,8 @@ const HideOnScroll = (props) => {
 const MobileHeader = () => {
     const {data: user} = useGetCurrentUserQuery();
     const location = useLocation();
-    const [userMenuOpen, setUserMenuOpen] = useState<null | HTMLElement>(null);
-    const [logoutUser] = useLogoutUserMutation();
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {t} = useTranslation();
-
-    const handleClick = (event: MouseEvent<HTMLElement>) => {
-        switch (event.currentTarget.textContent) {
-            case 'Profile':
-                navigate('/dashboard/home');
-                break;
-            case 'Logout':
-                logoutUser();
-                break
-            default:
-                console.log('Unknown action');
-        }
-    }
 
     function getUserName(): string | undefined {
         if (user) {
@@ -94,76 +62,33 @@ const MobileHeader = () => {
         <HideOnScroll>
             <AppBar color='inherit' variant='transparent'>
                 <StyledToolbar>
-                    {user ? (
-                        <>
-                            <Menu
-                                sx={{mt: '45px'}}
-                                id="menu-appbar"
-                                anchorEl={userMenuOpen}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(userMenuOpen)}
-                                onClose={() => setUserMenuOpen(null)}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={() => setUserMenuOpen(null)}>
-                                        <Typography onClick={handleClick}
-                                                    sx={{
-                                                        textAlign: "center"
-                                                    }}>
-                                            {setting}
-                                        </Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                            <Box sx={{alignItems: 'flex-start'}}>
+                        {/*TODO: Add status for freelancers*/}
+                    {!user &&
+                        <Stack sx={{cursor: 'pointer'}} onClick={() => navigate('/')}>
+                            <Typography variant='h4' color='primary' fontWeight='700'
+                                        component='span'>ProConnectX</Typography>
+                            <Typography variant='body1' fontSize='0.75rem'
+                                        component='span'>{t('platform.slogan')}</Typography>
+                        </Stack>
+                    }
+                    <Box sx={{alignItems: 'flex-start'}}>
+                        {user &&
+                            <>
                                 <Typography variant='h6'>{getUserName()}</Typography>
                                 {user.status &&
                                     <Typography variant='body2'>{t(`header.user.status.${user.status}`)}</Typography>
                                 }
-                            </Box>
-                            <Stack direction='row' spacing={1}>
-                                <Notification/>
-                                <Tooltip title="Open settings">
-                                    <IconButton onClick={(event) => setUserMenuOpen(event.currentTarget)}
-                                                sx={{p: 0, mr: 1}}>
-                                        <Avatar alt={user.firstName} src={user.avatarImageUrl}/>
-                                    </IconButton>
-                                </Tooltip>
-                            </Stack>
-
-                        </>
-                    ) : (location.pathname !== '/auth' &&
-                        <Stack direction='row' spacing={1} sx={{alignItems: 'center'}}>
-                            <Link sx={{cursor: 'pointer'}} underline='none'
-                                  onClick={() => {
-                                      dispatch(setOpen(true))
-                                      dispatch(setSignup(false))
-                                  }}>
-                                Sign in
-                            </Link>
-                            <Button variant='contained' onClick={() => {
-                                dispatch(setOpen(true))
-                                dispatch(setSignup(true))
-                            }}>
-                                Join
-                            </Button>
-                        </Stack>
-                    )}
+                            </>
+                        }
+                    </Box>
+                    <UserMenu />
                 </StyledToolbar>
             </AppBar>
         </HideOnScroll>
         <StyledToolbar/>
         <FabManager/>
         <FabContainer/>
-        {location.pathname !== 'auth' && <AuthDialog/>}
+        {location.pathname !== '/auth' && <AuthDialog/>}
     </>);
 }
 

@@ -18,8 +18,8 @@ import {
     EventDto,
     EventType,
     OrderDto,
-    RoleType,
     OrderStatus,
+    RoleType,
     TransactionStatus,
     useAcceptOrderMutation,
     useAcceptProposalMutation,
@@ -617,17 +617,18 @@ const ProposalDialog = ({open, onClose, disputeId}: ProposalDialogProps) => {
                             </DialogContent>
 
                             {/* Action Buttons */}
-                            {dispute.status === 'OPEN' && (
                                 <DialogActions>
-                                    <Button onClick={onClose} color="error" variant="contained">
-                                        {t('buttons.cancel')}
-                                    </Button>
-
-                                    {showFreelancerProposalForm ? (
-                                        <Button type="submit" color="success" variant="contained" loading={isSubmitting}>
-                                            {t('buttons.submit')}
-                                        </Button>
-                                    ) : user?.activeRole === RoleType.RoleClient && (
+                                    {showFreelancerProposalForm && (
+                                        <>
+                                            <Button onClick={onClose} color="error" variant="contained">
+                                                {t('buttons.cancel')}
+                                            </Button>
+                                            <Button type="submit" color="success" variant="contained" loading={isSubmitting}>
+                                                {t('buttons.submit')}
+                                            </Button>
+                                        </>
+                                    )}
+                                    {user?.activeRole === RoleType.RoleClient && dispute.status === 'IN_REVIEW' && (
                                         <>
                                             <Button
                                                 color="error"
@@ -649,7 +650,6 @@ const ProposalDialog = ({open, onClose, disputeId}: ProposalDialogProps) => {
                                         </>
                                     )}
                                 </DialogActions>
-                            )}
                         </Form>
                     )}
                 </Formik>
@@ -689,7 +689,7 @@ const ProposalDialog = ({open, onClose, disputeId}: ProposalDialogProps) => {
 
 const OrdersTab = () => {
     const [page, setPage] = useState(0);
-    const {data} = useGetOrdersQuery({page: page, size: undefined});
+    const {data} = useGetOrdersQuery({page: page, size: 12, sort: ['id','desc']});
 
     return (
         <>

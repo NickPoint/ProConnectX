@@ -1,7 +1,7 @@
 import {Stack, Typography} from "@mui/material";
 import {StarRate} from "@mui/icons-material";
 import Chip from "@mui/material/Chip";
-import { t } from "i18next";
+import {t} from "i18next";
 
 export type RatingProps =
     | { rating: number; ratingCount: undefined, withRatingCount?: false }

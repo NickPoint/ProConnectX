@@ -7,7 +7,8 @@ import {
     Chip,
     Container,
     Divider,
-    Fab, GlobalStyles,
+    Fab,
+    GlobalStyles,
     Step,
     StepButton,
     StepContent,
@@ -60,39 +61,178 @@ const GridWithDividers = React.forwardRef<HTMLDivElement, GridWithDividersProps>
     }
 );
 
-const ServicePage = () => {
-    const dispatch = useAppDispatch();
+const DesktopServicePage = ({user, service}) => {
     const [activeStep, setActiveStep] = React.useState(0);
-    const {id} = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const {t} = useTranslation();
-    const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-    if (!id) {
-        navigate('/404')
-        return;
-    }
+    return (
+        <Grid container spacing={8} alignItems='flex-start'>
+            <Grid size={7}>
+                <Grid component={Paper} size={12} sx={{position: 'relative', overflow: 'hidden'}}>
+                    <GlobalStyles
+                        styles={{
+                            '.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic': {
+                                bottom: '110px',
+                            },
+                        }}
+                    />
+                    <Swiper
+                        modules={[Navigation, Pagination, Autoplay]}
+                        spaceBetween={16}
+                        slidesPerView={1}
+                        navigation
+                        pagination={{
+                            clickable: true,
+                            dynamicBullets: true,
+                        }}
+                        autoplay={{delay: 3500}}
+                        loop
+                        style={{
+                            aspectRatio: '16 / 9'
+                        }}
+                    >
+                        {service.galleryUrls.map((url, index) => (
+                            <SwiperSlide key={index}>
+                                <img
+                                    src={url}
+                                    alt={`Slide ${index}`}
+                                    style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                    <Box sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        zIndex: 1,
+                        pointerEvents: 'none',
+                        background: `linear-gradient(to bottom, transparent 75%, #000)`,
+                    }}>
+                    </Box>
+                </Grid>
+                <GridWithDividers container size={12} spacing={4} sx={{mt: -10, position: 'relative', zIndex: 1}}>
+                    <Grid size={12}>
+                        <Box sx={{
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            display: 'flex',
+                            color: 'white',
+                            px: 1,
+                        }}>
+                            <UserCard variant='box' {...service.freelancer} />
+                            <Fab color='primary'>
+                                <Message/>
+                            </Fab>
+                        </Box>
+                    </Grid>
+                    <Grid container size={12} spacing={2} alignItems='center'>
+                        <Grid size={6}>
+                            <Typography sx={{textTransform: 'capitalize'}} variant='h3'
+                                        component='h1'>{service.title}</Typography>
+                            <Rating {...service} withRatingCount/>
 
-    useEffect(() => {
-        dispatch(setPageTitle(t('service.page.title')));
-    }, [dispatch]);
+                        </Grid>
+                        <Grid size={6} textAlign='right'>
+                            <Typography variant='h4' fontWeight='700'>${service.price}</Typography>
+                            <Typography variant='body2'>{t('service.package.basic')}</Typography>
+                        </Grid>
+                    </Grid>
+                </GridWithDividers>
+            </Grid>
+            <GridWithDividers container size={5} spacing={4}>
+                <Grid container size={12} spacing={2}>
+                    <Grid size={12}>
+                        <Typography variant='h4' component='h2'>{t('service.page.description')}</Typography>
+                    </Grid>
+                    <Grid size={12} dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(service.description)}}/>
+                    <Grid size={12}>
+                        <VerticallyScrollingContainer>
+                            {service.address &&
+                                <Chip color='secondary' icon={<Place/>} variant='filled'
+                                      label={`${service.address.city}, ${service.address.country}`}/>
+                            }
+                            {
+                                service.categories.map((category, index) => (
+                                    <Chip key={index} color='primary' variant='outlined'
+                                          label={t(`enum.categories.${category}`)}/>
+                                ))
+                            }
+                        </VerticallyScrollingContainer>
+                    </Grid>
+                </Grid>
+                {/*TODO: add packages*/}
+                {service.workflow && service.workflow.length > 0 &&
+                    <Grid container size={12} spacing={2}>
+                        <Grid size={12}>
+                            <Typography variant='h4' component='h2'>{t('service.page.workflow')}</Typography>
+                        </Grid>
+                        <Grid size={12} component={Paper} sx={{p: 2}}>
+                            <Stepper nonLinear orientation="vertical" activeStep={activeStep}>
+                                {[...service.workflow]
+                                    .sort((a, b) => a.stepNumber - b.stepNumber)
+                                    .map((step, index) => (
+                                        <Step key={index}>
+                                            <StepButton onClick={() => setActiveStep(index)}>
+                                                <Typography variant="h6">{step.title}</Typography>
+                                            </StepButton>
+                                            {step.description &&
+                                                <StepContent>
+                                                    <Typography variant="body1" color="text.secondary">
+                                                        {step.description}
+                                                    </Typography>
+                                                </StepContent>}
+                                        </Step>
+                                    ))}
+                            </Stepper>
+                        </Grid>
+                    </Grid>
+                }
+                {service.faqs && service.faqs.length > 0 &&
+                    <Grid container size={12} spacing={2}>
+                        <Grid size={12}>
+                            <Typography variant='h4' component='h2'>{t('service.page.faq')}</Typography>
+                        </Grid>
+                        <Grid size={12}>
+                            {service.faqs.map((faq, index) => (
+                                <Accordion key={index}>
+                                    <AccordionSummary expandIcon={<ExpandMore/>}>
+                                        <Typography variant="h6">{faq.question}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography variant="body1">
+                                            {faq.answer}
+                                        </Typography>
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))}
+                        </Grid>
+                    </Grid>
+                }
+                {service.reviews && service.reviews.length > 0 &&
+                    <Grid container size={12} spacing={2}>
+                        <Grid size={12}>
+                            <Typography variant='h4' component='h2'>Reviews</Typography>
+                        </Grid>
+                        <Reviews {...service} />
+                    </Grid>
+                }
+            </GridWithDividers>
+            {user?.activeRole === RoleType.RoleClient &&
+                <Grid size={12}>
+                    <BookServiceForm {...service}/>
+                </Grid>}
+        </Grid>
+    );
+}
 
-    const {data: user} = useGetCurrentUserQuery();
-    const {data: service, isLoading, isFetching}
-        = useGetServiceQuery({id: Number.parseInt(id)});
+const MobileServicePage = ({user, service}) => {
+    const [activeStep, setActiveStep] = React.useState(0);
+    const {t} = useTranslation();
 
-    if (isLoading || isFetching) {
-        return <GlobalLoadingBackdrop/>
-    }
-
-
-    if (!service) {
-        navigate('/404')
-        return;
-    }
-
-    return (<>
+    return (
         <Grid container>
             <Grid size={12} sx={{position: 'relative', overflow: 'hidden'}}>
                 <GlobalStyles
@@ -115,7 +255,7 @@ const ServicePage = () => {
                     autoplay={{delay: 3500}}
                     loop
                     style={{
-                        aspectRatio: isSmallScreen ? '1 / 1' : '16 / 7',
+                        aspectRatio: '1 / 1'
                     }}
                 >
                     {service.galleryUrls.map((url, index) => (
@@ -250,7 +390,44 @@ const ServicePage = () => {
                     <BookServiceForm {...service}/>
                 </Grid>}
         </Grid>
-    </>);
+    );
+}
+
+const ServicePage = () => {
+    const dispatch = useAppDispatch();
+    const {id} = useParams<{ id: string }>();
+    const navigate = useNavigate();
+    const {t} = useTranslation();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+    if (!id) {
+        navigate('/404')
+        return;
+    }
+
+    useEffect(() => {
+        dispatch(setPageTitle(t('service.page.title')));
+    }, [dispatch]);
+
+    const {data: user} = useGetCurrentUserQuery();
+    const {data: service, isLoading, isFetching}
+        = useGetServiceQuery({id: Number.parseInt(id)});
+
+    if (isLoading || isFetching) {
+        return <GlobalLoadingBackdrop/>
+    }
+
+    if (!service) {
+        navigate('/404')
+        return;
+    }
+
+    if (isMobile) {
+        return <MobileServicePage user={user} service={service}/>;
+    } else {
+        return <DesktopServicePage user={user} service={service}/>;
+    }
 }
 
 export default ServicePage;

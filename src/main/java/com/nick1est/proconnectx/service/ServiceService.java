@@ -1,5 +1,6 @@
 package com.nick1est.proconnectx.service;
 
+import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.*;
 import com.nick1est.proconnectx.dto.*;
 import com.nick1est.proconnectx.exception.NotFoundException;
@@ -7,18 +8,18 @@ import com.nick1est.proconnectx.mapper.CategoryMapper;
 import com.nick1est.proconnectx.mapper.ServiceMapper;
 import com.nick1est.proconnectx.repository.ServiceRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -63,63 +64,104 @@ public class ServiceService {
     }
 
     @Transactional
-    public Page<LightweightServiceDto> findFilteredServices(ServiceFilter serviceFilter, Pageable pageable) {
-        log.info("Finding filtered services: {}", serviceFilter);
+    public Page<LightweightServiceDto> getServices(ServiceFilter serviceFilter, Pageable pageable) {
         List<Category> categories = categoryMapper.toDaoList(serviceFilter.getCategories());
+        Specification<Service> spec = ServiceSpecifications.buildSpecification(serviceFilter, categories);
+        Page<Service> services = serviceRepository.findAll(spec, pageable);
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Service> query = cb.createQuery(Service.class);
-        Root<Service> service = query.from(Service.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (serviceFilter.getTitle() != null && !serviceFilter.getTitle().isEmpty()) {
-            predicates.add(cb.like(cb.lower(service.get("title")), "%" + serviceFilter.getTitle().toLowerCase() + "%"));
-        }
-
-        if (categories != null && !categories.isEmpty()) {
-            Join<Service, Category> categoryJoin = service.join("categories", JoinType.LEFT);
-            predicates.add(categoryJoin.in(categories));
-        }
-
-        if (serviceFilter.getRating() != null) {
-            predicates.add(cb.or(
-                    cb.and(
-                            cb.greaterThan(service.get("ratingCount"), 5),
-                            cb.greaterThanOrEqualTo(service.get("rating"), serviceFilter.getRating())
-                    ),
-                    cb.lessThanOrEqualTo(service.get("ratingCount"), 5)
-            ));
-        }
-
-        if (serviceFilter.getMinBudget() != null) {
-            predicates.add(cb.greaterThanOrEqualTo(service.get("price"), serviceFilter.getMinBudget()));
-        }
-        if (serviceFilter.getMaxBudget() != null) {
-            predicates.add(cb.lessThanOrEqualTo(service.get("price"), serviceFilter.getMaxBudget()));
-        }
-
-        query.where(cb.and(predicates.toArray(new Predicate[0])));
-
-        int pageNumber = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
-        int firstResult = pageNumber * pageSize;
-
-        TypedQuery<Service> typedQuery = entityManager.createQuery(query);
-        typedQuery.setFirstResult(firstResult);
-        typedQuery.setMaxResults(pageSize);
-
-        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        Root<Service> countRoot = countQuery.from(Service.class);
-        countQuery.select(cb.count(countRoot)).where(cb.and(predicates.toArray(new Predicate[0])));
-
-        Long total = entityManager.createQuery(countQuery).getSingleResult();
-
-        List<Service> resultList = typedQuery.getResultList();
-        List<LightweightServiceDto> dtoList = serviceMapper.toDtoList(resultList);
-
-        return new PageImpl<>(dtoList, pageable, total);
+        return services.map(serviceMapper::toLightDto);
     }
 
+    @Transactional
+    public Page<LightweightServiceDto> getUserServices(UserDetailsImpl userDetails, Pageable pageable) {
+        Specification<Service> spec = ServiceSpecifications.filterByUser(userDetails);
+        Page<Service> services = serviceRepository.findAll(spec, pageable);
 
+        return services.map(serviceMapper::toLightDto);
+    }
+
+    public class ServiceSpecifications {
+
+        public static Specification<Service> titleLike(String title) {
+            return (root, query, cb) -> {
+                if (title == null || title.isEmpty()) return null;
+                return cb.like(cb.lower(root.get("title")), "%" + title.toLowerCase() + "%");
+            };
+        }
+
+        public static Specification<Service> hasCategories(List<Category> categories) {
+            return (root, query, cb) -> {
+                if (categories == null || categories.isEmpty()) return null;
+                query.distinct(true);
+                Join<Service, Category> categoryJoin = root.join("categories", JoinType.LEFT);
+                return categoryJoin.in(categories);
+            };
+        }
+
+        public static Specification<Service> addressFilter(String partialAddress) {
+            return (root, query, cb) -> {
+                if (partialAddress == null || partialAddress.isEmpty()) return null;
+                Join<Service, Address> addressJoin = root.join("address", JoinType.LEFT);
+
+                Predicate streetPredicate = cb.like(cb.lower(addressJoin.get("street")), "%" + partialAddress.toLowerCase() + "%");
+                Predicate cityPredicate = cb.like(cb.lower(addressJoin.get("city")), "%" + partialAddress.toLowerCase() + "%");
+                Predicate regionPredicate = cb.like(cb.lower(addressJoin.get("region")), "%" + partialAddress.toLowerCase() + "%");
+                Predicate countryPredicate = cb.like(cb.lower(addressJoin.get("country")), "%" + partialAddress.toLowerCase() + "%");
+                Predicate houseNumberPredicate = cb.like(cb.lower(addressJoin.get("houseNumber")), "%" + partialAddress.toLowerCase() + "%");
+                Predicate postalCodePredicate = cb.like(cb.lower(addressJoin.get("postalCode")), "%" + partialAddress.toLowerCase() + "%");
+
+
+                return cb.or(streetPredicate, cityPredicate, regionPredicate, countryPredicate, houseNumberPredicate, postalCodePredicate);
+            };
+        }
+
+        public static Specification<Service> ratingFilter(Double rating) {
+            return (root, query, cb) -> {
+                if (rating == null) return null;
+                return cb.or(
+                        cb.and(
+                                cb.greaterThan(root.get("ratingCount"), 5),
+                                cb.greaterThanOrEqualTo(root.get("rating"), rating)
+                        ),
+                        cb.lessThanOrEqualTo(root.get("ratingCount"), 5)
+                );
+            };
+        }
+
+        public static Specification<Service> minBudget(Double min) {
+            return (root, query, cb) -> {
+                if (min == null) return null;
+                return cb.greaterThanOrEqualTo(root.get("price"), min);
+            };
+        }
+
+        public static Specification<Service> maxBudget(Double max) {
+            return (root, query, cb) -> {
+                if (max == null) return null;
+                return cb.lessThanOrEqualTo(root.get("price"), max);
+            };
+        }
+
+        public static Specification<Service> filterByUser(UserDetailsImpl userDetails) {
+            return (root, query, cb) -> {
+                if (RoleType.ROLE_ADMIN.equals(userDetails.getActiveRole())) {
+                    return cb.conjunction();
+                } else if (RoleType.ROLE_FREELANCER.equals(userDetails.getActiveRole())) {
+                    return cb.equal(root.get("freelancer"), userDetails.getFreelancer());
+                } else {
+                    return cb.disjunction();
+                }
+            };
+        }
+
+        public static Specification<Service> buildSpecification(ServiceFilter filter, List<Category> categories) {
+            return Specification
+                    .where(titleLike(filter.getTitle()))
+                    .and(hasCategories(categories))
+                    .and(ratingFilter(filter.getRating()))
+                    .and(minBudget(filter.getMinBudget()))
+                    .and(maxBudget(filter.getMaxBudget()))
+                    .and(addressFilter(filter.getLocation()));
+        }
+    }
 }

@@ -1,12 +1,13 @@
-import { emptySplitApi as api } from "./emptyApi"
+import {emptySplitApi as api} from "./emptyApi"
+
 export const addTagTypes = [
   "Order",
   "Freelancer",
   "Dispute",
+  "Client",
   "Registration",
   "Service",
   "File",
-  "Client",
   "Auth",
   "test-controller",
   "Statistics",
@@ -123,6 +124,16 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Dispute"],
       }),
+      updateClient: build.mutation<UpdateClientApiResponse, UpdateClientApiArg>(
+        {
+          query: queryArg => ({
+            url: `/client/profile`,
+            method: "PUT",
+            body: queryArg.userProfileUpdateDto,
+          }),
+          invalidatesTags: ["Client"],
+        },
+      ),
       rejectRegistrationRequest: build.mutation<
         RejectRegistrationRequestApiResponse,
         RejectRegistrationRequestApiArg
@@ -144,6 +155,23 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Registration"],
       }),
+      getServices: build.query<GetServicesApiResponse, GetServicesApiArg>({
+        query: queryArg => ({
+          url: `/service`,
+          params: {
+            title: queryArg.title,
+            categories: queryArg.categories,
+            location: queryArg.location,
+            rating: queryArg.rating,
+            minBudget: queryArg.minBudget,
+            maxBudget: queryArg.maxBudget,
+            page: queryArg.page,
+            size: queryArg.size,
+            sort: queryArg.sort,
+          },
+        }),
+        providesTags: ["Service"],
+      }),
       createService: build.mutation<
         CreateServiceApiResponse,
         CreateServiceApiArg
@@ -156,21 +184,6 @@ const injectedRtkApi = api
           },
         }),
         invalidatesTags: ["Service"],
-      }),
-      getFilteredServices: build.query<
-        GetFilteredServicesApiResponse,
-        GetFilteredServicesApiArg
-      >({
-        query: queryArg => ({
-          url: `/service/filter`,
-          method: "POST",
-          body: queryArg.serviceFilter,
-          params: {
-            page: queryArg.page,
-            size: queryArg.size,
-          },
-        }),
-        providesTags: ["Service"],
       }),
       bookService: build.mutation<BookServiceApiResponse, BookServiceApiArg>({
         query: queryArg => ({
@@ -270,6 +283,16 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Auth"],
       }),
+      addAccount: build.mutation<AddAccountApiResponse, AddAccountApiArg>({
+        query: queryArg => ({
+          url: `/auth/add-account`,
+          method: "POST",
+          params: {
+            accountType: queryArg.accountType,
+          },
+        }),
+        invalidatesTags: ["Auth"],
+      }),
       userAccess: build.query<UserAccessApiResponse, UserAccessApiArg>({
         query: () => ({ url: `/test/user` }),
         providesTags: ["test-controller"],
@@ -307,31 +330,34 @@ const injectedRtkApi = api
         query: queryArg => ({ url: `/service/${queryArg.id}` }),
         providesTags: ["Service"],
       }),
+      getUserServices: build.query<
+        GetUserServicesApiResponse,
+        GetUserServicesApiArg
+      >({
+        query: queryArg => ({
+          url: `/service/user-services`,
+          params: {
+            page: queryArg.page,
+            size: queryArg.size,
+            sort: queryArg.sort,
+          },
+        }),
+        providesTags: ["Service"],
+      }),
       getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
         query: queryArg => ({
           url: `/orders`,
           params: {
+            statuses: queryArg.statuses,
             page: queryArg.page,
             size: queryArg.size,
+            sort: queryArg.sort,
           },
         }),
         providesTags: ["Order"],
       }),
       getOrder: build.query<GetOrderApiResponse, GetOrderApiArg>({
         query: queryArg => ({ url: `/orders/${queryArg.orderId}` }),
-        providesTags: ["Order"],
-      }),
-      getActiveOrders: build.query<
-        GetActiveOrdersApiResponse,
-        GetActiveOrdersApiArg
-      >({
-        query: queryArg => ({
-          url: `/orders/active`,
-          params: {
-            page: queryArg.page,
-            size: queryArg.size,
-          },
-        }),
         providesTags: ["Order"],
       }),
       getFile: build.query<GetFileApiResponse, GetFileApiArg>({
@@ -430,6 +456,10 @@ export type AcceptProposalApiResponse = unknown
 export type AcceptProposalApiArg = {
   disputeId: number
 }
+export type UpdateClientApiResponse = unknown
+export type UpdateClientApiArg = {
+  userProfileUpdateDto: UserProfileUpdateDto
+}
 export type RejectRegistrationRequestApiResponse = /** status 200 OK */ object
 export type RejectRegistrationRequestApiArg = {
   id: number
@@ -441,16 +471,25 @@ export type ApproveRegistrationRequestApiArg = {
   id: number
   type: "ADMIN" | "CLIENT" | "FREELANCER"
 }
+export type GetServicesApiResponse =
+  /** status 200 OK */ PageLightweightServiceDto
+export type GetServicesApiArg = {
+  title?: string
+  categories?: CategoryType[]
+  location?: string
+  rating?: number
+  minBudget?: number
+  maxBudget?: number
+  /** Zero-based page index (0..N) */
+  page?: number
+  /** The size of the page to be returned */
+  size?: number
+  /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+  sort?: string[]
+}
 export type CreateServiceApiResponse = /** status 201 Created */ number
 export type CreateServiceApiArg = {
   service: ServiceCreateDto
-}
-export type GetFilteredServicesApiResponse =
-  /** status 200 OK */ PageLightweightServiceDto
-export type GetFilteredServicesApiArg = {
-  page?: number
-  size?: number
-  serviceFilter: ServiceFilter
 }
 export type BookServiceApiResponse = /** status 200 OK */ number
 export type BookServiceApiArg = {
@@ -494,6 +533,10 @@ export type CheckEmailApiResponse = unknown
 export type CheckEmailApiArg = {
   email: string
 }
+export type AddAccountApiResponse = /** status 200 OK */ object
+export type AddAccountApiArg = {
+  accountType: "ADMIN" | "CLIENT" | "FREELANCER"
+}
 export type UserAccessApiResponse = /** status 200 OK */ string
 export type UserAccessApiArg = void
 export type ModeratorAccessApiResponse = /** status 200 OK */ string
@@ -514,19 +557,29 @@ export type GetServiceApiResponse = /** status 200 OK */ ServiceDto
 export type GetServiceApiArg = {
   id: number
 }
+export type GetUserServicesApiResponse =
+  /** status 200 OK */ PageLightweightServiceDto
+export type GetUserServicesApiArg = {
+  /** Zero-based page index (0..N) */
+  page?: number
+  /** The size of the page to be returned */
+  size?: number
+  /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+  sort?: string[]
+}
 export type GetOrdersApiResponse = /** status 200 OK */ PageOrderDto
 export type GetOrdersApiArg = {
+  statuses?: OrderStatus[]
+  /** Zero-based page index (0..N) */
   page?: number
+  /** The size of the page to be returned */
   size?: number
+  /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+  sort?: string[]
 }
 export type GetOrderApiResponse = /** status 200 OK */ OrderDto
 export type GetOrderApiArg = {
   orderId: number
-}
-export type GetActiveOrdersApiResponse = /** status 200 OK */ PageOrderDto
-export type GetActiveOrdersApiArg = {
-  page?: number
-  size?: number
 }
 export type GetFileApiResponse = /** status 200 OK */ Blob
 export type GetFileApiArg = {
@@ -568,40 +621,6 @@ export type UserProfileUpdateDto = {
   address: AddressDto
   phoneNumber: string
 }
-export type ServiceAddressDto = {
-  street?: string
-  city: string
-  region: string
-  postalCode?: string
-  country: string
-  houseNumber?: string
-}
-export type ServiceCreateDto = {
-  title: string
-  description: string
-  shortDescription: string
-  price: number
-  address?: ServiceAddressDto
-  categories: CategoryType[]
-  images: Blob[]
-  workflowJson?: string
-  faqsJson?: string
-}
-export type SortObject = {
-  direction?: string
-  nullHandling?: string
-  ascending?: boolean
-  property?: string
-  ignoreCase?: boolean
-}
-export type PageableObject = {
-  paged?: boolean
-  unpaged?: boolean
-  pageNumber?: number
-  pageSize?: number
-  offset?: number
-  sort?: SortObject[]
-}
 export type LightweightAddressDto = {
   city: string
   postalCode: string
@@ -629,26 +648,52 @@ export type LightweightServiceDto = {
   postedAt: string
   thumbnailUrl: string
 }
+export type SortObject = {
+  direction?: string
+  nullHandling?: string
+  ascending?: boolean
+  property?: string
+  ignoreCase?: boolean
+}
+export type PageableObject = {
+  offset?: number
+  sort?: SortObject[]
+  pageNumber?: number
+  pageSize?: number
+  paged?: boolean
+  unpaged?: boolean
+}
 export type PageLightweightServiceDto = {
   totalPages?: number
   totalElements?: number
-  numberOfElements?: number
-  pageable?: PageableObject
-  first?: boolean
-  last?: boolean
   size?: number
   content?: LightweightServiceDto[]
   number?: number
   sort?: SortObject[]
+  first?: boolean
+  last?: boolean
+  numberOfElements?: number
+  pageable?: PageableObject
   empty?: boolean
 }
-export type ServiceFilter = {
-  title?: string
+export type ServiceAddressDto = {
+  street?: string
+  city: string
+  region: string
+  postalCode?: string
+  country: string
+  houseNumber?: string
+}
+export type ServiceCreateDto = {
+  title: string
+  description: string
+  shortDescription: string
+  price: number
+  address?: ServiceAddressDto
   categories: CategoryType[]
-  location?: string
-  rating: number
-  minBudget: number
-  maxBudget: number
+  images: Blob[]
+  workflowJson?: string
+  faqsJson?: string
 }
 export type FreelancerDto = {
   id: number
@@ -707,7 +752,7 @@ export type AuthResponse = {
 export type SignupFormRequest = {
   email: string
   password: string
-  role: RoleType
+  accountType: AccountType
 }
 export type LoginRequest = {
   email: string
@@ -796,14 +841,14 @@ export type OrderDto = {
 export type PageOrderDto = {
   totalPages?: number
   totalElements?: number
-  numberOfElements?: number
-  pageable?: PageableObject
-  first?: boolean
-  last?: boolean
   size?: number
   content?: OrderDto[]
   number?: number
   sort?: SortObject[]
+  first?: boolean
+  last?: boolean
+  numberOfElements?: number
+  pageable?: PageableObject
   empty?: boolean
 }
 export type DisputeDto = {
@@ -1058,10 +1103,11 @@ export const {
   useForceReleaseMutation,
   useForceRefundMutation,
   useAcceptProposalMutation,
+  useUpdateClientMutation,
   useRejectRegistrationRequestMutation,
   useApproveRegistrationRequestMutation,
+  useGetServicesQuery,
   useCreateServiceMutation,
-  useGetFilteredServicesQuery,
   useBookServiceMutation,
   useGetFreelancerQuery,
   useCreateFreelancerMutation,
@@ -1073,15 +1119,16 @@ export const {
   useLogoutUserMutation,
   useAuthenticateUserMutation,
   useCheckEmailMutation,
+  useAddAccountMutation,
   useUserAccessQuery,
   useModeratorAccessQuery,
   useAllAccessQuery,
   useAdminAccessQuery,
   useGetStatsOverviewQuery,
   useGetServiceQuery,
+  useGetUserServicesQuery,
   useGetOrdersQuery,
   useGetOrderQuery,
-  useGetActiveOrdersQuery,
   useGetFileQuery,
   useGetDisputeQuery,
   useGetCurrentUserQuery,

@@ -18,9 +18,10 @@ public class OrderDisputeService {
 
     @Transactional
     public void approveOrderFromDispute(Order order, UserDetailsImpl userDetails, AccountType accountType) {
-        order.setStatus(OrderStatus.APPROVED);
+        order.setStatus(OrderStatus.COMPLETED);
         transactionService.releaseTransaction(order);
         eventService.recordOrderApproved(order, userDetails, accountType);
+        eventService.recordOrderCompleted(order);
     }
 
     @Transactional

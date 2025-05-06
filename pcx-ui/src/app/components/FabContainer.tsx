@@ -1,11 +1,11 @@
 import {useAppDispatch, useAppSelector} from "../hooks.ts";
-import {removeFab, selectFabs} from "../../features/fab/fabSlice.ts";
-import {Box, Collapse, Fab, Stack, Zoom} from "@mui/material";
+import {selectFabs} from "../../features/fab/fabSlice.ts";
+import {Collapse, Fab, Stack} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import theme from "../theme/theme.tsx";
 import {ArrowUpward} from "@mui/icons-material";
-import { TransitionGroup } from "react-transition-group";
-import { useNavigate } from "react-router-dom";
+import {TransitionGroup} from "react-transition-group";
+import {useNavigate} from "react-router-dom";
 
 const chooseIcon = (iconName: string) => {
     switch (iconName) {

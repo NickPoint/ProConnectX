@@ -1,7 +1,6 @@
 package com.nick1est.proconnectx.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data

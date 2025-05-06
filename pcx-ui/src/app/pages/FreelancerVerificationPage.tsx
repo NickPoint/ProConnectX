@@ -12,7 +12,6 @@ import {useCreateFreelancerMutation} from "../../features/api/enhancedApi.ts";
 import {ExtendedAddress} from "../components/AddressAutocomplete.tsx";
 import {useLoadScript} from "@react-google-maps/api";
 import {setIsLoading} from "../../features/loading/loadingSlice.ts";
-import {Category} from "../../features/enums.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../store.ts";
 import {FieldRenderer} from "../components/FieldRenderer.tsx";

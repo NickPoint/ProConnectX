@@ -2,28 +2,27 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.Event;
-import com.nick1est.proconnectx.dao.EventType;
+import com.nick1est.proconnectx.dao.AccountType;
 import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dto.*;
 import com.nick1est.proconnectx.exception.EmailAlreadyExistsException;
-import com.nick1est.proconnectx.service.*;
+import com.nick1est.proconnectx.service.AuthService;
+import com.nick1est.proconnectx.service.RoleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -71,6 +70,14 @@ public class AuthController {
                 .body(authResponse);
     }
 
+    @PostMapping("/add-account")
+    @PreAuthorize("hasAnyRole('CLIENT','FREELANCER','UNVERIFIED')")
+    public ResponseEntity<?> addAccount(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                        @NotNull AccountType accountType) {
+        authService.addAccount(userDetails.getPrincipal().getId(), accountType);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @PostMapping("/check-email")
     public ResponseEntity<Void> checkEmail(@RequestParam @NotBlank @Email String email) {
         boolean exists = authService.checkEmailExists(email);
@@ -90,7 +97,7 @@ public class AuthController {
 
     @PostMapping("/switch-role")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> switchRole(@RequestParam RoleType role, @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
+    public ResponseEntity<?> switchRole(@RequestParam RoleType role, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         val authResponse = authService.switchRole(userDetails, role);
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, authResponse.getToken().toString())

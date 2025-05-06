@@ -1,4 +1,4 @@
-import {AppBar, Box, IconButton, Toolbar, Typography, useScrollTrigger} from "@mui/material";
+import {AppBar, IconButton, Toolbar, Typography, useScrollTrigger} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {useAppSelector} from "../../hooks";
 import {selectPageTitle} from "../../../features/header/headerSlice";

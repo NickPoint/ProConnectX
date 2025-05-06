@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
-import { useDrawingArea } from '@mui/x-charts/hooks';
-import { styled } from '@mui/material/styles';
+import {PieChart} from '@mui/x-charts/PieChart';
+import {useDrawingArea} from '@mui/x-charts/hooks';
+import {styled} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import { Flag } from '@mui/icons-material';
+import LinearProgress, {linearProgressClasses} from '@mui/material/LinearProgress';
+import {Flag} from '@mui/icons-material';
 
 const data = [
   { label: 'India', value: 50000 },

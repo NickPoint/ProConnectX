@@ -1,6 +1,6 @@
-import {Field, FieldArray} from "formik";
+import {Field, FieldArray, useField} from "formik";
 import {TextField} from "formik-mui";
-import { DatePicker } from 'formik-mui-x-date-pickers';
+import {DatePicker} from 'formik-mui-x-date-pickers';
 import {
     Button,
     FormControl,
@@ -193,6 +193,29 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ step, fieldName, f
             </Grid>
         );
     }
+
+    if (fieldConfig.type === 'number') {
+        const [, , {setValue}] = useField(fullName);
+
+        return (<Grid size={{xs: size}}>
+            <Field
+                component={TextField}
+                type="number"
+                name={fullName}
+                label={t(`form.fields.${fieldConfig.label}`)}
+                sx={{display: fieldConfig.display}}
+                fullWidth
+                disabled={fieldConfig.disabled}
+                onFocus={() => dispatch(setActiveField(helperText ? helperText : fullName))}
+                required={fieldConfig.required}
+                onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    setValue(value);
+                }}
+            />
+        </Grid>);
+    }
+
 
     return (
         <Grid size={{xs: size}}>

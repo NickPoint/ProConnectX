@@ -5,52 +5,77 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import {ArrowBack, HomeRounded, Work} from '@mui/icons-material';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import {AppRegistration} from '@mui/icons-material';
 import {useTranslation} from 'react-i18next';
-import {useAppDispatch, useAppSelector} from "../../hooks.ts";
-import { setActiveTab, selectActiveTab } from '../../../features/dashboard/dashboardSlice.ts';
 import {useLocation, useNavigate} from "react-router-dom";
-import {useEffect} from "react";
-
-const mainListItems = [
-    {text: 'home', icon: <HomeRoundedIcon/>},
-    {text: 'orders', icon: <AssignmentRoundedIcon/>},
-];
-
-const secondaryListItems = [
-    {text: 'settings', icon: <SettingsRoundedIcon/>}
-];
+import {RoleType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
 
 export default function MenuContent() {
+    const {data: user} = useGetCurrentUserQuery();
     const navigate = useNavigate();
     const location = useLocation();
     const {t} = useTranslation();
 
+    const mainListItems = [
+        {
+            label: 'home',
+            icon: <HomeRounded />,
+            onClick: () => navigate('/dashboard/home'),
+            display: true,
+        },
+        {
+            label: 'orders',
+            icon: <AssignmentRoundedIcon/>,
+            onClick: () => navigate('/dashboard/orders'),
+            display: RoleType.RoleUnverified !== user?.activeRole,
+        },
+        {
+            label: 'services',
+            icon: <Work/>,
+            onClick: () => navigate('/dashboard/services'),
+            display: RoleType.RoleFreelancer === user?.activeRole,
+        },
+    ];
+
+    const secondaryListItems = [
+        {
+            label: 'settings',
+            icon: <SettingsRoundedIcon/>,
+            onClick: () => navigate('/dashboard/settings'),
+            display: user && [RoleType.RoleFreelancer, RoleType.RoleClient].includes(user?.activeRole)
+        },
+        {
+            label: 'exitDashboard',
+            icon: <ArrowBack />,
+            onClick: () => navigate('/'),
+            display: true,
+        },
+    ];
+
     return (
         <Stack sx={{flexGrow: 1, p: 1, justifyContent: 'space-between'}}>
             <List dense>
-                {mainListItems.map((item, index) => (
+                {mainListItems.map(({label, icon, onClick, display}, index) => (
+                    display &&
                     <ListItem key={index} disablePadding sx={{display: 'block'}}>
-                        <ListItemButton onClick={() => navigate(item.text)}
-                                        selected={location.pathname === `/dashboard/${item.text}`}>
-                            <ListItemIcon>{item.icon}</ListItemIcon>
-                            <ListItemText primary={t(`dashboard.menu.${item.text}.title`)}/>
+                        <ListItemButton onClick={onClick}
+                                        selected={location.pathname === `/dashboard/${label}`}>
+                            <ListItemIcon>{icon}</ListItemIcon>
+                            <ListItemText primary={t(`dashboard.menu.${label}.title`)}/>
                         </ListItemButton>
                     </ListItem>
                 ))}
             </List>
             <List dense>
-                {secondaryListItems.map((item, index) => (
+                {secondaryListItems.map(({label, icon, onClick, display}, index) => (
+                    display &&
                     <ListItem key={index} disablePadding sx={{display: 'block'}}>
-                        <ListItemButton onClick={() => navigate(item.text)}
-                                        selected={location.pathname === `/dashboard/${item.text}`}>
-                            <ListItemIcon>{item.icon}</ListItemIcon>
-                            <ListItemText primary={t(`dashboard.menu.${item.text}.title`)}/>
+                        <ListItemButton onClick={onClick}
+                                        selected={location.pathname === `/dashboard/${label}`}>
+                            <ListItemIcon>{icon}</ListItemIcon>
+                            <ListItemText primary={t(`dashboard.menu.${label}.title`)}/>
                         </ListItemButton>
                     </ListItem>
                 ))}

@@ -1,9 +1,13 @@
 package com.nick1est.proconnectx.repository;
 
-import com.nick1est.proconnectx.dao.*;
+import com.nick1est.proconnectx.dao.Client;
+import com.nick1est.proconnectx.dao.Freelancer;
+import com.nick1est.proconnectx.dao.Order;
+import com.nick1est.proconnectx.dao.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +16,7 @@ import java.util.Collection;
 
 @Repository
 @RepositoryRestResource(exported = false)
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
     boolean existsByIdAndClient(Long orderId, Client client);
     boolean existsByIdAndServiceFreelancer(Long orderId, Freelancer freelancer);

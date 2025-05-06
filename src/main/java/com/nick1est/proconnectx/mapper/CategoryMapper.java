@@ -3,9 +3,7 @@ package com.nick1est.proconnectx.mapper;
 import com.nick1est.proconnectx.dao.Category;
 import com.nick1est.proconnectx.dao.CategoryType;
 import com.nick1est.proconnectx.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

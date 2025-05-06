@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {SparkLineChart} from '@mui/x-charts/SparkLineChart';
 import {areaElementClasses} from '@mui/x-charts/LineChart';
-import dayjs, {Dayjs} from "dayjs";
+import dayjs from "dayjs";
 import {parseOffsetDateTime} from "../../../utils/dateParser.ts";
 
 export type StatType =
@@ -146,7 +146,7 @@ export default function StatCard({
                             <Typography variant="h4" component="p">
                                 {getModifiedValue(value, type)}
                             </Typography>
-                            {trend && percentGrow &&
+                            {trend &&
                                 <Chip size="small" color={getLabelColor(trend)} label={`${percentGrow}%`}/>
                             }
                         </Stack>

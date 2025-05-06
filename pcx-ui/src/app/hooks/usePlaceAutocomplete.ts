@@ -1,7 +1,12 @@
-import { useCallback } from "react";
-import {setLoading, setSuggestions, setCacheEntry, selectCache } from "../../features/placeAutocomplete/placeAutocompleteSlice";
+import {useCallback} from "react";
+import {
+    selectCache,
+    setCacheEntry,
+    setLoading,
+    setSuggestions
+} from "../../features/placeAutocomplete/placeAutocompleteSlice";
 import {useAppDispatch, useAppSelector} from "../hooks";
-import { debounce } from "@mui/material";
+import {debounce} from "@mui/material";
 
 const usePlacesAutocomplete = () => {
     const dispatch = useAppDispatch();

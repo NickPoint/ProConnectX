@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.repository;
 
-import com.nick1est.proconnectx.dao.*;
+import com.nick1est.proconnectx.dao.DocumentType;
+import com.nick1est.proconnectx.dao.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;

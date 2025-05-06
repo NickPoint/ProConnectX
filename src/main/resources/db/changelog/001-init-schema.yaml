@@ -371,6 +371,8 @@ databaseChangeLog:
         - createTable:
             columns:
               - column:
+                  constraints:
+                    nullable: false
                   name: client_id
                   type: BIGINT
               - column:
@@ -395,7 +397,14 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
                   name: service_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: freelancer_id
                   type: BIGINT
               - column:
                   constraints:
@@ -553,7 +562,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: price
-                  type: NUMERIC(19, 4)
+                  type: NUMERIC(10, 2)
               - column:
                   constraints:
                     nullable: false
@@ -1370,4 +1379,20 @@ databaseChangeLog:
             onUpdate: NO ACTION
             referencedColumnNames: id
             referencedTableName: dispute
+            validate: true
+
+  - changeSet:
+      id: 1745839303759-77
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: freelancer_id
+            baseTableName: orders
+            constraintName: fk_orders_freelancer
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: freelancer
             validate: true

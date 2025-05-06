@@ -1,7 +1,6 @@
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.dao.*;
-import com.nick1est.proconnectx.dto.NotificationDto;
 import com.nick1est.proconnectx.dto.NotificationPayload;
 import com.nick1est.proconnectx.mapper.NotificationMapper;
 import com.nick1est.proconnectx.repository.NotificationRepository;

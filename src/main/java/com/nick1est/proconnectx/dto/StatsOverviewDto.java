@@ -1,7 +1,6 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.StatisticsType;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;

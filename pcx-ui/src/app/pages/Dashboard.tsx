@@ -4,12 +4,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AppNavbar from '../components/dashboard/AppNavbar';
 import Header from '../components/dashboard/Header';
-import DashboardOverviewTab from '../components/dashboard/DashboardOverviewTab.tsx';
 import SideMenu from '../components/dashboard/SideMenu';
-import { selectActiveTab } from '../../features/dashboard/dashboardSlice';
-import { useAppSelector } from '../hooks';
-import RegistrationRequestTab from "../components/dashboard/RegistrationRequestTab.tsx";
-import { Outlet } from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     return (

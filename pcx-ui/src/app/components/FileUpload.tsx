@@ -1,4 +1,4 @@
-import {Field, useField, useFormikContext} from 'formik';
+import {useField, useFormikContext} from 'formik';
 import {useCallback, useState} from 'react';
 import {Box, Card, CardActions, CardContent, CardMedia, IconButton, LinearProgress, Typography} from '@mui/material';
 import {closestCenter, DndContext, PointerSensor, useSensor, useSensors} from '@dnd-kit/core';

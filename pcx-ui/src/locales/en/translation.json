@@ -18,6 +18,10 @@
     "complete": "Complete",
     "save": "Save",
     "imageUpload": "Image Upload",
+    "searchServices": "Search Services",
+    "findTalents": "Find Talents",
+    "join": "Join",
+    "signIn": "Sign In",
     "change": "Change",
     "submitForReview": "Submit for review",
     "connect": "Connect",
@@ -321,9 +325,11 @@
     "errorCode": "404"
   },
   "homePage": {
-    "yourActiveOrders": "Your active orders"
+    "yourActiveOrders": "Your active orders",
+    "newOrders": "New Orders"
   },
   "dashboard": {
+    "title": "Dashboard",
     "registrations": {
       "freelancersRegistrationRequests": "Freelancers registration requests",
       "clientsRegistrationRequests": "Clients registration requests",
@@ -350,8 +356,14 @@
       "orders": {
         "title": "Orders"
       },
+      "services": {
+        "title": "Services"
+      },
       "settings": {
         "title": "Settings"
+      },
+      "exitDashboard": {
+        "title": "Exit Dashboard"
       }
     },
     "stats": {
@@ -368,6 +380,25 @@
           "busy": "Working hard to make you happy!"
         }
       }
+    },
+    "menu": {
+      "openMenu": "Open menu",
+      "dashboard": "Dashboard",
+      "verify": "Verify {{accountType}} account",
+      "switchAccount": "Switch to {{accountType}}",
+      "addAnotherAccount": "Add another account",
+      "logout": "Logout"
+    }
+  },
+  "landingPage": {
+    "hero": {
+      "title": "Connecting Talent with Opportunity — Seamlessly."
+    },
+    "popularServices": {
+      "title": "Most Popular Services"
+    },
+    "categories": {
+      "title": "Categories"
     }
   },
   "join": {
@@ -448,8 +479,10 @@
       "success": "Welcome back!"
     }
   },
-  "userRegistration": {
-    "succes": ""
+  "registration": {
+    "addAccount": {
+      "success": "{{accountType}} account has been successfully registered!"
+    }
   },
   "verification": {
     "title": "Verification",
@@ -526,11 +559,12 @@
           "address": {
             "fullAddress": "Where should this work happen? Remote or a specific location? If remote, then left this field empty."
           },
-          "categories": "Help freelancers find you! Pick the right project categories.",
+          "categories": "Help clients find you! Pick the right project categories.",
           "images": "A picture is worth a thousand words — upload some visuals!"
         },
         "step2": {
-          "description": "Make it shine! Describe your project in detail so freelancers know exactly what you need."
+          "description": "Make it shine! Describe your project in detail so clients know exactly what you need.",
+          "shortDescription": "Give your project the spotlight! Provide key details so clients understand your vision."
         },
         "step3": {
           "workflow": "Break it down: Define the key steps to get your project done smoothly."

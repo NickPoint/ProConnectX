@@ -11,6 +11,11 @@ interface BaseFieldConfig {
     required?: boolean;
     size?: number;
     disabled?: boolean;
+    dependsOn?: {
+        field: string;                // Field to watch (relative path in same object)
+        value?: any;                  // Value that triggers the condition (optional: truthy by default)
+        required?: boolean;          // Override required
+    };
 }
 
 interface TextFieldConfig extends BaseFieldConfig {
@@ -48,7 +53,7 @@ interface FileFieldConfig extends BaseFieldConfig {
     max?: number;
 }
 
-interface AddressGroupFieldConfig extends BaseFieldConfig {
+interface AddressGroupFieldConfig {
     type: 'addressGroup';
     fields: Record<string, TextFieldConfig>;
 }
@@ -113,7 +118,18 @@ export const generateValidationSchema = (fieldsConfig: FieldConfig) => {
                         schema = yup.string();
                 }
 
-                if (fieldConfig.required) {
+                if (fieldConfig.dependsOn) {
+                    const { field, value, required = true } = fieldConfig.dependsOn;
+
+                    schema = schema.when(field, {
+                        is: val => value !== undefined ? val === value : !!val,
+                        then: s => required
+                            ? s.required(
+                                t('form.error.required', { field: t(`form.fields.${fieldConfig.label}`) })
+                            ) : s,
+                        otherwise: s => s.notRequired(),
+                    });
+                } else if (fieldConfig.required) {
                     schema = schema.required(
                         t('form.error.required', { field: t(`form.fields.${fieldConfig.label}`) })
                     );

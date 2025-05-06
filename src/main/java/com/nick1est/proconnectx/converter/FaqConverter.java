@@ -3,7 +3,6 @@ package com.nick1est.proconnectx.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nick1est.proconnectx.dto.Faq;
-import com.nick1est.proconnectx.dto.WorkflowStep;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

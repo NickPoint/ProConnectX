@@ -4,9 +4,11 @@ import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.*;
 import com.nick1est.proconnectx.dto.ClientDto;
 import com.nick1est.proconnectx.dto.employer.registration.ClientRegistrationRequest;
+import com.nick1est.proconnectx.dto.employer.registration.UserProfileUpdateDto;
 import com.nick1est.proconnectx.exception.NotFoundException;
 import com.nick1est.proconnectx.mapper.ClientMapper;
 import com.nick1est.proconnectx.repository.ClientRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -32,7 +34,7 @@ public class ClientService implements AbstractUserInterface<Client> {
     public ClientDto createClient(ClientRegistrationRequest registrationRequest, UserDetailsImpl userDetails) {
         log.info("Registering new client for principal: {}", userDetails.getId());
         val client = getById(userDetails.getClient().getId());
-        clientMapper.updateClientFromDto(registrationRequest, client);
+        clientMapper.updateClientFromRegistrationRequestDto(registrationRequest, client);
         val files = new ArrayList<File>();
         val avatar = fileService.uploadFile(client.getId(), registrationRequest.getAvatarImage(), DocumentType.AVATAR, OwnerType.CLIENT, true);
         files.add(avatar);
@@ -84,5 +86,10 @@ public class ClientService implements AbstractUserInterface<Client> {
                 .findFirst()
                 .map(file -> serverUrl + "/files/" + file.getId())
                 .orElse(null);
+    }
+
+    @Transactional
+    public void updateProfile(Long clientId, @Valid UserProfileUpdateDto userProfileUpdateDto) {
+        clientMapper.updateClientFromProfileUpdate(userProfileUpdateDto, getById(clientId));
     }
 }

@@ -1,6 +1,6 @@
 package com.nick1est.proconnectx.aspect;
 
-import com.nick1est.proconnectx.dao.Service;
+import com.nick1est.proconnectx.dto.ServiceDto;
 import com.nick1est.proconnectx.repository.ServiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,19 @@ public class VisitorCountAspect {
 
     private final ServiceRepository serviceRepository;
 
-    @AfterReturning(pointcut = "execution(* com.nick1est.proconnectx.service.ServiceService.getServiceDtoById(..))",
-            returning = "service")
+    @AfterReturning(
+            pointcut = "execution(* com.nick1est.proconnectx.controller.ServiceController.getService(..))",
+            returning = "result"
+    )
     @Transactional
-    public void incrementVisitorCount(Object service) {
-        if (service instanceof Service serviceInstance) {
-            log.debug("Incrementing visitor count for service {}", serviceInstance.getId());
-            serviceInstance.incrementVisitorCounter();
+    public void incrementVisitorCount(Object result) {
+        if (result instanceof ServiceDto dto) {
+            log.debug("Incrementing visitor count for service {}", dto.getId());
+            serviceRepository.findById(dto.getId()).ifPresent(service -> {
+                service.incrementVisitorCounter();
+                serviceRepository.save(service);
+            });
         }
     }
+
 }

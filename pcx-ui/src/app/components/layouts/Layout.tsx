@@ -4,7 +4,7 @@ import MobileHeader from "../headers/MobileHeader.tsx";
 import Container from "@mui/material/Container";
 import {useTheme} from "@mui/material/styles";
 import {useMediaQuery} from "@mui/material";
-import DekstopHeader from "../headers/DekstopHeader.tsx";
+import DekstopHeader from "../headers/DesktopHeader.tsx";
 
 const Layout = () => {
     const theme = useTheme();

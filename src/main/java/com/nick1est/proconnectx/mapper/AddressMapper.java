@@ -1,13 +1,10 @@
 package com.nick1est.proconnectx.mapper;
 
 import com.nick1est.proconnectx.dao.Address;
-import com.nick1est.proconnectx.dao.Freelancer;
-import com.nick1est.proconnectx.dto.*;
-import com.nick1est.proconnectx.dto.employer.registration.FreelancerRegistrationRequest;
+import com.nick1est.proconnectx.dto.AddressDto;
+import com.nick1est.proconnectx.dto.LightweightAddressDto;
+import com.nick1est.proconnectx.dto.ServiceAddressDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class AddressMapper {

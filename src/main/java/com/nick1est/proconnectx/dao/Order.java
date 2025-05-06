@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -34,20 +33,29 @@ public class Order {
     @NotNull
     private Transaction transaction;
 
-    @JoinColumn
-    @ManyToOne
+    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     private Service service;
 
-    @JoinColumn
+    @JoinColumn(nullable = false)
     @ManyToOne
+    @NotNull
     private Client client;
+
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    @NotNull
+    private Freelancer freelancer;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private OrderStatus status =  OrderStatus.CREATED;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private OrderType type;
 
     @Column

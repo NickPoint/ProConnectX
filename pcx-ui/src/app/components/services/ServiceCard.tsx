@@ -26,7 +26,7 @@ const CustomCardMediaRoot = styled(Box, {
 })<{ ownerState: CustomCardMediaState }>(({theme, ownerState}) => ({
     display: 'flex',
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${ownerState.image})`,
-    backgroundRepeat: 'no-repeaSt',
+    backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     minHeight: 200,
@@ -64,14 +64,18 @@ function getAddressAsString(address: LightweightAddressDto | undefined): string 
     return `${address.country}, ${address.city}`
 }
 
+interface ServiceCardProps extends LightweightServiceDto{
+    publicVariant?: boolean;
+}
 
-const ServiceCard: React.FC<LightweightServiceDto> = (service) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({publicVariant = true, ...service}) => {
     const navigate = useNavigate();
     const {t} = useTranslation();
 
     return (
         <Card>
-            <CardHeader color='primary'
+            {publicVariant ?
+                <CardHeader color='primary'
                         avatar={<Avatar alt={service.freelancer.firstName} src={service.freelancer.avatarImageUrl}/>}
 /*                        action={<ButtonGroup>
                             <IconButton><Star/></IconButton>
@@ -79,7 +83,12 @@ const ServiceCard: React.FC<LightweightServiceDto> = (service) => {
                         </ButtonGroup>}*/
                         title={
                             <Typography>{`${service.freelancer?.firstName} ${service.freelancer?.lastName}`}</Typography>}
-            />
+                /> :
+                <CardHeader color='primary'
+                            title={
+                                <Typography>#{service.id}</Typography>}
+                />
+            }
             <CardActionArea onClick={() => navigate(`/service/${service.id}`)}>
                 <CustomCardMedia image={service.thumbnailUrl}
                                  chips={[

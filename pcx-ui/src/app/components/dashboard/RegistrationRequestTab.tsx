@@ -1,13 +1,19 @@
-import {
-    AccountStatus,
-    AccountType,
-    RegistrationRequestDto,
-} from "../../../features/api/pcxApi.ts";
+import {AccountStatus, AccountType, RegistrationRequestDto,} from "../../../features/api/pcxApi.ts";
 import {FC, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Avatar, Card, CardActionArea, CardContent, Chip, Grid, MenuItem, Stack, TextField, Typography} from "@mui/material";
+import {
+    Avatar,
+    Card,
+    CardActionArea,
+    CardContent,
+    Chip,
+    Grid,
+    MenuItem,
+    Stack,
+    TextField,
+    Typography
+} from "@mui/material";
 import {useTranslation} from "react-i18next";
-import {SelectChangeEvent} from "@mui/material/Select";
 
 
 const RegistrationRequestCard: FC<RegistrationRequestDto> = ({

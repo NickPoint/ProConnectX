@@ -1,4 +1,4 @@
-import { Backdrop, CircularProgress } from '@mui/material';
+import {Backdrop, CircularProgress} from '@mui/material';
 import {useAppSelector} from "../hooks.ts";
 import {selectIsLoading} from "../../features/loading/loadingSlice.ts";
 

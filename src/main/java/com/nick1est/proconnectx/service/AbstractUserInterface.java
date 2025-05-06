@@ -3,8 +3,6 @@ package com.nick1est.proconnectx.service;
 import com.nick1est.proconnectx.dao.AbstractUser;
 import com.nick1est.proconnectx.dao.AccountStatus;
 import com.nick1est.proconnectx.dao.Principal;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

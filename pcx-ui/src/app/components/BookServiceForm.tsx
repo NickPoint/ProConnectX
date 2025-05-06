@@ -17,7 +17,7 @@ import {styled} from "@mui/material/styles";
 import {FreelancerDto, useBookServiceMutation} from "../../features/api/pcxApi.ts";
 import Avatar from "@mui/material/Avatar";
 import {enqueueSnackbar} from "notistack";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {useNavigate} from "react-router-dom";
 
 interface Props {

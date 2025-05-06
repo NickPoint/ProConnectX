@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -46,7 +45,7 @@ public class Service implements Statistic {
     @Lob
     private String shortDescription;
 
-    @Column(precision = 19, scale = 4, nullable = false)
+    @Column(precision = 10, scale = 2, nullable = false)
     @NotNull
     private BigDecimal price;
 

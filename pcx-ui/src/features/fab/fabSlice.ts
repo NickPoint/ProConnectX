@@ -1,7 +1,6 @@
 import {createAppSlice} from "../../app/createAppSlice.ts";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {FabProps} from "@mui/material";
-import {SvgIconComponent} from "@mui/icons-material";
 
 interface FabState {
     buttons: { id: string; fabProps: FabProps, visible: boolean, icon: string }[];

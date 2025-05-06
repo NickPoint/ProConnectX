@@ -1,4 +1,4 @@
-import {Avatar, Box, Paper, Stack, Typography } from "@mui/material";
+import {Avatar, Box, Paper, Stack, Typography} from "@mui/material";
 import {ReviewerDto} from "../../features/api/pcxApi.ts";
 import Rating from "./Rating.tsx";
 

@@ -7,6 +7,7 @@ import com.nick1est.proconnectx.dto.LightweightClientDto;
 import com.nick1est.proconnectx.dto.LightweightRegistrationRequestDto;
 import com.nick1est.proconnectx.dto.RegistrationRequestDto;
 import com.nick1est.proconnectx.dto.employer.registration.ClientRegistrationRequest;
+import com.nick1est.proconnectx.dto.employer.registration.UserProfileUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -33,5 +34,6 @@ public abstract class ClientMapper {
     public abstract LightweightRegistrationRequestDto toLightweightRegistrationRequestDto(Client client);
     public abstract List<LightweightRegistrationRequestDto> toLightweightRegistrationRequestDto(List<Client> clients);
 
-    public abstract void updateClientFromDto(ClientRegistrationRequest dto, @MappingTarget Client client);
+    public abstract void updateClientFromRegistrationRequestDto(ClientRegistrationRequest dto, @MappingTarget Client client);
+    public abstract void updateClientFromProfileUpdate(UserProfileUpdateDto dto, @MappingTarget Client client);
 }

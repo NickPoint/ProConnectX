@@ -1,6 +1,5 @@
 package com.nick1est.proconnectx.exception;
 
-import lombok.Data;
 import lombok.Getter;
 import org.springdoc.api.ErrorMessage;
 

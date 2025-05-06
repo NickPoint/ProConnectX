@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {PayloadAction} from '@reduxjs/toolkit';
 import {NotificationDto} from "../api/enhancedApi.ts";
 import {createAppSlice} from "../../app/createAppSlice.ts";
 

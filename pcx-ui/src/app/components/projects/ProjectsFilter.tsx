@@ -5,15 +5,15 @@ import {
     Button,
     FormControl,
     FormHelperText,
+    Grid,
     IconButton,
     InputLabel,
     MenuItem,
     Select,
     Slider,
     SwipeableDrawer,
-    Typography,
     TextField,
-    Grid,
+    Typography,
 } from "@mui/material";
 import {Category, ProjectType} from "../../../features/enums";
 import {useEffect, useState} from "react";

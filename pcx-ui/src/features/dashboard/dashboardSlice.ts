@@ -1,11 +1,12 @@
 import {createAppSlice} from "../../app/createAppSlice.ts";
 import {PayloadAction} from "@reduxjs/toolkit";
 
+type Tab = 'home' | 'orders' | 'services'
 interface DashboardSlice {
-    activeTab: 'home' | 'analytics' | 'clients' | 'orders' | 'registrationRequest',
+    activeTab: Tab
 }
 
-const initialState = {
+const initialState: DashboardSlice = {
     activeTab: 'home',
 }
 
@@ -13,7 +14,7 @@ export const dashboardSlice = createAppSlice({
     name: "dashboard",
     initialState,
     reducers: {
-        setActiveTab: (state, action: PayloadAction<string>) => {
+        setActiveTab: (state, action: PayloadAction<Tab>) => {
             state.activeTab = action.payload;
         }
     },

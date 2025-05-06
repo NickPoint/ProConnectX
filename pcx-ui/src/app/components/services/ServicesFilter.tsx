@@ -1,11 +1,12 @@
-import {useLazyGetFilteredServicesQuery} from "../../../features/api/enhancedApi";
+import {useLazyGetServicesQuery} from "../../../features/api/enhancedApi";
 import {
     Collapse,
     debounce,
     Divider,
     FormControl,
     InputLabel,
-    MenuItem, Pagination,
+    MenuItem,
+    Pagination,
     Select,
     SelectProps,
     Slider,
@@ -15,14 +16,12 @@ import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField";
 import React, {useEffect, useState} from "react";
 import {useFormik} from "formik";
-import {replaceEmptyStringsWithNull} from "../../../features/filter/formikHelper";
 import GenericSearch from "../GenericSearch.tsx";
-import {CategoryType, ServiceFilter} from "../../../features/api/pcxApi.ts";
+import {CategoryType} from "../../../features/api/pcxApi.ts";
 import CardList from "../../pages/CardList.tsx";
 import {useTranslation} from "react-i18next";
 
-//TODO: Hardcoded values
-const initialValues: ServiceFilter = {
+const initialValues = {
     title: '',
     categories: [],
     location: '',
@@ -47,7 +46,7 @@ const SelectWithLabel = React.forwardRef<HTMLDivElement, SelectProps>(
 const ServicesFilter = () => {
     const [budgetValues, setBudgetValues] = useState({min: 0, max: 1000});
     const [ratingValue, setRatingValue] = useState(3);
-    const [getFilteredServices, {data, error, isLoading}] = useLazyGetFilteredServicesQuery();
+    const [getFilteredServices, {data, isLoading, isFetching}] = useLazyGetServicesQuery();
     const [filterOpened, setFilterOpened] = React.useState(false);
     const [page, setPage] = useState(0);
     const {t} = useTranslation();
@@ -58,18 +57,21 @@ const ServicesFilter = () => {
 
     const formik = useFormik({
         initialValues,
-        onSubmit: values => {
-            getFilteredServices({page: page, serviceFilter: values}).unwrap()
+        onSubmit: () => {
         }
     });
 
     useEffect(() => {
         const debounce1 = debounce(() => {
-            formik.handleSubmit();
+            getFilteredServices({
+                page: page,
+                size: 12,
+                ...formik.values
+            });
         }, 1000);
         debounce1();
         return debounce1.clear;
-    }, [formik.values]);
+    }, [formik.values, page]);
 
     return (
         <Grid container spacing={4} sx={{justifyContent: "center"}}>
@@ -155,7 +157,7 @@ const ServicesFilter = () => {
                 <Divider/>
             </Grid>
             <Grid size={12}>
-                <CardList lastListSize={4} isLoading={isLoading} data={data?.content} />
+                <CardList lastListSize={4} isLoading={isLoading || isFetching} data={data?.content}/>
             </Grid>
             <Grid size={12}>
                 <Pagination
