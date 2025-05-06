@@ -4,6 +4,7 @@ import com.nick1est.proconnectx.dao.OwnerType;
 import com.nick1est.proconnectx.exception.FileStorageException;
 import lombok.val;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ import java.util.UUID;
 
 @Service
 public class FileStorageService {
+    @Value("${upload.dir}")
+    private String uploadDir;
 
     public String uploadFile(MultipartFile file, Long ownerId, OwnerType ownerType) throws IOException {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -58,11 +61,10 @@ public class FileStorageService {
 
     private Path generateFilePath(Long ownerId, OwnerType ownerType) {
         return switch (ownerType) {
-            case SERVICE -> Paths.get("uploads", "service", ownerId.toString());
-            case FREELANCER -> Paths.get("uploads", "freelancer", ownerId.toString());
-            case CLIENT -> Paths.get("uploads", "freelancer", ownerId.toString());
-            default -> Paths.get("uploads", "undefined", ownerId.toString());
+            case SERVICE -> Paths.get(uploadDir, "service", ownerId.toString());
+            case FREELANCER -> Paths.get(uploadDir, "freelancer", ownerId.toString());
+            case CLIENT -> Paths.get(uploadDir, "client", ownerId.toString());
+            default -> Paths.get(uploadDir, "undefined", ownerId.toString());
         };
     }
-
 }
