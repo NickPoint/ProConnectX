@@ -26,6 +26,12 @@
           }
         ]
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@mui/*/*/*"]
+      }
     ]
   },
   "overrides": [

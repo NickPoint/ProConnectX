@@ -8,7 +8,7 @@ COPY src src
 RUN gradle war
 
 # 🚀 Runtime Stage with Tomcat
-FROM tomcat:11.0.6-jdk17
+FROM tomcat:10.1-jdk17
 ARG SPRING_DATASOURCE_URL
 ARG SPRING_DATASOURCE_USERNAME
 ARG SPRING_DATASOURCE_PASSWORD
@@ -21,6 +21,6 @@ ENV SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL \
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/api.war
+COPY --from=builder /app/build/libs/*.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
