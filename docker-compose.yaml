@@ -8,6 +8,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/proconnectx
       SPRING_DATASOURCE_USERNAME: proconnectx
       SPRING_DATASOURCE_PASSWORD: proconnectx
+      ALLOWED_ORIGINS: http://localhost:5173
     depends_on:
       - postgres
 
