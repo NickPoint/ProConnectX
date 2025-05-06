@@ -3,9 +3,7 @@ package com.nick1est.proconnectx.config;
 import com.nick1est.proconnectx.auth.AuthEntryPointJwt;
 import com.nick1est.proconnectx.auth.AuthTokenFilter;
 import com.nick1est.proconnectx.auth.UserDetailsServiceImpl;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,12 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -69,11 +65,14 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(unauthorizedHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/health", "/actuator/health").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/**").permitAll()
-                        .requestMatchers("/auth/**", "/project/**", "/service/**", "/files/**", "/ws/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/auth/**", "/service/**", "/files/**", "/ws/**").permitAll()
+                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
@@ -93,19 +92,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Component
-    @ConfigurationProperties(prefix = "cors")
-    public class CorsProperties {
-        private List<String> allowedOrigins = new ArrayList<>();
-
-        public List<String> getAllowedOrigins() {
-            return allowedOrigins;
-        }
-
-        public void setAllowedOrigins(List<String> allowedOrigins) {
-            this.allowedOrigins = allowedOrigins;
-        }
     }
 }
