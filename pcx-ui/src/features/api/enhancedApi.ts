@@ -50,6 +50,12 @@ const enhancedApi = pcxApi.enhanceEndpoints({
         authenticateUser: {
             invalidatesTags: ['Auth', 'Freelancer', 'Order'],
         },
+        createClient: {
+            invalidatesTags: ['Auth', 'Client'],
+        },
+        createFreelancer: {
+            invalidatesTags: ['Auth', 'Freelancer'],
+        },
         getServices: {
             providesTags: (result) => createTagsFromList(result?.content, 'Service'),
         },

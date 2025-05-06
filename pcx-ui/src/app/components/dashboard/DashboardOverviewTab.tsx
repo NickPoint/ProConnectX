@@ -4,7 +4,13 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import StatCard, {StatCardProps, StatType} from './StatCard';
-import {RoleType, useGetCurrentUserQuery, useGetStatsOverviewQuery} from "../../../features/api/pcxApi.ts";
+import {
+    AccountStatus,
+    AccountType,
+    RoleType,
+    useGetCurrentUserQuery,
+    useGetStatsOverviewQuery
+} from "../../../features/api/pcxApi.ts";
 import {ClientRegistrationsTable, FreelancerRegistrationsTable} from "./UserRegistrationsTable.tsx";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
@@ -88,6 +94,8 @@ export default function DashboardOverviewTab() {
     }
 
     const visibleStatTypes = statTypesByRole[user?.activeRole] || [];
+    const pendingFreelancerAccount = user?.accounts.find(account => account.accountType === AccountType.Freelancer && account.accountStatus === AccountStatus.Unverified);
+    const pendingClientAccount = user?.accounts.find(account => account.accountType === AccountType.Client && account.accountStatus === AccountStatus.Unverified);
 
     return (
         <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
@@ -100,15 +108,25 @@ export default function DashboardOverviewTab() {
                 columns={12}
                 sx={{mb: (theme) => theme.spacing(2)}}
             >
-                {user && [RoleType.RoleAdmin, RoleType.RoleUnverified].includes(user.activeRole) &&
+                {RoleType.RoleAdmin === user?.activeRole &&
                     <>
-                        <Grid size={{xs: 12, lg: 9}}>
+                        <Grid size={{xs: 12}}>
                             <FreelancerRegistrationsTable/>
                         </Grid>
-                        <Grid size={{xs: 12, lg: 9}}>
+                        <Grid size={{xs: 12}}>
                             <ClientRegistrationsTable/>
                         </Grid>
                     </>
+                }
+                {pendingFreelancerAccount &&
+                    <Grid size={{xs: 12}}>
+                        <FreelancerRegistrationsTable/>
+                    </Grid>
+                }
+                {pendingClientAccount &&
+                    <Grid size={{xs: 12}}>
+                        <ClientRegistrationsTable/>
+                    </Grid>
                 }
                 {visibleStatTypes.map((type, index) => {
                         const card = cards[type];
