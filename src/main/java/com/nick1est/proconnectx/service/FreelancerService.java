@@ -113,7 +113,7 @@ public class FreelancerService implements AbstractUserInterface<Freelancer> {
         return freelancer.getFiles().stream()
                 .filter(file -> DocumentType.AVATAR.equals(file.getDocumentType()))
                 .findFirst()
-                .map(file -> serverUrl + "/files/" + file.getId())
+                .map(file -> serverUrl + "files/" + file.getId())
                 .orElse(null);
     }
 

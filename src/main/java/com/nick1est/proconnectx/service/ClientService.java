@@ -84,7 +84,7 @@ public class ClientService implements AbstractUserInterface<Client> {
         return client.getFiles().stream()
                 .filter(file -> DocumentType.AVATAR.equals(file.getDocumentType()))
                 .findFirst()
-                .map(file -> serverUrl + "/files/" + file.getId())
+                .map(file -> serverUrl + "files/" + file.getId())
                 .orElse(null);
     }
 

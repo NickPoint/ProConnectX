@@ -23,7 +23,7 @@ public abstract class FileMapper {
         if (file == null) {
             return null;
         }
-        return serverUrl + "/files/" + file.getId();
+        return serverUrl + "files/" + file.getId();
     }
 
     public List<String> mapFileToUrl(List<File> files) {
