@@ -37,8 +37,9 @@ const formFields: FormStepsConfig = {
         },
         address: {
             type: 'addressGroup',
+            size: 12,
             fields: {
-                fullAddress: { label: 'address', type: 'text', required: false },
+                fullAddress: { label: 'address', type: 'place', required: false },
                 houseNumber: { label: 'houseNumber', type: 'text' },
                 street: { label: 'street', type: 'text' },
                 city: {
@@ -233,17 +234,9 @@ const PostsServicePage = () => {
     const [visible, setVisible] = useState(true);
     const activeField = useAppSelector(selectActiveField);
     const [visibleText, setVisibleText] = useState(activeField);
-    const {isLoaded} = useLoadScript({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
-        libraries,
-    })
 
     const initialValues: PostServiceFormValues = cachedFormData
         || generateInitialValuesFromConfig(formFields);
-
-    useEffect(() => {
-        dispatch(setIsLoading(!isLoaded));
-    }, [isLoaded, dispatch]);
 
     useEffect(() => {
         dispatch(setTitle(t('postService.title')))
