@@ -3,16 +3,22 @@ package com.nick1est.proconnectx.controller;
 import com.nick1est.proconnectx.annotations.CheckOwnership;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.OwnershipType;
+import com.nick1est.proconnectx.dto.BookServiceDto;
 import com.nick1est.proconnectx.dto.OrderDto;
 import com.nick1est.proconnectx.dto.OrdersFilter;
 import com.nick1est.proconnectx.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,11 +52,15 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    @PostMapping("/book/{serviceId}")
+    @Operation(summary = "Book a service", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                    schema = @Schema(implementation = BookServiceDto.class))))
+    @PostMapping(value="/book/{serviceId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
-    public ResponseEntity<Long> bookService(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long serviceId,
-                                            @RequestBody String additionalNotes) {
-        val orderId = orderService.bookService(serviceId, userDetails.getClient(), additionalNotes);
+    public ResponseEntity<Long> bookService(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                            @PathVariable Long serviceId,
+                                            @Valid @ModelAttribute BookServiceDto bookingInfo) {
+        val orderId = orderService.bookService(serviceId, userDetails.getClient(), bookingInfo);
         return ResponseEntity.ok().body(orderId);
     }
 
@@ -93,4 +103,7 @@ public class OrderController {
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         orderService.cancelOrder(orderId, reason, userDetails);
     }
+
+// TODO: Make able while booking upload photo or ater order creation
+// TODO: Rating logic
 }

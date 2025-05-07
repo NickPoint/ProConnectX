@@ -14,7 +14,7 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public abstract class AbstractUser implements Approvable {
+public abstract class AbstractUser implements Approvable, FileOwner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -36,9 +36,9 @@ public class ClientService implements AbstractUserInterface<Client> {
         val client = getById(userDetails.getClient().getId());
         clientMapper.updateClientFromRegistrationRequestDto(registrationRequest, client);
         val files = new ArrayList<File>();
-        val avatar = fileService.uploadFile(client.getId(), registrationRequest.getAvatarImage(), DocumentType.AVATAR, OwnerType.CLIENT, true);
+        val avatar = fileService.uploadFile(client, registrationRequest.getAvatarImage(), DocumentType.AVATAR, OwnerType.CLIENT, true);
         files.add(avatar);
-        val documents = fileService.uploadFiles(client.getId(), registrationRequest.getIdDocument(), DocumentType.ID_CARD, OwnerType.CLIENT, false);
+        val documents = fileService.uploadFiles(client, registrationRequest.getIdDocument(), DocumentType.ID_CARD, OwnerType.CLIENT, false);
         files.addAll(documents);
         client.setFiles(files);
         client.setAccountStatus(AccountStatus.PENDING);

@@ -2,6 +2,7 @@ package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.*;
+import com.nick1est.proconnectx.dto.BookServiceDto;
 import com.nick1est.proconnectx.dto.OrderDto;
 import com.nick1est.proconnectx.dto.OrdersFilter;
 import com.nick1est.proconnectx.mapper.OrderMapper;
@@ -31,6 +32,7 @@ public class OrderService {
     private final EventService eventService;
     private final TransactionService transactionService;
     private final DisputeService disputeService;
+    private final FileService fileService;
 
     @Transactional
     public void acceptOrder(Long orderId,
@@ -99,16 +101,18 @@ public class OrderService {
     @Transactional
     public Long bookService(Long serviceId,
                             Client client,
-                            String additionalNotes) {
-        log.debug("Client {} booking service {}", client, serviceId);
+                            BookServiceDto bookingInfo) {
+        log.debug("Client {} booked the service {}", client, serviceId);
         val service = serviceService.getServiceReferenceById(serviceId);
         val order = new Order();
         order.setService(service);
         order.setClient(client);
+        order.setFreelancer(service.getFreelancer());
         order.setType(OrderType.SERVICE);
-        order.setAdditionalNotes(additionalNotes);
+        order.setAdditionalNotes(bookingInfo.getAdditionalNotes());
         transactionService.createTransaction(order);
         val savedOrder = orderRepository.save(order);
+        fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, OwnerType.ORDER,false);
         eventService.recordOrderCreated(savedOrder, client);
         return savedOrder.getId();
     }

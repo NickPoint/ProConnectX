@@ -14,8 +14,6 @@ import {Form, Formik} from "formik";
 import {generateValidationSchema} from "../formUtils.ts";
 import {FieldRenderer} from "../FieldRenderer.tsx";
 import {useTranslation} from "react-i18next";
-import {useLoadScript} from "@react-google-maps/api";
-import {libraries} from "../../pages/ClientVerificationPage.tsx";
 import {useMemo, useState} from "react";
 import {CloudUpload} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
@@ -29,7 +27,7 @@ const formConf = {
     address: {
         type: 'addressGroup',
         fields: {
-            fullAddress: { label: 'address', required: true, type: 'text', size: 12 },
+            fullAddress: { label: 'address', required: true, type: 'place', size: 12 },
             houseNumber: { label: 'houseNumber', required: true, type: 'text', size: 4 },
             street: { label: 'street', required: true, type: 'text', size: 12 },
             city: { label: 'city', required: true, type: 'text', size: 6 },
@@ -65,7 +63,7 @@ export function ImageUpload() {
         formData.append('avatar', files[0]);
 
         updateAvatar(formData).unwrap()
-            .then(() => enqueueSnackbar(t('settings.imageUpload.success'), {variant: 'success'}));
+            .then(() => enqueueSnackbar(t('dashboard.settings.imageUpload.success'), {variant: 'success'}));
     };
 
     return (
@@ -89,10 +87,6 @@ export function ImageUpload() {
 const SettingsTab = () => {
     const {t} = useTranslation();
     const [isReadOnly, setIsReadOnly] = useState(true);
-    const {isLoaded} = useLoadScript({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
-        libraries,
-    })
     const [updateFreelancer] = useUpdateFreelancerMutation();
     const [updateClient] = useUpdateClientMutation();
     const controlledFormConf = useMemo(() => {
@@ -133,7 +127,11 @@ const SettingsTab = () => {
         lastName: accountData.lastName,
         phoneNumber: accountData.phoneNumber,
         address: {
-            fullAddress: `${accountData.address.street} ${accountData.address.houseNumber}, ${accountData.address.city}, ${accountData.address.region}, ${accountData.address.postalCode}, ${accountData.address.country}`,
+            fullAddress: {
+                placeId: null,
+                description: `${accountData.address.street} ${accountData.address.houseNumber}, ${accountData.address.city}, ${accountData.address.region}, ${accountData.address.postalCode}, ${accountData.address.country}`,
+                structured_formatting: null,
+            },
             street: accountData.address.street,
             houseNumber: accountData.address.houseNumber,
             city: accountData.address.city,

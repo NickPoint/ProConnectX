@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
-public class Order {
+public class Order implements FileOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +32,9 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.PERSIST)
     @NotNull
     private Transaction transaction;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> files;
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -78,4 +81,9 @@ public class Order {
     @Column(nullable = false)
     @NotNull
     private Instant updatedAt;
+
+    @Override
+    public OwnerType getOwnerType() {
+        return OwnerType.ORDER;
+    }
 }

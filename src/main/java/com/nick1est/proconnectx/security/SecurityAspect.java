@@ -35,7 +35,7 @@ public class SecurityAspect {
         boolean ownsResource = switch (checkOwnership.type()) {
             case ORDER -> switch (activeRole) {
                 case ROLE_CLIENT -> orderRepository.existsByIdAndClient(id, userDetails.getClient());
-                case ROLE_FREELANCER -> orderRepository.existsByIdAndServiceFreelancer(id, userDetails.getFreelancer());
+                case ROLE_FREELANCER -> orderRepository.existsByIdAndFreelancer(id, userDetails.getFreelancer());
                 default -> false;
             };
             case SERVICE -> switch (activeRole) {

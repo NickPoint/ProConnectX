@@ -14,12 +14,5 @@ public class FileDto {
     @NotBlank
     private String originalFileName;
     @NotNull
-    private DocumentType documentType;
-    @NotBlank
-    private String path;
-    @NotNull
     private Instant uploadedAt;
-    @NotNull
-    private Boolean verified;
-
 }

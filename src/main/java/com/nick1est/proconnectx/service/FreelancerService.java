@@ -43,10 +43,10 @@ public class FreelancerService implements AbstractUserInterface<Freelancer> {
         val freelancer = getById(userDetails.getFreelancer().getId());
         freelancerMapper.updateFreelancerFromRegistrationRequest(registrationRequest, freelancer);
         val files = new ArrayList<File>();
-        val avatar = fileService.uploadFile(freelancer.getId(), registrationRequest.getAvatarImage(),
+        val avatar = fileService.uploadFile(freelancer, registrationRequest.getAvatarImage(),
                 DocumentType.AVATAR, OwnerType.FREELANCER, true);
         files.add(avatar);
-        val documents = fileService.uploadFiles(freelancer.getId(), registrationRequest.getIdDocument(),
+        val documents = fileService.uploadFiles(freelancer, registrationRequest.getIdDocument(),
                 DocumentType.ID_CARD, OwnerType.FREELANCER, false);
         files.addAll(documents);
         freelancer.setFiles(files);

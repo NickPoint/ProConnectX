@@ -215,7 +215,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                                 <Stack spacing={1}>
                                                     <Field fullWidth component={TextField} name="email"
                                                            label='Email'/>
-                                                    <Field fullWidth component={TextField} name="password"
+                                                    <Field fullWidth component={TextField} name="password" type="password"
                                                            label='Password'/>
                                                 </Stack>
                                                 <Stack spacing={1} sx={{alignItems: 'center', mt: 20}}>
@@ -349,7 +349,7 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
                             <Form>
                                 <Stack spacing={1}>
                                     <Field fullWidth component={TextField} name="email" label='Email'/>
-                                    <Field fullWidth component={TextField} name="password"
+                                    <Field fullWidth component={TextField} name="password" type="password"
                                            label='Password'/>
                                 </Stack>
                                 <Stack spacing={1} sx={{alignItems: 'center', mt: 20}}>

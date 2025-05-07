@@ -25,8 +25,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -39,14 +39,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -78,8 +78,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -92,14 +92,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -131,8 +131,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -145,14 +145,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -178,8 +178,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -192,14 +192,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -231,8 +231,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -245,14 +245,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -277,8 +277,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -291,14 +291,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -330,8 +330,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -344,14 +344,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -383,8 +383,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -397,14 +397,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -430,8 +430,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -444,14 +444,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -477,8 +477,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -491,14 +491,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -524,8 +524,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -538,14 +538,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -570,8 +570,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -584,14 +584,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -632,8 +632,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -646,14 +646,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -692,8 +692,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -706,14 +706,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -797,8 +797,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -811,14 +811,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -846,8 +846,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -860,14 +860,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -883,6 +883,7 @@ paths:
     post:
       tags:
       - Order
+      summary: Book a service
       operationId: bookService
       parameters:
       - name: serviceId
@@ -893,10 +894,9 @@ paths:
           format: int64
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              type: string
-        required: true
+              $ref: '#/components/schemas/BookServiceDto'
       responses:
         "404":
           description: Not Found
@@ -904,8 +904,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -918,14 +918,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -949,8 +949,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -963,14 +963,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -998,8 +998,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1012,14 +1012,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1053,8 +1053,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1067,14 +1067,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1097,8 +1097,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1111,14 +1111,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1146,8 +1146,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1160,14 +1160,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1196,8 +1196,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1210,14 +1210,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1246,8 +1246,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1260,14 +1260,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1290,8 +1290,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1304,14 +1304,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1340,8 +1340,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1354,14 +1354,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1390,8 +1390,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1404,14 +1404,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1440,8 +1440,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1454,14 +1454,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1484,8 +1484,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1498,14 +1498,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1528,8 +1528,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1542,14 +1542,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1572,8 +1572,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1586,14 +1586,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1616,8 +1616,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1630,14 +1630,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1678,8 +1678,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1692,14 +1692,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1731,8 +1731,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1745,14 +1745,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1801,8 +1801,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1815,14 +1815,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1878,8 +1878,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1892,14 +1892,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1929,8 +1929,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1943,14 +1943,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -1980,8 +1980,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1994,14 +1994,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2032,8 +2032,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2046,14 +2046,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2076,8 +2076,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2090,14 +2090,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2120,8 +2120,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2134,14 +2134,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2166,8 +2166,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2180,14 +2180,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2212,8 +2212,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2226,14 +2226,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2258,8 +2258,8 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2272,14 +2272,14 @@ paths:
                 oneOf:
                 - type: string
                 - $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
+        "401":
+          description: Unauthorized
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
+        "403":
+          description: Forbidden
           content:
             application/hal+json:
               schema:
@@ -2518,6 +2518,18 @@ components:
           type: string
         faqsJson:
           type: string
+    BookServiceDto:
+      type: object
+      properties:
+        additionalNotes:
+          type: string
+        files:
+          type: array
+          description: List of files to upload
+          format: binary
+          items:
+            type: string
+            format: binary
     FreelancerRegistrationRequest:
       required:
       - address
@@ -2831,12 +2843,12 @@ components:
     PageLightweightServiceDto:
       type: object
       properties:
-        totalPages:
-          type: integer
-          format: int32
         totalElements:
           type: integer
           format: int64
+        totalPages:
+          type: integer
+          format: int32
         size:
           type: integer
           format: int32
@@ -2872,15 +2884,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        pageNumber:
-          type: integer
-          format: int32
         pageSize:
           type: integer
           format: int32
-        paged:
-          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
         unpaged:
+          type: boolean
+        paged:
           type: boolean
     SortObject:
       type: object
@@ -3081,6 +3093,21 @@ components:
       - REVIEW_SUBMITTED
       - FILE_UPLOADED
       - ROLE_SWITCHED
+    FileDto:
+      required:
+      - id
+      - originalFileName
+      - uploadedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        originalFileName:
+          type: string
+        uploadedAt:
+          type: string
+          format: date-time
     LightweightClientDto:
       required:
       - email
@@ -3150,6 +3177,10 @@ components:
             $ref: '#/components/schemas/EventDto'
         additionalNotes:
           type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDto'
         rejectionReason:
           type: string
         createdAt:
@@ -3164,12 +3195,12 @@ components:
     PageOrderDto:
       type: object
       properties:
-        totalPages:
-          type: integer
-          format: int32
         totalElements:
           type: integer
           format: int64
+        totalPages:
+          type: integer
+          format: int32
         size:
           type: integer
           format: int32

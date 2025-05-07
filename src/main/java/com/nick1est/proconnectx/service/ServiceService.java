@@ -42,7 +42,7 @@ public class ServiceService {
         val service = serviceMapper.toDao(serviceDto, workflow, faqs);
         service.setFreelancer(freelancer);
         val savedService = serviceRepository.save(service);
-        val files = fileService.uploadFiles(savedService.getId(), serviceDto.getImages(),
+        val files = fileService.uploadFiles(savedService, serviceDto.getImages(),
                 DocumentType.GALLERY, OwnerType.SERVICE, true);
         savedService.setGallery(files);
         return savedService.getId();

@@ -61,11 +61,10 @@ const statTypesByRole: Record<RoleType, StatType[]> = {
         'ORDER_SUCCESS_RATE',
         'ACTIVE_ORDERS',
     ],
-    // CLIENT: [
-    //     'TOTAL_SPENT',
-    //     'ORDERS_PLACED',
-    //     // ...
-    // ],
+    ROLE_CLIENT: [
+        'TOTAL_SERVICES_PURCHASED',
+        // ...
+    ],
     // ADMIN: [
     //     'TOTAL_REVENUE',
     //     'TOTAL_USERS',
@@ -89,13 +88,10 @@ export default function DashboardOverviewTab() {
     const {data: cards} = useGetStatsOverviewQuery(queryArgs, {
         skip: user?.activeRole === RoleType.RoleUnverified
     });
-    if (!cards) {
-        return <GlobalLoadingBackdrop />
-    }
 
     const visibleStatTypes = statTypesByRole[user?.activeRole] || [];
-    const pendingFreelancerAccount = user?.accounts.find(account => account.accountType === AccountType.Freelancer && account.accountStatus === AccountStatus.Unverified);
-    const pendingClientAccount = user?.accounts.find(account => account.accountType === AccountType.Client && account.accountStatus === AccountStatus.Unverified);
+    const pendingFreelancerAccount = user?.accounts.some(account => account.accountType === AccountType.Freelancer && account.accountStatus === AccountStatus.Pending);
+    const pendingClientAccount = user?.accounts.some(account => account.accountType === AccountType.Client && account.accountStatus === AccountStatus.Pending);
 
     return (
         <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
@@ -128,7 +124,7 @@ export default function DashboardOverviewTab() {
                         <ClientRegistrationsTable/>
                     </Grid>
                 }
-                {visibleStatTypes.map((type, index) => {
+                {cards && visibleStatTypes.map((type, index) => {
                         const card = cards[type];
                         if (!card) return null;
 

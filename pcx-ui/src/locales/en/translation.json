@@ -176,7 +176,8 @@
       "DAILY_TOTAL_EARNINGS": "Total Earnings",
       "ORDERS_COMPLETED": "Orders Completed",
       "ORDER_SUCCESS_RATE": "Order Success Rate",
-      "ACTIVE_ORDERS": "Active Orders"
+      "ACTIVE_ORDERS": "Active Orders",
+      "TOTAL_SERVICES_PURCHASED": "Total Services Purchased"
     },
     "paymentStatus": {
     },
@@ -283,7 +284,9 @@
       "rejectionReason": "Rejection reason",
       "disputeReason": "Dispute reason",
       "deadlineDate": "Deadline date",
-      "proposal": "Proposal"
+      "proposal": "Proposal",
+      "additionalNotes": "Additional notes",
+      "additionalFiles": "Additional files"
     },
     "fileUpload": {
       "uploaded": "Uploaded",
@@ -344,6 +347,9 @@
       "title": "Settings",
       "userProfile": {
         "success": "Profile has been successfully updated!"
+      },
+      "imageUpload": {
+        "success": "Your avatar has been updated!"
       }
     },
     "menu": {
@@ -423,6 +429,7 @@
       "faq": "FAQ"
     },
     "form": {
+      "title": "Service Booking",
       "success": "Your order has been successfully created! \uD83C\uDF89 We're getting things ready—sit back and track the progress in your dashboard."
     },
     "package": {
@@ -437,6 +444,7 @@
     "status": "Status",
     "timeline": "Timeline",
     "additionalNotes": "Additional Notes",
+    "additionalFiles": "Additional Files",
     "rejectionReason": "Rejection Reason",
     "disputeReason": "Dispute Reason",
     "deadline": "Deadline",

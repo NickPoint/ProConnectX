@@ -4,6 +4,7 @@ import com.nick1est.proconnectx.dao.Client;
 import com.nick1est.proconnectx.dao.Freelancer;
 import com.nick1est.proconnectx.dao.Order;
 import com.nick1est.proconnectx.dao.OrderStatus;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,15 +14,16 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 @RepositoryRestResource(exported = false)
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
     boolean existsByIdAndClient(Long orderId, Client client);
-    boolean existsByIdAndServiceFreelancer(Long orderId, Freelancer freelancer);
+    boolean existsByIdAndFreelancer(Long orderId, Freelancer freelancer);
 
-    Page<Order> findByService_Freelancer(Freelancer serviceFreelancer, Pageable pageable);
+    Page<Order> findByFreelancer(Freelancer serviceFreelancer, Pageable pageable);
 
     Page<Order> findByClient(Client client, Pageable pageable);
 
@@ -29,9 +31,11 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     Page<Order> findByClientAndStatusIn(Client client, Collection<OrderStatus> statuses, Pageable pageable);
 
-    long countByService_FreelancerIdAndStatusAndUpdatedAtBetween(Long serviceFreelancerId, OrderStatus status, Instant updatedAtAfter, Instant updatedAtBefore);
+    long countByFreelancerIdAndStatusAndUpdatedAtBetween(Long freelancerId, OrderStatus status, Instant updatedAtAfter, Instant updatedAtBefore);
 
-    long countByService_FreelancerIdAndStatus(Long freelancerId, OrderStatus status);
+    long countByFreelancerIdAndStatus(Long freelancerId, OrderStatus status);
 
-    long countByService_FreelancerIdAndStatusIn(Long freelancerId, Collection<OrderStatus> statuses);
+    long countByFreelancerIdAndStatusIn(Long freelancerId, Collection<OrderStatus> statuses);
+
+    long countByClientIdAndStatusAndUpdatedAtBetween(Long clientId, @NotNull OrderStatus status, @NotNull Instant updatedAtAfter, @NotNull Instant updatedAtBefore);
 }

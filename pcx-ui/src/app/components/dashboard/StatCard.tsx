@@ -17,6 +17,7 @@ export type StatType =
     | 'ORDER_SUCCESS_RATE'
     | 'ACTIVE_ORDERS'
     | 'PENDING_PAYMENTS'
+    | 'TOTAL_SERVICES_PURCHASED'
 
 export type StatCardProps = {
     type: StatType;

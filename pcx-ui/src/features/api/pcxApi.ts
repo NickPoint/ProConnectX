@@ -1,5 +1,4 @@
-import {emptySplitApi as api} from "./emptyApi"
-
+import { emptySplitApi as api } from "./emptyApi"
 export const addTagTypes = [
   "Order",
   "Freelancer",
@@ -189,7 +188,7 @@ const injectedRtkApi = api
         query: queryArg => ({
           url: `/orders/book/${queryArg.serviceId}`,
           method: "POST",
-          body: queryArg.body,
+          body: queryArg.bookServiceDto,
         }),
         invalidatesTags: ["Order"],
       }),
@@ -494,7 +493,7 @@ export type CreateServiceApiArg = {
 export type BookServiceApiResponse = /** status 200 OK */ number
 export type BookServiceApiArg = {
   serviceId: number
-  body: string
+  bookServiceDto: BookServiceDto
 }
 export type GetFreelancerApiResponse = /** status 200 OK */ FreelancerDto
 export type GetFreelancerApiArg = void
@@ -658,14 +657,14 @@ export type SortObject = {
 export type PageableObject = {
   offset?: number
   sort?: SortObject[]
-  pageNumber?: number
   pageSize?: number
-  paged?: boolean
+  pageNumber?: number
   unpaged?: boolean
+  paged?: boolean
 }
 export type PageLightweightServiceDto = {
-  totalPages?: number
   totalElements?: number
+  totalPages?: number
   size?: number
   content?: LightweightServiceDto[]
   number?: number
@@ -694,6 +693,11 @@ export type ServiceCreateDto = {
   images: Blob[]
   workflowJson?: string
   faqsJson?: string
+}
+export type BookServiceDto = {
+  additionalNotes?: string
+  /** List of files to upload */
+  files?: Blob[]
 }
 export type FreelancerDto = {
   id: number
@@ -825,6 +829,11 @@ export type EventDto = {
   createdAt: string
   disputeId?: number
 }
+export type FileDto = {
+  id: number
+  originalFileName: string
+  uploadedAt: string
+}
 export type OrderDto = {
   id: number
   service: LightweightServiceDto
@@ -833,14 +842,15 @@ export type OrderDto = {
   transaction: LightweightTransactionDto
   events: EventDto[]
   additionalNotes?: string
+  files?: FileDto[]
   rejectionReason?: string
   createdAt: string
   deadlineDate?: string
   updatedAt?: string
 }
 export type PageOrderDto = {
-  totalPages?: number
   totalElements?: number
+  totalPages?: number
   size?: number
   content?: OrderDto[]
   number?: number

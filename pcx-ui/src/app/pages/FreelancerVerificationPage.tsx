@@ -29,8 +29,9 @@ export const formFields: FormStepsConfig = {
         phoneNumber: { label: 'phoneNumber', required: true, type: 'text', size: 12 },
         address: {
             type: 'addressGroup',
+            size: 12,
             fields: {
-                fullAddress: { label: 'address', required: true, type: 'text', size: 12 },
+                fullAddress: { label: 'address', required: true, type: 'place', size: 12 },
                 houseNumber: { label: 'houseNumber', required: true, type: 'text', size: 4 },
                 street: { label: 'street', required: true, type: 'text', size: 12 },
                 city: { label: 'city', required: true, type: 'text', size: 6 },
@@ -137,17 +138,9 @@ const FreelancerVerificationPage = () => {
     const [createFreelancer] = useCreateFreelancerMutation();
     const [visible, setVisible] = useState(true);
     const [visibleText, setVisibleText] = useState(activeField);
-    const {isLoaded} = useLoadScript({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
-        libraries,
-    })
 
     const initialValues: VerificationFormValues = cachedFormData
         || generateInitialValuesFromConfig(formFields);
-
-    useEffect(() => {
-        dispatch(setIsLoading(!isLoaded));
-    }, [isLoaded, dispatch]);
 
     useEffect(() => {
         dispatch(setTitle(t('verification.title')))

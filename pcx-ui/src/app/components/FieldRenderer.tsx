@@ -29,6 +29,7 @@ import Chip from "@mui/material/Chip";
 import * as React from "react";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import GoogleMaps from "./MuiAddressAutocomplete.tsx";
 
 interface FieldRendererProps {
     fieldName: string;
@@ -55,7 +56,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ step, fieldName, f
     if (fieldConfig.type === 'addressGroup') {
         return (
             <Grid size={12}>
-                <AddressAutocomplete
+                <GoogleMaps
                     name={fullName}
                     required={fieldConfig.required}
                     label={t(`form.fields.${fieldConfig.fields.fullAddress.label}`)}
@@ -63,6 +64,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ step, fieldName, f
                     childs={Object.keys(fieldConfig.fields).filter(key => key !== 'fullAddress')}
                     houseNumberRequired={fieldConfig.fields.houseNumber.required}
                     disabled={fieldConfig.disabled}
+                    size={fieldConfig.size}
                 />
             </Grid>
         );
@@ -222,6 +224,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ step, fieldName, f
             <Field
                 component={TextField}
                 name={fullName}
+                type={fieldConfig.inputType}
                 label={t(`form.fields.${fieldConfig.label}`)}
                 sx={{display: fieldConfig.display}}
                 fullWidth

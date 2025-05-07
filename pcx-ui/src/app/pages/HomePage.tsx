@@ -404,4 +404,6 @@ const HomePage = () => {
     );
 };
 
+// TODO: Create Freelancer's and Client's pages
+
 export default HomePage;

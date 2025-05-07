@@ -22,7 +22,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class Service implements Statistic {
+public class Service implements Statistic, FileOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,7 +66,7 @@ public class Service implements Statistic {
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "serviceId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> gallery;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -95,5 +95,10 @@ public class Service implements Statistic {
     @Override
     public void incrementVisitorCounter() {
         this.visitCounter++;
+    }
+
+    @Override
+    public OwnerType getOwnerType() {
+        return OwnerType.SERVICE;
     }
 }

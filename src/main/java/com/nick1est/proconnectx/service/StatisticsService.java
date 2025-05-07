@@ -7,6 +7,7 @@ import com.nick1est.proconnectx.dto.DailyEarningsDto;
 import com.nick1est.proconnectx.dto.StatsOverviewDto;
 import com.nick1est.proconnectx.repository.OrderRepository;
 import com.nick1est.proconnectx.repository.TransactionRepository;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -50,7 +52,8 @@ public class StatisticsService {
 //                stats.put(StatisticsType.TOP_CATEGORIES, getFreelancerTopCategories(freelancerId));
             }
             case ROLE_CLIENT -> {
-                // similar...
+                val clientId = userDetails.getClient().getId();
+                stats.put(StatisticsType.TOTAL_SERVICES_PURCHASED, getTotalServicesPurchased(clientId, start, end));
             }
             case ROLE_ADMIN -> {
                 // similar...
@@ -119,14 +122,14 @@ public class StatisticsService {
     }
 
     public StatsOverviewDto.StatisticsDto getFreelancerOrdersCompleted(Long freelancerId, Instant start, Instant end) {
-        long count = orderRepository.countByService_FreelancerIdAndStatusAndUpdatedAtBetween(freelancerId,
+        long count = orderRepository.countByFreelancerIdAndStatusAndUpdatedAtBetween(freelancerId,
                 OrderStatus.COMPLETED, start, end);
         return simpleStat(BigDecimal.valueOf(count));
     }
 
     public StatsOverviewDto.StatisticsDto getFreelancerSuccessRate(Long freelancerId) {
-        long completed = orderRepository.countByService_FreelancerIdAndStatus(freelancerId, OrderStatus.COMPLETED);
-        long canceled = orderRepository.countByService_FreelancerIdAndStatus(freelancerId, OrderStatus.CANCELED);
+        long completed = orderRepository.countByFreelancerIdAndStatus(freelancerId, OrderStatus.COMPLETED);
+        long canceled = orderRepository.countByFreelancerIdAndStatus(freelancerId, OrderStatus.CANCELED);
         long total = completed + canceled;
         BigDecimal rate = total == 0 ? BigDecimal.ZERO :
                 BigDecimal.valueOf(completed * 100).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP);
@@ -134,9 +137,14 @@ public class StatisticsService {
     }
 
     public StatsOverviewDto.StatisticsDto getFreelancerActiveOrders(Long freelancerId) {
-        long count = orderRepository.countByService_FreelancerIdAndStatusIn(
+        long count = orderRepository.countByFreelancerIdAndStatusIn(
                 freelancerId, List.of(OrderStatus.IN_PROGRESS, OrderStatus.DISPUTED,
                         OrderStatus.SUBMITTED_FOR_REVIEW, OrderStatus.APPROVED));
+        return simpleStat(BigDecimal.valueOf(count));
+    }
+
+    public StatsOverviewDto.StatisticsDto getTotalServicesPurchased(Long clientId, Instant start, Instant end) {
+        long count = orderRepository.countByClientIdAndStatusAndUpdatedAtBetween(clientId, OrderStatus.COMPLETED, start, end);
         return simpleStat(BigDecimal.valueOf(count));
     }
 

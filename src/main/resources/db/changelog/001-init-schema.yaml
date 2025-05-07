@@ -1396,3 +1396,30 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
             validate: true
+
+  - changeSet:
+      id: 1745839303759-78
+      author: Mykyta Voievudskyi
+      changes:
+        - addColumn:
+            tableName: file
+            columns:
+              - column:
+                  name: order_id
+                  type: BIGINT
+
+  - changeSet:
+      id: 1745839303759-79
+      author: Mykyta Voievudskyi
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: file
+            constraintName: fk_file_orders
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: orders
+            validate: true

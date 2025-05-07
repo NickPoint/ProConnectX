@@ -12,5 +12,6 @@ public enum DocumentType {
     BANK_STATEMENT,
     OTHER,
     GALLERY,
-    AVATAR
+    AVATAR,
+    ORDER_FILES
 }

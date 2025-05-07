@@ -1,5 +1,5 @@
 import {
-    addTagTypes,
+    addTagTypes, BookServiceApiArg, BookServiceApiResponse,
     CreateFreelancerApiResponse,
     CreateServiceApiResponse,
     pcxApi,
@@ -55,6 +55,9 @@ const enhancedApi = pcxApi.enhanceEndpoints({
         },
         createFreelancer: {
             invalidatesTags: ['Auth', 'Freelancer'],
+        },
+        switchRole: {
+            invalidatesTags: ['Auth', 'Order'],
         },
         getServices: {
             providesTags: (result) => createTagsFromList(result?.content, 'Service'),
@@ -125,6 +128,14 @@ const overridenApi = pcxApi.injectEndpoints({
             }),
             invalidatesTags: ["Service"],
         }),
+        bookService: build.mutation<BookServiceApiResponse, FormData>({
+            query: queryArg => ({
+                url: `/orders/book/${queryArg.get('serviceId')}`,
+                method: "POST",
+                body: queryArg,
+            }),
+            invalidatesTags: ["Order"],
+        }),
         getNotifications: build.query<NotificationDto[], Channel>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
@@ -165,7 +176,7 @@ const overridenApi = pcxApi.injectEndpoints({
                     method: "POST",
                     body: queryArg,
                 }),
-                invalidatesTags: ["File"],
+                invalidatesTags: ["Freelancer", "Client"],
             },
         ),
     }),
@@ -174,9 +185,7 @@ const overridenApi = pcxApi.injectEndpoints({
 
 
 export const {
-    useMakeBidMutation,
-    useGetProjectQuery,
-    useLazyGetFilteredBidsQuery,
+    useLazyGetFileQuery,
     useLazyGetServicesQuery,
 } = enhancedApi
 
@@ -187,4 +196,5 @@ export const {
     useCreateFreelancerMutation,
     useCreateClientMutation,
     useUpdateAvatarMutation,
+    useBookServiceMutation,
 } = overridenApi

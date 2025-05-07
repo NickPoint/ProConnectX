@@ -1,14 +1,12 @@
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.DocumentType;
-import com.nick1est.proconnectx.dao.File;
-import com.nick1est.proconnectx.dao.OwnerType;
-import com.nick1est.proconnectx.dao.RoleType;
+import com.nick1est.proconnectx.dao.*;
 import com.nick1est.proconnectx.exception.FileStorageException;
 import com.nick1est.proconnectx.exception.NotFoundException;
 import com.nick1est.proconnectx.mapper.FileMapper;
 import com.nick1est.proconnectx.repository.FileRepository;
+import com.nick1est.proconnectx.repository.OrderRepository;
 import com.nick1est.proconnectx.repository.PrincipalRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,7 @@ public class FileService {
     private final FileStorageService fileStorageService;
     private final PrincipalRepository principalRepository;
     private final MessageSource messageSource;
+    private final OrderRepository orderRepository;
 
 //    public List<FileDto> getOwnerFiles(Long ownerId) {
 //        List<File> files = fileRepository.findAllByOwnerId(ownerId);
@@ -42,31 +41,33 @@ public class FileService {
 //    }
 
     @Transactional
-    public List<File> uploadFiles(Long ownerId, List<MultipartFile> files, DocumentType documentType,
+    public List<File> uploadFiles(FileOwner owner, List<MultipartFile> files, DocumentType documentType,
                                   OwnerType ownerType, Boolean isPublic) {
         val results = new ArrayList<File>();
         for (MultipartFile file : files) {
-            results.add(uploadFile(ownerId, file, documentType, ownerType, isPublic));
+            results.add(uploadFile(owner, file, documentType, ownerType, isPublic));
         }
         return results;
     }
 
     @Transactional
-    public File uploadFile(Long ownerId, MultipartFile file, DocumentType type, OwnerType ownerType, Boolean isPublic) {
+    public File uploadFile(FileOwner owner, MultipartFile file, DocumentType type, OwnerType ownerType, Boolean isPublic) {
         try {
-            val path = fileStorageService.uploadFile(file, ownerId, ownerType);
+            val path = fileStorageService.uploadFile(file, owner.getId(), ownerType);
             val fileEntity = new File();
             fileEntity.setOriginalFileName(file.getOriginalFilename());
             fileEntity.setDocumentType(type);
             fileEntity.setPath(path.replace("\\", "/"));
-            if (OwnerType.FREELANCER.equals(ownerType)) {
-                fileEntity.setFreelancerId(ownerId);
-            } else if (OwnerType.CLIENT.equals(ownerType)) {
-                fileEntity.setClientId(ownerId);
-            } else if (OwnerType.SERVICE.equals(ownerType)) {
-                fileEntity.setServiceId(ownerId);
-            }
             fileEntity.setOwnerType(ownerType);
+            if (owner instanceof Freelancer freelancer) {
+                fileEntity.setFreelancer(freelancer);
+            } else if (owner instanceof Client client) {
+                fileEntity.setClient(client);
+            } else if (owner instanceof com.nick1est.proconnectx.dao.Service service) {
+                fileEntity.setService(service);
+            } else if (owner instanceof Order order) {
+                fileEntity.setOrder(order);
+            }
             if (isPublic) {
                 fileEntity.setIsPublic(true);
             }
@@ -94,17 +95,29 @@ public class FileService {
             return fileStorageService.loadFileAsResource(file.getPath());
         }
 
+        if (OwnerType.ORDER.equals(file.getOwnerType())) {
+            if (userDetails.getActiveRole().equals(RoleType.ROLE_FREELANCER)) {
+                val exists = orderRepository.existsByIdAndFreelancer(file.getOrder().getId(), userDetails.getFreelancer());
+                if (!exists) {
+                    throw new AccessDeniedException(errorMessage);
+                }
+            } else if (userDetails.getActiveRole().equals(RoleType.ROLE_CLIENT)) {
+                val exists = orderRepository.existsByIdAndClient(file.getOrder().getId(), userDetails.getClient());
+                if (!exists) {
+                    throw new AccessDeniedException(errorMessage);
+                }
+            }
+        }
+
         if (file.getOwnerType().equals(OwnerType.FREELANCER)) {
             if (!userDetails.getActiveRole().equals(RoleType.ROLE_FREELANCER)
-                    || !file.getFreelancerId().equals(userDetails.getFreelancer().getId())) {
-                throw new AccessDeniedException(
-                        errorMessage);
+                    || !file.getFreelancer().equals(userDetails.getFreelancer())) {
+                throw new AccessDeniedException(errorMessage);
             }
         } else if (file.getOwnerType().equals(OwnerType.CLIENT)) {
             if (!userDetails.getActiveRole().equals(RoleType.ROLE_CLIENT)
-                    || !file.getClientId().equals(userDetails.getClient().getId())) {
-                throw new AccessDeniedException(
-                        errorMessage);
+                    || !file.getClient().equals(userDetails.getClient())) {
+                throw new AccessDeniedException(errorMessage);
             }
         }
 
@@ -126,14 +139,14 @@ public class FileService {
 
     @Transactional
     public void updateAvatar(MultipartFile avatarFile, UserDetailsImpl userDetails) {
-        Long freelancerId = userDetails.getFreelancer().getId();
-        List<File> existingAvatars = fileRepository.findByFreelancerIdAndDocumentType(freelancerId, DocumentType.AVATAR);
+        Freelancer freelancer = userDetails.getFreelancer();
+        List<File> existingAvatars = fileRepository.findByFreelancerAndDocumentType(freelancer, DocumentType.AVATAR);
 
         for (File oldAvatar : existingAvatars) {
             fileStorageService.deleteFile(oldAvatar.getPath());
             fileRepository.delete(oldAvatar);
         }
 
-        uploadFile(freelancerId, avatarFile, DocumentType.AVATAR, OwnerType.FREELANCER, true);
+        uploadFile(freelancer, avatarFile, DocumentType.AVATAR, OwnerType.FREELANCER, true);
     }
 }

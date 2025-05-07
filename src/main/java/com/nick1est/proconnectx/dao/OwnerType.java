@@ -5,5 +5,6 @@ public enum OwnerType {
     PROJECT,
     CLIENT,
     FREELANCER,
-    EMPLOYER
+    EMPLOYER,
+    ORDER
 }

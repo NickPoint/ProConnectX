@@ -20,6 +20,7 @@ interface BaseFieldConfig {
 
 interface TextFieldConfig extends BaseFieldConfig {
     type: 'text';
+    inputType: string
     email?: boolean;
     multiline?: boolean;
     maxRows?: number;
@@ -58,6 +59,10 @@ interface AddressGroupFieldConfig {
     fields: Record<string, TextFieldConfig>;
 }
 
+interface PlaceFieldConfig extends BaseFieldConfig {
+    type: 'place';
+}
+
 interface ArrayFieldConfig extends BaseFieldConfig {
     type: 'array';
     fields: Record<string, FieldConfig>;
@@ -74,6 +79,7 @@ export type FieldConfig =
     | SelectFieldConfig
     | FileFieldConfig
     | AddressGroupFieldConfig
+    | PlaceFieldConfig
     | ArrayFieldConfig
     | DateFieldConfig;
 
@@ -107,6 +113,9 @@ export const generateValidationSchema = (fieldsConfig: FieldConfig) => {
                         break;
                     case 'addressGroup':
                         schema = yup.object().shape(buildShape(fieldConfig.fields));
+                        break;
+                    case 'place':
+                        schema = yup.object()
                         break;
                     case 'array':
                         schema = yup.array().of(yup.object().shape(buildShape(fieldConfig.fields)));
@@ -206,6 +215,9 @@ export const generateInitialValuesFromConfig = (config: FieldConfig): any => {
                     break;
                 case 'addressGroup':
                     result[key] = generateInitialValuesFromConfig(field.fields);
+                    break;
+                case 'place':
+                    result[key] = null;
                     break;
                 case 'array':
                     result[key] = [generateInitialValuesFromConfig(field.fields)];

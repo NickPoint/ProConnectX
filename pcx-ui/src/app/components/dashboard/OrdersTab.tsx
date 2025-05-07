@@ -55,6 +55,7 @@ import {enqueueSnackbar} from "notistack";
 import dayjs, {Dayjs} from "dayjs";
 import {useNavigate} from "react-router-dom";
 import {GlobalLoadingBackdrop} from "../GlobalLoadingBackdrop.tsx";
+import FileCard from "../FileCard.tsx";
 
 
 interface EventsTimelineProps {
@@ -304,17 +305,6 @@ const OrderCard = (props: OrderDto) => {
                         <Grid size={12}>
                             <Divider/>
                         </Grid>
-                        <Grid container size={12} spacing={1}>
-                            <Grid size={12}>
-                                <Typography variant='h6'>{t('order.additionalNotes')}</Typography>
-                            </Grid>
-                            <Grid size={12}>
-                                <Typography>{props.additionalNotes}</Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid size={12}>
-                            <Divider/>
-                        </Grid>
                         {props.rejectionReason &&
                             <>
                                 <Grid container size={12} spacing={1}>
@@ -323,6 +313,40 @@ const OrderCard = (props: OrderDto) => {
                                     </Grid>
                                     <Grid size={12}>
                                         <Typography>{props.rejectionReason}</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid size={12}>
+                                    <Divider/>
+                                </Grid>
+                            </>
+                        }
+                        {props.additionalNotes &&
+                            <>
+                                <Grid container size={12} spacing={1}>
+                                    <Grid size={12}>
+                                        <Typography variant='h6'>{t('order.additionalNotes')}</Typography>
+                                    </Grid>
+                                    <Grid size={12}>
+                                        <Typography>{props.additionalNotes}</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid size={12}>
+                                    <Divider/>
+                                </Grid>
+                            </>
+                        }
+                        {props.files &&
+                            <>
+                                <Grid container size={12} spacing={1}>
+                                    <Grid size={12}>
+                                        <Typography variant='h6'>{t('order.additionalFiles')}</Typography>
+                                    </Grid>
+                                    <Grid container size={12} spacing={1}>
+                                        {props.files.map((file, index) => (
+                                            <Grid key={index} size={12}>
+                                                <FileCard file={file} />
+                                            </Grid>
+                                        ))}
                                     </Grid>
                                 </Grid>
                                 <Grid size={12}>

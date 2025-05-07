@@ -222,7 +222,7 @@ const DesktopServicePage = ({user, service}) => {
             </GridWithDividers>
             {user?.activeRole === RoleType.RoleClient &&
                 <Grid size={12}>
-                    <BookServiceForm {...service}/>
+                    <BookServiceForm service={service} />
                 </Grid>}
         </Grid>
     );
@@ -387,7 +387,7 @@ const MobileServicePage = ({user, service}) => {
             </GridWithDividers>
             {user?.activeRole === RoleType.RoleClient &&
                 <Grid size={12}>
-                    <BookServiceForm {...service}/>
+                    <BookServiceForm service={service}/>
                 </Grid>}
         </Grid>
     );

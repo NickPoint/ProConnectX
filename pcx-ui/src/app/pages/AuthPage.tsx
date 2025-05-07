@@ -19,7 +19,7 @@ const AuthPage = () => {
 
     useEffect(() => {
         dispatch(setOpen(false));
-    })
+    }, [dispatch]);
 
     return (
         <Paper sx={{overflow: 'hidden'}}>

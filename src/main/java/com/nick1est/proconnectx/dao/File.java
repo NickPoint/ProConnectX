@@ -19,14 +19,21 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column
-    private Long serviceId;
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Service service;
 
-    @Column
-    private Long clientId;
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Client client;
 
-    @Column
-    private Long freelancerId;
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Freelancer freelancer;
+
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Order order;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

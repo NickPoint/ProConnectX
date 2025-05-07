@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.OrderStatus;
+import com.nick1est.proconnectx.dto.employer.registration.FileDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class OrderDto {
     @NotNull
     private List<EventDto> events;
     private String additionalNotes;
+    private List<FileDto> files;
     private String rejectionReason;
     @NotNull
     private Instant createdAt;

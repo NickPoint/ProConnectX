@@ -14,7 +14,7 @@ public class Freelancer extends AbstractUser {
     @Lob
     private String description;
 
-    @OneToMany(mappedBy = "freelancerId", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.PERSIST)
     protected List<File> files;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -22,4 +22,9 @@ public class Freelancer extends AbstractUser {
             joinColumns = @JoinColumn(name = "freelancer_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
+
+    @Override
+    public OwnerType getOwnerType() {
+        return OwnerType.FREELANCER;
+    }
 }

@@ -12,6 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 public class Client extends AbstractUser {
-    @OneToMany(mappedBy = "clientId", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
     protected List<File> files;
+
+    @Override
+    public OwnerType getOwnerType() {
+        return OwnerType.CLIENT;
+    }
 }
