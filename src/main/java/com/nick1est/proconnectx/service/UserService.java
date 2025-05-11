@@ -114,7 +114,7 @@ public class UserService {
                         .map(Role::getName).collect(Collectors.toSet()),
                 activeInfo,
                 infos,
-                profileService.getAvatarUrl(active.getId())
+                profileService != null ? profileService.getAvatarUrl(active.getId()) : null //TODO: Maybe there is better variant to handle that admin doesn't have profileService
         );
     }
 
