@@ -159,16 +159,13 @@
       "TATTOO_ARTIST": "Tattoo Artist",
       "OTHER": "Other"
     },
-    "accountStatus": {
+    "profileStatus": {
       "UNVERIFIED": "Unverified",
       "PENDING": "Pending",
       "ACTIVE": "Active",
-      "INACTIVE": "Inactive",
-      "DELETED": "Deleted",
-      "BANNED": "Banned",
       "REJECTED": "Rejected"
     },
-    "accountType": {
+    "profileType": {
       "FREELANCER": "Freelancer",
       "CLIENT": "Client"
     },
@@ -279,8 +276,8 @@
       "workflowDescription": "Description",
       "status": "Status",
       "registrationDate": "Registration Date",
-      "accountType": "Account Type",
-      "accountStatus": "Account Status",
+      "profileType": "Profile Type",
+      "profileStatus": "Profile Status",
       "rejectionReason": "Rejection reason",
       "disputeReason": "Dispute reason",
       "deadlineDate": "Deadline date",
@@ -338,7 +335,7 @@
       "clientsRegistrationRequests": "Clients registration requests",
       "title": "Registration requests",
       "empty": "Seems like nothing to show here",
-      "accountStatus": "Account status",
+      "profileStatus": "Profile status",
       "rejectionReasonDialogText": "Please provide a clear reason for rejection.",
       "registrationRequestRejected": "Registration request has been declined.",
       "registrationRequestApproved": "Registration request has been approved."
@@ -390,8 +387,8 @@
     "menu": {
       "openMenu": "Open menu",
       "dashboard": "Dashboard",
-      "verify": "Verify {{accountType}} account",
-      "switchAccount": "Switch to {{accountType}}",
+      "verify": "Verify {{profileType}} account",
+      "switchAccount": "Switch to {{profileType}}",
       "addAnotherAccount": "Add another account",
       "logout": "Logout"
     }
@@ -489,7 +486,7 @@
   },
   "registration": {
     "addAccount": {
-      "success": "{{accountType}} account has been successfully registered!"
+      "success": "{{profileType}} account has been successfully registered!"
     }
   },
   "verification": {

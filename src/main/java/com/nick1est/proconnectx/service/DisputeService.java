@@ -22,12 +22,12 @@ public class DisputeService {
     private final DisputeMapper disputeMapper;
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void openDispute(Order order, String reason, Client client) {
+    public void openDispute(Order order, String reason, Profile clientProfile) {
         Dispute dispute = new Dispute();
         dispute.setOrder(order);
         dispute.setReason(reason);
         disputeRepository.save(dispute);
-        eventService.recordOrderDisputed(order, dispute, reason, client);
+        eventService.recordOrderDisputed(order, dispute, reason, clientProfile);
     }
 
     @Transactional
@@ -41,8 +41,8 @@ public class DisputeService {
         dispute.setProposalStatus(ProposalStatus.ACCEPTED);
         dispute.setStatus(DisputeStatus.RESOLVED_FREELANCER_PAID);
 
-        eventService.recordProposalAccepted(dispute, userDetails.getClient());
-        orderDisputeService.approveOrderFromDispute(dispute.getOrder(), userDetails, AccountType.CLIENT);
+        eventService.recordProposalAccepted(dispute, userDetails.getActiveProfile());
+        orderDisputeService.approveOrderFromDispute(dispute.getOrder(), userDetails, ProfileType.CLIENT);
     }
 
     @Transactional
@@ -56,8 +56,8 @@ public class DisputeService {
         dispute.setProposalStatus(ProposalStatus.REJECTED);
         dispute.setStatus(DisputeStatus.REJECTED);
         dispute.setProposalRejectionReason(reason);
-        eventService.recordProposalRejected(dispute, reason, userDetails.getClient());
-        openDispute(dispute.getOrder(), reason, userDetails.getClient());
+        eventService.recordProposalRejected(dispute, reason, userDetails.getActiveProfile());
+        openDispute(dispute.getOrder(), reason, userDetails.getActiveProfile());
     }
 
     @Transactional
@@ -71,7 +71,7 @@ public class DisputeService {
         dispute.setProposal(proposal);
         dispute.setProposalStatus(ProposalStatus.PENDING);
         dispute.setStatus(DisputeStatus.IN_REVIEW);
-        eventService.recordProposalCreated(dispute, proposal, userDetails.getFreelancer());
+        eventService.recordProposalCreated(dispute, proposal, userDetails.getActiveProfile());
     }
 
     @Transactional
@@ -101,7 +101,7 @@ public class DisputeService {
 
         Order order = dispute.getOrder();
 //      TODO: eventService.recordDisputeReleased(dispute, userDetails);
-        orderDisputeService.approveOrderFromDispute(order, userDetails, AccountType.ADMIN);
+        orderDisputeService.approveOrderFromDispute(order, userDetails, ProfileType.ADMIN);
     }
 
     public DisputeDto getDtoById(Long disputeId) {

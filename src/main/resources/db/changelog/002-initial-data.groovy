@@ -41,15 +41,15 @@ databaseChangeLog {
         }
 
         // Insert Admin User
-        insert(tableName: 'principal') {
+        insert(tableName: 'user') {
             column(name: 'email', value: 'admin@gmail.com')
             column(name: 'password', value: '$2a$10$Wwx8NxkWdzIKAEuhjmfPHOo9rQfxiW6Yrt2N3DK9jnBpIZi0xutii') // This seems like an already hashed password
-            column(name: 'last_active_role', value: 'ROLE_ADMIN')
+            column(name: 'last_active_profile', value: 'ADMIN')
         }
 
         // Link Admin User with Role
-        insert(tableName: 'principal_role') {
-            column(name: 'principal_id', value: '1')
+        insert(tableName: 'user_role') {
+            column(name: 'user_id', value: '1')
             column(name: 'role_id', value: '1')
         }
     }

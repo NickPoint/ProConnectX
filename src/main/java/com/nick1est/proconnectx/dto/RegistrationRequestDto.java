@@ -1,7 +1,7 @@
 package com.nick1est.proconnectx.dto;
 
-import com.nick1est.proconnectx.dao.AccountStatus;
-import com.nick1est.proconnectx.dao.AccountType;
+import com.nick1est.proconnectx.dao.ProfileStatus;
+import com.nick1est.proconnectx.dao.ProfileType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -18,15 +18,14 @@ public class RegistrationRequestDto {
     private String lastName;
     @NotBlank
     private String email;
-    private String avatarImageUrl;
     @NotBlank
     private String phoneNumber;
     @NotNull
-    private AccountStatus accountStatus;
+    private ProfileStatus profileStatus;
     private String rejectionReason;
     @NotNull
     private Instant registrationDate;
     @NotNull
-    private AccountType accountType;
+    private ProfileType profileType;
 }
 

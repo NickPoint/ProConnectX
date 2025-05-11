@@ -30,7 +30,7 @@ public class ProjectService {
 
     public Project createProject(ProjectCreateDto project) {
         log.info("Creating project: {}", project);
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getUser();
         val projectEntity = projectMapper.projectCreateDtoToProject(project);
         val employer = employerService.findById(userDetails.getId());
         projectEntity.setEmployer(employer);

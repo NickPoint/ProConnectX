@@ -2,7 +2,7 @@ package com.nick1est.proconnectx.mapper;
 
 import com.nick1est.proconnectx.dao.DocumentType;
 import com.nick1est.proconnectx.dao.File;
-import com.nick1est.proconnectx.dto.employer.registration.FileDto;
+import com.nick1est.proconnectx.dto.profile.FileDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ public abstract class FileMapper {
         if (file == null) {
             return null;
         }
-        return serverUrl + "files/" + file.getId();
+        return serverUrl + "/files/" + file.getId();
     }
 
     public List<String> mapFileToUrl(List<File> files) {

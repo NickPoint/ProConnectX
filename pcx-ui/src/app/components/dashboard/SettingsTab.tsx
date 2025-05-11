@@ -2,7 +2,7 @@ import {Avatar, Button, Grid} from "@mui/material";
 import {
     ClientDto,
     FreelancerDto,
-    RoleType,
+    ProfileType,
     useGetClientQuery,
     useGetCurrentUserQuery,
     useGetFreelancerQuery,
@@ -106,38 +106,38 @@ const SettingsTab = () => {
         return <GlobalLoadingBackdrop />
     }
 
-    let accountData: ClientDto | FreelancerDto | undefined;
+    let profileData: ClientDto | FreelancerDto | undefined;
     let onSubmit: any
-    if (user.activeRole === RoleType.RoleFreelancer) {
+    if (user.activeProfile?.profileType === ProfileType.Freelancer) {
         const {data, refetch} = useGetFreelancerQuery();
-        accountData = data;
+        profileData = data;
         onSubmit = updateFreelancer;
-    } else if (user.activeRole === RoleType.RoleClient) {
+    } else if (user.activeProfile?.profileType === ProfileType.Client) {
         const {data, refetch} = useGetClientQuery()
-        accountData = data;
+        profileData = data;
         onSubmit = updateClient;
     }
 
-    if (!accountData) {
+    if (!profileData) {
         return <GlobalLoadingBackdrop />
     }
 
     const initialValues = {
-        firstName: accountData.firstName,
-        lastName: accountData.lastName,
-        phoneNumber: accountData.phoneNumber,
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        phoneNumber: profileData.phoneNumber,
         address: {
             fullAddress: {
                 placeId: null,
-                description: `${accountData.address.street} ${accountData.address.houseNumber}, ${accountData.address.city}, ${accountData.address.region}, ${accountData.address.postalCode}, ${accountData.address.country}`,
+                description: `${profileData.address.street} ${profileData.address.houseNumber}, ${profileData.address.city}, ${profileData.address.region}, ${profileData.address.postalCode}, ${profileData.address.country}`,
                 structured_formatting: null,
             },
-            street: accountData.address.street,
-            houseNumber: accountData.address.houseNumber,
-            city: accountData.address.city,
-            postalCode: accountData.address.postalCode,
-            region: accountData.address.region,
-            country: accountData.address.country,
+            street: profileData.address.street,
+            houseNumber: profileData.address.houseNumber,
+            city: profileData.address.city,
+            postalCode: profileData.address.postalCode,
+            region: profileData.address.region,
+            country: profileData.address.country,
         }
     }
 
@@ -156,7 +156,7 @@ const SettingsTab = () => {
                                 height: '100%',
                             },
                         },
-                    }} alt={accountData.firstName} src={accountData.avatarImageUrl}/>
+                    }} alt={profileData.firstName} src={profileData.avatarImageUrl}/>
                 </Grid>
                 <Grid size={12} display="flex" alignItems="center" justifyContent="center">
                     <ImageUpload />

@@ -37,9 +37,9 @@ public class StatisticsService {
                                                                                 ZoneId zoneId) {
         Map<StatisticsType, StatsOverviewDto.StatisticsDto> stats = new HashMap<>();
 
-        switch (userDetails.getActiveRole()) {
-            case ROLE_FREELANCER -> {
-                val freelancerId = userDetails.getFreelancer().getId();
+        switch (userDetails.getActiveProfile().getProfileType()) {
+            case FREELANCER -> {
+                val freelancerId = userDetails.getActiveProfile().getId();
                 stats.put(StatisticsType.DAILY_TOTAL_EARNINGS, getFreelancerDailyEarnings(freelancerId, start, end, zoneId));
                 stats.put(StatisticsType.ORDERS_COMPLETED, getFreelancerOrdersCompleted(freelancerId, start, end));
                 stats.put(StatisticsType.ORDER_SUCCESS_RATE, getFreelancerSuccessRate(freelancerId));
@@ -51,11 +51,11 @@ public class StatisticsService {
 //                stats.put(StatisticsType.WORK_HOURS_TRACKED, getFreelancerTrackedHours(freelancerId));
 //                stats.put(StatisticsType.TOP_CATEGORIES, getFreelancerTopCategories(freelancerId));
             }
-            case ROLE_CLIENT -> {
-                val clientId = userDetails.getClient().getId();
+            case CLIENT -> {
+                val clientId = userDetails.getActiveProfile().getId();
                 stats.put(StatisticsType.TOTAL_SERVICES_PURCHASED, getTotalServicesPurchased(clientId, start, end));
             }
-            case ROLE_ADMIN -> {
+            case ADMIN -> {
                 // similar...
             }
         }

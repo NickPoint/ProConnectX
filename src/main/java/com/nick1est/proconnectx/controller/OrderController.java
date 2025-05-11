@@ -2,7 +2,7 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.annotations.CheckOwnership;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.OwnershipType;
+import com.nick1est.proconnectx.dao.ResourceType;
 import com.nick1est.proconnectx.dto.BookServiceDto;
 import com.nick1est.proconnectx.dto.OrderDto;
 import com.nick1est.proconnectx.dto.OrdersFilter;
@@ -45,7 +45,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     @PreAuthorize("hasRole('CLIENT') or hasRole('FREELANCER') or hasRole('ADMIN')")
-    @CheckOwnership(type = OwnershipType.ORDER)
+    @CheckOwnership(type = ResourceType.ORDER)
     public ResponseEntity<OrderDto> getOrder(@PathVariable Long orderId,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         OrderDto order = orderService.getDtoById(orderId);
@@ -60,44 +60,44 @@ public class OrderController {
     public ResponseEntity<Long> bookService(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                             @PathVariable Long serviceId,
                                             @Valid @ModelAttribute BookServiceDto bookingInfo) {
-        val orderId = orderService.bookService(serviceId, userDetails.getClient(), bookingInfo);
+        val orderId = orderService.bookService(serviceId, userDetails.getActiveProfile().getId(), bookingInfo);
         return ResponseEntity.ok().body(orderId);
     }
 
     @PutMapping("/{orderId}/accept")
     @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ADMIN')")
-    @CheckOwnership(type = OwnershipType.ORDER)
+    @CheckOwnership(type = ResourceType.ORDER)
     public void acceptOrder(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails,
                             @RequestParam LocalDate deadlineDate) {
-        orderService.acceptOrder(orderId, userDetails.getFreelancer(), deadlineDate);
+        orderService.acceptOrder(orderId, userDetails.getActiveProfile().getId(), deadlineDate);
     }
 
     @PutMapping("/{orderId}/submit-for-review")
     @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ADMIN')")
-    @CheckOwnership(type = OwnershipType.ORDER)
+    @CheckOwnership(type = ResourceType.ORDER)
     public void submitOrderForReview(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.submitOrderForReview(orderId, userDetails.getFreelancer());
+        orderService.submitOrderForReview(orderId, userDetails.getActiveProfile().getId());
     }
 
     @PutMapping("/{orderId}/approve")
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
-    @CheckOwnership(type = OwnershipType.ORDER)
+    @CheckOwnership(type = ResourceType.ORDER)
     public void approveOrder(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         orderService.approveOrder(orderId, userDetails);
     }
 
     @PutMapping("/{orderId}/dispute")
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
-    @CheckOwnership(type = OwnershipType.ORDER)
+    @CheckOwnership(type = ResourceType.ORDER)
     public void disputeOrder(@PathVariable Long orderId,
                              @NotEmpty @RequestBody String reason,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.disputeOrder(orderId, reason, userDetails.getClient());
+        orderService.disputeOrder(orderId, reason, userDetails.getActiveProfile());
     }
 
     @PutMapping("/{orderId}/cancel")
     @PreAuthorize("hasRole('FREELANCER') or hasRole('ADMIN')")
-    @CheckOwnership(type = OwnershipType.ORDER)
+    @CheckOwnership(type = ResourceType.ORDER)
     public void cancelOrder(@PathVariable Long orderId,
                             @RequestBody String reason,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {

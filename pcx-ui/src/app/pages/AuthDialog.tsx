@@ -1,9 +1,9 @@
 import Button from '@mui/material/Button';
 import {
-    AccountType,
+    ProfileType,
     LoginRequest,
     SignupFormRequest,
-    useAddAccountMutation,
+    useAddProfileMutation,
     useAuthenticateUserMutation,
     useCheckEmailMutation,
     useGetCurrentUserQuery,
@@ -40,10 +40,10 @@ export const AddAccountDialog: React.FC<AddAccountProps> = ({open, onClose}) => 
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {data: user} = useGetCurrentUserQuery();
-    const [addAccount] = useAddAccountMutation();
+    const [addAccount] = useAddProfileMutation();
 
-    const hasClientAccount = user?.accounts.some((account) => account.accountType === AccountType.Client);
-    const hasFreelancerAccount = user?.accounts.some((account) => account.accountType === AccountType.Freelancer);
+    const hasClientAccount = user?.allProfiles.some((profile) => profile.profileType === ProfileType.Client);
+    const hasFreelancerAccount = user?.allProfiles.some((profile) => profile.profileType === ProfileType.Freelancer);
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -57,9 +57,9 @@ export const AddAccountDialog: React.FC<AddAccountProps> = ({open, onClose}) => 
                             <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
                                 <CardActionArea
                                     sx={{height: '100%'}}
-                                    onClick={() => addAccount({accountType: AccountType.Client}).unwrap()
+                                    onClick={() => addAccount({profileType: ProfileType.Client}).unwrap()
                                                 .then(() => {
-                                                    enqueueSnackbar(t('registration.addAccount.success', {accountType: t(`enum.accountType.${AccountType.Client}`)}), {variant: 'success'});
+                                                    enqueueSnackbar(t('registration.addAccount.success', {profileType: t(`enum.profileType.${ProfileType.Client}`)}), {variant: 'success'});
                                                     onClose();
                                                     navigate('/client-verification');
                                                 })}
@@ -78,9 +78,9 @@ export const AddAccountDialog: React.FC<AddAccountProps> = ({open, onClose}) => 
                                 <Card>
                                     <CardActionArea
                                         sx={{height: '100%'}}
-                                        onClick={() => addAccount({accountType: AccountType.Freelancer}).unwrap()
+                                        onClick={() => addAccount({profileType: ProfileType.Freelancer}).unwrap()
                                             .then(() => {
-                                                enqueueSnackbar(t('registration.addAccount.success', {accountType: t(`enum.accountType.${AccountType.Freelancer}`)}), {variant: 'success'});
+                                                enqueueSnackbar(t('registration.addAccount.success', {profileType: t(`enum.profileType.${ProfileType.Freelancer}`)}), {variant: 'success'});
                                                 onClose();
                                                 navigate('/freelancer-verification');
                                             })}
@@ -134,7 +134,7 @@ const signUpSchema = object({
 const signUpInitialValues: SignupFormRequest = {
     email: '',
     password: '',
-    accountType: '' as AccountType,
+    profileType: '' as ProfileType,
 }
 
 interface SignupFormProps {
@@ -170,8 +170,8 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                 }
                 onSubmit(values)
                     .then(() => {
-                        enqueueSnackbar(t('registration.addAccount.success', {accountType: t(`enum.accountType.${values.accountType}`)}), {variant: 'success'});
-                        if (values.accountType === AccountType.Freelancer) {
+                        enqueueSnackbar(t('registration.addAccount.success', {profileType: t(`enum.profileType.${values.profileType}`)}), {variant: 'success'});
+                        if (values.profileType === ProfileType.Freelancer) {
                             navigate('/freelancer-verification');
                         } else {
                             navigate('/client-verification');
@@ -209,7 +209,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                         </Grid>
                                         <Grid size={{xs: 12, md: 6}} container spacing={4} padding={4}>
                                             <Grid size={12}>
-                                                <Typography variant="h4">Create new account</Typography>
+                                                <Typography variant="h4">Create new profile</Typography>
                                             </Grid>
                                             <Grid size={12}>
                                                 <Stack spacing={1}>
@@ -228,7 +228,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                                     >
                                                         Sign Up
                                                     </Button>
-                                                    <Typography>Already has account?{' '}
+                                                    <Typography>Already has profile?{' '}
                                                         <Link sx={{cursor: 'pointer'}}
                                                               onClick={() => dispatch(setSignup(false))}>Sign
                                                             in</Link>
@@ -252,7 +252,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                         <Grid container spacing={2} size={12}>
                                             <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
                                                 <CardActionArea sx={{height: '100%'}}
-                                                                onClick={() => setFieldValue('accountType', AccountType.Client)}
+                                                                onClick={() => setFieldValue('profileType', ProfileType.Client)}
                                                                 type='submit'>
                                                     <CardContent>
                                                         <Typography
@@ -265,7 +265,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                             <Grid component={Card} variant='outlined' size={{xs: 12, md: 6}}>
                                                 <Card>
                                                     <CardActionArea sx={{height: '100%'}}
-                                                                    onClick={() => setFieldValue('accountType', AccountType.Freelancer)}
+                                                                    onClick={() => setFieldValue('profileType', ProfileType.Freelancer)}
                                                                     type='submit'>
                                                         <CardContent>
                                                             <Typography
@@ -362,7 +362,7 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
                                     >
                                         Sign In
                                     </Button>
-                                    <Typography>Doesn't have and account?{' '}
+                                    <Typography>Doesn't have and profile?{' '}
                                         <Link sx={{cursor: 'pointer'}}
                                               onClick={() => dispatch(setSignup(true))}>
                                             Sign Up
@@ -390,7 +390,7 @@ const AuthDialog = () => {
     return (
         <Dialog fullWidth maxWidth='md' open={open}
                 onClose={() => dispatch(setOpen(false))}>
-            <DialogContent sx={{p: 0, overflow: 'hidden'}}>
+            <DialogContent sx={{p: 0, overflowX: 'hidden'}}>
                 <motion.div layout>
                     <AnimatePresence mode="wait">
                         {!isSignUp ? (

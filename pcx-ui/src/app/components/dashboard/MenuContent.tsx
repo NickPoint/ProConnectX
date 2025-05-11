@@ -10,7 +10,7 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import {useTranslation} from 'react-i18next';
 import {useLocation, useNavigate} from "react-router-dom";
-import {RoleType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {ProfileType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
 
 export default function MenuContent() {
     const {data: user} = useGetCurrentUserQuery();
@@ -29,13 +29,13 @@ export default function MenuContent() {
             label: 'orders',
             icon: <AssignmentRoundedIcon/>,
             onClick: () => navigate('/dashboard/orders'),
-            display: RoleType.RoleUnverified !== user?.activeRole,
+            display: ProfileType.RoleUnverified !== user?.activeProfile,
         },
         {
             label: 'services',
             icon: <Work/>,
             onClick: () => navigate('/dashboard/services'),
-            display: RoleType.RoleFreelancer === user?.activeRole,
+            display: ProfileType.Freelancer === user?.activeProfile.profileType,
         },
     ];
 
@@ -44,7 +44,7 @@ export default function MenuContent() {
             label: 'settings',
             icon: <SettingsRoundedIcon/>,
             onClick: () => navigate('/dashboard/settings'),
-            display: user && [RoleType.RoleFreelancer, RoleType.RoleClient].includes(user?.activeRole)
+            display: user && [ProfileType.Freelancer, ProfileType.Client].includes(user?.activeProfile)
         },
         {
             label: 'exitDashboard',

@@ -21,43 +21,11 @@ function createTagsFromList<T extends { id: string | number }>(
 }
 const enhancedApi = pcxApi.enhanceEndpoints({
     endpoints: {
-        makeBid: {
-            invalidatesTags: (result, error, arg) => [{type: 'Project', id: arg.projectId}],
-        },
-        getProject: {
-            providesTags: (result, error, arg) => [{type: 'Project', id: arg.projectId}],
-        },
-        // getCurrentUser: {
-        //     async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        //         const {data} = await queryFulfilled;
-        //         const {t} = useTranslation();
-        //         const notifications: NotificationDto[] = []
-        //         data.accounts.forEach(account => {
-        //             if (account.accountStatus === AccountStatus.Pending) {
-        //                 notifications.push({title: t('notifications.unfinishedVerification.title'),
-        //                     fullName: `${data.firstName} ${data.lastName}`,
-        //                     message: t('notifications.unfinishedVerification.message'),
-        //                     eventType: EventType.AccountUnverified});
-        //             } else if (account.accountStatus === AccountStatus.Rejected) {
-        //                 notifications.push({title: t('notifications.rejectedRegistration.title'),
-        //                     fullName: `${data.firstName} ${data.lastName}`,
-        //                     message: t('notifications.rejectedRegistration.message', {role: t(`enum.accountType.${account.accountType}`)}),
-        //                     eventType: EventType.RegistrationRejected});
-        //             }
-        //         })
-        //     }
-        // },
         authenticateUser: {
             invalidatesTags: ['Auth', 'Freelancer', 'Order'],
         },
-        createClient: {
-            invalidatesTags: ['Auth', 'Client'],
-        },
-        createFreelancer: {
-            invalidatesTags: ['Auth', 'Freelancer'],
-        },
         switchRole: {
-            invalidatesTags: ['Auth', 'Order'],
+            invalidatesTags: ['Auth', 'Order', 'Statistics'],
         },
         getServices: {
             providesTags: (result) => createTagsFromList(result?.content, 'Service'),
@@ -107,7 +75,7 @@ const overridenApi = pcxApi.injectEndpoints({
                 method: "POST",
                 body: queryArg,
             }),
-            invalidatesTags: ["Freelancer"],
+            invalidatesTags: ["Auth", "Freelancer"],
         }),
         createClient: build.mutation<
             CreateFreelancerApiResponse,
@@ -118,7 +86,7 @@ const overridenApi = pcxApi.injectEndpoints({
                 method: "POST",
                 body: queryArg,
             }),
-            invalidatesTags: ["Client"],
+            invalidatesTags: ["Auth", "Client"],
         }),
         createService: build.mutation<CreateServiceApiResponse, FormData>({
             query: queryArg => ({

@@ -1,0 +1,91 @@
+app:
+  server:
+    url: "http://192.168.31.6:8080"
+  base-url: "http://192.168.31.6:5173"
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/proconnectx"
+    username: proconnectx
+    password: proconnectx
+    driver-class-name: "org.postgresql.Driver"
+
+  messages:
+    basename: messages
+    encoding: "UTF-8"
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.PostgreSQLDialect"
+        default_schema: public
+    hibernate:
+      ddl-auto: none
+
+  servlet:
+    multipart:
+      max-file-size: "50MB"
+      max-request-size: "50MB"
+
+  liquibase:
+    enabled: true
+    change-log: "db/changelog/db.changelog-master.yaml"
+    contexts: "dev,test,prod"
+    default-schema: public
+    drop-first: false
+
+  mail:
+    host: smtp.mailersend.net
+    port: 587
+    username: username
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          debug: true
+    default-encoding: UTF-8
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: notification-group
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: "com.nick1est.proconnectx.events"
+
+cors:
+  allowed-origins: "http://localhost:5173,http://192.168.31.6:5173/"
+
+upload:
+  dir: uploads
+
+proConnectX:
+  app:
+    jwtCookieName: proConnectX
+    jwtSecret: "sEExyrTvivyBONjmPKLOPIMoun87G69FGVO86RD854s3S7esxCVy8990k0M9n0b08V7"
+    jwtExpirationMs: 86400000
+
+jwt:
+  cookie:
+    secure: false
+    same-site: Lax

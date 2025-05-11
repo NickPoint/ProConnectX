@@ -20,7 +20,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch} from "../../hooks";
 import React, {useEffect} from "react";
 import {setPageTitle} from "../../../features/header/headerSlice";
-import {RoleType, useGetCurrentUserQuery, useGetServiceQuery} from "../../../features/api/pcxApi";
+import {ProfileType, useGetCurrentUserQuery, useGetServiceQuery} from "../../../features/api/pcxApi";
 import BookServiceForm from "../BookServiceForm.tsx";
 import UserCard from "../UserCard.tsx";
 import Paper from "@mui/material/Paper";
@@ -220,7 +220,7 @@ const DesktopServicePage = ({user, service}) => {
                     </Grid>
                 }
             </GridWithDividers>
-            {user?.activeRole === RoleType.RoleClient &&
+            {user?.activeProfile.profileType === ProfileType.Client &&
                 <Grid size={12}>
                     <BookServiceForm service={service} />
                 </Grid>}
@@ -385,7 +385,7 @@ const MobileServicePage = ({user, service}) => {
                     </Grid>
                 }
             </GridWithDividers>
-            {user?.activeRole === RoleType.RoleClient &&
+            {user?.activeProfile.profileType === ProfileType.Client &&
                 <Grid size={12}>
                     <BookServiceForm service={service}/>
                 </Grid>}

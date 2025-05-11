@@ -50,7 +50,7 @@ public class ServiceController {
         List<Faq> faqs = mapper.readValue(
                 service.getFaqsJson(), new TypeReference<List<Faq>>() {
                 });
-        return serviceService.createService(service, workflow, faqs, userDetails.getFreelancer());
+        return serviceService.createService(service, workflow, faqs, userDetails.getActiveProfile().getId());
     }
 
     @GetMapping

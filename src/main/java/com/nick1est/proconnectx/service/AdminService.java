@@ -1,57 +1,74 @@
 package com.nick1est.proconnectx.service;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.AbstractUser;
-import com.nick1est.proconnectx.dao.AccountStatus;
-import com.nick1est.proconnectx.dao.AccountType;
+import com.nick1est.proconnectx.dao.BaseProfile;
+import com.nick1est.proconnectx.dao.ProfileStatus;
+import com.nick1est.proconnectx.dao.ProfileType;
+import com.nick1est.proconnectx.dao.RoleType;
 import com.nick1est.proconnectx.dto.RegistrationRequestDto;
-import com.nick1est.proconnectx.mapper.ClientMapper;
-import com.nick1est.proconnectx.mapper.FreelancerMapper;
+import com.nick1est.proconnectx.events.domain.ProfileRejectedEvent;
+import com.nick1est.proconnectx.events.domain.ProfileVerifiedEvent;
+import com.nick1est.proconnectx.mapper.ClientMapperGeneric;
+import com.nick1est.proconnectx.mapper.FreelancerMapperGeneric;
+import com.nick1est.proconnectx.repository.ClientRepository;
+import com.nick1est.proconnectx.repository.FreelancerRepository;
+import com.nick1est.proconnectx.repository.UserRepository;
+import com.nick1est.proconnectx.service.profile.ClientProfileService;
+import com.nick1est.proconnectx.service.profile.FreelancerProfileService;
+import com.nick1est.proconnectx.service.profile.ProfileResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AdminService {
-    private final FreelancerService freelancerService;
-    private final ClientService clientService;
-    private final GeneralApprovalService generalApprovalService;
-    private final FreelancerMapper freelancerMapper;
-    private final ClientMapper clientMapper;
+    private final FreelancerProfileService freelancerProfileService;
+    private final ClientProfileService clientProfileService;
+    private final FreelancerRepository freelancerRepository;
+    private final ClientRepository clientRepository;
+    private final FreelancerMapperGeneric freelancerMapper;
+    private final ClientMapperGeneric clientMapper;
+    private final ProfileResolver profileResolver;
+    private final Map<ProfileType, RoleType> profileTypeRoleTypeMap;
+    private final RoleService roleService;
+    private final UserRepository userRepository;
+    private final ApplicationEventPublisher events;
 
-    public List<RegistrationRequestDto> getFreelancersRegistrationRequests(AccountStatus accountStatus) {
-        val freelancers = freelancerService.getByAccountStatus(accountStatus);
+    public List<RegistrationRequestDto> getFreelancersRegistrationRequests(ProfileStatus profileStatus) {
+        val freelancers = freelancerRepository.findByProfileStatus(profileStatus);
         return freelancerMapper.toRegistrationRequestDto(freelancers);
     }
 
-    public List<RegistrationRequestDto> getClientsRegistrationRequests(AccountStatus accountStatus) {
-        val clients = clientService.getByAccountStatus(accountStatus);
+    public List<RegistrationRequestDto> getClientsRegistrationRequests(ProfileStatus profileStatus) {
+        val clients = clientRepository.findByProfileStatus(profileStatus);
         return clientMapper.toRegistrationRequestDto(clients);
     }
 
     @Transactional
-    public void approveRegistrationRequest(AccountType entityType, Long id, UserDetailsImpl userDetails) {
-        AbstractUser approvable = getApprovableEntity(entityType, id);
-        generalApprovalService.approve(approvable, userDetails);
+    public void approveRegistrationRequest(Long profileId, ProfileType profileType, UserDetailsImpl userDetails) {
+        val profile = profileResolver.resolve(profileId, profileType);
+        val role = profileTypeRoleTypeMap.get(profileType);
+        val roles = profile.getUser().getRoles();
+        roles.remove(roleService.getByName(RoleType.ROLE_UNVERIFIED));
+        roles.add(roleService.getByName(role));
+        profile.setProfileStatus(ProfileStatus.ACTIVE);
+        events.publishEvent(new ProfileVerifiedEvent(profileId, profileType));
     }
 
     @Transactional
-    public void rejectRegistrationRequest(AccountType entityType, Long id, String reason, UserDetailsImpl userDetails) {
-        AbstractUser approvable = getApprovableEntity(entityType, id);
-        generalApprovalService.reject(approvable, reason, userDetails);
-    }
-
-    private AbstractUser getApprovableEntity(AccountType type, Long id) {
-        return switch (type) {
-            case FREELANCER -> freelancerService.getById(id);
-            case CLIENT -> clientService.getById(id);
-            default -> throw new IllegalArgumentException("Unsupported approvable type: " + type);
-        };
+    public void rejectRegistrationRequest(Long profileId, ProfileType profileType, String reason, UserDetailsImpl userDetails) {
+        val profile = (BaseProfile) profileResolver.resolve(profileId, profileType);
+        log.debug("Rejecting registration request for {}: {} by admin: {}", profileType, profileId, userDetails.getUser().getId());
+        profile.setRejectionReason(reason);
+        profile.setProfileStatus(ProfileStatus.REJECTED);
+        events.publishEvent(new ProfileRejectedEvent(profileId, profileType, reason));
     }
 }

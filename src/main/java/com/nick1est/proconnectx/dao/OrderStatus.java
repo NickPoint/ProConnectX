@@ -37,5 +37,16 @@ public enum OrderStatus {
     /**
      * Order was canceled (by client, freelancer, or system).
      */
-    CANCELED
+    CANCELED;
+
+    public boolean canTransitionTo(OrderStatus target) {
+        return switch (this) {
+            case CREATED -> target == IN_PROGRESS || target == CANCELED;
+            case IN_PROGRESS -> target == SUBMITTED_FOR_REVIEW;
+            case SUBMITTED_FOR_REVIEW -> target == APPROVED || target == DISPUTED;
+            case DISPUTED -> target == APPROVED || target == CANCELED;
+            case APPROVED -> target == COMPLETED;
+            default -> false;
+        };
+    }
 }

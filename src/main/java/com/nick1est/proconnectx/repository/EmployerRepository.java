@@ -15,6 +15,6 @@ import java.util.Optional;
 @Repository
 @RepositoryRestResource(exported = false)
 public interface EmployerRepository extends JpaRepository<Employer, Long> {
-    Optional<Employer> findByPrincipal(@NotNull Principal principal);
+    Optional<Employer> findByPrincipal(@NotNull User user);
 }
 */

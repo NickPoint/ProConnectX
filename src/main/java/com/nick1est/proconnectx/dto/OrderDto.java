@@ -1,7 +1,8 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.OrderStatus;
-import com.nick1est.proconnectx.dto.employer.registration.FileDto;
+import com.nick1est.proconnectx.dto.profile.BaseProfileDto;
+import com.nick1est.proconnectx.dto.profile.FileDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -17,7 +18,7 @@ public class OrderDto {
     @NotNull
     private LightweightServiceDto service;
     @NotNull
-    private LightweightClientDto client;
+    private BaseProfileDto clientProfile;
     @NotNull
     private OrderStatus status;
     @NotNull

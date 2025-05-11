@@ -7,6 +7,7 @@ import com.nick1est.proconnectx.exception.NotFoundException;
 import com.nick1est.proconnectx.mapper.CategoryMapper;
 import com.nick1est.proconnectx.mapper.ServiceMapper;
 import com.nick1est.proconnectx.repository.ServiceRepository;
+import com.nick1est.proconnectx.service.profile.FreelancerProfileService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -32,19 +33,20 @@ public class ServiceService {
     private final EntityManager entityManager;
     private final FileService fileService;
     private final MessageSource messageSource;
+    private final FreelancerProfileService freelancerProfileService;
 
     @Transactional
     public Long createService(ServiceCreateDto serviceDto,
                               List<WorkflowStep> workflow,
                               List<Faq> faqs,
-                              Freelancer freelancer) {
-        log.info("Freelancer {} posted a new service: {}", freelancer.getId(), serviceDto);
+                              Long freelancerId) {
+        log.info("Freelancer {} posted a new service: {}", freelancerId, serviceDto);
+        val freelancerProfile = freelancerProfileService.getById(freelancerId);
         val service = serviceMapper.toDao(serviceDto, workflow, faqs);
-        service.setFreelancer(freelancer);
+        service.setFreelancer(freelancerProfile);
         val savedService = serviceRepository.save(service);
-        val files = fileService.uploadFiles(savedService, serviceDto.getImages(),
-                DocumentType.GALLERY, OwnerType.SERVICE, true);
-        savedService.setGallery(files);
+        val files = fileService.uploadFiles(savedService, serviceDto.getImages(), DocumentType.GALLERY, true);
+        savedService.setFiles(files);
         return savedService.getId();
     }
 
@@ -144,10 +146,11 @@ public class ServiceService {
 
         public static Specification<Service> filterByUser(UserDetailsImpl userDetails) {
             return (root, query, cb) -> {
-                if (RoleType.ROLE_ADMIN.equals(userDetails.getActiveRole())) {
+                val activeProfile = userDetails.getActiveProfile();
+                if (ProfileType.ADMIN == activeProfile.getProfileType()) {
                     return cb.conjunction();
-                } else if (RoleType.ROLE_FREELANCER.equals(userDetails.getActiveRole())) {
-                    return cb.equal(root.get("freelancer"), userDetails.getFreelancer());
+                } else if (ProfileType.FREELANCER == activeProfile.getProfileType()) {
+                    return cb.equal(root.get("freelancerProfile"), activeProfile);
                 } else {
                     return cb.disjunction();
                 }

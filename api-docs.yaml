@@ -25,12 +25,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -47,6 +41,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -78,12 +78,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -100,6 +94,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -131,12 +131,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -153,6 +147,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -178,12 +178,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -200,6 +194,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -231,12 +231,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -253,6 +247,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -277,12 +277,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -299,6 +293,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -330,12 +330,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -352,6 +346,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -383,12 +383,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -405,6 +399,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -430,12 +430,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -452,6 +446,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -477,12 +477,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -499,6 +493,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -524,12 +524,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -550,9 +544,15 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "200":
           description: OK
-  /client/profile:
+  /client/update:
     put:
       tags:
       - Client
@@ -570,12 +570,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -592,6 +586,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -614,11 +614,7 @@ paths:
         in: path
         required: true
         schema:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
+          $ref: '#/components/schemas/ProfileType'
       requestBody:
         content:
           application/json:
@@ -628,12 +624,6 @@ paths:
       responses:
         "404":
           description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -654,6 +644,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -680,20 +676,10 @@ paths:
         in: path
         required: true
         schema:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
+          $ref: '#/components/schemas/ProfileType'
       responses:
         "404":
           description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -714,6 +700,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -797,12 +789,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -819,6 +805,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -846,12 +838,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -868,6 +854,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -904,12 +896,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -926,6 +912,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -949,12 +941,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -975,12 +961,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "200":
           description: OK
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/FreelancerDto'
+                $ref: '#/components/schemas/FreelancerProfileDto'
     post:
       tags:
       - Freelancer
@@ -998,12 +990,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1024,17 +1010,23 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "201":
           description: Created
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/FreelancerDto'
-  /files/avatar:
+                $ref: '#/components/schemas/FreelancerProfileDto'
+  /freelancer/avatar:
     post:
       tags:
-      - File
-      operationId: updateAvatar
+      - Freelancer
+      operationId: updateFreelancerAvatar
       requestBody:
         content:
           application/json:
@@ -1053,12 +1045,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1075,6 +1061,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1097,12 +1089,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1123,12 +1109,18 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "200":
           description: OK
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ClientDto'
+                $ref: '#/components/schemas/ClientProfileDto'
     post:
       tags:
       - Client
@@ -1146,12 +1138,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1168,6 +1154,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1177,27 +1169,26 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ClientDto'
-  /auth/switch-role:
+                $ref: '#/components/schemas/ClientProfileDto'
+  /client/avatar:
     post:
       tags:
-      - Auth
-      operationId: switchRole
-      parameters:
-      - name: role
-        in: query
-        required: true
-        schema:
-          $ref: '#/components/schemas/RoleType'
+      - Client
+      operationId: updateClientAvatar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - avatar
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
       responses:
         "404":
           description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1218,6 +1209,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1228,6 +1225,56 @@ paths:
             application/hal+json:
               schema:
                 type: object
+  /auth/switch-profile:
+    post:
+      tags:
+      - Auth
+      operationId: switchProfile
+      parameters:
+      - name: newProfileType
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProfileType'
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
   /auth/signup:
     post:
       tags:
@@ -1246,12 +1293,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1268,6 +1309,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1282,16 +1329,10 @@ paths:
     post:
       tags:
       - Auth
-      operationId: logoutUser
+      operationId: logout
       responses:
         "404":
           description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1316,12 +1357,14 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "200":
-          description: OK
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
   /auth/login:
     post:
       tags:
@@ -1340,8 +1383,52 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "400":
           description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /auth/add-profile:
+    post:
+      tags:
+      - Auth
+      operationId: addProfile
+      parameters:
+      - name: profileType
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProfileType'
+      responses:
+        "404":
+          description: Not Found
           content:
             application/hal+json:
               schema:
@@ -1366,14 +1453,16 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "200":
-          description: OK
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
   /auth/check-email:
-    post:
+    head:
       tags:
       - Auth
       operationId: checkEmail
@@ -1390,12 +1479,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1416,62 +1499,14 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "200":
-          description: OK
-  /auth/add-account:
-    post:
-      tags:
-      - Auth
-      operationId: addAccount
-      parameters:
-      - name: accountType
-        in: query
-        required: true
-        schema:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
-      responses:
-        "404":
-          description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "400":
           description: Bad Request
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "500":
-          description: Internal Server Error
-          content:
-            application/hal+json:
-              schema:
-                oneOf:
-                - type: string
-                - $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "200":
           description: OK
-          content:
-            application/hal+json:
-              schema:
-                type: object
   /test/user:
     get:
       tags:
@@ -1484,12 +1519,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1506,6 +1535,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1528,12 +1563,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1550,6 +1579,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1572,12 +1607,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1594,6 +1623,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1616,12 +1651,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1638,6 +1667,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1678,12 +1713,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1700,6 +1729,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1731,12 +1766,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1753,6 +1782,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1801,12 +1836,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1823,6 +1852,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1878,12 +1913,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1900,6 +1929,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1929,12 +1964,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -1951,6 +1980,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -1980,12 +2015,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -2002,6 +2031,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2032,12 +2067,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -2054,6 +2083,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2076,12 +2111,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -2098,6 +2127,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2108,20 +2143,14 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
-  /auth/freelancer-registrations:
+  /auth/registration-requests:
     get:
       tags:
       - Auth
-      operationId: getFreelancerRegistrationRequests
+      operationId: getRegistrationRequests
       responses:
         "404":
           description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2146,52 +2175,12 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "200":
-          description: OK
-          content:
-            application/hal+json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/LightweightRegistrationRequestDto'
-  /auth/client-registrations:
-    get:
-      tags:
-      - Auth
-      operationId: getClientRegistrationRequests
-      responses:
-        "404":
-          description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "400":
           description: Bad Request
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "500":
-          description: Internal Server Error
-          content:
-            application/hal+json:
-              schema:
-                oneOf:
-                - type: string
-                - $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-        "403":
-          description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "200":
           description: OK
           content:
@@ -2199,7 +2188,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LightweightRegistrationRequestDto'
+                  $ref: '#/components/schemas/RegistrationRequestDto'
   /admin/freelancer-registrations:
     get:
       tags:
@@ -2212,12 +2201,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -2234,6 +2217,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2258,12 +2247,6 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
@@ -2280,6 +2263,12 @@ paths:
                 $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -2340,6 +2329,13 @@ components:
           $ref: '#/components/schemas/AddressDto'
         phoneNumber:
           type: string
+    ProfileType:
+      type: string
+      enum:
+      - ADMIN
+      - CLIENT
+      - FREELANCER
+      - UNVERIFIED
     CategoryType:
       type: string
       enum:
@@ -2533,10 +2529,9 @@ components:
     FreelancerRegistrationRequest:
       required:
       - address
-      - categories
       - description
       - firstName
-      - idDocument
+      - idDocuments
       - lastName
       - phoneNumber
       type: object
@@ -2549,21 +2544,21 @@ components:
           $ref: '#/components/schemas/AddressDto'
         phoneNumber:
           type: string
+        avatarImage:
+          type: string
+          format: binary
+        idDocuments:
+          type: array
+          items:
+            type: string
+            format: binary
         categories:
           type: array
           items:
             $ref: '#/components/schemas/CategoryType'
-        avatarImage:
-          type: string
-          format: binary
         description:
           type: string
-        idDocument:
-          type: array
-          items:
-            type: string
-            format: binary
-    FreelancerDto:
+    FreelancerProfileDto:
       required:
       - address
       - email
@@ -2578,8 +2573,6 @@ components:
         id:
           type: integer
           format: int64
-        address:
-          $ref: '#/components/schemas/AddressDto'
         firstName:
           type: string
         lastName:
@@ -2596,11 +2589,13 @@ components:
           format: int32
         avatarImageUrl:
           type: string
+        address:
+          $ref: '#/components/schemas/AddressDto'
     ClientRegistrationRequest:
       required:
       - address
       - firstName
-      - idDocument
+      - idDocuments
       - lastName
       - phoneNumber
       type: object
@@ -2616,12 +2611,12 @@ components:
         avatarImage:
           type: string
           format: binary
-        idDocument:
+        idDocuments:
           type: array
           items:
             type: string
             format: binary
-    ClientDto:
+    ClientProfileDto:
       required:
       - address
       - email
@@ -2636,8 +2631,6 @@ components:
         id:
           type: integer
           format: int64
-        address:
-          $ref: '#/components/schemas/AddressDto'
         firstName:
           type: string
         lastName:
@@ -2654,6 +2647,54 @@ components:
           format: int32
         avatarImageUrl:
           type: string
+        address:
+          $ref: '#/components/schemas/AddressDto'
+    AuthResponse:
+      required:
+      - activeProfile
+      - allProfiles
+      - email
+      - roles
+      type: object
+      properties:
+        email:
+          type: string
+        roles:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleType'
+        activeProfile:
+          $ref: '#/components/schemas/ProfileInfo'
+        allProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileInfo'
+        avatarUrl:
+          type: string
+    ProfileInfo:
+      required:
+      - profileId
+      - profileType
+      - status
+      type: object
+      properties:
+        profileId:
+          type: integer
+          format: int64
+        profileType:
+          $ref: '#/components/schemas/ProfileType'
+        status:
+          $ref: '#/components/schemas/ProfileStatus'
+        displayName:
+          type: string
+    ProfileStatus:
+      type: string
+      enum:
+      - UNVERIFIED
+      - PENDING
+      - ACTIVE
+      - REJECTED
     RoleType:
       type: string
       enum:
@@ -2664,9 +2705,9 @@ components:
       - ROLE_CLIENT
     SignupFormRequest:
       required:
-      - accountType
       - email
       - password
+      - profileType
       type: object
       properties:
         email:
@@ -2677,63 +2718,8 @@ components:
           maxLength: 32
           minLength: 8
           type: string
-        accountType:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
-    Account:
-      type: object
-      properties:
-        userId:
-          type: integer
-          format: int64
-        accountStatus:
-          $ref: '#/components/schemas/AccountStatus'
-        accountType:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
-    AccountStatus:
-      type: string
-      enum:
-      - UNVERIFIED
-      - PENDING
-      - ACTIVE
-      - INACTIVE
-      - DELETED
-      - BANNED
-      - REJECTED
-    AuthResponse:
-      required:
-      - accounts
-      - activeRole
-      - email
-      - roles
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Account'
-        roles:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/RoleType'
-        activeRole:
-          $ref: '#/components/schemas/RoleType'
-        avatarImageUrl:
-          type: string
+        profileType:
+          $ref: '#/components/schemas/ProfileType'
     LoginRequest:
       required:
       - email
@@ -2759,7 +2745,7 @@ components:
           type: array
           items:
             type: number
-    LightWeightFreelancerDto:
+    BaseProfileDto:
       required:
       - email
       - firstName
@@ -2767,6 +2753,7 @@ components:
       - lastName
       - phoneNumber
       - rating
+      - ratingCount
       type: object
       properties:
         id:
@@ -2776,13 +2763,16 @@ components:
           type: string
         lastName:
           type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
         rating:
           type: number
           format: double
-        email:
-          type: string
-        phoneNumber:
-          type: string
+        ratingCount:
+          type: integer
+          format: int32
         avatarImageUrl:
           type: string
     LightweightAddressDto:
@@ -2830,7 +2820,7 @@ components:
         price:
           type: number
         freelancer:
-          $ref: '#/components/schemas/LightWeightFreelancerDto'
+          $ref: '#/components/schemas/BaseProfileDto'
         categories:
           type: array
           items:
@@ -2843,12 +2833,16 @@ components:
     PageLightweightServiceDto:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -2863,20 +2857,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        first:
-          type: boolean
         last:
           type: boolean
         numberOfElements:
           type: integer
           format: int32
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         empty:
           type: boolean
     PageableObject:
       type: object
       properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
         offset:
           type: integer
           format: int64
@@ -2884,15 +2880,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        pageSize:
-          type: integer
-          format: int32
-        pageNumber:
-          type: integer
-          format: int32
-        unpaged:
-          type: boolean
         paged:
+          type: boolean
+        unpaged:
           type: boolean
     SortObject:
       type: object
@@ -2983,7 +2973,7 @@ components:
           type: integer
           format: int64
         freelancer:
-          $ref: '#/components/schemas/LightWeightFreelancerDto'
+          $ref: '#/components/schemas/BaseProfileDto'
         title:
           type: string
         description:
@@ -3067,7 +3057,7 @@ components:
     EventType:
       type: string
       enum:
-      - ACCOUNT_CREATED
+      - USER_REGISTERED
       - VERIFICATION_SUBMITTED
       - ACCOUNT_APPROVED
       - ACCOUNT_REJECTED
@@ -3108,36 +3098,6 @@ components:
         uploadedAt:
           type: string
           format: date-time
-    LightweightClientDto:
-      required:
-      - email
-      - firstName
-      - id
-      - lastName
-      - phoneNumber
-      - rating
-      - ratingCount
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        firstName:
-          type: string
-        lastName:
-          type: string
-        rating:
-          type: number
-          format: double
-        ratingCount:
-          type: integer
-          format: int32
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        avatarImageUrl:
-          type: string
     LightweightTransactionDto:
       required:
       - id
@@ -3151,7 +3111,7 @@ components:
           $ref: '#/components/schemas/TransactionStatus'
     OrderDto:
       required:
-      - client
+      - clientProfile
       - createdAt
       - events
       - id
@@ -3165,8 +3125,8 @@ components:
           format: int64
         service:
           $ref: '#/components/schemas/LightweightServiceDto'
-        client:
-          $ref: '#/components/schemas/LightweightClientDto'
+        clientProfile:
+          $ref: '#/components/schemas/BaseProfileDto'
         status:
           $ref: '#/components/schemas/OrderStatus'
         transaction:
@@ -3195,12 +3155,16 @@ components:
     PageOrderDto:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -3215,15 +3179,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        first:
-          type: boolean
         last:
           type: boolean
         numberOfElements:
           type: integer
           format: int32
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         empty:
           type: boolean
     TransactionStatus:
@@ -3234,7 +3194,6 @@ components:
       - RELEASED
       - CANCELED
       - REFUNDED
-      - DISPUTED
     DisputeDto:
       required:
       - id
@@ -3267,52 +3226,17 @@ components:
       - IN_REVIEW
       - RESOLVED_REFUNDED
       - RESOLVED_FREELANCER_PAID
+      - ADMIN_ACTION_REQUIRED
       - REJECTED
-    LightweightRegistrationRequestDto:
-      required:
-      - accountStatus
-      - accountType
-      - email
-      - firstName
-      - id
-      - lastName
-      - phoneNumber
-      - registrationDate
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        accountStatus:
-          $ref: '#/components/schemas/AccountStatus'
-        rejectionReason:
-          type: string
-        registrationDate:
-          type: string
-          format: date-time
-        accountType:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
     RegistrationRequestDto:
       required:
-      - accountStatus
-      - accountType
       - email
       - firstName
       - id
       - lastName
       - phoneNumber
+      - profileStatus
+      - profileType
       - registrationDate
       type: object
       properties:
@@ -3325,20 +3249,14 @@ components:
           type: string
         email:
           type: string
-        avatarImageUrl:
-          type: string
         phoneNumber:
           type: string
-        accountStatus:
-          $ref: '#/components/schemas/AccountStatus'
+        profileStatus:
+          $ref: '#/components/schemas/ProfileStatus'
         rejectionReason:
           type: string
         registrationDate:
           type: string
           format: date-time
-        accountType:
-          type: string
-          enum:
-          - ADMIN
-          - CLIENT
-          - FREELANCER
+        profileType:
+          $ref: '#/components/schemas/ProfileType'

@@ -49,7 +49,7 @@ export const formFields: FormStepsConfig = {
             allowedMimeTypes: ['image/'],
             maxSize: true
         },
-        idDocument: {
+        idDocuments: {
             label: 'idDocument',
             required: true,
             min: 1,
@@ -91,7 +91,7 @@ interface VerificationFormValues {
     },
     step2: {
         avatarImage: FileList | File[]
-        idDocument: FileList | File[]
+        idDocuments: FileList | File[]
     }
 }
 
@@ -107,8 +107,8 @@ function mapFormToRequest(values: VerificationFormValues): FormData {
     formData.append('address.houseNumber', values.step1.address.houseNumber);
     formData.append('phoneNumber', values.step1.phoneNumber);
     formData.append('avatarImage', values.step2.avatarImage[0]);
-    Array.from(values.step2.idDocument).forEach((file) => {
-        formData.append('idDocument', file);
+    Array.from(values.step2.idDocuments).forEach((file) => {
+        formData.append('idDocuments', file);
     })
     return formData;
 }

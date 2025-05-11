@@ -67,7 +67,7 @@ public class Service implements Statistic, FileOwner {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<File> gallery;
+    private List<File> files;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "service_categories",

@@ -2,7 +2,7 @@ import {AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Too
 import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
 import {MouseEvent, useState} from "react";
 import {useAppSelector} from "../../hooks";
-import {useLogoutUserMutation} from "../../../features/api/pcxApi";
+import {useLogoutMutation} from "../../../features/api/pcxApi";
 
 const settings = ['Profile', 'Logout'];
 
@@ -10,7 +10,7 @@ const Header = () => {
     const user = useAppSelector(selectUser);
     const location = useLocation();
     const [userMenuOpen, setUserMenuOpen] = useState<null | HTMLElement>(null);
-    const [logoutUser] = useLogoutUserMutation();
+    const [logoutUser] = useLogoutMutation();
     const navigate = useNavigate();
 
     const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -55,7 +55,7 @@ const Header = () => {
                             <>
                                 <Typography variant='h6' sx={{
                                     mr: 1
-                                }}>Hi, {user?.firstName}</Typography>
+                                }}>Hi, {user?.activeProfile.displayName}</Typography>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={(event) => setUserMenuOpen(event.currentTarget)}
                                                 sx={{p: 0}}>

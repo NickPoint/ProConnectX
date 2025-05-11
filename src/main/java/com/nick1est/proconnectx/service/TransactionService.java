@@ -3,7 +3,6 @@ package com.nick1est.proconnectx.service;
 import com.nick1est.proconnectx.dao.Order;
 import com.nick1est.proconnectx.dao.Transaction;
 import com.nick1est.proconnectx.dao.TransactionStatus;
-import com.nick1est.proconnectx.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class TransactionService {
-    private final TransactionRepository transactionRepository;
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void createTransaction(Order order) {
@@ -28,21 +26,34 @@ public class TransactionService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void escrowTransaction(Order order) {
-        order.getTransaction().setStatus(TransactionStatus.ESCROWED);
+        val transaction = order.getTransaction();
+        changeStatus(transaction, TransactionStatus.ESCROWED);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void releaseTransaction(Order order) {
-        order.getTransaction().setStatus(TransactionStatus.RELEASED);
+        val transaction = order.getTransaction();
+        changeStatus(transaction, TransactionStatus.RELEASED);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void cancelTransaction(Order order) {
-        order.getTransaction().setStatus(TransactionStatus.CANCELED);
+        val transaction = order.getTransaction();
+        changeStatus(transaction, TransactionStatus.CANCELED);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void refundTransaction(Order order) {
-        order.getTransaction().setStatus(TransactionStatus.REFUNDED);
+        val transaction = order.getTransaction();
+        changeStatus(transaction, TransactionStatus.REFUNDED);
+    }
+
+    private void changeStatus(Transaction transaction, TransactionStatus newStatus) {
+        if (!transaction.getStatus().canTransitionTo(newStatus)) {
+            throw new IllegalStateException(
+                    "Invalid transition: " + transaction.getStatus() + " → " + newStatus
+            );
+        }
+        transaction.setStatus(newStatus);
     }
 }

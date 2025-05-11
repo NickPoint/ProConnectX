@@ -76,8 +76,8 @@ public class BidController {
     }
 
     private void checkOwnership(Long projectId) {
-        val principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof UserDetailsImpl userDetails)) {
+        val user = SecurityContextHolder.getContext().getAuthentication().getUser();
+        if (!(user instanceof UserDetailsImpl userDetails)) {
             throw new AccessDeniedException("You are not authorized to perform this operation");
         }
         Employer owner = projectService.findProjectOwner(projectId);

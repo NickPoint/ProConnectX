@@ -19,6 +19,6 @@ public interface BidMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "freelancer", source = "freelancer")
     @Mapping(target = "project", source = "project")
-    Bid toDao(BidRequest bidRequest, Freelancer freelancer, Project project);
+    Bid toDao(BidRequest bidRequest, Profilefreelancer, Project project);
 }
 */

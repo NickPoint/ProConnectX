@@ -1,3 +1,4 @@
+/*
 package com.nick1est.proconnectx.mock;
 
 import com.nick1est.proconnectx.dao.*;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Profile("test")
 public class DataInitializer {
 
-    private final PrincipalRepository principalRepository;
+    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final CategoryRepository categoryRepository;
     private final PasswordEncoder encoder;
@@ -46,12 +47,12 @@ public class DataInitializer {
             categoryRepository.save(category);
         }
 
-        val admin = new Principal();
+        val admin = new User();
         admin.setEmail("admin@gmail.com");
         admin.setPassword(encoder.encode("12345678"));
         admin.setRoles(Set.of(roleRepository.findByName(RoleType.ROLE_ADMIN).orElseThrow()));
-        admin.setLastActiveRole(RoleType.ROLE_ADMIN);
-        principalRepository.save(admin);
+        admin.setLastActiveProfile(RoleType.ROLE_ADMIN);
+        userRepository.save(admin);
     }
 
     public static <T extends Enum<?>> T getRandomEnum(Class<T> enumeration) {
@@ -62,3 +63,4 @@ public class DataInitializer {
     }
 
 }
+*/

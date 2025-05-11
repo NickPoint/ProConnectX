@@ -18,18 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.MANDATORY)
 public class EventService {
     private final EventRepository eventRepository;
-    private final NotificationService notificationService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void recordOrderCreated(Order order, Client client) {
-        log.debug("Client {} has created an order: {}", client.getId(), order.getId());
+    public void recordOrderCreated(Order order, Profile clientProfile) {
+        log.debug("Client {} has created an order: {}", clientProfile.getId(), order.getId());
         createEvent(order, EventType.ORDER_CREATED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.ORDER_CREATED, null, null, order.getService().getFreelancer().getId()));
     }
 
-    public void recordOrderAccepted(Order order, Freelancer freelancer) {
-        log.debug("Freelancer {} accepted the order: {}", freelancer.getId(), order.getId());
+    public void recordOrderAccepted(Order order, Long freelancerId) {
+        log.debug("Freelancer {} accepted the order: {}", freelancerId, order.getId());
         createEvent(order, EventType.ORDER_ACCEPTED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.ORDER_ACCEPTED, null, order.getClient().getId(), null));
@@ -43,66 +42,66 @@ public class EventService {
                         order.getService().getFreelancer().getId()));
     }
 
-    public void recordOrderSubmittedForReview(Order order, Freelancer freelancer) {
-        log.debug("Freelancer {} submitted order for review: {}", freelancer.getId(), order.getId());
+    public void recordOrderSubmittedForReview(Order order, Long freelancerId) {
+        log.debug("Freelancer {} submitted order for review: {}", freelancerId, order.getId());
         createEvent(order, EventType.ORDER_SUBMITTED_FOR_REVIEW);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.ORDER_SUBMITTED_FOR_REVIEW, null, order.getClient().getId(), null));
     }
 
-    public void recordOrderApproved(Order order, UserDetailsImpl userDetails, AccountType accountType) {
-        if (AccountType.ADMIN.equals(accountType)) {
-            log.debug("Admin {} approved the order: {}", userDetails.getId(), order.getId());
+    public void recordOrderApproved(Order order, UserDetailsImpl userDetails, ProfileType profileType) {
+        if (ProfileType.ADMIN.equals(profileType)) {
+            log.debug("Admin {} approved the order: {}", userDetails.getUser().getId(), order.getId());
             createEvent(order, EventType.ORDER_APPROVED_BY_ADMIN);
             applicationEventPublisher.publishEvent(
                     new ServiceOrderEvent(order.getId(), EventType.ORDER_APPROVED_BY_ADMIN, null, order.getClient().getId(), order.getService().getFreelancer().getId()));
-        } else if (AccountType.CLIENT.equals(accountType)) {
-            log.debug("Client {} approved the order: {}", userDetails.getClient().getId(), order.getId());
+        } else if (ProfileType.CLIENT.equals(profileType)) {
+            log.debug("Client {} approved the order: {}", userDetails.getActiveProfile().getId(), order.getId());
             createEvent(order, EventType.ORDER_APPROVED);
             applicationEventPublisher.publishEvent(
                     new ServiceOrderEvent(order.getId(), EventType.ORDER_APPROVED, null, null, order.getService().getFreelancer().getId()));
         }
     }
 
-    public void recordOrderDisputed(Order order, Dispute dispute, String reason, Client client) {
-        log.debug("Client {} disputed the order: {}", client.getId(), order.getId());
+    public void recordOrderDisputed(Order order, Dispute dispute, String reason, Profile clientProfile) {
+        log.debug("Client {} disputed the order: {}", clientProfile.getId(), order.getId());
         createEvent(order, dispute, EventType.ORDER_DISPUTED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.ORDER_DISPUTED, reason, null, order.getService().getFreelancer().getId()));
     }
 
-    public void recordProposalCreated(Dispute dispute, String proposal, Freelancer freelancer) {
-        log.debug("Freelancer {} proposed solution in the dispute: {}", freelancer.getId(), dispute);
+    public void recordProposalCreated(Dispute dispute, String proposal, Profile freelancerProfile) {
+        log.debug("Freelancer {} proposed solution in the dispute: {}", freelancerProfile.getId(), dispute);
         val order = dispute.getOrder();
         createEvent(order, dispute, EventType.PROPOSAL_CREATED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.PROPOSAL_CREATED, proposal, dispute.getOrder().getClient().getId(), null));
     }
-    public void recordProposalRejected(Dispute dispute, String reason, Client client) {
-        log.debug("Client {} rejected proposal in the dispute: {}", client.getId(), dispute);
+    public void recordProposalRejected(Dispute dispute, String reason, Profile clientProfile) {
+        log.debug("Client {} rejected proposal in the dispute: {}", clientProfile.getId(), dispute);
         val order = dispute.getOrder();
         createEvent(order, dispute, EventType.PROPOSAL_REJECTED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.PROPOSAL_REJECTED, reason, null, order.getService().getFreelancer().getId()));
     }
 
-    public void recordProposalAccepted(Dispute dispute, Client client) {
-        log.debug("Client {} accepted proposal in the dispute: {}", client.getId(), dispute);
+    public void recordProposalAccepted(Dispute dispute, Profile clientProfile) {
+        log.debug("Client {} accepted proposal in the dispute: {}", clientProfile.getId(), dispute);
         val order = dispute.getOrder();
         createEvent(order, dispute, EventType.PROPOSAL_ACCEPTED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.PROPOSAL_ACCEPTED, null, null, order.getService().getFreelancer().getId()));
     }
 
-    public void recordOrderCanceled(Order order, Freelancer freelancer) {
-        log.debug("Freelancer {} canceled the order: {}", freelancer.getId(), order.getId());
+    public void recordOrderCanceled(Order order, Profile freelancerProfile) {
+        log.debug("Freelancer {} canceled the order: {}", freelancerProfile.getId(), order.getId());
         createEvent(order, EventType.ORDER_CANCELED);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.ORDER_CANCELED, null, order.getClient().getId(), null));
     }
 
     public void recordOrderCanceledWithRefund(Order order, UserDetailsImpl userDetails) {
-        log.debug("Admin {} canceled the order with refund: {}", userDetails.getId(), order.getId());
+        log.debug("Admin {} canceled the order with refund: {}", userDetails.getUser().getId(), order.getId());
         createEvent(order, EventType.ORDER_CANCELED_WITH_REFUND_BY_ADMIN);
         applicationEventPublisher.publishEvent(
                 new ServiceOrderEvent(order.getId(), EventType.ORDER_CANCELED_WITH_REFUND_BY_ADMIN, null, order.getClient().getId(), order.getService().getFreelancer().getId()));

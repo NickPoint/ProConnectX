@@ -1,11 +1,9 @@
 package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.AccountType;
+import com.nick1est.proconnectx.dao.ProfileType;
 import com.nick1est.proconnectx.dto.RegistrationRequestDto;
 import com.nick1est.proconnectx.service.AdminService;
-import com.nick1est.proconnectx.service.ClientService;
-import com.nick1est.proconnectx.service.FreelancerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
     private final AdminService adminService;
-    private final FreelancerService freelancerService;
-    private final ClientService clientService;
 
     @GetMapping("/freelancer-registrations")
     @PreAuthorize("hasRole('ADMIN')")
@@ -43,9 +39,9 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Tag(name = "Registration")
     public ResponseEntity<?> approveRegistrationRequest(@PathVariable @NotNull Long id,
-                                                        @PathVariable @NotNull AccountType type,
+                                                        @PathVariable @NotNull ProfileType type,
                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        adminService.approveRegistrationRequest(type, id, userDetails);
+        adminService.approveRegistrationRequest(id, type, userDetails);
         return ResponseEntity.ok().build();
     }
 
@@ -53,10 +49,10 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Tag(name = "Registration")
     public ResponseEntity<?> rejectRegistrationRequest(@PathVariable @NotNull Long id,
-                                                       @PathVariable @NotNull AccountType type,
+                                                       @PathVariable @NotNull ProfileType type,
                                                        @RequestBody @NotEmpty String reason,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        adminService.rejectRegistrationRequest(type, id, reason, userDetails);
+        adminService.rejectRegistrationRequest(id, type, reason, userDetails);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section>
+        <h2>Welcome aboard, <span th:text="${name}">User</span>!</h2>
+        <p>Welcome to ProConnectX!</p>
+        <p>Here are some quick links to get started:</p>
+        <ul>
+            <li>
+                <a th:href="${baseUrl} + '/client-verification'">
+                    Register yourself as client and start searching for and ordering available services
+                </a>
+            </li>
+            <li>
+                <a th:href="${baseUrl} + '/freelancer-verification'">
+                    Register yourself as freelancer and start offering your services to clients
+                </a>
+            </li>
+        </ul>
+    </section>
+</div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 package com.nick1est.proconnectx.auth;
 
-import com.nick1est.proconnectx.dao.RoleType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,13 +29,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String jwt = parseJwt(request);
         try {
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            if (jwt != null && jwtUtils.validateToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-                String activeRole = jwtUtils.getActiveRoleFromJwtToken(jwt);
                 log.debug("Username from JWT: {}", username);
-                log.debug("Active role from JWT: {}", activeRole);
                 UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
-                userDetails.setActiveRole(RoleType.valueOf(activeRole));
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -44,7 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (UsernameNotFoundException e) {
-            log.warn("Principal with username {} not found", jwtUtils.getUserNameFromJwtToken(jwt));
+            log.warn("User with username {} not found", jwtUtils.getUserNameFromJwtToken(jwt));
         }
 
         filterChain.doFilter(request, response);

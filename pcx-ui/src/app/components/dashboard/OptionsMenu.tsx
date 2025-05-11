@@ -10,7 +10,7 @@ import ListItemIcon, {listItemIconClasses} from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
-import {useLogoutUserMutation} from "../../../features/api/pcxApi.ts";
+import {useLogoutMutation} from "../../../features/api/pcxApi.ts";
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
@@ -25,7 +25,7 @@ export default function OptionsMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [logoutUser] = useLogoutUserMutation();
+  const [logoutUser] = useLogoutMutation();
 
   return (
     <React.Fragment>
@@ -57,9 +57,9 @@ export default function OptionsMenu() {
         }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose}>My profile</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>Add another account</MenuItem>
+        <MenuItem onClick={handleClose}>Add another profile</MenuItem>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
         <Divider />
         <MenuItem

@@ -64,4 +64,14 @@ public class File {
     @NotNull
     private Instant uploadedAt;
 
+    public FileOwner getOwner() {
+        return switch (ownerType) {
+            case CLIENT     -> client;
+            case FREELANCER -> freelancer;
+            case ORDER      -> order;
+            case SERVICE    -> service;
+            default         -> throw new IllegalStateException("Unknown ownerType: " + ownerType);
+        };
+    }
+
 }

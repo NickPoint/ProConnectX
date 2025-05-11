@@ -17,7 +17,7 @@ import Rating, {RatingProps} from "../components/Rating.tsx";
 import {
     OrderDto,
     OrderStatus,
-    RoleType,
+    ProfileType,
     useGetCurrentUserQuery,
     useGetOrdersQuery,
     useGetServicesQuery,
@@ -53,7 +53,7 @@ const RatingCard: React.FC<RatingProps> = ({rating, ratingCount}) => {
     </Card>
 }
 
-const statTypesConf: Record<RoleType, { type: StatType, size: number }[]> = {
+const statTypesConf: Record<ProfileType, { type: StatType, size: number }[]> = {
     ROLE_FREELANCER: [
         {type: 'DAILY_TOTAL_EARNINGS', size: 12},
         {type: 'ORDERS_COMPLETED', size: 6},
@@ -93,7 +93,7 @@ const OrderCard = (props: OrderDto) => {
                             <LinearProgress variant='determinate'
                                             value={calculateProgress(props.createdAt, props.deadlineDate, props.status)}/>
                         </Box>
-                        {user?.activeRole === RoleType.RoleClient
+                        {user?.activeProfile.profileType === ProfileType.Client
                             ? <UserCard variant='box' {...props.service.freelancer} />
                             : <UserCard variant='box' {...props.client}/>}
                     </Stack>
@@ -326,21 +326,21 @@ const HomePage = () => {
     const {data: user, isLoading, isFetching} = useGetCurrentUserQuery();
     const {t} = useTranslation();
     const {data: cards} = useGetStatsOverviewQuery(queryArgs, {
-        skip: !user?.activeRole || [RoleType.RoleUnverified, RoleType.RoleAdmin].includes(user?.activeRole)
+        skip: !user?.activeProfile || [ProfileType.RoleUnverified, ProfileType.Admin].includes(user?.activeProfile)
     });
     const {data: activeOrders} = useGetOrdersQuery({
         statuses: [OrderStatus.Approved, OrderStatus.Disputed, OrderStatus.InProgress],
         page: 0, size: 4
     }, {
-        skip: !user?.activeRole || [RoleType.RoleUnverified, RoleType.RoleAdmin].includes(user?.activeRole),
+        skip: !user?.activeProfile || [ProfileType.RoleUnverified, ProfileType.Admin].includes(user?.activeProfile),
     });
     const {data: newOrders} = useGetOrdersQuery({
         statuses: [OrderStatus.Created],
         page: 0, size: 4
     }, {
-        skip: !user?.activeRole || [RoleType.RoleUnverified, RoleType.RoleAdmin].includes(user?.activeRole),
+        skip: !user?.activeProfile || [ProfileType.RoleUnverified, ProfileType.Admin].includes(user?.activeProfile),
     });
-    if (!isLoading && !isFetching && (!user || RoleType.RoleFreelancer !== user?.activeRole)) {
+    if (!isLoading && !isFetching && (!user || ProfileType.Freelancer !== user?.activeProfile)) {
         return <LandingPage/>
     }
     if (!cards) {
@@ -350,7 +350,7 @@ const HomePage = () => {
     return (
         <Grid component={Container} maxWidth='lg' container spacing={4}>
             <Grid container size={{xs: 12, md: 6}} spacing={1}>
-                {statTypesConf[user?.activeRole].map((conf, index) => {
+                {statTypesConf[user?.activeProfile].map((conf, index) => {
                     const card = cards[conf.type];
                     if (!card) return null;
 
@@ -375,7 +375,9 @@ const HomePage = () => {
                 {/*</Grid>*/}
             </Grid>
             <Grid container size={{xs: 12, md: 6}} spacing={2}>
-                <Typography variant='h4'>{t('homePage.yourActiveOrders')}</Typography>
+                <Grid size={12}>
+                    <Typography variant='h4'>{t('homePage.yourActiveOrders')}</Typography>
+                </Grid>
                 {activeOrders && activeOrders.numberOfElements > 0 && activeOrders.content?.map((order, index) => (
                     <Grid size={{xs: 12, md: 6}} key={index}>
                         <OrderCard {...order} />
@@ -388,7 +390,9 @@ const HomePage = () => {
                 }
             </Grid>
             <Grid container size={{xs: 12, md: 6}} spacing={2}>
-                <Typography variant='h4'>{t('homePage.newOrders')}</Typography>
+                <Grid size={12}>
+                    <Typography variant='h4'>{t('homePage.newOrders')}</Typography>
+                </Grid>
                 {newOrders && newOrders.numberOfElements > 0 && newOrders.content?.map((order, index) => (
                     <Grid size={{xs: 12, md: 6}} key={index}>
                         <OrderCard {...order} />

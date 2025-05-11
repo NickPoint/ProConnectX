@@ -3,7 +3,6 @@ package com.nick1est.proconnectx.config;
 import com.nick1est.proconnectx.auth.JwtUtils;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.auth.UserDetailsServiceImpl;
-import com.nick1est.proconnectx.dao.RoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
@@ -31,14 +30,13 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
         if (request instanceof ServletServerHttpRequest servletRequest) {
             String jwt = jwtUtils.getJwtFromCookies(servletRequest.getServletRequest());
 
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            if (jwt != null && jwtUtils.validateToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-                String activeRole = jwtUtils.getActiveRoleFromJwtToken(jwt);
+                String activeRole = jwtUtils.getProfileTypeFromToken(jwt).toString();
                 log.debug("Username from JWT: {}", username);
                 log.debug("Active role from JWT: {}", activeRole);
 
                 UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
-                userDetails.setActiveRole(RoleType.valueOf(activeRole));
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());

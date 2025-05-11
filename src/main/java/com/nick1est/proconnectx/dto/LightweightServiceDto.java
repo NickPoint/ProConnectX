@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.dto;
 
 import com.nick1est.proconnectx.dao.CategoryType;
+import com.nick1est.proconnectx.dto.profile.BaseProfileDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ public class LightweightServiceDto {
     @NotNull
     private BigDecimal price;
     @NotNull
-    private LightWeightFreelancerDto freelancer;
+    private BaseProfileDto freelancer;
     @NotEmpty
     private List<CategoryType> categories;
     @NotNull

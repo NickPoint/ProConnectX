@@ -5,23 +5,21 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import {NotificationDto, useGetNotificationsQuery} from "../../features/api/enhancedApi";
-import {RoleType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
+import {ProfileType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
 import {useAppSelector} from "../hooks.ts";
 import {getNotifications} from "../../features/notifications/notificationSlice.ts";
 import {useTranslation} from "react-i18next";
 import {t} from "i18next";
 import {useNavigate} from "react-router-dom";
 
-function getChannelByActiveRole(activeRole: RoleType) {
-    switch (activeRole) {
-        case RoleType.RoleAdmin:
+function getChannelByActiveRole(activeProfile: ProfileType | undefined) {
+    switch (activeProfile) {
+        case ProfileType.Admin:
             return "admin"
-        case RoleType.RoleFreelancer:
+        case ProfileType.Freelancer:
             return "freelancer"
-        case RoleType.RoleClient:
+        case ProfileType.Client:
             return "client"
-        case RoleType.RoleUnverified:
-            return "unverified"
         default:
             return "general"
     }
@@ -58,7 +56,7 @@ const Notification = () => {
     const {t} = useTranslation();
     const open = Boolean(anchorEl);
     const {data: user} = useGetCurrentUserQuery();
-    useGetNotificationsQuery(`notifications/${getChannelByActiveRole(user?.activeRole)}`)
+    useGetNotificationsQuery(`notifications/${getChannelByActiveRole(user?.activeProfile.profileType)}`)
     const notifications = useAppSelector(getNotifications);
     const navigate = useNavigate();
 

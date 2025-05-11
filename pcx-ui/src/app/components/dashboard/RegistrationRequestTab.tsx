@@ -1,4 +1,4 @@
-import {AccountStatus, AccountType, RegistrationRequestDto,} from "../../../features/api/pcxApi.ts";
+import {ProfileStatus, ProfileType, RegistrationRequestDto,} from "../../../features/api/pcxApi.ts";
 import {FC, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
@@ -22,17 +22,17 @@ const RegistrationRequestCard: FC<RegistrationRequestDto> = ({
                                                                  lastName,
                                                                  avatarImageUrl,
                                                                  phoneNumber,
-                                                                 accountStatus,
+                                                                 status,
                                                                  rejectionReason,
                                                                  registrationDate,
-                                                                 accountType
+                                                                 profileType
                                                              }) => {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        if (accountType === AccountType.Freelancer) {
+        if (profileType === ProfileType.Freelancer) {
             navigate(`/freelancer/${id}`);
-        } else if (accountType === AccountType.Client) {
+        } else if (profileType === ProfileType.Client) {
             navigate(`/client/${id}`);
         }
     };
@@ -57,11 +57,11 @@ const RegistrationRequestCard: FC<RegistrationRequestDto> = ({
                             on: {new Date(registrationDate).toLocaleDateString()}</Typography>
 
                         {/* Status Chip */}
-                        <Chip label={accountStatus}
-                              color={accountStatus === AccountStatus.Active ? 'success' : 'error'}/>
+                        <Chip label={status}
+                              color={status === ProfileStatus.Active ? 'success' : 'error'}/>
 
                         {/* Rejection Reason */}
-                        {accountStatus === AccountStatus.Rejected && rejectionReason && (
+                        {status === ProfileStatus.Rejected && rejectionReason && (
                             <Typography variant="body2"
                                         color="error">Reason: {rejectionReason}</Typography>
                         )}
@@ -73,8 +73,8 @@ const RegistrationRequestCard: FC<RegistrationRequestDto> = ({
 }
 
 const RegistrationRequestTab = () => {
-    const [accountStatus, setAccountStatus] = useState<AccountStatus>(AccountStatus.Pending);
-    const {data: regReqs, isSuccess} = useGetRegistrationRequestsQuery({accountStatus: accountStatus});
+    const [status, setProfileStatus] = useState<ProfileStatus>(ProfileStatus.Pending);
+    const {data: regReqs, isSuccess} = useGetRegistrationRequestsQuery({status: status});
     const {t} = useTranslation();
 
     if (!isSuccess || !regReqs) {
@@ -86,13 +86,13 @@ const RegistrationRequestTab = () => {
             <Grid size={12}>
                 <TextField
                     select
-                    value={accountStatus}
+                    value={status}
                     onChange={(e) =>
-                        setAccountStatus(e.target.value as AccountStatus)}
-                    label={t('dashboard.menu.registrations.accountStatus')}>
-                    {Object.values(AccountStatus).map((accountStatus, index) => (
-                        <MenuItem key={index} value={accountStatus}>
-                            {accountStatus}
+                        setProfileStatus(e.target.value as ProfileStatus)}
+                    label={t('dashboard.menu.registrations.status')}>
+                    {Object.values(ProfileStatus).map((status, index) => (
+                        <MenuItem key={index} value={status}>
+                            {status}
                         </MenuItem>
                     ))}
                 </TextField>

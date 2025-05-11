@@ -19,7 +19,7 @@ import {
     EventType,
     OrderDto,
     OrderStatus,
-    RoleType,
+    ProfileType,
     TransactionStatus,
     useAcceptOrderMutation,
     useAcceptProposalMutation,
@@ -193,9 +193,9 @@ const OrderCard = (props: OrderDto) => {
     const {data: user} = useGetCurrentUserQuery();
     const [acceptOrder] = useAcceptOrderMutation();
     const [rejectOrder] = useCancelOrderMutation();
-    const [approveOrder] = useApproveOrderMutation();
+    const [approveOrder, {isLoading: approveLoading}] = useApproveOrderMutation();
     const [disputeOrder] = useDisputeOrderMutation();
-    const [submitOrderForReview] = useSubmitOrderForReviewMutation();
+    const [submitOrderForReview, {isLoading: submitReviewLoading}] = useSubmitOrderForReviewMutation();
     const {t} = useTranslation();
 
     return (
@@ -220,7 +220,7 @@ const OrderCard = (props: OrderDto) => {
                                 <LinearProgress variant='determinate'
                                                 value={calculateProgress(props.createdAt, props.deadlineDate, props.status)}/>
                             </Box>
-                            {user?.activeRole === RoleType.RoleClient
+                            {user?.activeProfile.profileType === ProfileType.Client
                                 ? <UserCard variant='box' {...props.service.freelancer} />
                                 : <UserCard variant='box' {...props.client}/>}
                         </Stack>
@@ -263,9 +263,9 @@ const OrderCard = (props: OrderDto) => {
                         <Grid container size={12} spacing={1}>
                             <Grid size={{xs: 12}}>
                                 <Typography variant="h6">
-                                    {user?.activeRole === RoleType.RoleClient
-                                        ? t('enum.accountType.FREELANCER')
-                                        : t('enum.accountType.CLIENT')}
+                                    {user?.activeProfile.profileType === ProfileType.Client
+                                        ? t('enum.profileType.FREELANCER')
+                                        : t('enum.profileType.CLIENT')}
                                 </Typography>
                             </Grid>
 
@@ -274,7 +274,7 @@ const OrderCard = (props: OrderDto) => {
                             </Grid>
                             <Grid size={8}>
                                 <Typography>
-                                    {user?.activeRole === RoleType.RoleClient
+                                    {user?.activeProfile.profileType === ProfileType.Client
                                         ? `${props.service.freelancer.firstName} ${props.service.freelancer.lastName}`
                                         : `${props.client.firstName} ${props.client.lastName}`}
                                 </Typography>
@@ -285,7 +285,7 @@ const OrderCard = (props: OrderDto) => {
                             </Grid>
                             <Grid size={8}>
                                 <Typography>
-                                    {user?.activeRole === RoleType.RoleClient
+                                    {user?.activeProfile.profileType === ProfileType.Client
                                         ? props.service.freelancer.email
                                         : props.client.email}
                                 </Typography>
@@ -296,7 +296,7 @@ const OrderCard = (props: OrderDto) => {
                             </Grid>
                             <Grid size={8}>
                                 <Typography>
-                                    {user?.activeRole === RoleType.RoleClient
+                                    {user?.activeProfile.profileType === ProfileType.Client
                                         ? props.service.freelancer.phoneNumber
                                         : props.client.phoneNumber}
                                 </Typography>
@@ -365,7 +365,7 @@ const OrderCard = (props: OrderDto) => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    {user?.activeRole === RoleType.RoleClient && (
+                    {user?.activeProfile.profileType === ProfileType.Client && (
                         <>
                             {(props.status === 'SUBMITTED_FOR_REVIEW' || deadlineOverdue(props.deadlineDate)) &&
                                 <Button
@@ -378,7 +378,7 @@ const OrderCard = (props: OrderDto) => {
                             }
 
                             {props.status === 'SUBMITTED_FOR_REVIEW' && (
-                                <Button color="success" variant="contained"
+                                <Button loading={approveLoading} color="success" variant="contained"
                                         onClick={() => approveOrder({orderId: props.id})
                                             .then(() => enqueueSnackbar(t('order.approve.success'), {variant: 'success'}))}>
                                     {t('buttons.approve')}
@@ -387,7 +387,7 @@ const OrderCard = (props: OrderDto) => {
                         </>
                     )}
 
-                    {user?.activeRole === RoleType.RoleFreelancer && (
+                    {user?.activeProfile.profileType === ProfileType.Freelancer && (
                         <>
                             {props.status === 'CREATED' &&
                                 <>
@@ -409,7 +409,7 @@ const OrderCard = (props: OrderDto) => {
                             }
 
                             {props.status === 'IN_PROGRESS' &&
-                                <Button color="success" variant="contained"
+                                <Button loading={submitReviewLoading} color="success" variant="contained"
                                         onClick={() => {
                                             submitOrderForReview({orderId: props.id}).unwrap()
                                                 .then(() => enqueueSnackbar(t('order.submitForReview.success'), {variant: 'success'}))
@@ -420,7 +420,7 @@ const OrderCard = (props: OrderDto) => {
                         </>
                     )}
 
-                    {user?.activeRole === RoleType.RoleAdmin && (
+                    {user?.activeProfile.profileType === ProfileType.Admin && (
                         <>
                             <Button color="error" variant="contained">{t('buttons.reject')}</Button>
                             <Button color="warning" variant="contained">{t('buttons.dispute')}</Button>
@@ -444,19 +444,21 @@ const OrderCard = (props: OrderDto) => {
                             });
                     }}
                 >
-                    <Form>
-                        <DialogTitle>{t('order.dispute.title')}</DialogTitle>
-                        <DialogContent sx={theme => ({pt: `${theme.spacing(1)}!important`})}>
-                            {Object.entries(disputeFormConf).map(([fieldName, fieldConfig]) => (
-                                <FieldRenderer key={fieldName} fieldName={fieldName} fieldConfig={fieldConfig}/>
-                            ))}
-                        </DialogContent>
-                        <DialogActions sx={{justifyContent: 'space-between'}}>
-                            <Button onClick={() => setOpenDisputeDialog(false)} color='error'
-                                    variant='contained'>{t('buttons.cancel')}</Button>
-                            <Button type='submit' color='success' variant='contained'>{t('buttons.submit')}</Button>
-                        </DialogActions>
-                    </Form>
+                    {({isSubmitting}) => (
+                        <Form>
+                            <DialogTitle>{t('order.dispute.title')}</DialogTitle>
+                            <DialogContent sx={theme => ({pt: `${theme.spacing(1)}!important`})}>
+                                {Object.entries(disputeFormConf).map(([fieldName, fieldConfig]) => (
+                                    <FieldRenderer key={fieldName} fieldName={fieldName} fieldConfig={fieldConfig}/>
+                                ))}
+                            </DialogContent>
+                            <DialogActions sx={{justifyContent: 'space-between'}}>
+                                <Button onClick={() => setOpenDisputeDialog(false)} color='error'
+                                        variant='contained'>{t('buttons.cancel')}</Button>
+                                <Button loading={isSubmitting} type='submit' color='success' variant='contained'>{t('buttons.submit')}</Button>
+                            </DialogActions>
+                        </Form>
+                    )}
                 </Formik>
             </Dialog>
             <Dialog open={openRejectDialog} fullWidth maxWidth='xs' onClose={() => setOpenRejectDialog(false)}>
@@ -472,19 +474,21 @@ const OrderCard = (props: OrderDto) => {
                             });
                     }}
                 >
-                    <Form>
-                        <DialogTitle>{t('order.reject.title')}</DialogTitle>
-                        <DialogContent sx={theme => ({pt: `${theme.spacing(1)}!important`})}>
-                            {Object.entries(rejectFormConf).map(([fieldName, fieldConfig]) => (
-                                <FieldRenderer key={fieldName} fieldName={fieldName} fieldConfig={fieldConfig}/>
-                            ))}
-                        </DialogContent>
-                        <DialogActions sx={{justifyContent: 'space-between'}}>
-                            <Button onClick={() => setOpenRejectDialog(false)} color='error'
-                                    variant='contained'>{t('buttons.cancel')}</Button>
-                            <Button type='submit' color='success' variant='contained'>{t('buttons.submit')}</Button>
-                        </DialogActions>
-                    </Form>
+                    {({isSubmitting}) => (
+                        <Form>
+                            <DialogTitle>{t('order.reject.title')}</DialogTitle>
+                            <DialogContent sx={theme => ({pt: `${theme.spacing(1)}!important`})}>
+                                {Object.entries(rejectFormConf).map(([fieldName, fieldConfig]) => (
+                                    <FieldRenderer key={fieldName} fieldName={fieldName} fieldConfig={fieldConfig}/>
+                                ))}
+                            </DialogContent>
+                            <DialogActions sx={{justifyContent: 'space-between'}}>
+                                <Button onClick={() => setOpenRejectDialog(false)} color='error'
+                                        variant='contained'>{t('buttons.cancel')}</Button>
+                                <Button loading={isSubmitting} type='submit' color='success' variant='contained'>{t('buttons.submit')}</Button>
+                            </DialogActions>
+                        </Form>
+                    )}
                 </Formik>
             </Dialog>
             <Dialog open={openAcceptDialog} fullWidth maxWidth='xs' onClose={() => setOpenAcceptDialog(false)}>
@@ -500,18 +504,20 @@ const OrderCard = (props: OrderDto) => {
                             });
                     }}
                 >
-                    <Form>
-                        <DialogTitle>{t('order.accept.title')}</DialogTitle>
-                        <DialogContent sx={theme => ({pt: `${theme.spacing(1)}!important`})}>
-                            {Object.entries(acceptFormConf).map(([fieldName, fieldConfig]) => (
-                                <FieldRenderer key={fieldName} fieldName={fieldName} fieldConfig={fieldConfig}/>
-                            ))}
-                        </DialogContent>
-                        <DialogActions sx={{justifyContent: 'space-between'}}>
-                            <Button onClick={() => setOpenAcceptDialog(false)} color='error' variant='contained'>{t('buttons.cancel')}</Button>
-                            <Button type='submit' color='success' variant='contained'>{t('buttons.submit')}</Button>
-                        </DialogActions>
-                    </Form>
+                    {({isSubmitting}) => (
+                        <Form>
+                            <DialogTitle>{t('order.accept.title')}</DialogTitle>
+                            <DialogContent sx={theme => ({pt: `${theme.spacing(1)}!important`})}>
+                                {Object.entries(acceptFormConf).map(([fieldName, fieldConfig]) => (
+                                    <FieldRenderer key={fieldName} fieldName={fieldName} fieldConfig={fieldConfig}/>
+                                ))}
+                            </DialogContent>
+                            <DialogActions sx={{justifyContent: 'space-between'}}>
+                                <Button onClick={() => setOpenAcceptDialog(false)} color='error' variant='contained'>{t('buttons.cancel')}</Button>
+                                <Button loading={isSubmitting} type='submit' color='success' variant='contained'>{t('buttons.submit')}</Button>
+                            </DialogActions>
+                        </Form>
+                    )}
                 </Formik>
             </Dialog>
         </>
@@ -570,7 +576,7 @@ const ProposalDialog = ({open, onClose, disputeId}: ProposalDialogProps) => {
     }
 
     const showFreelancerProposalForm =
-        user?.activeRole === RoleType.RoleFreelancer &&
+        user?.activeProfile.profileType === ProfileType.Freelancer &&
         dispute?.status === 'OPEN' &&
         (dispute.proposalStatus === 'NONE' || dispute.proposalStatus === 'REJECTED');
 
@@ -652,7 +658,7 @@ const ProposalDialog = ({open, onClose, disputeId}: ProposalDialogProps) => {
                                             </Button>
                                         </>
                                     )}
-                                    {user?.activeRole === RoleType.RoleClient && dispute.status === 'IN_REVIEW' && (
+                                    {user?.activeProfile.profileType === ProfileType.Client && dispute.status === 'IN_REVIEW' && (
                                         <>
                                             <Button
                                                 color="error"

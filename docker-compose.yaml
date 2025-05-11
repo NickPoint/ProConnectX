@@ -1,4 +1,40 @@
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8081:8080
+    depends_on:
+      - kafka
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+      KAFKA_CLUSTERS_0_NAME: wizard_test
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
   backend:
     build: ./
     ports:
@@ -9,11 +45,23 @@ services:
       SPRING_DATASOURCE_USERNAME: proconnectx
       SPRING_DATASOURCE_PASSWORD: proconnectx
       ALLOWED_ORIGINS: http://localhost:5173
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SMTP_USERNAME: username
+      SMTP_PASSWORD: password
+      JWT_COOKIE_NAME: proConnectX
+      JWT_SECRET: sEExyrTvivyBONjmPKLOPIMoun87G69FGVO86RD854s3S7esxCVy8990k0M9n0b08V7
+      JWT_EXPIRATION_MS: 86400000
     depends_on:
       - postgres
+      - kafka
+      - zookeeper
 
   frontend:
-    build: ./pcx-ui
+    build:
+      context: ./pcx-ui
+      args:
+        VITE_API_URL: http://localhost:8080/
+        VITE_GOOGLE_MAPS_API_KEY: AIzaSyC_WwIAYgBMzcaR9lDZUpKhozFvDBfwmnA
     ports:
       - "5173:80"
 

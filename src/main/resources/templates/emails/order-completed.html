@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Order Is Complete</title>
+</head>
+<body>
+<p>Hi <span th:text="${name}">User</span>,</p>
+<p>Good news! Your order <strong th:text="${orderId}">123</strong> has been successfully completed.</p>
+<p>You can view the details and leave feedback by clicking the link below:</p>
+<p><a th:href="@{${baseUrl}/orders/{id}(id=${orderId})}">View Order Details</a></p>
+<br/>
+<p>Thank you for using ProConnectX!</p>
+<br/>
+<p>Best regards,<br/>The ProConnectX Team</p>
+</body>
+</html>

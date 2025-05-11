@@ -5,16 +5,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import StatCard, {StatCardProps, StatType} from './StatCard';
 import {
-    AccountStatus,
-    AccountType,
-    RoleType,
+    ProfileStatus,
+    ProfileType,
     useGetCurrentUserQuery,
     useGetStatsOverviewQuery
 } from "../../../features/api/pcxApi.ts";
-import {ClientRegistrationsTable, FreelancerRegistrationsTable} from "./UserRegistrationsTable.tsx";
+import RegistrationsTable from "./RegistrationsTable.tsx";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
-import {GlobalLoadingBackdrop} from "../GlobalLoadingBackdrop.tsx";
 
 const freelancerStats: StatCardProps[] = [
     {
@@ -54,14 +52,14 @@ const freelancerStats: StatCardProps[] = [
     },
 ];
 
-const statTypesByRole: Record<RoleType, StatType[]> = {
-    ROLE_FREELANCER: [
+const statTypesByProfile: Record<ProfileType, StatType[]> = {
+    FREELANCER: [
         'DAILY_TOTAL_EARNINGS',
         'ORDERS_COMPLETED',
         'ORDER_SUCCESS_RATE',
         'ACTIVE_ORDERS',
     ],
-    ROLE_CLIENT: [
+    CLIENT: [
         'TOTAL_SERVICES_PURCHASED',
         // ...
     ],
@@ -86,12 +84,10 @@ export default function DashboardOverviewTab() {
         };
     }, []);
     const {data: cards} = useGetStatsOverviewQuery(queryArgs, {
-        skip: user?.activeRole === RoleType.RoleUnverified
+        skip: user && user.activeProfile.status !== ProfileStatus.Active
     });
 
-    const visibleStatTypes = statTypesByRole[user?.activeRole] || [];
-    const pendingFreelancerAccount = user?.accounts.some(account => account.accountType === AccountType.Freelancer && account.accountStatus === AccountStatus.Pending);
-    const pendingClientAccount = user?.accounts.some(account => account.accountType === AccountType.Client && account.accountStatus === AccountStatus.Pending);
+    const visibleStatTypes = statTypesByProfile[user?.activeProfile.profileType] || [];
 
     return (
         <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
@@ -104,26 +100,9 @@ export default function DashboardOverviewTab() {
                 columns={12}
                 sx={{mb: (theme) => theme.spacing(2)}}
             >
-                {RoleType.RoleAdmin === user?.activeRole &&
-                    <>
-                        <Grid size={{xs: 12}}>
-                            <FreelancerRegistrationsTable/>
-                        </Grid>
-                        <Grid size={{xs: 12}}>
-                            <ClientRegistrationsTable/>
-                        </Grid>
-                    </>
-                }
-                {pendingFreelancerAccount &&
-                    <Grid size={{xs: 12}}>
-                        <FreelancerRegistrationsTable/>
-                    </Grid>
-                }
-                {pendingClientAccount &&
-                    <Grid size={{xs: 12}}>
-                        <ClientRegistrationsTable/>
-                    </Grid>
-                }
+                <Grid container>
+                    <RegistrationsTable />
+                </Grid>
                 {cards && visibleStatTypes.map((type, index) => {
                         const card = cards[type];
                         if (!card) return null;

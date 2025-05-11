@@ -2,7 +2,7 @@ package com.nick1est.proconnectx.controller;
 
 import com.nick1est.proconnectx.annotations.CheckOwnership;
 import com.nick1est.proconnectx.auth.UserDetailsImpl;
-import com.nick1est.proconnectx.dao.OwnershipType;
+import com.nick1est.proconnectx.dao.ResourceType;
 import com.nick1est.proconnectx.dto.DisputeDto;
 import com.nick1est.proconnectx.service.DisputeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,15 +23,15 @@ public class DisputeController {
 
     @GetMapping("/{disputeId}")
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('FREELANCER') or hasRole('ROLE_ADMIN')")
-    @CheckOwnership(type = OwnershipType.DISPUTE)
+    @CheckOwnership(type = ResourceType.DISPUTE)
     public ResponseEntity<DisputeDto> getDispute(@PathVariable Long disputeId,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(disputeService.getDtoById(disputeId));
     }
 
     @PutMapping("/{disputeId}/accept-proposal")
-    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
-    @CheckOwnership(type = OwnershipType.DISPUTE)
+    @PreAuthorize("hasAnyRole('CLIENT','ADMIN')")
+    @CheckOwnership(type = ResourceType.DISPUTE)
     public void acceptProposal(@PathVariable Long disputeId,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         disputeService.acceptProposal(disputeId, userDetails);
@@ -39,7 +39,7 @@ public class DisputeController {
 
     @PutMapping("/{disputeId}/reject-proposal")
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
-    @CheckOwnership(type = OwnershipType.DISPUTE)
+    @CheckOwnership(type = ResourceType.DISPUTE)
     public void rejectProposal(@PathVariable Long disputeId,
                                @RequestBody String reason,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -48,7 +48,7 @@ public class DisputeController {
 
     @PutMapping("/{disputeId}/propose")
     @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ROLE_ADMIN')")
-    @CheckOwnership(type = OwnershipType.DISPUTE)
+    @CheckOwnership(type = ResourceType.DISPUTE)
     public void proposeSolution(@PathVariable Long disputeId,
                                 @NotEmpty @RequestBody String proposal,
                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -58,7 +58,7 @@ public class DisputeController {
 
     @PutMapping("/{disputeId}/force-refund")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @CheckOwnership(type = OwnershipType.DISPUTE)
+    @CheckOwnership(type = ResourceType.DISPUTE)
     public void forceRefund(@PathVariable Long disputeId,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         disputeService.forceRefund(disputeId, userDetails);
@@ -66,7 +66,7 @@ public class DisputeController {
 
     @PutMapping("/{disputeId}/force-release")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @CheckOwnership(type = OwnershipType.DISPUTE)
+    @CheckOwnership(type = ResourceType.DISPUTE)
     public void forceRelease(@PathVariable Long disputeId,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         disputeService.forceRelease(disputeId, userDetails);

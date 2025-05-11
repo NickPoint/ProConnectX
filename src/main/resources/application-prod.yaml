@@ -1,0 +1,100 @@
+app:
+  server:
+    url: https://proconnectx-production.up.railway.app
+  base-url: https://proconnectxui-production.up.railway.app
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  messages:
+    basename: messages
+    encoding: UTF-8
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.yaml
+    contexts: dev,test,prod
+    default-schema: public
+    drop-first: false
+
+  mail:
+    host: smtp.mailersend.net
+    port: 587
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: notification-group
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: "com.nick1est.proconnectx.events"
+
+logging:
+  level:
+    org.springframework: debug
+    com.nick1est.proconnectx: debug
+    org.springframework.web.socket: DEBUG
+    org.springframework.messaging: DEBUG
+    org.springframework.web.socket.messaging: DEBUG
+    org.springframework.web.socket.server.support: DEBUG
+    org.springframework.web.socket.sockjs: DEBUG
+
+cors:
+  allowed-origins: ${ALLOWED_ORIGINS}
+
+upload:
+  dir: /opt/uploads
+
+proConnectionX:
+  app:
+    jwtCookieName: ${JWT_COOKIE_NAME}
+    jwtSecret: ${JWT_SECRET}
+    jwtExpirationMs: ${JWT_EXPIRATION_MS}
+
+
+jwt:
+  cookie:
+    secure: true
+    same-site: None

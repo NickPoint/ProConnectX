@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.auth;
 
-import com.nick1est.proconnectx.dao.RoleType;
+import com.nick1est.proconnectx.config.JwtCookieProperties;
+import com.nick1est.proconnectx.dao.ProfileType;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -21,17 +22,23 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@Getter
 public class JwtUtils {
 
-    @Value("${proConnectionX.app.jwtSecret}")
+    private final JwtCookieProperties jwtCookieProperties;
+    @Value("${proConnectX.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${proConnectionX.app.jwtExpirationMs}")
+    @Value("${proConnectX.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    @Value("${proConnectionX.app.jwtCookieName}")
+    @Value("${proConnectX.app.jwtCookieName}")
     @Getter
     private String jwtCookie;
+
+    public JwtUtils(JwtCookieProperties jwtCookieProperties) {
+        this.jwtCookieProperties = jwtCookieProperties;
+    }
 
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
@@ -42,19 +49,14 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, RoleType role) {
-        String jwt = Jwts.builder()
-                .subject(userPrincipal.getEmail())
-                .claim("activeRoleType", role.toString())
+    public String generateToken(String username, ProfileType profileType) {
+        return Jwts.builder()
+                .subject(username)
+                .claim("activeProfile", profileType.toString())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key())
                 .compact();
-        return ResponseCookie.from(jwtCookie, jwt).path("/").maxAge(24 * 60 * 60).httpOnly(true).build();
-    }
-
-    public ResponseCookie getCleanJwtCookie() {
-        return ResponseCookie.from(jwtCookie, null).path("/").build();
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -62,16 +64,16 @@ public class JwtUtils {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String getActiveRoleFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().get("activeRoleType", String.class);
+    public ProfileType getProfileTypeFromToken(String token) {
+        return ProfileType.valueOf(Jwts.parser().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().get("activeProfile", String.class));
     }
 
     private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(key()).build().parse(authToken);
             return true;

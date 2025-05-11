@@ -28,7 +28,7 @@ const Drawer = styled(MuiDrawer)({
 
 export default function SideMenu() {
     const {data: user} = useGetCurrentUserQuery();
-    const [accountDropdown, setAccountDropdown] = useState<null | HTMLElement>(null);
+    const [profileDropdown, setAccountDropdown] = useState<null | HTMLElement>(null);
 
     return (
         <Drawer
@@ -63,14 +63,14 @@ export default function SideMenu() {
             >
                 <Avatar
                     sizes="small"
-                    alt={user?.firstName}
-                    src={user?.avatarImageUrl}
+                    alt={user?.activeProfile.displayName}
+                    src={user?.avatarUrl}
                     sx={{width: 36, height: 36}}
                 />
                 <Box sx={{mr: 'auto'}}>
-                    {user?.firstName && user?.lastName &&
+                    {user?.activeProfile.displayName &&
                         <Typography variant="body2" sx={{fontWeight: 500, lineHeight: '16px'}}>
-                            {`${user.firstName} ${user.lastName}`}
+                            {user.activeProfile.displayName}
                         </Typography>
                     }
                     <Typography variant="caption" sx={{color: 'text.secondary'}}>
@@ -84,7 +84,7 @@ export default function SideMenu() {
                 >
                     <MoreVertRoundedIcon />
                 </MenuButton>
-                <AccountDropdown open={accountDropdown}
+                <AccountDropdown open={profileDropdown}
                                  onClose={() => setAccountDropdown(null)}
                                  anchorOrigin={{vertical: 'top', horizontal: 'center'}}
                                  transformOrigin={{vertical: 'bottom', horizontal: 'center'}}/>

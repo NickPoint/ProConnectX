@@ -7,7 +7,7 @@ import {useAppSelector} from "../../hooks";
 import {selectPageTitle} from "../../../features/header/headerSlice";
 import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
 import {selectUser} from "../../../features/auth/authSlice";
-import {useLogoutUserMutation} from "../../../features/api/pcxApi";
+import {useLogoutMutation} from "../../../features/api/pcxApi";
 
 const StyledToolbar = styled('div')(({theme}) => ({
     display: 'flex',
@@ -25,7 +25,7 @@ const Header2 = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [userMenuOpen, setUserMenuOpen] = useState<null | HTMLElement>(null);
-    const [logoutUser] = useLogoutUserMutation();
+    const [logoutUser] = useLogoutMutation();
 
     const handleClick = (event: MouseEvent<HTMLElement>) => {
         switch (event.currentTarget.textContent) {

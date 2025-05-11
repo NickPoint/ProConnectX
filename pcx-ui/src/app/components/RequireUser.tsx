@@ -1,21 +1,28 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
-import {FC} from "react";
-import {AccountStatus, AccountType, AuthResponse, RoleType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
+import {AuthResponse, ProfileStatus, ProfileType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
 import {GlobalLoadingBackdrop} from "./GlobalLoadingBackdrop.tsx";
 
 interface RequireUserProps {
-    allowedRoles: RoleType[];
-    dissalowedAccountsStatuses?: {
-        type: AccountType;
-        status?: AccountStatus;
-    }[]
+    /** Which ProfileTypes are allowed access (e.g. [ProfileType.CLIENT]) */
+    allowedProfiles: ProfileType[];
+    /**
+     * Optionally block if any profile of a given type is in one of these statuses
+     * e.g. [{ type: ProfileType.FREELANCER, status: ProfileStatus.PENDING }]
+     */
+    disallowedStatuses?: Array<{
+        type: ProfileType;
+        status?: ProfileStatus;
+    }>;
     children?: React.ReactNode;
 }
 
-const RequireUser: FC<RequireUserProps> = ({ allowedRoles, children, dissalowedAccountsStatuses }) => {
+const RequireUser: React.FC<RequireUserProps> = ({
+                                               allowedProfiles,
+                                               disallowedStatuses,
+                                               children,
+                                           }) => {
     const location = useLocation();
     const { data: user, isLoading, isFetching } = useGetCurrentUserQuery();
-
     const loading = isLoading || isFetching;
 
     if (loading) {
@@ -23,31 +30,45 @@ const RequireUser: FC<RequireUserProps> = ({ allowedRoles, children, dissalowedA
     }
 
     if (!user) {
-        return <Navigate to="/auth" state={{ from: location }} replace />;
+        return (
+            <Navigate to="/auth" state={{ from: location }} replace />
+        );
     }
 
-    function checkUserAllowed(user: AuthResponse) {
-        if (user.activeRole === RoleType.RoleAdmin) {
-            return true;
+    const profilesByType = new Map<ProfileType, AuthResponse["allProfiles"][0]>(
+        user.allProfiles.map((p) => [p.profileType, p])
+    );
+
+    const isAllowed = (() => {
+        const active = user.activeProfile;
+        if (active.profileType === ProfileType.Admin) return true;
+
+        if (!allowedProfiles.includes(active.profileType)) {
+            return false;
         }
-        if (allowedRoles.includes(user.activeRole)) {
-            if (dissalowedAccountsStatuses) {
-                for (const disallowed of dissalowedAccountsStatuses) {
-                    for (const account of user.accounts) {
-                        if (account.accountType === disallowed.type) {
-                            if (!disallowed.status || account.accountStatus === disallowed.status) {
-                                return false;
-                            }
-                        }
+
+        if (disallowedStatuses) {
+            for (const rule of disallowedStatuses) {
+                const prof = profilesByType.get(rule.type);
+                if (prof) {
+                    // block if status matches or if no status specified (i.e. block all of that type)
+                    if (!rule.status || prof.status === rule.status) {
+                        return false;
                     }
                 }
             }
-            return true;
         }
-        return false;
-    }
 
-    return checkUserAllowed(user) ? (children ? children : <Outlet />) : <Navigate to="/unauthorized" state={{ from: location }} replace />;
+        return true;
+    })();
+
+    if (isAllowed) {
+        return children ? <>{children}</> : <Outlet />;
+    } else {
+        return (
+            <Navigate to="/unauthorized" state={{ from: location }} replace />
+        );
+    }
 };
 
 export default RequireUser;

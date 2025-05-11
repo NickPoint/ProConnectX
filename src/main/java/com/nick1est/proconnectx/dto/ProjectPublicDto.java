@@ -3,7 +3,7 @@ package com.nick1est.proconnectx.dto;
 import com.nick1est.proconnectx.dao.CategoryType;
 import com.nick1est.proconnectx.dao.ProjectStatus;
 import com.nick1est.proconnectx.dao.ProjectType;
-import com.nick1est.proconnectx.dto.employer.registration.EmployerResponseDto;
+import com.nick1est.proconnectx.dto.profile.EmployerResponseDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

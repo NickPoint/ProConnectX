@@ -52,12 +52,4 @@ public class FileController {
                 .body(fileResource);
     }
 
-    @PostMapping("/avatar")
-    @PreAuthorize("hasRole('CLIENT') or hasRole('FREELANCER')")
-    public ResponseEntity<?> updateAvatar(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                          @RequestPart("avatar") MultipartFile file) {
-        fileService.updateAvatar(file, userDetails);
-        return ResponseEntity.ok().build();
-    }
-
 }

@@ -1,8 +1,8 @@
 package com.nick1est.proconnectx.repository;
 
-import com.nick1est.proconnectx.dao.AccountStatus;
-import com.nick1est.proconnectx.dao.Category;
 import com.nick1est.proconnectx.dao.Freelancer;
+import com.nick1est.proconnectx.dao.ProfileStatus;
+import com.nick1est.proconnectx.dao.Category;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,11 +23,13 @@ public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
             "AND (:city is null or freelancer.address.city = :city) " +
             "AND (:rating is null or freelancer.ratingCount > 5 and freelancer.rating >= :rating or freelancer.ratingCount <= 5)")
     List<Freelancer> findByNameAndFieldAndLocationAndRating(@Param("firstName") String firstName,
-                                                        @Param("lastName") String lastName,
-                                                        @Param("categories") List<Category> categories,
-                                                        @Param("country") String country,
-                                                        @Param("city") String city,
-                                                        @Param("rating") Double rating);
+                                                            @Param("lastName") String lastName,
+                                                            @Param("categories") List<Category> categories,
+                                                            @Param("country") String country,
+                                                            @Param("city") String city,
+                                                            @Param("rating") Double rating);
 
-    List<Freelancer> findByAccountStatus(@NotNull AccountStatus accountStatus);
+    List<Freelancer> findByProfileStatus(@NotNull ProfileStatus profileStatus);
+
+    List<Freelancer> findByUserIdAndProfileStatus(Long userId, @NotNull ProfileStatus profileStatus);
 }

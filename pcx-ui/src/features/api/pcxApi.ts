@@ -6,10 +6,10 @@ export const addTagTypes = [
   "Client",
   "Registration",
   "Service",
-  "File",
   "Auth",
   "test-controller",
   "Statistics",
+  "File",
 ] as const
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -126,7 +126,7 @@ const injectedRtkApi = api
       updateClient: build.mutation<UpdateClientApiResponse, UpdateClientApiArg>(
         {
           query: queryArg => ({
-            url: `/client/profile`,
+            url: `/client/update`,
             method: "PUT",
             body: queryArg.userProfileUpdateDto,
           }),
@@ -211,16 +211,17 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Freelancer"],
       }),
-      updateAvatar: build.mutation<UpdateAvatarApiResponse, UpdateAvatarApiArg>(
-        {
-          query: queryArg => ({
-            url: `/files/avatar`,
-            method: "POST",
-            body: queryArg.body,
-          }),
-          invalidatesTags: ["File"],
-        },
-      ),
+      updateFreelancerAvatar: build.mutation<
+        UpdateFreelancerAvatarApiResponse,
+        UpdateFreelancerAvatarApiArg
+      >({
+        query: queryArg => ({
+          url: `/freelancer/avatar`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Freelancer"],
+      }),
       getClient: build.query<GetClientApiResponse, GetClientApiArg>({
         query: () => ({ url: `/client` }),
         providesTags: ["Client"],
@@ -237,12 +238,26 @@ const injectedRtkApi = api
           invalidatesTags: ["Client"],
         },
       ),
-      switchRole: build.mutation<SwitchRoleApiResponse, SwitchRoleApiArg>({
+      updateClientAvatar: build.mutation<
+        UpdateClientAvatarApiResponse,
+        UpdateClientAvatarApiArg
+      >({
         query: queryArg => ({
-          url: `/auth/switch-role`,
+          url: `/client/avatar`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Client"],
+      }),
+      switchProfile: build.mutation<
+        SwitchProfileApiResponse,
+        SwitchProfileApiArg
+      >({
+        query: queryArg => ({
+          url: `/auth/switch-profile`,
           method: "POST",
           params: {
-            role: queryArg.role,
+            newProfileType: queryArg.newProfileType,
           },
         }),
         invalidatesTags: ["Auth"],
@@ -257,7 +272,7 @@ const injectedRtkApi = api
           invalidatesTags: ["Auth"],
         },
       ),
-      logoutUser: build.mutation<LogoutUserApiResponse, LogoutUserApiArg>({
+      logout: build.mutation<LogoutApiResponse, LogoutApiArg>({
         query: () => ({ url: `/auth/logout`, method: "POST" }),
         invalidatesTags: ["Auth"],
       }),
@@ -272,22 +287,22 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Auth"],
       }),
-      checkEmail: build.mutation<CheckEmailApiResponse, CheckEmailApiArg>({
+      addProfile: build.mutation<AddProfileApiResponse, AddProfileApiArg>({
         query: queryArg => ({
-          url: `/auth/check-email`,
+          url: `/auth/add-profile`,
           method: "POST",
           params: {
-            email: queryArg.email,
+            profileType: queryArg.profileType,
           },
         }),
         invalidatesTags: ["Auth"],
       }),
-      addAccount: build.mutation<AddAccountApiResponse, AddAccountApiArg>({
+      checkEmail: build.mutation<CheckEmailApiResponse, CheckEmailApiArg>({
         query: queryArg => ({
-          url: `/auth/add-account`,
-          method: "POST",
+          url: `/auth/check-email`,
+          method: "HEAD",
           params: {
-            accountType: queryArg.accountType,
+            email: queryArg.email,
           },
         }),
         invalidatesTags: ["Auth"],
@@ -374,18 +389,11 @@ const injectedRtkApi = api
         query: () => ({ url: `/auth` }),
         providesTags: ["Auth"],
       }),
-      getFreelancerRegistrationRequests: build.query<
-        GetFreelancerRegistrationRequestsApiResponse,
-        GetFreelancerRegistrationRequestsApiArg
+      getRegistrationRequests: build.query<
+        GetRegistrationRequestsApiResponse,
+        GetRegistrationRequestsApiArg
       >({
-        query: () => ({ url: `/auth/freelancer-registrations` }),
-        providesTags: ["Auth"],
-      }),
-      getClientRegistrationRequests: build.query<
-        GetClientRegistrationRequestsApiResponse,
-        GetClientRegistrationRequestsApiArg
-      >({
-        query: () => ({ url: `/auth/client-registrations` }),
+        query: () => ({ url: `/auth/registration-requests` }),
         providesTags: ["Auth"],
       }),
       getFreelancersRegistrationRequests: build.query<
@@ -462,13 +470,13 @@ export type UpdateClientApiArg = {
 export type RejectRegistrationRequestApiResponse = /** status 200 OK */ object
 export type RejectRegistrationRequestApiArg = {
   id: number
-  type: "ADMIN" | "CLIENT" | "FREELANCER"
+  type: ProfileType
   body: string
 }
 export type ApproveRegistrationRequestApiResponse = /** status 200 OK */ object
 export type ApproveRegistrationRequestApiArg = {
   id: number
-  type: "ADMIN" | "CLIENT" | "FREELANCER"
+  type: ProfileType
 }
 export type GetServicesApiResponse =
   /** status 200 OK */ PageLightweightServiceDto
@@ -495,46 +503,52 @@ export type BookServiceApiArg = {
   serviceId: number
   bookServiceDto: BookServiceDto
 }
-export type GetFreelancerApiResponse = /** status 200 OK */ FreelancerDto
+export type GetFreelancerApiResponse = /** status 200 OK */ FreelancerProfileDto
 export type GetFreelancerApiArg = void
 export type CreateFreelancerApiResponse =
-  /** status 201 Created */ FreelancerDto
+  /** status 201 Created */ FreelancerProfileDto
 export type CreateFreelancerApiArg = {
   registrationRequest: FreelancerRegistrationRequest
 }
-export type UpdateAvatarApiResponse = /** status 200 OK */ object
-export type UpdateAvatarApiArg = {
+export type UpdateFreelancerAvatarApiResponse = /** status 200 OK */ object
+export type UpdateFreelancerAvatarApiArg = {
   body: {
     avatar: Blob
   }
 }
-export type GetClientApiResponse = /** status 200 OK */ ClientDto
+export type GetClientApiResponse = /** status 200 OK */ ClientProfileDto
 export type GetClientApiArg = void
-export type CreateClientApiResponse = /** status 201 Created */ ClientDto
+export type CreateClientApiResponse = /** status 201 Created */ ClientProfileDto
 export type CreateClientApiArg = {
   registrationRequest: ClientRegistrationRequest
 }
-export type SwitchRoleApiResponse = /** status 200 OK */ object
-export type SwitchRoleApiArg = {
-  role: RoleType
+export type UpdateClientAvatarApiResponse = /** status 200 OK */ object
+export type UpdateClientAvatarApiArg = {
+  body: {
+    avatar: Blob
+  }
+}
+export type SwitchProfileApiResponse = /** status 200 OK */ AuthResponse
+export type SwitchProfileApiArg = {
+  newProfileType: ProfileType
 }
 export type RegisterUserApiResponse = /** status 200 OK */ AuthResponse
 export type RegisterUserApiArg = {
   signupFormRequest: SignupFormRequest
 }
-export type LogoutUserApiResponse = /** status 200 OK */ object
-export type LogoutUserApiArg = void
+export type LogoutApiResponse = unknown
+export type LogoutApiArg = void
 export type AuthenticateUserApiResponse = /** status 200 OK */ AuthResponse
 export type AuthenticateUserApiArg = {
   loginRequest: LoginRequest
 }
+export type AddProfileApiResponse = unknown
+export type AddProfileApiArg = {
+  profileType: ProfileType
+}
 export type CheckEmailApiResponse = unknown
 export type CheckEmailApiArg = {
   email: string
-}
-export type AddAccountApiResponse = /** status 200 OK */ object
-export type AddAccountApiArg = {
-  accountType: "ADMIN" | "CLIENT" | "FREELANCER"
 }
 export type UserAccessApiResponse = /** status 200 OK */ string
 export type UserAccessApiArg = void
@@ -590,12 +604,9 @@ export type GetDisputeApiArg = {
 }
 export type GetCurrentUserApiResponse = /** status 200 OK */ AuthResponse
 export type GetCurrentUserApiArg = void
-export type GetFreelancerRegistrationRequestsApiResponse =
-  /** status 200 OK */ LightweightRegistrationRequestDto[]
-export type GetFreelancerRegistrationRequestsApiArg = void
-export type GetClientRegistrationRequestsApiResponse =
-  /** status 200 OK */ LightweightRegistrationRequestDto[]
-export type GetClientRegistrationRequestsApiArg = void
+export type GetRegistrationRequestsApiResponse =
+  /** status 200 OK */ RegistrationRequestDto[]
+export type GetRegistrationRequestsApiArg = void
 export type GetFreelancersRegistrationRequestsApiResponse =
   /** status 200 OK */ RegistrationRequestDto[]
 export type GetFreelancersRegistrationRequestsApiArg = void
@@ -620,18 +631,34 @@ export type UserProfileUpdateDto = {
   address: AddressDto
   phoneNumber: string
 }
+export type SortObject = {
+  direction?: string
+  nullHandling?: string
+  ascending?: boolean
+  property?: string
+  ignoreCase?: boolean
+}
+export type PageableObject = {
+  pageNumber?: number
+  pageSize?: number
+  offset?: number
+  sort?: SortObject[]
+  paged?: boolean
+  unpaged?: boolean
+}
 export type LightweightAddressDto = {
   city: string
   postalCode: string
   country: string
 }
-export type LightWeightFreelancerDto = {
+export type BaseProfileDto = {
   id: number
   firstName: string
   lastName: string
-  rating: number
-  email: string
   phoneNumber: string
+  email: string
+  rating: number
+  ratingCount: number
   avatarImageUrl?: string
 }
 export type LightweightServiceDto = {
@@ -642,37 +669,22 @@ export type LightweightServiceDto = {
   rating: number
   ratingCount: number
   price: number
-  freelancer: LightWeightFreelancerDto
+  freelancer: BaseProfileDto
   categories: CategoryType[]
   postedAt: string
   thumbnailUrl: string
 }
-export type SortObject = {
-  direction?: string
-  nullHandling?: string
-  ascending?: boolean
-  property?: string
-  ignoreCase?: boolean
-}
-export type PageableObject = {
-  offset?: number
-  sort?: SortObject[]
-  pageSize?: number
-  pageNumber?: number
-  unpaged?: boolean
-  paged?: boolean
-}
 export type PageLightweightServiceDto = {
-  totalElements?: number
   totalPages?: number
+  totalElements?: number
+  pageable?: PageableObject
+  first?: boolean
   size?: number
   content?: LightweightServiceDto[]
   number?: number
   sort?: SortObject[]
-  first?: boolean
   last?: boolean
   numberOfElements?: number
-  pageable?: PageableObject
   empty?: boolean
 }
 export type ServiceAddressDto = {
@@ -699,9 +711,8 @@ export type BookServiceDto = {
   /** List of files to upload */
   files?: Blob[]
 }
-export type FreelancerDto = {
+export type FreelancerProfileDto = {
   id: number
-  address: AddressDto
   firstName: string
   lastName: string
   phoneNumber: string
@@ -709,20 +720,20 @@ export type FreelancerDto = {
   rating: number
   ratingCount: number
   avatarImageUrl?: string
+  address: AddressDto
 }
 export type FreelancerRegistrationRequest = {
   firstName: string
   lastName: string
   address: AddressDto
   phoneNumber: string
-  categories: CategoryType[]
   avatarImage?: Blob
+  idDocuments: Blob[]
+  categories?: CategoryType[]
   description: string
-  idDocument: Blob[]
 }
-export type ClientDto = {
+export type ClientProfileDto = {
   id: number
-  address: AddressDto
   firstName: string
   lastName: string
   phoneNumber: string
@@ -730,6 +741,7 @@ export type ClientDto = {
   rating: number
   ratingCount: number
   avatarImageUrl?: string
+  address: AddressDto
 }
 export type ClientRegistrationRequest = {
   firstName: string
@@ -737,26 +749,25 @@ export type ClientRegistrationRequest = {
   address: AddressDto
   phoneNumber: string
   avatarImage?: Blob
-  idDocument: Blob[]
+  idDocuments: Blob[]
 }
-export type Account = {
-  userId?: number
-  accountStatus?: AccountStatus
-  accountType?: AccountType
+export type ProfileInfo = {
+  profileId: number
+  profileType: ProfileType
+  status: ProfileStatus
+  displayName?: string
 }
 export type AuthResponse = {
-  firstName?: string
-  lastName?: string
   email: string
-  accounts: Account[]
   roles: RoleType[]
-  activeRole: RoleType
-  avatarImageUrl?: string
+  activeProfile: ProfileInfo
+  allProfiles: ProfileInfo[]
+  avatarUrl?: string
 }
 export type SignupFormRequest = {
   email: string
   password: string
-  accountType: AccountType
+  profileType: ProfileType
 }
 export type LoginRequest = {
   email: string
@@ -794,7 +805,7 @@ export type ReviewDto = {
 }
 export type ServiceDto = {
   id: number
-  freelancer: LightWeightFreelancerDto
+  freelancer: BaseProfileDto
   title: string
   description: string
   shortDescription: string
@@ -808,16 +819,6 @@ export type ServiceDto = {
   ratingCount: number
   galleryUrls: string[]
   postedAt: string
-}
-export type LightweightClientDto = {
-  id: number
-  firstName: string
-  lastName: string
-  rating: number
-  ratingCount: number
-  email: string
-  phoneNumber: string
-  avatarImageUrl?: string
 }
 export type LightweightTransactionDto = {
   id: number
@@ -837,7 +838,7 @@ export type FileDto = {
 export type OrderDto = {
   id: number
   service: LightweightServiceDto
-  client: LightweightClientDto
+  clientProfile: BaseProfileDto
   status: OrderStatus
   transaction: LightweightTransactionDto
   events: EventDto[]
@@ -849,16 +850,16 @@ export type OrderDto = {
   updatedAt?: string
 }
 export type PageOrderDto = {
-  totalElements?: number
   totalPages?: number
+  totalElements?: number
+  pageable?: PageableObject
+  first?: boolean
   size?: number
   content?: OrderDto[]
   number?: number
   sort?: SortObject[]
-  first?: boolean
   last?: boolean
   numberOfElements?: number
-  pageable?: PageableObject
   empty?: boolean
 }
 export type DisputeDto = {
@@ -869,28 +870,22 @@ export type DisputeDto = {
   proposal?: string
   proposalRejectionReason?: string
 }
-export type LightweightRegistrationRequestDto = {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-  accountStatus: AccountStatus
-  rejectionReason?: string
-  registrationDate: string
-  accountType: AccountType
-}
 export type RegistrationRequestDto = {
   id: number
   firstName: string
   lastName: string
   email: string
-  avatarImageUrl?: string
   phoneNumber: string
-  accountStatus: AccountStatus
+  profileStatus: ProfileStatus
   rejectionReason?: string
   registrationDate: string
-  accountType: AccountType
+  profileType: ProfileType
+}
+export enum ProfileType {
+  Admin = "ADMIN",
+  Client = "CLIENT",
+  Freelancer = "FREELANCER",
+  Unverified = "UNVERIFIED",
 }
 export enum CategoryType {
   WebDesign = "WEB_DESIGN",
@@ -1024,19 +1019,11 @@ export enum RoleType {
   RoleUnverified = "ROLE_UNVERIFIED",
   RoleClient = "ROLE_CLIENT",
 }
-export enum AccountStatus {
+export enum ProfileStatus {
   Unverified = "UNVERIFIED",
   Pending = "PENDING",
   Active = "ACTIVE",
-  Inactive = "INACTIVE",
-  Deleted = "DELETED",
-  Banned = "BANNED",
   Rejected = "REJECTED",
-}
-export enum AccountType {
-  Admin = "ADMIN",
-  Client = "CLIENT",
-  Freelancer = "FREELANCER",
 }
 export enum Type {
   Employer = "Employer",
@@ -1058,10 +1045,9 @@ export enum TransactionStatus {
   Released = "RELEASED",
   Canceled = "CANCELED",
   Refunded = "REFUNDED",
-  Disputed = "DISPUTED",
 }
 export enum EventType {
-  AccountCreated = "ACCOUNT_CREATED",
+  UserRegistered = "USER_REGISTERED",
   VerificationSubmitted = "VERIFICATION_SUBMITTED",
   AccountApproved = "ACCOUNT_APPROVED",
   AccountRejected = "ACCOUNT_REJECTED",
@@ -1093,6 +1079,7 @@ export enum DisputeStatus {
   InReview = "IN_REVIEW",
   ResolvedRefunded = "RESOLVED_REFUNDED",
   ResolvedFreelancerPaid = "RESOLVED_FREELANCER_PAID",
+  AdminActionRequired = "ADMIN_ACTION_REQUIRED",
   Rejected = "REJECTED",
 }
 export enum ProposalStatus {
@@ -1121,15 +1108,16 @@ export const {
   useBookServiceMutation,
   useGetFreelancerQuery,
   useCreateFreelancerMutation,
-  useUpdateAvatarMutation,
+  useUpdateFreelancerAvatarMutation,
   useGetClientQuery,
   useCreateClientMutation,
-  useSwitchRoleMutation,
+  useUpdateClientAvatarMutation,
+  useSwitchProfileMutation,
   useRegisterUserMutation,
-  useLogoutUserMutation,
+  useLogoutMutation,
   useAuthenticateUserMutation,
+  useAddProfileMutation,
   useCheckEmailMutation,
-  useAddAccountMutation,
   useUserAccessQuery,
   useModeratorAccessQuery,
   useAllAccessQuery,
@@ -1142,8 +1130,7 @@ export const {
   useGetFileQuery,
   useGetDisputeQuery,
   useGetCurrentUserQuery,
-  useGetFreelancerRegistrationRequestsQuery,
-  useGetClientRegistrationRequestsQuery,
+  useGetRegistrationRequestsQuery,
   useGetFreelancersRegistrationRequestsQuery,
   useGetClientsRegistrationRequestsQuery,
 } = injectedRtkApi

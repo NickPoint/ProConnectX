@@ -1,7 +1,7 @@
 import {useAppDispatch} from "../hooks.ts";
 import {addFab, clearFabs} from "../../features/fab/fabSlice.ts";
 import {useLocation} from "react-router-dom";
-import {RoleType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
+import {ProfileType, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
 import {useEffect} from "react";
 
 
@@ -10,8 +10,8 @@ const FabManager = () => {
     const {data: user} = useGetCurrentUserQuery()
     const location = useLocation();
 
-    const userIsUnverified = () => (user?.roles.length === 1 && user?.roles[0] === RoleType.RoleUnverified)
-    const hasRole = (requiredRole: RoleType) => user?.roles.includes(requiredRole);
+    const userIsUnverified = () => (user?.roles.length === 1 && user?.roles[0] === ProfileType.RoleUnverified)
+    const hasRole = (requiredRole: ProfileType) => user?.roles.includes(requiredRole);
 
     useEffect(() => {
         dispatch(clearFabs());
@@ -19,7 +19,7 @@ const FabManager = () => {
         if (!user || userIsUnverified()) return;
 
         if (location.pathname === "/services"
-            && user.activeRole === RoleType.RoleFreelancer) {
+            && user.activeProfile?.profileType === ProfileType.Freelancer) {
             dispatch(addFab({id: 'addService', fabProps: {}, visible: true, icon: 'add'}));
         }
     }, [dispatch, user, user?.roles, location.pathname]);

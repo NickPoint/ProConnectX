@@ -54,7 +54,7 @@ public class BidService {
         return bid;
     }
 
-    public void makeBid(Long projectId, Freelancer freelancer, BidRequest bidRequest) {
+    public void makeBid(Long projectId, Profilefreelancer, BidRequest bidRequest) {
         log.info("Making bid for freelancer with id {} for project with id {}", freelancer.getId(), projectId);
         val project = projectRepository.getReferenceById(projectId);
         val bid = bidMapper.toDao(bidRequest, freelancer, project);

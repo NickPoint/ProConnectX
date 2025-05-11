@@ -64,7 +64,7 @@ public class Employer {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private AccountStatus accountStatus;
+    private ProfileStatus profileStatus;
 
     @OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL)
     private List<File> files;
@@ -72,7 +72,7 @@ public class Employer {
     @JoinColumn(nullable = false)
     @OneToOne
     @NotNull
-    private Principal principal;
+    private User user;
 
     @Column(nullable = false)
     @NotNull
@@ -83,7 +83,7 @@ public class Employer {
 
     @PrePersist
     private void prePersist() {
-        this.accountStatus = AccountStatus.UNVERIFIED;
+        this.profileStatus = ProfileStatus.UNVERIFIED;
         this.registrationDate = Instant.now();
         this.rating = 0.0;
         this.ratingCount = 0;

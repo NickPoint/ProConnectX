@@ -9,12 +9,11 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
 import {
-    AccountStatus,
-    AccountType,
-    RoleType,
+    ProfileStatus,
+    ProfileType,
     useGetCurrentUserQuery,
-    useLogoutUserMutation,
-    useSwitchRoleMutation
+    useLogoutMutation,
+    useSwitchProfileMutation
 } from "../../../features/api/pcxApi.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
@@ -27,17 +26,17 @@ interface SideMenuMobileProps {
 
 export default function SideMenuMobile({open, toggleDrawer}: SideMenuMobileProps) {
     const {data: user} = useGetCurrentUserQuery();
-    const [logoutUser] = useLogoutUserMutation();
-    const [switchRole] = useSwitchRoleMutation();
+    const [logoutUser] = useLogoutMutation();
+    const [switchRole] = useSwitchProfileMutation();
     const [addAccountOpen, setAddAccountOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const {t} = useTranslation();
 
-    const oppositeAccount = user?.activeRole === RoleType.RoleFreelancer ? AccountType.Client : AccountType.Freelancer;
-    const pendingFreelancerAccount = user?.accounts.find(account => account.accountType === AccountType.Freelancer && account.accountStatus === AccountStatus.Unverified);
-    const pendingClientAccount = user?.accounts.find(account => account.accountType === AccountType.Client && account.accountStatus === AccountStatus.Unverified);
-    const oppositeRole = user?.activeRole === RoleType.RoleFreelancer ? RoleType.RoleClient : RoleType.RoleFreelancer;
+    const oppositeAccount = user?.activeProfile.profileType === ProfileType.Freelancer ? ProfileType.Client : ProfileType.Freelancer;
+    const pendingFreelancerAccount = user?.allProfiles.find(profile => profile.profileType === ProfileType.Freelancer && profile.status === ProfileStatus.Unverified);
+    const pendingClientAccount = user?.allProfiles.find(profile => profile.profileType === ProfileType.Client && profile.status === ProfileStatus.Unverified);
+    const oppositeRole = user?.activeProfile.profileType === ProfileType.Freelancer ? ProfileType.Client : ProfileType.Freelancer;
 
     const buttonConfig = [
         {
@@ -48,27 +47,27 @@ export default function SideMenuMobile({open, toggleDrawer}: SideMenuMobileProps
         },
         {
             icon: <VerifiedUser/>,
-            label: t('header.menu.verify', {accountType: t(`enum.accountType.${AccountType.Freelancer}`)}),
+            label: t('header.menu.verify', {profileType: t(`enum.profileType.${ProfileType.Freelancer}`)}),
             onClick: () => navigate('/freelancer-verification'),
             display: pendingFreelancerAccount
         },
         {
             icon: <VerifiedUser/>,
-            label: t('header.menu.verify', {accountType: t(`enum.accountType.${AccountType.Client}`)}),
+            label: t('header.menu.verify', {profileType: t(`enum.profileType.${ProfileType.Client}`)}),
             onClick: () => navigate('/client-verification'),
             display: pendingClientAccount
         },
         {
             icon: <SwitchAccount/>,
-            label: t('header.menu.switchAccount', {accountType: t(`enum.accountType.${oppositeAccount}`)}),
+            label: t('header.menu.switchAccount', {profileType: t(`enum.profileType.${oppositeAccount}`)}),
             onClick: () => switchRole({role: oppositeRole}),
-            display: user?.accounts.find(account => account.accountType === oppositeAccount)?.accountStatus === AccountStatus.Active,
+            display: user?.allProfiles.find(profile => profile.profileType === oppositeAccount)?.status === ProfileStatus.Active,
         },
         {
             icon: <SwitchAccount/>,
             label: t('header.menu.addAnotherAccount'),
             onClick: () => setAddAccountOpen(true),
-            display: user?.accounts.length === 1
+            display: user?.allProfiles.length === 1
         },
         {
             icon: <Logout/>,
@@ -106,12 +105,12 @@ export default function SideMenuMobile({open, toggleDrawer}: SideMenuMobileProps
                     >
                         <Avatar
                             sizes="small"
-                            alt={user?.firstName}
+                            alt={user?.activeProfile.displayName}
                             src={user?.avatarImageUrl}
                             sx={{width: 24, height: 24}}
                         />
                         <Typography component="p" variant="h6">
-                            {user?.firstName} {user?.lastName}
+                            {user?.activeProfile.displayName}
                         </Typography>
                     </Stack>
                     <MenuButton showBadge>

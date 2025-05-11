@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(enumAsRef = true)
 public enum EventType {
-    // Registration & Account
-    ACCOUNT_CREATED,
+    // Registration & Profile
+    USER_REGISTERED,
     VERIFICATION_SUBMITTED,
     ACCOUNT_APPROVED,
     ACCOUNT_REJECTED,

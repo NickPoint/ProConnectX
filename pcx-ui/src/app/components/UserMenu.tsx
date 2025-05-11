@@ -16,12 +16,11 @@ import {AccountCircle, Logout, SwitchAccount, VerifiedUser} from '@mui/icons-mat
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {
-    AccountStatus,
-    AccountType,
-    RoleType,
+    ProfileStatus,
+    ProfileType,
     useGetCurrentUserQuery,
-    useLogoutUserMutation,
-    useSwitchRoleMutation
+    useLogoutMutation,
+    useSwitchProfileMutation
 } from '../../features/api/pcxApi';
 import {AddAccountDialog} from "../pages/AuthDialog.tsx";
 import Notification from "./Notification.tsx";
@@ -43,17 +42,17 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
                                                                     transformOrigin = {vertical: 'top', horizontal: 'right'},
 }) => {
     const {data: user} = useGetCurrentUserQuery();
-    const [logoutUser] = useLogoutUserMutation();
-    const [switchRole] = useSwitchRoleMutation();
+    const [logoutUser] = useLogoutMutation();
+    const [switchProfile] = useSwitchProfileMutation();
     const [addAccountOpen, setAddAccountOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const {t} = useTranslation();
 
-    const oppositeAccount = user?.activeRole === RoleType.RoleFreelancer ? AccountType.Client : AccountType.Freelancer;
-    const pendingFreelancerAccount = user?.accounts.find(account => account.accountType === AccountType.Freelancer && account.accountStatus === AccountStatus.Unverified);
-    const pendingClientAccount = user?.accounts.find(account => account.accountType === AccountType.Client && account.accountStatus === AccountStatus.Unverified);
-    const oppositeRole = user?.activeRole === RoleType.RoleFreelancer ? RoleType.RoleClient : RoleType.RoleFreelancer;
+    const oppositeAccount = user?.activeProfile.profileType === ProfileType.Freelancer ? ProfileType.Client : ProfileType.Freelancer;
+    const pendingFreelancerAccount = user?.allProfiles.find(profile => profile.profileType === ProfileType.Freelancer && profile.status === ProfileStatus.Unverified);
+    const pendingClientAccount = user?.allProfiles.find(profile => profile.profileType === ProfileType.Client && profile.status === ProfileStatus.Unverified);
+    const oppositeProfile = user?.activeProfile.profileType === ProfileType.Freelancer ? ProfileType.Client : ProfileType.Freelancer;
 
     const menuConfig = [
         {
@@ -64,27 +63,27 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
         },
         {
             icon: <VerifiedUser />,
-            label: t('header.menu.verify', {accountType: t(`enum.accountType.${AccountType.Freelancer}`)}),
+            label: t('header.menu.verify', {profileType: t(`enum.profileType.${ProfileType.Freelancer}`)}),
             onClick: () => navigate('/freelancer-verification'),
             display: pendingFreelancerAccount
         },
         {
             icon: <VerifiedUser />,
-            label: t('header.menu.verify', {accountType: t(`enum.accountType.${AccountType.Client}`)}),
+            label: t('header.menu.verify', {profileType: t(`enum.profileType.${ProfileType.Client}`)}),
             onClick: () => navigate('/client-verification'),
             display: pendingClientAccount
         },
         {
             icon: <SwitchAccount/>,
-            label: t('header.menu.switchAccount', {accountType: t(`enum.accountType.${oppositeAccount}`)}),
-            onClick: () => switchRole({role: oppositeRole}),
-            display: user?.accounts.find(account => account.accountType === oppositeAccount)?.accountStatus === AccountStatus.Active,
+            label: t('header.menu.switchAccount', {profileType: t(`enum.profileType.${oppositeAccount}`)}),
+            onClick: () => switchProfile({newProfileType: oppositeProfile}),
+            display: user?.allProfiles.find(profile => profile.profileType === oppositeAccount)?.status === ProfileStatus.Active,
         },
         {
             icon: <SwitchAccount/>,
             label: t('header.menu.addAnotherAccount'),
             onClick: () => setAddAccountOpen(true),
-            display: user?.accounts.length === 1
+            display: user?.allProfiles.length === 1
         },
         {
             icon: <Logout/>,
@@ -130,18 +129,18 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
 const UserMenu = () => {
     const {data: user} = useGetCurrentUserQuery();
     const dispatch = useAppDispatch();
-    const [accountDropdown, setAccountDropdown] = useState<null | HTMLElement>(null);
+    const [profileDropdown, setAccountDropdown] = useState<null | HTMLElement>(null);
     const {t} = useTranslation();
 
     return (
         user ?
             <>
-                <AccountDropdown open={accountDropdown} onClose={() => setAccountDropdown(null)} />
+                <AccountDropdown open={profileDropdown} onClose={() => setAccountDropdown(null)} />
                 <Stack direction="row" spacing={1}>
                     <Notification/>
                     <Tooltip title={t('header.menu.openMenu')}>
                         <IconButton onClick={(event) => setAccountDropdown(event.currentTarget)} sx={{p: 0, mr: 1}}>
-                            <Avatar alt={user?.firstName} src={user?.avatarImageUrl}/>
+                            <Avatar alt={user?.activeProfile.displayName} src={user?.avatarUrl}/>
                         </IconButton>
                     </Tooltip>
                 </Stack>

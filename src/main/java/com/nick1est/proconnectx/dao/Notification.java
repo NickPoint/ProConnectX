@@ -25,7 +25,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn
-    private Principal principal;
+    private User user;
 
     @ManyToOne
     @JoinColumn

@@ -7,6 +7,7 @@ import com.nick1est.proconnectx.dto.OrderDto;
 import com.nick1est.proconnectx.dto.OrdersFilter;
 import com.nick1est.proconnectx.mapper.OrderMapper;
 import com.nick1est.proconnectx.repository.OrderRepository;
+import com.nick1est.proconnectx.service.profile.ClientProfileService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,87 +34,104 @@ public class OrderService {
     private final TransactionService transactionService;
     private final DisputeService disputeService;
     private final FileService fileService;
+    private final ClientProfileService clientProfileService;
 
     @Transactional
     public void acceptOrder(Long orderId,
-                            Freelancer freelancer,
+                            Long freelancerId,
                             LocalDate deadlineDate) {
         val order = getById(orderId);
-        order.setStatus(OrderStatus.IN_PROGRESS);
+
+        changeStatus(order, OrderStatus.IN_PROGRESS);
         order.setDeadlineDate(deadlineDate);
         transactionService.escrowTransaction(order);
-        eventService.recordOrderAccepted(order, freelancer);
+        eventService.recordOrderAccepted(order, freelancerId);
     }
 
     @Transactional
     public void completeOrder(Long orderId) {
         val order = getById(orderId);
-        order.setStatus(OrderStatus.COMPLETED);
+
+        if (!order.getStatus().canTransitionTo(OrderStatus.COMPLETED)) {
+            throw new IllegalStateException("Cannot complete order from status: " + order.getStatus());
+        }
+
+        changeStatus(order, OrderStatus.COMPLETED);
         transactionService.releaseTransaction(order);
         eventService.recordOrderCompleted(order);
     }
 
     @Transactional
     public void submitOrderForReview(Long orderId,
-                                     Freelancer freelancer) {
+                                     Long freelancerId) {
         val order = getById(orderId);
-        order.setStatus(OrderStatus.SUBMITTED_FOR_REVIEW);
-        eventService.recordOrderSubmittedForReview(order, freelancer);
+        changeStatus(order, OrderStatus.SUBMITTED_FOR_REVIEW);
+        eventService.recordOrderSubmittedForReview(order, freelancerId);
     }
 
     @Transactional
     public void approveOrder(Long orderId, UserDetailsImpl userDetails) {
         val order = getById(orderId);
-        approveOrder(order, userDetails, AccountType.CLIENT);
+        approveOrder(order, userDetails, ProfileType.CLIENT);
         completeOrder(orderId);
     }
 
     @Transactional
-    public void approveOrder(Order order, UserDetailsImpl userDetails, AccountType accountType) {
-        order.setStatus(OrderStatus.APPROVED);
-        eventService.recordOrderApproved(order, userDetails, accountType);
+    public void approveOrder(Order order, UserDetailsImpl userDetails, ProfileType profileType) {
+        changeStatus(order, OrderStatus.APPROVED);
+        eventService.recordOrderApproved(order, userDetails, profileType);
     }
 
     @Transactional
-    public void disputeOrder(Long orderId, String reason, Client client) {
+    public void disputeOrder(Long orderId, String reason, Profile clientProfile) {
         val order = getById(orderId);
-        order.setStatus(OrderStatus.DISPUTED);
-        disputeService.openDispute(order, reason, client);
+        changeStatus(order, OrderStatus.DISPUTED);
+        disputeService.openDispute(order, reason, clientProfile);
     }
 
     @Transactional
     public void cancelOrder(Long orderId, String reason, UserDetailsImpl userDetails) {
         val order = getById(orderId);
-        order.setStatus(OrderStatus.CANCELED);
+        changeStatus(order, OrderStatus.CANCELED);
         order.setRejectionReason(reason);
         transactionService.cancelTransaction(order);
-        eventService.recordOrderCanceled(order, userDetails.getFreelancer());
+        eventService.recordOrderCanceled(order, userDetails.getActiveProfile());
     }
 
     @Transactional
     public void cancelOrderAndMakeRefund(Order order, UserDetailsImpl userDetails) {
-        order.setStatus(OrderStatus.CANCELED);
+        changeStatus(order, OrderStatus.CANCELED);
         transactionService.refundTransaction(order);
         eventService.recordOrderCanceledWithRefund(order, userDetails);
+    }
+
+    private void changeStatus(Order order, OrderStatus newStatus) {
+        if (!order.getStatus().canTransitionTo(newStatus)) {
+            throw new IllegalStateException(
+                    "Invalid transition: " + order.getStatus() + " → " + newStatus
+            );
+        }
+        order.setStatus(newStatus);
     }
 
 
     @Transactional
     public Long bookService(Long serviceId,
-                            Client client,
+                            Long clientId,
                             BookServiceDto bookingInfo) {
-        log.debug("Client {} booked the service {}", client, serviceId);
+        log.debug("Client {} booked the service {}", clientId, serviceId);
+        val clientProfile = clientProfileService.getById(clientId);
         val service = serviceService.getServiceReferenceById(serviceId);
         val order = new Order();
         order.setService(service);
-        order.setClient(client);
+        order.setClient(clientProfile);
         order.setFreelancer(service.getFreelancer());
         order.setType(OrderType.SERVICE);
         order.setAdditionalNotes(bookingInfo.getAdditionalNotes());
         transactionService.createTransaction(order);
         val savedOrder = orderRepository.save(order);
-        fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, OwnerType.ORDER,false);
-        eventService.recordOrderCreated(savedOrder, client);
+        savedOrder.setFiles(fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, false));
+        eventService.recordOrderCreated(savedOrder, clientProfile);
         return savedOrder.getId();
     }
 
@@ -139,12 +157,13 @@ public class OrderService {
     @Transactional
     public Page<OrderDto> getActiveUserOrders(UserDetailsImpl userDetails, Pageable pageable) {
         Page<Order> orders;
-        if (RoleType.ROLE_FREELANCER.equals(userDetails.getActiveRole())) {
-            orders = orderRepository.findByService_FreelancerAndStatusIn(userDetails.getFreelancer(), ACTIVE_ORDER_STATUSES, pageable);
-        } else if (userDetails.getActiveRole().equals(RoleType.ROLE_CLIENT)) {
-            orders = orderRepository.findByClientAndStatusIn(userDetails.getClient(), ACTIVE_ORDER_STATUSES, pageable);
+        val activeProfile = userDetails.getActiveProfile();
+        if (ProfileType.FREELANCER == activeProfile.getProfileType()) {
+            orders = orderRepository.findByFreelancerIdAndStatusIn(activeProfile.getId(), ACTIVE_ORDER_STATUSES, pageable);
+        } else if (ProfileType.CLIENT == activeProfile.getProfileType()) {
+            orders = orderRepository.findByClientIdAndStatusIn(activeProfile.getId(), ACTIVE_ORDER_STATUSES, pageable);
         } else {
-            throw new IllegalArgumentException("User with role " + userDetails.getActiveRole() + " doesn't have any relation to orders");
+            throw new IllegalArgumentException("User with active profile " + activeProfile.getProfileType() + " doesn't have any relation to orders");
         }
 
         return orders.map(orderMapper::toDto);
@@ -154,12 +173,13 @@ public class OrderService {
 
         public static Specification<Order> filterByUser(UserDetailsImpl userDetails) {
             return (root, query, cb) -> {
-                if (RoleType.ROLE_ADMIN.equals(userDetails.getActiveRole())) {
+                val activeProfile = userDetails.getActiveProfile();
+                if (ProfileType.ADMIN == activeProfile.getProfileType()) {
                     return cb.conjunction();
-                } else if (RoleType.ROLE_FREELANCER.equals(userDetails.getActiveRole())) {
-                    return cb.equal(root.get("freelancer"), userDetails.getFreelancer());
-                } else if (userDetails.getActiveRole().equals(RoleType.ROLE_CLIENT)) {
-                    return cb.equal(root.get("client"), userDetails.getClient());
+                } else if (ProfileType.FREELANCER == activeProfile.getProfileType()) {
+                    return cb.equal(root.get("freelancerProfile"), activeProfile);
+                } else if (ProfileType.CLIENT == activeProfile.getProfileType()) {
+                    return cb.equal(root.get("clientProfile"), activeProfile);
                 } else {
                     return cb.disjunction();
                 }

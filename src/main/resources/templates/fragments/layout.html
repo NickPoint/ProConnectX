@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <title th:fragment="pageTitle">ProConnectX</title>
+</head>
+<body>
+<header>
+    <div th:fragment="headerSlot">
+        <h1>ProConnectX</h1>
+        <nav>
+            <a th:href="${baseUrl}">Home</a> |
+            <a th:href="${baseUrl} + '/services'">Services</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div layout:fragment="content">
+        <p><em>Default content; please override in your page template.</em></p>
+    </div>
+</main>
+
+<footer>
+    <div th:fragment="footerSlot">
+        <p>&copy; 2025 ProConnectX</p>
+    </div>
+</footer>
+</body>
+</html>

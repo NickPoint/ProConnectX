@@ -6,7 +6,7 @@ import {styled} from "@mui/material/styles";
 import FabContainer from "../FabContainer.tsx";
 import FabManager from "../FabManager.tsx";
 import {addFab, removeFab} from "../../../features/fab/fabSlice.ts";
-import {RoleType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {ProfileType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
 import AuthDialog from "../../pages/AuthDialog.tsx";
 import {useTranslation} from "react-i18next";
 import UserMenu from "../UserMenu.tsx";
@@ -51,7 +51,7 @@ const MobileHeader = () => {
 
     function getUserName(): string | undefined {
         if (user) {
-            if (user.activeRole === RoleType.RoleUnverified) {
+            if (user.activeProfile?.profileType === ProfileType.RoleUnverified) {
                 return t('header.user.unverified');
             }
             return t('header.user.greeting', {firstName: user.firstName});
