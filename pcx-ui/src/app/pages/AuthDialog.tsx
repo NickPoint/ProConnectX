@@ -12,7 +12,7 @@ import {
 import {object, string} from "yup";
 import {TextField} from "formik-mui";
 import {Field, Form, Formik} from 'formik';
-import {CardActionArea, Dialog, DialogContent, Grid, Link, Stack, Typography} from "@mui/material";
+import {CardActionArea, Dialog, DialogContent, Grid, IconButton, InputAdornment, Link, Stack, Typography} from "@mui/material";
 import {enqueueSnackbar} from "notistack";
 import {useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from "../hooks.ts";
@@ -30,6 +30,7 @@ import {useTranslation} from "react-i18next";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {useState} from "react";
+import {Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface AddAccountProps {
     open: boolean;
@@ -148,6 +149,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
     const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
     const {t} = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <Formik
@@ -214,9 +216,27 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                             <Grid size={12}>
                                                 <Stack spacing={1}>
                                                     <Field fullWidth component={TextField} name="email"
-                                                           label='Email'/>
-                                                    <Field fullWidth component={TextField} name="password" type="password"
-                                                           label='Password'/>
+                                                           label={t('form.fields.email')}/>
+                                                    <Field fullWidth component={TextField}
+                                                           InputProps={{
+                                                               endAdornment: (
+                                                                   <InputAdornment position="end">
+                                                                       <IconButton
+                                                                           aria-label={
+                                                                               showPassword ? 'hide the password' : 'display the password'
+                                                                           }
+                                                                           onClick={() => setShowPassword((show) => !show)}
+                                                                           onMouseDown={(event) => event.preventDefault()}
+                                                                           onMouseUp={(event) => event.preventDefault()}
+                                                                           edge="end"
+                                                                       >
+                                                                           {showPassword ? <VisibilityOff/> :
+                                                                               <Visibility/>}
+                                                                       </IconButton>
+                                                                   </InputAdornment>
+                                                               )
+                                                           }}
+                                                           name="password" type="password" label={t('form.fields.password')}/>
                                                 </Stack>
                                                 <Stack spacing={1} sx={{alignItems: 'center', mt: 20}}>
                                                     <Button
@@ -310,6 +330,7 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
     const dispatch = useAppDispatch();
     const email = useAppSelector(selectEmail);
     const {t} = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
 
     const signInInitialValues = {
         email: email,
@@ -348,9 +369,28 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
                         {({isSubmitting}) => (
                             <Form>
                                 <Stack spacing={1}>
-                                    <Field fullWidth component={TextField} name="email" label='Email'/>
-                                    <Field fullWidth component={TextField} name="password" type="password"
-                                           label='Password'/>
+                                    <Field fullWidth component={TextField} name="email"
+                                           label={t('form.fields.email')}/>
+                                    <Field fullWidth component={TextField}
+                                           InputProps={{
+                                               endAdornment: (
+                                                   <InputAdornment position="end">
+                                                       <IconButton
+                                                           aria-label={
+                                                               showPassword ? 'hide the password' : 'display the password'
+                                                           }
+                                                           onClick={() => setShowPassword((show) => !show)}
+                                                           onMouseDown={(event) => event.preventDefault()}
+                                                           onMouseUp={(event) => event.preventDefault()}
+                                                           edge="end"
+                                                       >
+                                                           {showPassword ? <VisibilityOff/> :
+                                                               <Visibility/>}
+                                                       </IconButton>
+                                                   </InputAdornment>
+                                               )
+                                           }}
+                                           name="password" type="password" label={t('form.fields.password')}/>
                                 </Stack>
                                 <Stack spacing={1} sx={{alignItems: 'center', mt: 20}}>
                                     <Button

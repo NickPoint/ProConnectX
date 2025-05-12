@@ -6,12 +6,10 @@ import {styled} from "@mui/material/styles";
 import FabContainer from "../FabContainer.tsx";
 import FabManager from "../FabManager.tsx";
 import {addFab, removeFab} from "../../../features/fab/fabSlice.ts";
-import {ProfileType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
 import AuthDialog from "../../pages/AuthDialog.tsx";
 import {useTranslation} from "react-i18next";
 import UserMenu from "../UserMenu.tsx";
-
-const settings = ['Profile', 'Logout'];
 
 const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: "flex",

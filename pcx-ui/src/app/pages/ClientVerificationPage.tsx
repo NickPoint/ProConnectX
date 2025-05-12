@@ -9,8 +9,6 @@ import {useTranslation} from "react-i18next";
 import {Info} from "@mui/icons-material";
 import {StepperForm} from "../components/StepperForm.tsx";
 import {ExtendedAddress} from "../components/AddressAutocomplete.tsx";
-import {useLoadScript} from "@react-google-maps/api";
-import {setIsLoading} from "../../features/loading/loadingSlice.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../store.ts";
 import {FieldRenderer} from "../components/FieldRenderer.tsx";

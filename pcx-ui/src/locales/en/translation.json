@@ -248,6 +248,7 @@
   "form": {
     "fields": {
       "id": "ID",
+      "password": "Password",
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
