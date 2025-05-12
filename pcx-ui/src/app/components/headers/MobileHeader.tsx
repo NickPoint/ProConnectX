@@ -65,7 +65,9 @@ const MobileHeader = () => {
                     <Box sx={{alignItems: 'flex-start'}}>
                         {user &&
                             <>
-                                <Typography variant='h6'>{user?.activeProfile.displayName}</Typography>
+                                <Typography variant='h6'>
+                                    {t(`header.user.greeting`, {firstName: user?.activeProfile.displayName.split(' ')[0]})}
+                                </Typography>
                                 {user.status &&
                                     <Typography variant='body2'>{t(`header.user.status.${user.status}`)}</Typography>
                                 }
