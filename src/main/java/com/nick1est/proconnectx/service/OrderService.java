@@ -5,6 +5,7 @@ import com.nick1est.proconnectx.dao.*;
 import com.nick1est.proconnectx.dto.BookServiceDto;
 import com.nick1est.proconnectx.dto.OrderDto;
 import com.nick1est.proconnectx.dto.OrdersFilter;
+import com.nick1est.proconnectx.events.domain.*;
 import com.nick1est.proconnectx.mapper.OrderMapper;
 import com.nick1est.proconnectx.repository.OrderRepository;
 import com.nick1est.proconnectx.service.profile.ClientProfileService;
@@ -12,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,7 +32,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final ServiceService serviceService;
-    private final EventService eventService;
+    private final ApplicationEventPublisher events;
     private final TransactionService transactionService;
     private final DisputeService disputeService;
     private final FileService fileService;
@@ -38,72 +40,79 @@ public class OrderService {
 
     @Transactional
     public void acceptOrder(Long orderId,
-                            Long freelancerId,
+                            Profile freelancer,
                             LocalDate deadlineDate) {
         val order = getById(orderId);
 
         changeStatus(order, OrderStatus.IN_PROGRESS);
         order.setDeadlineDate(deadlineDate);
         transactionService.escrowTransaction(order);
-        eventService.recordOrderAccepted(order, freelancerId);
+        events.publishEvent(new OrderAcceptedEvent(order, freelancer, deadlineDate));
     }
 
     @Transactional
     public void completeOrder(Long orderId) {
         val order = getById(orderId);
 
-        if (!order.getStatus().canTransitionTo(OrderStatus.COMPLETED)) {
-            throw new IllegalStateException("Cannot complete order from status: " + order.getStatus());
-        }
-
         changeStatus(order, OrderStatus.COMPLETED);
         transactionService.releaseTransaction(order);
-        eventService.recordOrderCompleted(order);
+        events.publishEvent(new OrderCompletedEvent(order));
     }
 
     @Transactional
     public void submitOrderForReview(Long orderId,
-                                     Long freelancerId) {
+                                     Profile profile) {
         val order = getById(orderId);
         changeStatus(order, OrderStatus.SUBMITTED_FOR_REVIEW);
-        eventService.recordOrderSubmittedForReview(order, freelancerId);
+        events.publishEvent(new OrderSubmitterForReviewEvent(order, profile));
     }
 
     @Transactional
-    public void approveOrder(Long orderId, UserDetailsImpl userDetails) {
+    public void approveOrder(Long orderId, Profile profile) {
         val order = getById(orderId);
-        approveOrder(order, userDetails, ProfileType.CLIENT);
+        changeStatus(order, OrderStatus.APPROVED);
+        if (profile.getProfileType() == ProfileType.ADMIN) {
+            events.publishEvent(new OrderApprovedByAdminEvent(order, profile));
+        } else {
+            events.publishEvent(new OrderApprovedEvent(order, profile));
+        }
+
         completeOrder(orderId);
     }
 
     @Transactional
-    public void approveOrder(Order order, UserDetailsImpl userDetails, ProfileType profileType) {
-        changeStatus(order, OrderStatus.APPROVED);
-        eventService.recordOrderApproved(order, userDetails, profileType);
-    }
-
-    @Transactional
-    public void disputeOrder(Long orderId, String reason, Profile clientProfile) {
+    public void disputeOrder(Long orderId, String reason, Profile client) {
         val order = getById(orderId);
         changeStatus(order, OrderStatus.DISPUTED);
-        disputeService.openDispute(order, reason, clientProfile);
+        disputeService.openDispute(order, reason);
+        events.publishEvent(new OrderDisputedEvent(order, client));
     }
 
     @Transactional
-    public void cancelOrder(Long orderId, String reason, UserDetailsImpl userDetails) {
+    public void cancelOrder(Long orderId, String reason, Profile freelancer) {
         val order = getById(orderId);
         changeStatus(order, OrderStatus.CANCELED);
         order.setRejectionReason(reason);
         transactionService.cancelTransaction(order);
-        eventService.recordOrderCanceled(order, userDetails.getActiveProfile());
+        events.publishEvent(new OrderCanceledEvent(order, freelancer));
     }
 
     @Transactional
-    public void cancelOrderAndMakeRefund(Order order, UserDetailsImpl userDetails) {
+    public void adminCancelAndRefundOrder(Long orderId, String reason, Profile admin) {
+        val order = getById(orderId);
+        changeStatus(order, OrderStatus.CANCELED);
+        order.setRejectionReason(reason);
+        transactionService.refundTransaction(order);
+        events.publishEvent(new OrderCanceledByAdminEvent(order, admin));
+    }
+
+//    TODO: Admin should have possibility to resolve dispute with refund or release transaction
+/*    @Transactional
+    public void cancelOrderAndMakeRefund(Order order, Profile profile) {
         changeStatus(order, OrderStatus.CANCELED);
         transactionService.refundTransaction(order);
-        eventService.recordOrderCanceledWithRefund(order, userDetails);
-    }
+        events.recordOrderCanceledWithRefund(order, userDetails);
+    }*/
 
     private void changeStatus(Order order, OrderStatus newStatus) {
         if (!order.getStatus().canTransitionTo(newStatus)) {
@@ -120,18 +129,18 @@ public class OrderService {
                             Long clientId,
                             BookServiceDto bookingInfo) {
         log.debug("Client {} booked the service {}", clientId, serviceId);
-        val clientProfile = clientProfileService.getById(clientId);
+        val client = clientProfileService.getById(clientId);
         val service = serviceService.getServiceReferenceById(serviceId);
         val order = new Order();
         order.setService(service);
-        order.setClient(clientProfile);
+        order.setClient(client);
         order.setFreelancer(service.getFreelancer());
         order.setType(OrderType.SERVICE);
         order.setAdditionalNotes(bookingInfo.getAdditionalNotes());
         transactionService.createTransaction(order);
         val savedOrder = orderRepository.save(order);
         savedOrder.setFiles(fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, false));
-        eventService.recordOrderCreated(savedOrder, clientProfile);
+        events.publishEvent(new OrderPlacedEvent(savedOrder, client));
         return savedOrder.getId();
     }
 
@@ -177,9 +186,9 @@ public class OrderService {
                 if (ProfileType.ADMIN == activeProfile.getProfileType()) {
                     return cb.conjunction();
                 } else if (ProfileType.FREELANCER == activeProfile.getProfileType()) {
-                    return cb.equal(root.get("freelancerProfile"), activeProfile);
+                    return cb.equal(root.get("freelancer"), activeProfile);
                 } else if (ProfileType.CLIENT == activeProfile.getProfileType()) {
-                    return cb.equal(root.get("clientProfile"), activeProfile);
+                    return cb.equal(root.get("client"), activeProfile);
                 } else {
                     return cb.disjunction();
                 }

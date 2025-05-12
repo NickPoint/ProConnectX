@@ -43,12 +43,12 @@ public class AdminService {
     private final ApplicationEventPublisher events;
 
     public List<RegistrationRequestDto> getFreelancersRegistrationRequests(ProfileStatus profileStatus) {
-        val freelancers = freelancerRepository.findByProfileStatus(profileStatus);
+        val freelancers = freelancerRepository.findAll();
         return freelancerMapper.toRegistrationRequestDto(freelancers);
     }
 
     public List<RegistrationRequestDto> getClientsRegistrationRequests(ProfileStatus profileStatus) {
-        val clients = clientRepository.findByProfileStatus(profileStatus);
+        val clients = clientRepository.findAll(); // TODO: Pageable, sortable
         return clientMapper.toRegistrationRequestDto(clients);
     }
 

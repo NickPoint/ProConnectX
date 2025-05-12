@@ -56,6 +56,6 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public boolean hasRole(RoleType roleType) {
-        return user.getRoles().stream().anyMatch(r -> r.getName() == roleType);
+        return user != null && user.getRoles().stream().anyMatch(r -> r.getName() == roleType);
     }
 }

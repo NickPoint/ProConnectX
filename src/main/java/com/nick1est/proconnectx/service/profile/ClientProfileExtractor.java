@@ -13,6 +13,6 @@ public class ClientProfileExtractor implements AccountProfileExtractor {
         return ProfileType.CLIENT;
     }
     @Override public Function<User, Profile> extractProfile() {
-        return (user) -> user.getClients().getFirst();
+        return (user) -> user.getClients().getLast();
     }
 }

@@ -690,15 +690,6 @@ databaseChangeLog:
                   type: BIGINT
             tableName: user_role
   - changeSet:
-      id: 1746963549041-18
-      author: Mykyta Voievudskyi
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: city, street
-            constraintName: uc_81725260c0187be531065b983
-            tableName: address
-  - changeSet:
       id: 1746963549041-19
       author: Mykyta Voievudskyi
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS

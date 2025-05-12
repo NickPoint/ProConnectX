@@ -49,15 +49,6 @@ const MobileHeader = () => {
     const navigate = useNavigate();
     const {t} = useTranslation();
 
-    function getUserName(): string | undefined {
-        if (user) {
-            if (user.activeProfile?.profileType === ProfileType.RoleUnverified) {
-                return t('header.user.unverified');
-            }
-            return t('header.user.greeting', {firstName: user.firstName});
-        }
-    }
-
     return (<>
         <HideOnScroll>
             <AppBar color='inherit' variant='transparent'>
@@ -74,7 +65,7 @@ const MobileHeader = () => {
                     <Box sx={{alignItems: 'flex-start'}}>
                         {user &&
                             <>
-                                <Typography variant='h6'>{getUserName()}</Typography>
+                                <Typography variant='h6'>{user?.activeProfile.displayName}</Typography>
                                 {user.status &&
                                     <Typography variant='body2'>{t(`header.user.status.${user.status}`)}</Typography>
                                 }

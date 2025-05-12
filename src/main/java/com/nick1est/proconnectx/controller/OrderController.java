@@ -69,21 +69,21 @@ public class OrderController {
     @CheckOwnership(type = ResourceType.ORDER)
     public void acceptOrder(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails,
                             @RequestParam LocalDate deadlineDate) {
-        orderService.acceptOrder(orderId, userDetails.getActiveProfile().getId(), deadlineDate);
+        orderService.acceptOrder(orderId, userDetails.getActiveProfile(), deadlineDate);
     }
 
     @PutMapping("/{orderId}/submit-for-review")
     @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ADMIN')")
     @CheckOwnership(type = ResourceType.ORDER)
     public void submitOrderForReview(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.submitOrderForReview(orderId, userDetails.getActiveProfile().getId());
+        orderService.submitOrderForReview(orderId, userDetails.getActiveProfile());
     }
 
     @PutMapping("/{orderId}/approve")
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     @CheckOwnership(type = ResourceType.ORDER)
     public void approveOrder(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.approveOrder(orderId, userDetails);
+        orderService.approveOrder(orderId, userDetails.getActiveProfile());
     }
 
     @PutMapping("/{orderId}/dispute")
@@ -101,7 +101,7 @@ public class OrderController {
     public void cancelOrder(@PathVariable Long orderId,
                             @RequestBody String reason,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.cancelOrder(orderId, reason, userDetails);
+        orderService.cancelOrder(orderId, reason, userDetails.getActiveProfile());
     }
 
 // TODO: Make able while booking upload photo or ater order creation

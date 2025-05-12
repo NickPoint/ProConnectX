@@ -23,7 +23,7 @@ public class GenericEventHandler implements DomainEventHandler {
 
     @Override
     public Set<AppEventType> eventType() {
-        return Set.of(PROFILE_INITIATED, PROFILE_CREATED, PROFILE_VERIFIED, PROFILE_REJECTED);
+        return Set.of(PROFILE_INITIATED, PROFILE_CREATED, PROFILE_VERIFIED, PROFILE_REJECTED, ORDER_PLACED);
     }
 
     @Override

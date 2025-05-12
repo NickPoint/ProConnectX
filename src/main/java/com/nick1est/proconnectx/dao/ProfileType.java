@@ -7,5 +7,4 @@ public enum ProfileType {
     ADMIN,
     CLIENT,
     FREELANCER,
-    UNVERIFIED
 }

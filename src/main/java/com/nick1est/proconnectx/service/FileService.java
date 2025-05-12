@@ -63,7 +63,7 @@ public class FileService {
     public Resource downloadFile(Long fileId, UserDetailsImpl user) {
         File file = getById(fileId);
 
-        if (user.hasRole(RoleType.ROLE_ADMIN)) {
+        if (file.getIsPublic() || user.hasRole(RoleType.ROLE_ADMIN) ) {
             return fileStorageService.loadFileAsResource(file.getPath());
         }
 

@@ -28,14 +28,13 @@ import static com.nick1est.proconnectx.dto.ChannelType.IN_APP;
 public class OnBoardingEventListener {
     private final NotificationProducer notificationProducer;
     private final UserRepository userRepository;
-    private final RoleService roleService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleProfileInitiated(ProfileInitiatedEvent e) {
         notificationProducer.send(NotificationEvent.builder()
                 .recipientId(e.getProfileId())
                 .profileType(e.getProfileType())
-                .eventType(AppEventType.PROFILE_INITIATED)
+                .eventType(e.getType())
                 .channels(List.of(EMAIL))
                 .build());
 
@@ -55,7 +54,7 @@ public class OnBoardingEventListener {
         notificationProducer.send(NotificationEvent.builder()
                 .recipientId(e.getProfileId())
                 .profileType(e.getProfileType())
-                .eventType(AppEventType.PROFILE_CREATED)
+                .eventType(e.getType())
                 .channels(List.of(EMAIL, IN_APP))
                 .build());
 
@@ -64,7 +63,7 @@ public class OnBoardingEventListener {
             notificationProducer.send(NotificationEvent.builder()
                     .recipientId(admin.getId())
                     .profileType(ProfileType.ADMIN)
-                    .eventType(AppEventType.PROFILE_INITIATED)
+                    .eventType(e.getType())
                     .channels(List.of(EMAIL, IN_APP))
                     .build());
         });
@@ -75,7 +74,7 @@ public class OnBoardingEventListener {
         notificationProducer.send(NotificationEvent.builder()
                 .recipientId(e.getProfileId())
                 .profileType(e.getProfileType())
-                .eventType(AppEventType.PROFILE_VERIFIED)
+                .eventType(e.getType())
                 .channels(List.of(EMAIL, IN_APP))
                 .build());
     }
@@ -85,7 +84,7 @@ public class OnBoardingEventListener {
         notificationProducer.send(NotificationEvent.builder()
                 .recipientId(e.getProfileId())
                 .profileType(e.getProfileType())
-                .eventType(AppEventType.PROFILE_REJECTED)
+                .eventType(e.getType())
                 .payload(e.getPayload())
                 .channels(List.of(EMAIL, IN_APP))
                 .build());

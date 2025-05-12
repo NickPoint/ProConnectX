@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout}">
-<head>
-    <title>Welcome</title>
-</head>
+      layout:decorate="~{fragments/layout}"
+>
 <body>
 <div layout:fragment="content">
-    <section>
         <h2>Welcome aboard, <span th:text="${name}">User</span>!</h2>
         <p>Welcome to ProConnectX!</p>
         <p>Here are some quick links to get started:</p>
@@ -23,7 +20,6 @@
                 </a>
             </li>
         </ul>
-    </section>
 </div>
 </body>
 </html>

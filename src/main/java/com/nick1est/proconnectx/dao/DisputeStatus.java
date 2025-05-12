@@ -13,7 +13,7 @@ public enum DisputeStatus {
 
     public boolean canTransitionTo(DisputeStatus target) {
         return switch (this) {
-            case OPEN -> target == IN_REVIEW;
+            case OPEN -> target == IN_REVIEW || target == ADMIN_ACTION_REQUIRED;
             case IN_REVIEW -> target == RESOLVED_REFUNDED || target == RESOLVED_FREELANCER_PAID || target == REJECTED || target == ADMIN_ACTION_REQUIRED;
             case ADMIN_ACTION_REQUIRED -> target == RESOLVED_REFUNDED || target == RESOLVED_FREELANCER_PAID;
             default -> false;

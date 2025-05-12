@@ -75,6 +75,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("error.principal.not_found", userId));
     }
 
+    @Transactional
     public List<RegistrationRequestDto> getRegistrationRequest(Long userId) {
         val user = getById(userId);
         List<BaseProfile> list = new ArrayList<>();
@@ -86,11 +87,12 @@ public class UserService {
     public List<Profile> getAllActiveProfiles(Long userId) {
         val user = getById(userId);
         List<Profile> list = new ArrayList<>(2);
-        user.getClients().stream().findFirst().ifPresent(list::add);
-        user.getFreelancers().stream().findFirst().ifPresent(list::add);
+        user.getClients().stream().reduce((first, second) -> second).ifPresent(list::add);
+        user.getFreelancers().stream().reduce((first, second) -> second).ifPresent(list::add);
         return list;
     }
 
+    @Transactional
     public AuthResponse buildAuthResponse(UserDetailsImpl ud) {
         List<ProfileInfo> infos = getAllActiveProfiles(ud.getUser().getId()).stream()
                 .map(p -> new ProfileInfo(

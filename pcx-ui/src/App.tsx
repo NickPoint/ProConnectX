@@ -57,9 +57,9 @@ const App = () => {
                                 <PostServicePage/>
                             </RequireUser>}/>
                         <Route path='services' element={<ServicesFilter/>}/>
+                        <Route path='unauthorized' element={<UnauthorizedPage />} />
                     </Route>
                     <Route path='/' element={<LayoutWithTitle/>}>
-                        <Route path='unauthorized' element={<UnauthorizedPage />} />
                     </Route>
                     {/*<Route path='/' element={<Layout2/>}>*/}
                     {/*    <Route path='project/:id' element={<ProjectPage/>}/>*/}

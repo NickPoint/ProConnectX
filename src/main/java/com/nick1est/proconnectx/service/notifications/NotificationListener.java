@@ -31,6 +31,8 @@ public class NotificationListener {
         DomainEventHandler handler = domainHandlers.get(event.getEventType());
         if (handler != null) {
             handler.handle(event);
+        } else {
+            log.error("No handler for event type {}", event.getEventType());
         }
     }
 }

@@ -34,7 +34,7 @@ public class DisputeController {
     @CheckOwnership(type = ResourceType.DISPUTE)
     public void acceptProposal(@PathVariable Long disputeId,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        disputeService.acceptProposal(disputeId, userDetails);
+        disputeService.acceptProposal(disputeId, userDetails.getActiveProfile());
     }
 
     @PutMapping("/{disputeId}/reject-proposal")
@@ -43,7 +43,7 @@ public class DisputeController {
     public void rejectProposal(@PathVariable Long disputeId,
                                @RequestBody String reason,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        disputeService.rejectProposal(disputeId, reason, userDetails);
+        disputeService.rejectProposal(disputeId, reason, userDetails.getActiveProfile());
     }
 
     @PutMapping("/{disputeId}/propose")
@@ -52,7 +52,7 @@ public class DisputeController {
     public void proposeSolution(@PathVariable Long disputeId,
                                 @NotEmpty @RequestBody String proposal,
                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        disputeService.proposeSolution(disputeId, proposal, userDetails);
+        disputeService.proposeSolution(disputeId, proposal, userDetails.getActiveProfile());
     }
 
 
@@ -61,7 +61,7 @@ public class DisputeController {
     @CheckOwnership(type = ResourceType.DISPUTE)
     public void forceRefund(@PathVariable Long disputeId,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        disputeService.forceRefund(disputeId, userDetails);
+        disputeService.adminRejectProposal(disputeId, userDetails.getActiveProfile());
     }
 
     @PutMapping("/{disputeId}/force-release")
@@ -69,6 +69,13 @@ public class DisputeController {
     @CheckOwnership(type = ResourceType.DISPUTE)
     public void forceRelease(@PathVariable Long disputeId,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        disputeService.forceRelease(disputeId, userDetails);
+        disputeService.adminAcceptProposal(disputeId, userDetails.getActiveProfile());
+    }
+
+    @PutMapping("/{disputeId}/notify-admin")
+    @PreAuthorize("hasAnyRole('FREELANCER','CLIENT')")
+    public void notifyAdmin(@PathVariable Long disputeId,
+                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        disputeService.notifyAdmin(disputeId, userDetails.getActiveProfile());
     }
 }

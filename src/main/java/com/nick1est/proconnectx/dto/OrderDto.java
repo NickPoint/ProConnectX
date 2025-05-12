@@ -18,7 +18,7 @@ public class OrderDto {
     @NotNull
     private LightweightServiceDto service;
     @NotNull
-    private BaseProfileDto clientProfile;
+    private BaseProfileDto client;
     @NotNull
     private OrderStatus status;
     @NotNull

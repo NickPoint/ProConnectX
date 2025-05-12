@@ -12,7 +12,7 @@ public class EventDto {
     private Long id;
 
     @NotNull
-    private EventType type;
+    private String type; //TODO: back to strongly typed later
 
     @NotNull
     private Instant createdAt;

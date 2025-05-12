@@ -13,6 +13,6 @@ public class FreelancerProfileExtractor implements AccountProfileExtractor {
         return ProfileType.FREELANCER;
     }
     @Override public Function<User, Profile> extractProfile() {
-        return (user) -> user.getClients().getFirst();
+        return (user) -> user.getFreelancers().getLast();
     }
 }

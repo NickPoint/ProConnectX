@@ -205,7 +205,7 @@
       "VERIFICATION_SUBMITTED": "Verification submitted",
       "ACCOUNT_APPROVED": "Account approved",
       "ACCOUNT_REJECTED": "Account rejected",
-      "ORDER_CREATED": "Order created",
+      "ORDER_PLACED": "Order placed",
       "ORDER_ACCEPTED": "Order accepted",
       "ORDER_REJECTED": "Order rejected",
       "ORDER_COMPLETED": "Order completed",
@@ -325,7 +325,7 @@
     "errorCode": "404"
   },
   "homePage": {
-    "yourActiveOrders": "Your active orders",
+    "yourActiveOrders": "Your Active Orders",
     "newOrders": "New Orders"
   },
   "dashboard": {
@@ -333,6 +333,7 @@
     "registrations": {
       "freelancersRegistrationRequests": "Freelancers registration requests",
       "clientsRegistrationRequests": "Clients registration requests",
+      "yourRegistrationRequests": "Your registration requests",
       "title": "Registration requests",
       "empty": "Seems like nothing to show here",
       "profileStatus": "Profile status",

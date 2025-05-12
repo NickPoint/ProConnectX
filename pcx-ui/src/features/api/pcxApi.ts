@@ -97,6 +97,13 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Dispute"],
       }),
+      notifyAdmin: build.mutation<NotifyAdminApiResponse, NotifyAdminApiArg>({
+        query: queryArg => ({
+          url: `/dispute/${queryArg.disputeId}/notify-admin`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["Dispute"],
+      }),
       forceRelease: build.mutation<ForceReleaseApiResponse, ForceReleaseApiArg>(
         {
           query: queryArg => ({
@@ -451,6 +458,10 @@ export type ProposeSolutionApiArg = {
   disputeId: number
   body: string
 }
+export type NotifyAdminApiResponse = unknown
+export type NotifyAdminApiArg = {
+  disputeId: number
+}
 export type ForceReleaseApiResponse = unknown
 export type ForceReleaseApiArg = {
   disputeId: number
@@ -631,21 +642,6 @@ export type UserProfileUpdateDto = {
   address: AddressDto
   phoneNumber: string
 }
-export type SortObject = {
-  direction?: string
-  nullHandling?: string
-  ascending?: boolean
-  property?: string
-  ignoreCase?: boolean
-}
-export type PageableObject = {
-  pageNumber?: number
-  pageSize?: number
-  offset?: number
-  sort?: SortObject[]
-  paged?: boolean
-  unpaged?: boolean
-}
 export type LightweightAddressDto = {
   city: string
   postalCode: string
@@ -674,17 +670,32 @@ export type LightweightServiceDto = {
   postedAt: string
   thumbnailUrl: string
 }
+export type SortObject = {
+  direction?: string
+  nullHandling?: string
+  ascending?: boolean
+  property?: string
+  ignoreCase?: boolean
+}
+export type PageableObject = {
+  offset?: number
+  sort?: SortObject[]
+  pageSize?: number
+  pageNumber?: number
+  unpaged?: boolean
+  paged?: boolean
+}
 export type PageLightweightServiceDto = {
-  totalPages?: number
   totalElements?: number
-  pageable?: PageableObject
-  first?: boolean
+  totalPages?: number
   size?: number
   content?: LightweightServiceDto[]
   number?: number
   sort?: SortObject[]
+  first?: boolean
   last?: boolean
   numberOfElements?: number
+  pageable?: PageableObject
   empty?: boolean
 }
 export type ServiceAddressDto = {
@@ -755,7 +766,7 @@ export type ProfileInfo = {
   profileId: number
   profileType: ProfileType
   status: ProfileStatus
-  displayName?: string
+  displayName: string
 }
 export type AuthResponse = {
   email: string
@@ -826,7 +837,7 @@ export type LightweightTransactionDto = {
 }
 export type EventDto = {
   id: number
-  type: EventType
+  type: string
   createdAt: string
   disputeId?: number
 }
@@ -838,7 +849,7 @@ export type FileDto = {
 export type OrderDto = {
   id: number
   service: LightweightServiceDto
-  clientProfile: BaseProfileDto
+  client: BaseProfileDto
   status: OrderStatus
   transaction: LightweightTransactionDto
   events: EventDto[]
@@ -850,16 +861,16 @@ export type OrderDto = {
   updatedAt?: string
 }
 export type PageOrderDto = {
-  totalPages?: number
   totalElements?: number
-  pageable?: PageableObject
-  first?: boolean
+  totalPages?: number
   size?: number
   content?: OrderDto[]
   number?: number
   sort?: SortObject[]
+  first?: boolean
   last?: boolean
   numberOfElements?: number
+  pageable?: PageableObject
   empty?: boolean
 }
 export type DisputeDto = {
@@ -885,7 +896,6 @@ export enum ProfileType {
   Admin = "ADMIN",
   Client = "CLIENT",
   Freelancer = "FREELANCER",
-  Unverified = "UNVERIFIED",
 }
 export enum CategoryType {
   WebDesign = "WEB_DESIGN",
@@ -1046,34 +1056,6 @@ export enum TransactionStatus {
   Canceled = "CANCELED",
   Refunded = "REFUNDED",
 }
-export enum EventType {
-  UserRegistered = "USER_REGISTERED",
-  VerificationSubmitted = "VERIFICATION_SUBMITTED",
-  AccountApproved = "ACCOUNT_APPROVED",
-  AccountRejected = "ACCOUNT_REJECTED",
-  OrderCreated = "ORDER_CREATED",
-  OrderAccepted = "ORDER_ACCEPTED",
-  OrderRejected = "ORDER_REJECTED",
-  OrderSubmittedForReview = "ORDER_SUBMITTED_FOR_REVIEW",
-  OrderApproved = "ORDER_APPROVED",
-  OrderCompleted = "ORDER_COMPLETED",
-  OrderApprovedByAdmin = "ORDER_APPROVED_BY_ADMIN",
-  OrderDisputed = "ORDER_DISPUTED",
-  OrderCanceled = "ORDER_CANCELED",
-  OrderCanceledWithRefundByAdmin = "ORDER_CANCELED_WITH_REFUND_BY_ADMIN",
-  DisputeCreated = "DISPUTE_CREATED",
-  DisputeResolved = "DISPUTE_RESOLVED",
-  DisputeRejected = "DISPUTE_REJECTED",
-  ProposalCreated = "PROPOSAL_CREATED",
-  ProposalAccepted = "PROPOSAL_ACCEPTED",
-  ProposalRejected = "PROPOSAL_REJECTED",
-  TransactionCreated = "TRANSACTION_CREATED",
-  TransactionEscrowed = "TRANSACTION_ESCROWED",
-  TransactionReleased = "TRANSACTION_RELEASED",
-  ReviewSubmitted = "REVIEW_SUBMITTED",
-  FileUploaded = "FILE_UPLOADED",
-  RoleSwitched = "ROLE_SWITCHED",
-}
 export enum DisputeStatus {
   Open = "OPEN",
   InReview = "IN_REVIEW",
@@ -1097,6 +1079,7 @@ export const {
   useUpdateFreelancerMutation,
   useRejectProposalMutation,
   useProposeSolutionMutation,
+  useNotifyAdminMutation,
   useForceReleaseMutation,
   useForceRefundMutation,
   useAcceptProposalMutation,

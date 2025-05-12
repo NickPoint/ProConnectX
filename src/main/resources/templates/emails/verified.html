@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: content}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+>
 <body>
-<div>
+<div layout:fragment="content">
   <h2>Congratulations, <span th:text="${name}">User</span>!</h2>
   <p>Your profile has been <strong>verified</strong>. You’re all set to start using our platform.</p>
-  <a th:href="@{${baseUrl}/login}" class="button">Log In</a>
+  <a th:href="${baseUrl} + '/dashboard/home'">Check it out</a>
 </div>
 </body>
 </html>

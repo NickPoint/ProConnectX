@@ -16,7 +16,7 @@ import Card from "@mui/material/Card";
 import Rating, {RatingProps} from "../components/Rating.tsx";
 import {
     OrderDto,
-    OrderStatus,
+    OrderStatus, ProfileStatus,
     ProfileType,
     useGetCurrentUserQuery,
     useGetOrdersQuery,
@@ -54,17 +54,17 @@ const RatingCard: React.FC<RatingProps> = ({rating, ratingCount}) => {
 }
 
 const statTypesConf: Record<ProfileType, { type: StatType, size: number }[]> = {
-    ROLE_FREELANCER: [
+    FREELANCER: [
         {type: 'DAILY_TOTAL_EARNINGS', size: 12},
         {type: 'ORDERS_COMPLETED', size: 6},
         {type: 'ORDER_SUCCESS_RATE', size: 6},
     ],
-    ROLE_CLIENT: [
-        // ...
+    CLIENT: [
+        {type: 'TOTAL_SERVICES_PURCHASED', size: 6}
     ],
-    ROLE_ADMIN: [
+    ADMIN: [
         // ...
-    ],
+    ]
 };
 
 const OrderCard = (props: OrderDto) => {
@@ -93,7 +93,7 @@ const OrderCard = (props: OrderDto) => {
                             <LinearProgress variant='determinate'
                                             value={calculateProgress(props.createdAt, props.deadlineDate, props.status)}/>
                         </Box>
-                        {user?.activeProfile.profileType === ProfileType.Client
+                        {user?.activeProfile.profileType.profileType === ProfileType.Client
                             ? <UserCard variant='box' {...props.service.freelancer} />
                             : <UserCard variant='box' {...props.client}/>}
                     </Stack>
@@ -312,7 +312,7 @@ const LandingPage: React.FC = () => {
     );
 };
 
-const HomePage = () => {
+const AuthHomePage = () => {
     const queryArgs = useMemo(() => {
         const end = dayjs();
         const start = end.subtract(30, 'days');
@@ -323,34 +323,33 @@ const HomePage = () => {
             zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone
         };
     }, []);
-    const {data: user, isLoading, isFetching} = useGetCurrentUserQuery();
     const {t} = useTranslation();
+
+    const {data: user} = useGetCurrentUserQuery();
     const {data: cards} = useGetStatsOverviewQuery(queryArgs, {
-        skip: !user?.activeProfile || [ProfileType.RoleUnverified, ProfileType.Admin].includes(user?.activeProfile)
+        skip: !user || ProfileType.Admin === user.activeProfile.profileType
     });
     const {data: activeOrders} = useGetOrdersQuery({
         statuses: [OrderStatus.Approved, OrderStatus.Disputed, OrderStatus.InProgress],
         page: 0, size: 4
     }, {
-        skip: !user?.activeProfile || [ProfileType.RoleUnverified, ProfileType.Admin].includes(user?.activeProfile),
+        skip: !user || ProfileType.Admin === user?.activeProfile.profileType,
     });
     const {data: newOrders} = useGetOrdersQuery({
         statuses: [OrderStatus.Created],
         page: 0, size: 4
     }, {
-        skip: !user?.activeProfile || [ProfileType.RoleUnverified, ProfileType.Admin].includes(user?.activeProfile),
+        skip: !user || ProfileType.Admin === user?.activeProfile.profileType,
     });
-    if (!isLoading && !isFetching && (!user || ProfileType.Freelancer !== user?.activeProfile)) {
-        return <LandingPage/>
-    }
-    if (!cards) {
-        return <GlobalLoadingBackdrop/>
+
+    if (!user || !cards) {
+        return ;
     }
 
     return (
         <Grid component={Container} maxWidth='lg' container spacing={4}>
             <Grid container size={{xs: 12, md: 6}} spacing={1}>
-                {statTypesConf[user?.activeProfile].map((conf, index) => {
+                {statTypesConf[user.activeProfile.profileType].map((conf, index) => {
                     const card = cards[conf.type];
                     if (!card) return null;
 
@@ -389,23 +388,36 @@ const HomePage = () => {
                     </Grid>
                 }
             </Grid>
-            <Grid container size={{xs: 12, md: 6}} spacing={2}>
-                <Grid size={12}>
-                    <Typography variant='h4'>{t('homePage.newOrders')}</Typography>
+            {user.activeProfile.profileType === ProfileType.Freelancer &&
+                <Grid container size={{xs: 12, md: 6}} spacing={2}>
+                    <Grid size={12}>
+                        <Typography variant='h4'>{t('homePage.newOrders')}</Typography>
+                    </Grid>
+                    {newOrders && newOrders.numberOfElements > 0 && newOrders.content?.map((order, index) => (
+                        <Grid size={{xs: 12, md: 6}} key={index}>
+                            <OrderCard {...order} />
+                        </Grid>
+                    ))}
+                    {(newOrders?.numberOfElements === 0 || !newOrders) &&
+                        <Grid size={12} textAlign='center'>
+                            <Typography variant='body2'>{t('general.nothingToDisplay')}</Typography>
+                        </Grid>
+                    }
                 </Grid>
-                {newOrders && newOrders.numberOfElements > 0 && newOrders.content?.map((order, index) => (
-                    <Grid size={{xs: 12, md: 6}} key={index}>
-                        <OrderCard {...order} />
-                    </Grid>
-                ))}
-                {(newOrders?.numberOfElements === 0 || !newOrders) &&
-                    <Grid size={12} textAlign='center'>
-                        <Typography variant='body2'>{t('general.nothingToDisplay')}</Typography>
-                    </Grid>
-                }
-            </Grid>
+            }
         </Grid>
     );
+}
+
+const HomePage = () => {
+    const {data: user} = useGetCurrentUserQuery();
+
+    if (!user || ProfileType.Admin === user.activeProfile.profileType || ProfileStatus.Active !== user.activeProfile.status) {
+        return <LandingPage/>
+    } else {
+        return <AuthHomePage />
+    }
+
 };
 
 // TODO: Create Freelancer's and Client's pages

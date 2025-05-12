@@ -1,5 +1,5 @@
 import {
-    LightweightRegistrationRequestDto,
+    RegistrationRequestDto,
     ProfileStatus,
     ProfileType,
     useApproveRegistrationRequestMutation,
@@ -34,11 +34,12 @@ function statusColor(status: ProfileStatus) {
 }
 
 
-const columns: GridColDef<LightweightRegistrationRequestDto>[] = [
+const columns: GridColDef<RegistrationRequestDto>[] = [
     {field: 'firstName', headerName: t('form.fields.firstName'), width: 150},
     {field: 'lastName', headerName: t('form.fields.lastName'), width: 150},
     {field: 'email', headerName: t('form.fields.email'), width: 200},
     {field: 'phoneNumber', headerName: t('form.fields.phoneNumber'), width: 150},
+    {field: 'profileType', headerName: t('form.fields.profileType'), width: 150},
     {
         field: 'profileStatus',
         headerName: t('form.fields.profileStatus'),
@@ -70,7 +71,7 @@ const formConf = {
     }
 };
 
-const adminColumns: GridColDef<LightweightRegistrationRequestDto>[] = [
+const adminColumns: GridColDef<RegistrationRequestDto>[] = [
     ...columns,
     {
         field: 'actions',
@@ -84,7 +85,7 @@ const adminColumns: GridColDef<LightweightRegistrationRequestDto>[] = [
             const [rejectRegistrationRequest] = useRejectRegistrationRequestMutation();
 
             return (<Stack direction="row" spacing={1}>
-                    {params.row.status === ProfileStatus.Pending &&
+                    {params.row.profileStatus === ProfileStatus.Pending &&
                         (<>
                             <Button
                                 variant="contained"
@@ -159,14 +160,14 @@ export default function RegistrationsTable() {
     if (user) {
         return (
             user.activeProfile.profileType === ProfileType.Admin ?
-                <>
+                <Grid container spacing={2}>
                     <Grid size={12}>
                         <FreelancerRegistrationsTable/>
                     </Grid>
                     <Grid size={12}>
                         <ClientRegistrationsTable/>
                     </Grid>
-                </> :
+                </Grid> :
                 <UserRegistrationsTable />
         );
     }
@@ -180,20 +181,20 @@ export function UserRegistrationsTable() {
     });
     return (
         registrationRequests &&
-        <>
-            <Grid size={12}>
-                <Typography component="h2" variant="h6" sx={{mb: 2}}>
-                    {t('dashboard.registrations.freelancersRegistrationRequests')}
-                </Typography>
+            <Grid container size={12} spacing={1}>
+                <Grid size={12}>
+                    <Typography component="h2" variant="h6">
+                        {t('dashboard.registrations.yourRegistrationRequests')}
+                    </Typography>
+                </Grid>
+                <Grid size={12}>
+                    <CustomizedDataGrid
+                        rows={registrationRequests}
+                        columns={columns}
+                        disableRowSelectionOnClick
+                    />
+                </Grid>
             </Grid>
-            <Grid size={12}>
-                <CustomizedDataGrid
-                    rows={registrationRequests}
-                    columns={columns}
-                    disableRowSelectionOnClick
-                />
-            </Grid>
-        </>
     );
 }
 
@@ -202,20 +203,20 @@ export function FreelancerRegistrationsTable() {
 
     return (
         registrationRequests &&
-        <Grid container>
-            <Grid size={12}>
-                <Typography component="h2" variant="h6" sx={{mb: 2}}>
-                    {t('dashboard.registrations.freelancersRegistrationRequests')}
-                </Typography>
+            <Grid container>
+                <Grid size={12}>
+                    <Typography component="h2" variant="h6">
+                        {t('dashboard.registrations.freelancersRegistrationRequests')}
+                    </Typography>
+                </Grid>
+                <Grid size={12}>
+                    <CustomizedDataGrid
+                        rows={registrationRequests}
+                        columns={adminColumns}
+                        disableRowSelectionOnClick
+                    />
+                </Grid>
             </Grid>
-            <Grid size={12}>
-                <CustomizedDataGrid
-                    rows={registrationRequests}
-                    columns={adminColumns}
-                    disableRowSelectionOnClick
-                />
-            </Grid>
-        </Grid>
     );
 }
 
@@ -224,19 +225,19 @@ export function ClientRegistrationsTable() {
 
     return (
         registrationRequests &&
-        <Grid container>
-            <Grid size={12}>
-                <Typography component="h2" variant="h6" sx={{mb: 2}}>
-                    {t('dashboard.registrations.clientsRegistrationRequests')}
-                </Typography>
+            <Grid container>
+                <Grid size={12}>
+                    <Typography component="h2" variant="h6">
+                        {t('dashboard.registrations.clientsRegistrationRequests')}
+                    </Typography>
+                </Grid>
+                <Grid size={12}>
+                    <CustomizedDataGrid
+                        rows={registrationRequests}
+                        columns={adminColumns}
+                        disableRowSelectionOnClick
+                    />
+                </Grid>
             </Grid>
-            <Grid size={12}>
-                <CustomizedDataGrid
-                    rows={registrationRequests}
-                    columns={adminColumns}
-                    disableRowSelectionOnClick
-                />
-            </Grid>
-        </Grid>
     );
 }

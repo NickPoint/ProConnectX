@@ -23,10 +23,12 @@ public class Dispute {
 
     @JoinColumn(nullable = false)
     @ManyToOne
+    @NotNull
     private Order order;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private DisputeStatus status = DisputeStatus.OPEN;
 
     @Column(nullable = false)
@@ -44,6 +46,7 @@ public class Dispute {
 
     @Column
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ProposalStatus proposalStatus = ProposalStatus.NONE;
 
     @CreatedDate

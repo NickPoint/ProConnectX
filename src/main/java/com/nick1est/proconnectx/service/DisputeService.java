@@ -1,13 +1,14 @@
 package com.nick1est.proconnectx.service;
 
-import com.nick1est.proconnectx.auth.UserDetailsImpl;
 import com.nick1est.proconnectx.dao.*;
 import com.nick1est.proconnectx.dto.DisputeDto;
+import com.nick1est.proconnectx.events.domain.*;
 import com.nick1est.proconnectx.exception.NotFoundException;
 import com.nick1est.proconnectx.mapper.DisputeMapper;
 import com.nick1est.proconnectx.repository.DisputeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,91 +18,81 @@ import org.springframework.transaction.annotation.Transactional;
 public class DisputeService {
 
     private final DisputeRepository disputeRepository;
-    private final OrderDisputeService orderDisputeService;
-    private final EventService eventService;
+    private final AdminOrderService adminOrderService;
+    private final ApplicationEventPublisher events;
     private final DisputeMapper disputeMapper;
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void openDispute(Order order, String reason, Profile clientProfile) {
+    public void openDispute(Order order, String reason) {
         Dispute dispute = new Dispute();
         dispute.setOrder(order);
         dispute.setReason(reason);
         disputeRepository.save(dispute);
-        eventService.recordOrderDisputed(order, dispute, reason, clientProfile);
     }
 
     @Transactional
-    public void acceptProposal(Long disputeId, UserDetailsImpl userDetails) {
+    public void acceptProposal(Long disputeId, Profile client) {
         val dispute = getById(disputeId);
-
-        if (dispute.getProposalStatus() != ProposalStatus.PENDING) {
-            throw new IllegalStateException("error.proposal.no_pending");
-        }
 
         dispute.setProposalStatus(ProposalStatus.ACCEPTED);
-        dispute.setStatus(DisputeStatus.RESOLVED_FREELANCER_PAID);
-
-        eventService.recordProposalAccepted(dispute, userDetails.getActiveProfile());
-        orderDisputeService.approveOrderFromDispute(dispute.getOrder(), userDetails, ProfileType.CLIENT);
+        changeStatus(dispute, DisputeStatus.RESOLVED_FREELANCER_PAID);
+        events.publishEvent(new DisputeSolutionAcceptedEvent(dispute, client));
     }
 
     @Transactional
-    public void rejectProposal(Long disputeId, String reason, UserDetailsImpl userDetails) {
+    public void adminAcceptProposal(Long disputeId, Profile admin) {
         val dispute = getById(disputeId);
 
-        if (dispute.getProposalStatus() != ProposalStatus.PENDING) {
-            throw new IllegalStateException("error.proposal.no_pending");
-        }
+        dispute.setProposalStatus(ProposalStatus.ACCEPTED);
+        changeStatus(dispute, DisputeStatus.RESOLVED_FREELANCER_PAID);
+        adminOrderService.approveOrderFromDispute(dispute.getOrder(), admin);
+        events.publishEvent(new DisputeSolutionAccepteByAdminEvent(dispute, admin));
+    }
+
+    @Transactional
+    public void rejectProposal(Long disputeId, String reason, Profile client) {
+        val dispute = getById(disputeId);
 
         dispute.setProposalStatus(ProposalStatus.REJECTED);
-        dispute.setStatus(DisputeStatus.REJECTED);
+        changeStatus(dispute, DisputeStatus.REJECTED);
         dispute.setProposalRejectionReason(reason);
-        eventService.recordProposalRejected(dispute, reason, userDetails.getActiveProfile());
-        openDispute(dispute.getOrder(), reason, userDetails.getActiveProfile());
+        openDispute(dispute.getOrder(), reason);
+        events.publishEvent(new DisputeSolutionRejectedEvent(dispute, client));
     }
 
     @Transactional
-    public void proposeSolution(Long disputeId, String proposal, UserDetailsImpl userDetails) {
+    public void adminRejectProposal(Long disputeId, Profile admin) {
         val dispute = getById(disputeId);
 
-        if (dispute.getProposalStatus() == ProposalStatus.PENDING) {
-            throw new IllegalStateException("error.proposal.already_pending");
-        }
+        dispute.setProposalStatus(ProposalStatus.REJECTED);
+        changeStatus(dispute, DisputeStatus.REJECTED);
+        adminOrderService.cancelOrderAndRefundFromDispute(dispute.getOrder(), admin);
+        events.publishEvent(new DisputeSolutionRejectedByAdminEvent(dispute, admin));
+    }
 
+    @Transactional
+    public void proposeSolution(Long disputeId, String proposal, Profile freelancer) {
+        val dispute = getById(disputeId);
         dispute.setProposal(proposal);
         dispute.setProposalStatus(ProposalStatus.PENDING);
-        dispute.setStatus(DisputeStatus.IN_REVIEW);
-        eventService.recordProposalCreated(dispute, proposal, userDetails.getActiveProfile());
+        changeStatus(dispute, DisputeStatus.IN_REVIEW);
+        events.publishEvent(new DisputeSolutionProposedEvent(dispute, freelancer));
     }
 
     @Transactional
-    public void forceRefund(Long disputeId, UserDetailsImpl userDetails) {
+    public void notifyAdmin(Long disputeId, Profile user) {
         val dispute = getById(disputeId);
-
-        if (!dispute.getStatus().equals(DisputeStatus.OPEN)) {
-            throw new IllegalStateException("error.dispute.force_refund");
-        }
-
-        dispute.setStatus(DisputeStatus.RESOLVED_REFUNDED);
-
-        Order order = dispute.getOrder();
-//      TODO: eventService.recordDisputeRefunded(dispute, userDetails);
-        orderDisputeService.cancelOrderAndRefundFromDispute(order, userDetails);
+        changeStatus(dispute, DisputeStatus.ADMIN_ACTION_REQUIRED);
+        events.publishEvent(new DisputeAdminNotifyEvent(dispute, user));
     }
 
-    @Transactional
-    public void forceRelease(Long disputeId, UserDetailsImpl userDetails) {
-        val dispute = getById(disputeId);
-
-        if (!dispute.getStatus().equals(DisputeStatus.OPEN)) {
-            throw new IllegalStateException("error.dispute.force_release");
+    private void changeStatus(Dispute dispute, DisputeStatus newStatus) {
+        if (!dispute.getStatus().canTransitionTo(newStatus)) {
+            throw new IllegalStateException(
+                    "Invalid transition: " + dispute.getStatus() + " → " + newStatus
+            );
         }
-
-        dispute.setStatus(DisputeStatus.RESOLVED_FREELANCER_PAID);
-
-        Order order = dispute.getOrder();
-//      TODO: eventService.recordDisputeReleased(dispute, userDetails);
-        orderDisputeService.approveOrderFromDispute(order, userDetails, ProfileType.ADMIN);
+        dispute.setStatus(newStatus);
     }
 
     public DisputeDto getDtoById(Long disputeId) {

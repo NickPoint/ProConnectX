@@ -150,7 +150,7 @@ public class ServiceService {
                 if (ProfileType.ADMIN == activeProfile.getProfileType()) {
                     return cb.conjunction();
                 } else if (ProfileType.FREELANCER == activeProfile.getProfileType()) {
-                    return cb.equal(root.get("freelancerProfile"), activeProfile);
+                    return cb.equal(root.get("freelancer"), activeProfile);
                 } else {
                     return cb.disjunction();
                 }

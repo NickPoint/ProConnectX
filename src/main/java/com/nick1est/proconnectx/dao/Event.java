@@ -1,6 +1,7 @@
 package com.nick1est.proconnectx.dao;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +30,8 @@ public class Event {
     private Dispute dispute;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private EventType type;
+    @NotBlank
+    private String type;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+>
+<body>
+<div layout:fragment="content">
+    <h2>Hi <span th:text="${name}">User</span>!</h2>
+    <p>Good news! You received new order from <strong th:text="${clientName}">Client name</strong></p>
+    <p>Service: <strong th:text="${serviceName}">Service name</strong></p>
+    <p>Order ID: <strong th:text="${orderId}">123</strong></p>
+    <p>You can view the details by clicking the link below:</p>
+    <p><a th:href="${baseUrl} + '/dashboard/orders'">View Order Details</a></p>
+</div>
+</body>
+</html>

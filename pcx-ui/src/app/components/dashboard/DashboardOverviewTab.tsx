@@ -100,9 +100,8 @@ export default function DashboardOverviewTab() {
                 columns={12}
                 sx={{mb: (theme) => theme.spacing(2)}}
             >
-                <Grid container>
-                    <RegistrationsTable />
-                </Grid>
+
+                <RegistrationsTable />
                 {cards && visibleStatTypes.map((type, index) => {
                         const card = cards[type];
                         if (!card) return null;
