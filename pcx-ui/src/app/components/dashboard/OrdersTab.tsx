@@ -16,7 +16,6 @@ import {
 import {
     DisputeStatus,
     EventDto,
-    EventType,
     OrderDto,
     OrderStatus,
     ProfileType,
@@ -79,7 +78,7 @@ const EventsTimeline = ({events}: EventsTimelineProps) => {
                             <TimelineDot/>
                             {index !== events.length - 1 && <TimelineConnector/>}
                         </TimelineSeparator>
-                        {event.type === EventType.OrderDisputed && event.disputeId ?
+                        {event.type === "ORDER_DISPUTED" && event.disputeId ?
                             <TimelineContent sx={{textDecoration: 'underline', cursor: 'pointer'}}
                                              onClick={() => {
                                                  setDisputeId(event.disputeId)
