@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import {SparkLineChart} from '@mui/x-charts/SparkLineChart';
 import {areaElementClasses} from '@mui/x-charts/LineChart';
 import dayjs from "dayjs";
-import {parseOffsetDateTime} from "../../../utils/dateParser.ts";
+import {parseOffsetDateTimeToString} from "../../../utils/dateParser.ts";
 
 export type StatType =
     | 'DAILY_TOTAL_EARNINGS'
@@ -42,7 +42,7 @@ function getDaysBetween(start?: Date | string, end?: Date | string): string[] {
     let current = startDate;
 
     while (current.isSame(endDate) || current.isBefore(endDate)) {
-        days.push(parseOffsetDateTime(current.format('YYYY-MM-DD')));
+        days.push(parseOffsetDateTimeToString(current.format('YYYY-MM-DD')));
         current = current.add(1, 'day');
     }
 

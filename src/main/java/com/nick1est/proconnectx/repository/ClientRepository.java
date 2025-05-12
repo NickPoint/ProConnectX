@@ -4,6 +4,8 @@ import com.nick1est.proconnectx.dao.Client;
 import com.nick1est.proconnectx.dao.ProfileStatus;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,8 @@ import java.util.List;
 public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findByProfileStatus(@NotNull ProfileStatus profileStatus);
     List<Client> findByUserIdAndProfileStatus(Long userId, @NotNull ProfileStatus profileStatus);
+
+    @Modifying
+    @Query("update Client c set c.ratingSum = c.ratingSum + :newRating, c.ratingCount = c.ratingCount + 1 where c.id = :clientId")
+    void updateRating(Long clientId, Double newRating);
 }

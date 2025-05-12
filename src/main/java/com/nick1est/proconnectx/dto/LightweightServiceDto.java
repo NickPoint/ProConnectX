@@ -21,9 +21,9 @@ public class LightweightServiceDto {
     private String shortDescription;
     private LightweightAddressDto address;
     @NotNull
-    private Double rating;
+    private BigDecimal rating;
     @NotNull
-    private Integer ratingCount;
+    private Long ratingCount;
     @NotNull
     private BigDecimal price;
     @NotNull

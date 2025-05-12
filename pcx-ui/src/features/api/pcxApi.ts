@@ -6,6 +6,7 @@ export const addTagTypes = [
   "Client",
   "Registration",
   "Service",
+  "Review",
   "Auth",
   "test-controller",
   "Statistics",
@@ -191,6 +192,28 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Service"],
       }),
+      postServiceReview: build.mutation<
+        PostServiceReviewApiResponse,
+        PostServiceReviewApiArg
+      >({
+        query: queryArg => ({
+          url: `/review/${queryArg.orderId}/service`,
+          method: "POST",
+          body: queryArg.postReviewDto,
+        }),
+        invalidatesTags: ["Review"],
+      }),
+      postClientReview: build.mutation<
+        PostClientReviewApiResponse,
+        PostClientReviewApiArg
+      >({
+        query: queryArg => ({
+          url: `/review/${queryArg.orderId}/client`,
+          method: "POST",
+          body: queryArg.postReviewDto,
+        }),
+        invalidatesTags: ["Review"],
+      }),
       bookService: build.mutation<BookServiceApiResponse, BookServiceApiArg>({
         query: queryArg => ({
           url: `/orders/book/${queryArg.serviceId}`,
@@ -365,6 +388,34 @@ const injectedRtkApi = api
         }),
         providesTags: ["Service"],
       }),
+      getServiceReviews: build.query<
+        GetServiceReviewsApiResponse,
+        GetServiceReviewsApiArg
+      >({
+        query: queryArg => ({
+          url: `/review/service/${queryArg.serviceId}`,
+          params: {
+            page: queryArg.page,
+            size: queryArg.size,
+            sort: queryArg.sort,
+          },
+        }),
+        providesTags: ["Review"],
+      }),
+      getClientReviews: build.query<
+        GetClientReviewsApiResponse,
+        GetClientReviewsApiArg
+      >({
+        query: queryArg => ({
+          url: `/review/client/${queryArg.clientId}`,
+          params: {
+            page: queryArg.page,
+            size: queryArg.size,
+            sort: queryArg.sort,
+          },
+        }),
+        providesTags: ["Review"],
+      }),
       getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
         query: queryArg => ({
           url: `/orders`,
@@ -509,6 +560,16 @@ export type CreateServiceApiResponse = /** status 201 Created */ number
 export type CreateServiceApiArg = {
   service: ServiceCreateDto
 }
+export type PostServiceReviewApiResponse = unknown
+export type PostServiceReviewApiArg = {
+  orderId: number
+  postReviewDto: PostReviewDto
+}
+export type PostClientReviewApiResponse = unknown
+export type PostClientReviewApiArg = {
+  orderId: number
+  postReviewDto: PostReviewDto
+}
 export type BookServiceApiResponse = /** status 200 OK */ number
 export type BookServiceApiArg = {
   serviceId: number
@@ -591,6 +652,26 @@ export type GetUserServicesApiArg = {
   /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
   sort?: string[]
 }
+export type GetServiceReviewsApiResponse = /** status 200 OK */ PageReviewDto
+export type GetServiceReviewsApiArg = {
+  serviceId: number
+  /** Zero-based page index (0..N) */
+  page?: number
+  /** The size of the page to be returned */
+  size?: number
+  /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+  sort?: string[]
+}
+export type GetClientReviewsApiResponse = /** status 200 OK */ PageReviewDto
+export type GetClientReviewsApiArg = {
+  clientId: number
+  /** Zero-based page index (0..N) */
+  page?: number
+  /** The size of the page to be returned */
+  size?: number
+  /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+  sort?: string[]
+}
 export type GetOrdersApiResponse = /** status 200 OK */ PageOrderDto
 export type GetOrdersApiArg = {
   statuses?: OrderStatus[]
@@ -642,6 +723,21 @@ export type UserProfileUpdateDto = {
   address: AddressDto
   phoneNumber: string
 }
+export type SortObject = {
+  direction?: string
+  nullHandling?: string
+  ascending?: boolean
+  property?: string
+  ignoreCase?: boolean
+}
+export type PageableObject = {
+  pageNumber?: number
+  pageSize?: number
+  paged?: boolean
+  unpaged?: boolean
+  offset?: number
+  sort?: SortObject[]
+}
 export type LightweightAddressDto = {
   city: string
   postalCode: string
@@ -670,32 +766,17 @@ export type LightweightServiceDto = {
   postedAt: string
   thumbnailUrl: string
 }
-export type SortObject = {
-  direction?: string
-  nullHandling?: string
-  ascending?: boolean
-  property?: string
-  ignoreCase?: boolean
-}
-export type PageableObject = {
-  offset?: number
-  sort?: SortObject[]
-  pageSize?: number
-  pageNumber?: number
-  unpaged?: boolean
-  paged?: boolean
-}
 export type PageLightweightServiceDto = {
-  totalElements?: number
   totalPages?: number
+  totalElements?: number
+  pageable?: PageableObject
+  first?: boolean
+  last?: boolean
   size?: number
   content?: LightweightServiceDto[]
   number?: number
   sort?: SortObject[]
-  first?: boolean
-  last?: boolean
   numberOfElements?: number
-  pageable?: PageableObject
   empty?: boolean
 }
 export type ServiceAddressDto = {
@@ -716,6 +797,10 @@ export type ServiceCreateDto = {
   images: Blob[]
   workflowJson?: string
   faqsJson?: string
+}
+export type PostReviewDto = {
+  rating: number
+  body?: string
 }
 export type BookServiceDto = {
   additionalNotes?: string
@@ -739,7 +824,7 @@ export type FreelancerRegistrationRequest = {
   address: AddressDto
   phoneNumber: string
   avatarImage?: Blob
-  idDocuments: Blob[]
+  idDocument: Blob[]
   categories?: CategoryType[]
   description: string
 }
@@ -760,7 +845,7 @@ export type ClientRegistrationRequest = {
   address: AddressDto
   phoneNumber: string
   avatarImage?: Blob
-  idDocuments: Blob[]
+  idDocument: Blob[]
 }
 export type ProfileInfo = {
   profileId: number
@@ -799,21 +884,6 @@ export type Faq = {
   question: string
   answer: string
 }
-export type ReviewerDto = {
-  id: number
-  firstName: string
-  lastName?: string
-  rating: number
-  type: Type
-  avatarImageUrl?: string
-}
-export type ReviewDto = {
-  id: number
-  reviewer: ReviewerDto
-  body?: string
-  rating: number
-  createdAt: string
-}
 export type ServiceDto = {
   id: number
   freelancer: BaseProfileDto
@@ -824,12 +894,39 @@ export type ServiceDto = {
   workflow?: WorkflowStep[]
   faqs?: Faq[]
   address?: ServiceAddressDto
-  reviews?: ReviewDto[]
   categories: CategoryType[]
   rating: number
   ratingCount: number
   galleryUrls: string[]
   postedAt: string
+}
+export type ReviewerDto = {
+  id: number
+  firstName: string
+  lastName?: string
+  rating: number
+  profileType: ProfileType
+  avatarImageUrl?: string
+}
+export type ReviewDto = {
+  id: number
+  reviewer: ReviewerDto
+  body?: string
+  rating: number
+  createdAt: string
+}
+export type PageReviewDto = {
+  totalPages?: number
+  totalElements?: number
+  pageable?: PageableObject
+  first?: boolean
+  last?: boolean
+  size?: number
+  content?: ReviewDto[]
+  number?: number
+  sort?: SortObject[]
+  numberOfElements?: number
+  empty?: boolean
 }
 export type LightweightTransactionDto = {
   id: number
@@ -854,23 +951,24 @@ export type OrderDto = {
   transaction: LightweightTransactionDto
   events: EventDto[]
   additionalNotes?: string
-  files?: FileDto[]
+  files: FileDto[]
   rejectionReason?: string
+  reviews: ReviewDto[]
   createdAt: string
-  deadlineDate?: string
+  deadlineDate: string
   updatedAt?: string
 }
 export type PageOrderDto = {
-  totalElements?: number
   totalPages?: number
+  totalElements?: number
+  pageable?: PageableObject
+  first?: boolean
+  last?: boolean
   size?: number
   content?: OrderDto[]
   number?: number
   sort?: SortObject[]
-  first?: boolean
-  last?: boolean
   numberOfElements?: number
-  pageable?: PageableObject
   empty?: boolean
 }
 export type DisputeDto = {
@@ -1035,11 +1133,6 @@ export enum ProfileStatus {
   Active = "ACTIVE",
   Rejected = "REJECTED",
 }
-export enum Type {
-  Employer = "Employer",
-  Client = "Client",
-  Freelancer = "Freelancer",
-}
 export enum OrderStatus {
   Created = "CREATED",
   InProgress = "IN_PROGRESS",
@@ -1065,7 +1158,6 @@ export enum DisputeStatus {
   Rejected = "REJECTED",
 }
 export enum ProposalStatus {
-  None = "NONE",
   Pending = "PENDING",
   Accepted = "ACCEPTED",
   Rejected = "REJECTED",
@@ -1088,6 +1180,8 @@ export const {
   useApproveRegistrationRequestMutation,
   useGetServicesQuery,
   useCreateServiceMutation,
+  usePostServiceReviewMutation,
+  usePostClientReviewMutation,
   useBookServiceMutation,
   useGetFreelancerQuery,
   useCreateFreelancerMutation,
@@ -1108,6 +1202,8 @@ export const {
   useGetStatsOverviewQuery,
   useGetServiceQuery,
   useGetUserServicesQuery,
+  useGetServiceReviewsQuery,
+  useGetClientReviewsQuery,
   useGetOrdersQuery,
   useGetOrderQuery,
   useGetFileQuery,

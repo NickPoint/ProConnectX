@@ -22,6 +22,8 @@ import OrdersTab from "./app/components/dashboard/OrdersTab.tsx";
 import SettingsTab from "./app/components/dashboard/SettingsTab.tsx";
 import HomePageLayout from "./app/components/layouts/HomePageLayout.tsx";
 import ServicesTab from "./app/components/dashboard/ServicesTab.tsx";
+import FabManager from "./app/components/FabManager.tsx";
+import FabContainer from "./app/components/FabContainer.tsx";
 
 const App = () => {
 
@@ -31,6 +33,8 @@ const App = () => {
         <div className="App">
             <BrowserRouter>
                 <GlobalLoadingBackdrop />
+                <FabManager/>
+                <FabContainer/>
                 <Routes>
                     <Route path='/' element={<HomePageLayout/>}>
                         <Route index element={<HomePage/>}/>

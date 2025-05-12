@@ -22,7 +22,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class Service implements Statistic, FileOwner {
+public class Service implements Statistic, FileOwner, Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -75,13 +75,17 @@ public class Service implements Statistic, FileOwner {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
-    @Column(nullable = false)
-    @Range(min = 0, max = 5)
-    private Double rating = 0.0;
+    @Column(precision = 3, scale = 1, nullable = false)
+    @NotNull
+    private BigDecimal rating = BigDecimal.ZERO;
 
     @Column(nullable = false)
-    @Range(min = 0)
-    private Integer ratingCount = 0;
+    @NotNull
+    private BigDecimal ratingSum = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    @NotNull
+    private Long ratingCount = 0L;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

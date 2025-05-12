@@ -26,10 +26,14 @@ public class OrderDto {
     @NotNull
     private List<EventDto> events;
     private String additionalNotes;
+    @NotNull
     private List<FileDto> files;
     private String rejectionReason;
     @NotNull
+    private List<ReviewDto> reviews;
+    @NotNull
     private Instant createdAt;
+    @NotNull
     private LocalDate deadlineDate;
     private Instant updatedAt;
 }

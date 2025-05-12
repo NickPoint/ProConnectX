@@ -95,7 +95,7 @@ public class OrderEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void orderDisputedEvent(OrderDisputedEvent event) {
-        val freelancer = event.getOrder().getFreelancer();
+        val freelancer = event.getDispute().getOrder().getFreelancer();
         notificationProducer.send(NotificationEvent.builder()
                 .recipientId(freelancer.getId())
                 .profileType(freelancer.getProfileType())

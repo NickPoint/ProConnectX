@@ -14,6 +14,7 @@ import {debounce} from '@mui/material/utils';
 import {getIn, useField, useFormikContext} from "formik";
 import {useTranslation} from "react-i18next";
 import TextField from "@mui/material/TextField";
+import {useEffect} from "react";
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
@@ -189,8 +190,6 @@ export default function GoogleMaps({
             const getComponentValue = (type: string) =>
                 components.find((c) => c.types.includes(type))?.longText || "";
 
-            const houseNumber = getComponentValue("street_number");
-
             const parsedAddress = {
                 fullAddress: placeType,
                 street: getComponentValue("route"),
@@ -198,7 +197,7 @@ export default function GoogleMaps({
                 region: getComponentValue("administrative_area_level_1"),
                 postalCode: getComponentValue("postal_code"),
                 country: getComponentValue("country"),
-                houseNumber,
+                houseNumber: getComponentValue("street_number")
             };
 
             Object.entries(parsedAddress).map(([key, val]) => {

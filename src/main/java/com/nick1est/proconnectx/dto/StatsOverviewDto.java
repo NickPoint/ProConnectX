@@ -19,6 +19,7 @@ public class StatsOverviewDto {
     public static class StatisticsDto {
         @NotNull
         private BigDecimal value;
+        private Long helperValue;
         private String trend;
         private BigDecimal percentGrow;
         List<BigDecimal> data;

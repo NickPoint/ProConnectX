@@ -9,26 +9,25 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {FileMapper.class})
-public abstract class ReviewMapper {
+public interface ReviewMapper {
 
     @Mapping(target = "reviewer",
-            expression = "java(toReviewerDto(review.getClient(), review.getFreelancer()))")
-    public abstract ReviewDto toDto(Review review);
+            expression = "java(toReviewerDto(review))")
+    ReviewDto toDto(Review review);
 
-    public ReviewerDto toReviewerDto(Client client, Freelancer freelancer) {
-        if (client != null) {
-            return clientToDto(client);
-        } else if (freelancer != null) {
-            return freelancerToDto(freelancer);
+    default ReviewerDto toReviewerDto(Review review) {
+        if (review.getService() != null) {
+            return clientToDto(review.getClient());
+        }
+        if (review.getFreelancer() != null) {
+            return freelancerToDto(review.getFreelancer());
         }
         return null;
     }
 
-    @Mapping(target = "type", expression = "java(ReviewerDto.ReviewerType.Client)")
     @Mapping(target = "avatarImageUrl", source = "client.files", qualifiedByName = "avatarImageMapper")
-    public abstract ReviewerDto clientToDto(Client client);
+    ReviewerDto clientToDto(Client client);
 
-    @Mapping(target = "type", expression = "java(ReviewerDto.ReviewerType.Freelancer)")
     @Mapping(target = "avatarImageUrl", source = "freelancer.files", qualifiedByName = "avatarImageMapper")
-    public abstract ReviewerDto freelancerToDto(Freelancer freelancer);
+    ReviewerDto freelancerToDto(Freelancer freelancer);
 }

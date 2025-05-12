@@ -4,9 +4,10 @@ import dayjs from "dayjs";
 
 // --- Types ---
 
-type FieldType = 'text' | 'richtext' | 'select' | 'file' | 'addressGroup' | 'array' | 'number' | 'date';
+type FieldType = 'text' | 'richtext' | 'select' | 'file' | 'addressGroup' | 'array' | 'number' | 'date' | 'place' | 'rating';
 
 interface BaseFieldConfig {
+    type: FieldType;
     label: string;
     required?: boolean;
     size?: number;
@@ -63,6 +64,10 @@ interface PlaceFieldConfig extends BaseFieldConfig {
     type: 'place';
 }
 
+interface RatingFieldConfig extends BaseFieldConfig {
+    type: 'rating';
+}
+
 interface ArrayFieldConfig extends BaseFieldConfig {
     type: 'array';
     fields: Record<string, FieldConfig>;
@@ -81,6 +86,7 @@ export type FieldConfig =
     | AddressGroupFieldConfig
     | PlaceFieldConfig
     | ArrayFieldConfig
+    | RatingFieldConfig
     | DateFieldConfig;
 
 export type FormStepsConfig = {
@@ -101,6 +107,7 @@ export const generateValidationSchema = (fieldsConfig: FieldConfig) => {
 
                 switch (fieldConfig.type) {
                     case 'number':
+                    case 'rating':
                         schema = yup.number();
                         break;
                     case 'text':
@@ -131,7 +138,7 @@ export const generateValidationSchema = (fieldsConfig: FieldConfig) => {
                     const { field, value, required = true } = fieldConfig.dependsOn;
 
                     schema = schema.when(field, {
-                        is: val => value !== undefined ? val === value : !!val,
+                        is: val => value !== undefined && value !== "" ? val === value : !!val,
                         then: s => required
                             ? s.required(
                                 t('form.error.required', { field: t(`form.fields.${fieldConfig.label}`) })
@@ -205,6 +212,9 @@ export const generateInitialValuesFromConfig = (config: FieldConfig): any => {
                 case 'number':
                     result[key] = 0;
                     break;
+                case 'rating':
+                    result[key] = 3;
+                    break;
                 case 'text':
                 case 'richtext':
                     result[key] = '';
@@ -217,7 +227,7 @@ export const generateInitialValuesFromConfig = (config: FieldConfig): any => {
                     result[key] = generateInitialValuesFromConfig(field.fields);
                     break;
                 case 'place':
-                    result[key] = null;
+                    result[key] = '';
                     break;
                 case 'array':
                     result[key] = [generateInitialValuesFromConfig(field.fields)];

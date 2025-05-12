@@ -31,6 +31,11 @@ public class Review {
     @ManyToOne
     private Service service;
 
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    @NotNull
+    private Order order;
+
 /*    @JoinColumn
     @ManyToOne
     private Employer employer;*/

@@ -37,11 +37,13 @@ const formFields: FormStepsConfig = {
         },
         address: {
             type: 'addressGroup',
+            required: false,
             size: 12,
             fields: {
                 fullAddress: { label: 'address', type: 'place', required: false },
                 houseNumber: { label: 'houseNumber', type: 'text' },
                 street: { label: 'street', type: 'text' },
+                postalCode: { label: 'postalCode', type: 'text' },
                 city: {
                     label: 'city',
                     type: 'text',
@@ -78,12 +80,6 @@ const formFields: FormStepsConfig = {
         },
     },
     step2: {
-        description: {
-            label: 'description',
-            required: true,
-            type: 'richtext',
-            size: 12,
-        },
         shortDescription: {
             label: 'shortDescription',
             required: true,
@@ -91,7 +87,13 @@ const formFields: FormStepsConfig = {
             size: 12,
             multiline: true,
             maxRows: 4
-        }
+        },
+        description: {
+            label: 'description',
+            required: true,
+            type: 'richtext',
+            size: 12,
+        },
     },
     step3: {
         workflow: {

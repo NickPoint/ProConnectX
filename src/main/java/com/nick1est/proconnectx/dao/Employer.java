@@ -85,7 +85,7 @@ public class Employer {
     private void prePersist() {
         this.profileStatus = ProfileStatus.UNVERIFIED;
         this.registrationDate = Instant.now();
-        this.rating = 0.0;
+        this.ratingSum = 0.0;
         this.ratingCount = 0;
     }
 }

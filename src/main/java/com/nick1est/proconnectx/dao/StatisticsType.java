@@ -13,4 +13,7 @@ public enum StatisticsType {
 
     //Client
     TOTAL_SERVICES_PURCHASED,
+
+    //Common
+    PROFILE_RATING
 }

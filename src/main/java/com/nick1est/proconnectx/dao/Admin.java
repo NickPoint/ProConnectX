@@ -2,6 +2,7 @@ package com.nick1est.proconnectx.dao;
 
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,6 +35,21 @@ public class Admin implements Profile {
     @Override
     public void setFiles(List<File> files) {
 
+    }
+
+    @Override
+    public BigDecimal getRating() {
+        return null;
+    }
+
+    @Override
+    public BigDecimal getRatingSum() {
+        return null;
+    }
+
+    @Override
+    public Long getRatingCount() {
+        return 0L;
     }
 
     @Override

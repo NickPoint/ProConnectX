@@ -9,13 +9,14 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public abstract class BaseProfile implements Profile, FileOwner {
+public abstract class BaseProfile implements Profile, FileOwner, Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,15 +35,17 @@ public abstract class BaseProfile implements Profile, FileOwner {
     protected String lastName;
     protected String phoneNumber;
 
-    @Column(nullable = false)
-    @Range(min = 0, max = 5)
+    @Column(precision = 3, scale = 1, nullable = false)
     @NotNull
-    protected Double rating = 0.0;
+    private BigDecimal rating = BigDecimal.ZERO;
 
     @Column(nullable = false)
-    @Range(min = 0)
     @NotNull
-    protected Integer ratingCount = 0;
+    protected BigDecimal ratingSum = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    @NotNull
+    protected Long ratingCount = 0L;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -46,8 +46,7 @@ public class Dispute {
 
     @Column
     @Enumerated(EnumType.STRING)
-    @NotNull
-    private ProposalStatus proposalStatus = ProposalStatus.NONE;
+    private ProposalStatus proposalStatus;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

@@ -9,17 +9,17 @@ export type RatingProps =
 
 function getRatingText(rating: number): string {
     if (rating <= 0) {
-        return t('reviews.noRating');
+        return t('rating.noRating');
     } else if (rating < 2) {
-        return t('reviews.poor');
+        return t('rating.poor');
     } else if (rating < 3) {
-        return t('reviews.average');
+        return t('rating.average');
     } else if (rating < 4) {
-        return t('reviews.good');
+        return t('rating.good');
     } else if (rating < 5) {
-        return t('reviews.veryGood');
+        return t('rating.veryGood');
     } else {
-        return t('reviews.excellent');
+        return t('rating.excellent');
     }
 }
 

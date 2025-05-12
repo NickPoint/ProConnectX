@@ -30,7 +30,7 @@ import dayjs from "dayjs";
 import {GlobalLoadingBackdrop} from "../components/GlobalLoadingBackdrop.tsx";
 import StatCard, {StatType} from "../components/dashboard/StatCard.tsx";
 import Chip from "@mui/material/Chip";
-import {parseOffsetDateTime} from "../../utils/dateParser.ts";
+import {parseOffsetDateTimeToString} from "../../utils/dateParser.ts";
 import UserCard from "../components/UserCard.tsx";
 import {calculateProgress, getOrderStatusChipColor} from '../components/dashboard/OrdersTab.tsx';
 import {Group, RocketLaunch, Start} from '@mui/icons-material';
@@ -87,8 +87,8 @@ const OrderCard = (props: OrderDto) => {
                         <Typography variant='h6'>{props.service.title}</Typography>
                         <Box>
                             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                <Typography variant='body2'>{parseOffsetDateTime(props.createdAt)}</Typography>
-                                <Typography variant='body2'>{parseOffsetDateTime(props.deadlineDate)}</Typography>
+                                <Typography variant='body2'>{parseOffsetDateTimeToString(props.createdAt)}</Typography>
+                                <Typography variant='body2'>{parseOffsetDateTimeToString(props.deadlineDate)}</Typography>
                             </Box>
                             <LinearProgress variant='determinate'
                                             value={calculateProgress(props.createdAt, props.deadlineDate, props.status)}/>
@@ -330,7 +330,7 @@ const AuthHomePage = () => {
         skip: !user || ProfileType.Admin === user.activeProfile.profileType
     });
     const {data: activeOrders} = useGetOrdersQuery({
-        statuses: [OrderStatus.Approved, OrderStatus.Disputed, OrderStatus.InProgress],
+        statuses: [OrderStatus.Approved, OrderStatus.Disputed, OrderStatus.InProgress, OrderStatus.SubmittedForReview],
         page: 0, size: 4
     }, {
         skip: !user || ProfileType.Admin === user?.activeProfile.profileType,

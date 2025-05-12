@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -117,7 +118,7 @@ public class ServiceService {
             };
         }
 
-        public static Specification<Service> ratingFilter(Double rating) {
+        public static Specification<Service> ratingFilter(BigDecimal rating) {
             return (root, query, cb) -> {
                 if (rating == null) return null;
                 return cb.or(
@@ -130,14 +131,14 @@ public class ServiceService {
             };
         }
 
-        public static Specification<Service> minBudget(Double min) {
+        public static Specification<Service> minBudget(BigDecimal min) {
             return (root, query, cb) -> {
                 if (min == null) return null;
                 return cb.greaterThanOrEqualTo(root.get("price"), min);
             };
         }
 
-        public static Specification<Service> maxBudget(Double max) {
+        public static Specification<Service> maxBudget(BigDecimal max) {
             return (root, query, cb) -> {
                 if (max == null) return null;
                 return cb.lessThanOrEqualTo(root.get("price"), max);

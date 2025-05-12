@@ -7,6 +7,7 @@ import com.nick1est.proconnectx.events.domain.OrderApprovedByAdminEvent;
 import com.nick1est.proconnectx.events.domain.OrderCanceledByAdminEvent;
 import com.nick1est.proconnectx.events.domain.OrderCompletedEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,16 @@ public class AdminOrderService {
 
     @Transactional
     public void approveOrderFromDispute(Order order, Profile admin) {
+        changeStatus(order, OrderStatus.APPROVED);
+        events.publishEvent(new OrderApprovedByAdminEvent(order, admin));
+        completeOrder(order);
+    }
+
+    @Transactional
+    public void completeOrder(Order order) {
         changeStatus(order, OrderStatus.COMPLETED);
         transactionService.releaseTransaction(order);
         events.publishEvent(new OrderCompletedEvent(order));
-        events.publishEvent(new OrderApprovedByAdminEvent(order, admin));
     }
 
     @Transactional

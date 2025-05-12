@@ -18,7 +18,7 @@ import {styled} from "@mui/material/styles";
 import React from "react";
 import {LocationOn, Star} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
-import {parseOffsetDateTime} from "../../../utils/dateParser.ts";
+import {parseOffsetDateTimeToString} from "../../../utils/dateParser.ts";
 
 const CustomCardMediaRoot = styled(Box, {
     name: "CustomCardMedia",
@@ -101,7 +101,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({publicVariant = true, ...servi
                         <Grid container sx={{alignItems: 'center'}} spacing={2}>
                             <Grid size={{xs: 8}}>
                                 <Typography variant='h4'>{service.title}</Typography>
-                                <Typography variant='body2'>{parseOffsetDateTime(service.postedAt)}</Typography>
+                                <Typography variant='body2'>{parseOffsetDateTimeToString(service.postedAt)}</Typography>
                             </Grid>
                             <Grid size={{xs: 4}} sx={{textAlign: 'right'}}>
                                 <Typography variant='h5' fontWeight={700}>${service.price}</Typography>

@@ -28,13 +28,12 @@ public class ServiceDto {
     private List<WorkflowStep> workflow;
     private List<Faq> faqs;
     private ServiceAddressDto address;
-    private List<ReviewDto> reviews;
     @NotEmpty
     private List<CategoryType> categories;
     @NotNull
-    private Double rating;
+    private BigDecimal rating;
     @NotNull
-    private Integer ratingCount;
+    private Long ratingCount;
     @NotEmpty
     private List<String> galleryUrls;
     @NotNull

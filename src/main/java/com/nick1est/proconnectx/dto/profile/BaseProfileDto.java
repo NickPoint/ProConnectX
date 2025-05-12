@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class BaseProfileDto {
     @NotNull
@@ -19,8 +21,8 @@ public class BaseProfileDto {
     @NotBlank
     private String email;
     @NotNull
-    private Double rating;
+    private BigDecimal rating;
     @NotNull
-    private Integer ratingCount;
+    private Long ratingCount;
     private String avatarImageUrl;
 }

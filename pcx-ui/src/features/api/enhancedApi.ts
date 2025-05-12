@@ -24,7 +24,7 @@ const enhancedApi = pcxApi.enhanceEndpoints({
         authenticateUser: {
             invalidatesTags: ['Auth', 'Freelancer', 'Order'],
         },
-        switchRole: {
+        switchProfile: {
             invalidatesTags: ['Auth', 'Order', 'Statistics'],
         },
         getServices: {
@@ -34,11 +34,37 @@ const enhancedApi = pcxApi.enhanceEndpoints({
             providesTags: (result) => createTagsFromList(result?.content, 'Service'),
         },
         getService: {
-            providesTags: (result, error, arg) => [{ type: 'Service', id: arg.id }],
+            providesTags: (result, error, arg) => [{type: 'Service', id: arg.id}],
         },
+
         getOrders: {
-            providesTags: (result, error, arg) =>createTagsFromList(result?.content, 'Order'),
+            providesTags: (result, error, arg) => createTagsFromList(result?.content, 'Order'),
         },
+        getOrder: {
+            providesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        disputeOrder: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        cancelOrder: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        approveOrder: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        acceptOrder: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        submitOrderForReview: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        postServiceReview: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        },
+        postClientReview: {
+            invalidatesTags: (result, error, arg) => [{type: 'Order', id: arg.orderId}],
+        }
+
     }
 })
 

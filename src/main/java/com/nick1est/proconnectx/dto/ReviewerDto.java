@@ -1,25 +1,23 @@
 package com.nick1est.proconnectx.dto;
 
+import com.nick1est.proconnectx.dao.ProfileType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Value;
 
-@Data
+
+@Value
 public class ReviewerDto {
     @NotNull
-    private Long id;
+    Long id;
     @NotBlank
-    private String firstName;
-    private String lastName;
+    String firstName;
+    String lastName;
     @NotNull
-    private Double rating;
+    Double rating;
     @NotNull
-    private ReviewerType type;
-    private String avatarImageUrl;
+    ProfileType profileType;
+    String avatarImageUrl;
 
-    public enum ReviewerType {
-        Employer,
-        Client,
-        Freelancer
-    }
 }

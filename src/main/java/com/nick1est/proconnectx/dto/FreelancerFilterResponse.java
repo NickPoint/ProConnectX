@@ -3,6 +3,7 @@ package com.nick1est.proconnectx.dto;
 import com.nick1est.proconnectx.dao.CategoryType;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -13,6 +14,6 @@ public class FreelancerFilterResponse {
     private String description;
     private List<CategoryType> categories;
     private AddressDto addressDto;
-    private Double rating;
-    private Integer ratingCount;
+    private BigDecimal rating;
+    private Long ratingCount;
 }

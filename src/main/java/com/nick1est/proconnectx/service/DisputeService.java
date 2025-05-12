@@ -23,11 +23,12 @@ public class DisputeService {
     private final DisputeMapper disputeMapper;
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void openDispute(Order order, String reason) {
+    public void openDispute(Order order, String reason, Profile client) {
         Dispute dispute = new Dispute();
         dispute.setOrder(order);
         dispute.setReason(reason);
-        disputeRepository.save(dispute);
+        val savedDispute = disputeRepository.save(dispute);
+        events.publishEvent(new OrderDisputedEvent(savedDispute, client));
     }
 
     @Transactional
@@ -45,8 +46,8 @@ public class DisputeService {
 
         dispute.setProposalStatus(ProposalStatus.ACCEPTED);
         changeStatus(dispute, DisputeStatus.RESOLVED_FREELANCER_PAID);
-        adminOrderService.approveOrderFromDispute(dispute.getOrder(), admin);
         events.publishEvent(new DisputeSolutionAccepteByAdminEvent(dispute, admin));
+        adminOrderService.approveOrderFromDispute(dispute.getOrder(), admin);
     }
 
     @Transactional
@@ -54,10 +55,10 @@ public class DisputeService {
         val dispute = getById(disputeId);
 
         dispute.setProposalStatus(ProposalStatus.REJECTED);
-        changeStatus(dispute, DisputeStatus.REJECTED);
+        changeStatus(dispute, DisputeStatus.RESOLVED_REFUNDED);
         dispute.setProposalRejectionReason(reason);
-        openDispute(dispute.getOrder(), reason);
         events.publishEvent(new DisputeSolutionRejectedEvent(dispute, client));
+        openDispute(dispute.getOrder(), reason, client);
     }
 
     @Transactional
@@ -66,8 +67,8 @@ public class DisputeService {
 
         dispute.setProposalStatus(ProposalStatus.REJECTED);
         changeStatus(dispute, DisputeStatus.REJECTED);
-        adminOrderService.cancelOrderAndRefundFromDispute(dispute.getOrder(), admin);
         events.publishEvent(new DisputeSolutionRejectedByAdminEvent(dispute, admin));
+        adminOrderService.cancelOrderAndRefundFromDispute(dispute.getOrder(), admin);
     }
 
     @Transactional

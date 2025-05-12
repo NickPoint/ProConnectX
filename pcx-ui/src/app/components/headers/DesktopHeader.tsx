@@ -61,8 +61,6 @@ const DesktopHeader = () => {
             </AppBar>
         </HideOnScroll>
         <StyledToolbar/>
-        <FabManager/>
-        <FabContainer/>
         {location.pathname !== '/auth' && <AuthDialog/>}
     </>);
 }

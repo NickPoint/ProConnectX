@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
+- url: http://localhost:8081
   description: Generated server url
 paths:
   /orders/{orderId}/submit-for-review:
@@ -25,20 +25,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -78,20 +78,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -131,20 +131,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -178,20 +178,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -231,20 +231,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -277,20 +277,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -330,20 +330,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -383,20 +383,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -430,20 +430,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -477,20 +477,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -524,20 +524,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -571,20 +571,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -617,20 +617,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -675,20 +675,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -731,20 +731,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -836,20 +836,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -885,20 +885,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -918,6 +918,112 @@ paths:
               schema:
                 type: integer
                 format: int64
+  /review/{orderId}/service:
+    post:
+      tags:
+      - Review
+      operationId: postServiceReview
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostReviewDto'
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+  /review/{orderId}/client:
+    post:
+      tags:
+      - Review
+      operationId: postClientReview
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostReviewDto'
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
   /orders/book/{serviceId}:
     post:
       tags:
@@ -943,20 +1049,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -988,20 +1094,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1037,20 +1143,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1092,20 +1198,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1136,20 +1242,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1185,20 +1291,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1240,20 +1346,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1290,20 +1396,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1340,20 +1446,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1384,20 +1490,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1430,20 +1536,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1480,20 +1586,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1526,20 +1632,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1566,20 +1672,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1610,20 +1716,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1654,20 +1760,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1698,20 +1804,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1760,20 +1866,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1813,20 +1919,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1883,20 +1989,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -1915,6 +2021,158 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/PageLightweightServiceDto'
+  /review/service/{serviceId}:
+    get:
+      tags:
+      - Review
+      operationId: getServiceReviews
+      parameters:
+      - name: serviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PageReviewDto'
+  /review/client/{clientId}:
+    get:
+      tags:
+      - Review
+      operationId: getClientReviews
+      parameters:
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                oneOf:
+                - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PageReviewDto'
   /orders:
     get:
       tags:
@@ -1960,20 +2218,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2011,20 +2269,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2062,20 +2320,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2114,20 +2372,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2158,20 +2416,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2202,20 +2460,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2248,20 +2506,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2294,20 +2552,20 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-        "401":
-          description: Unauthorized
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/ErrorMessage'
                 - type: string
+                - $ref: '#/components/schemas/ErrorMessage'
+        "401":
+          description: Unauthorized
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
         "403":
           description: Forbidden
           content:
@@ -2560,6 +2818,16 @@ components:
           type: string
         faqsJson:
           type: string
+    PostReviewDto:
+      required:
+      - rating
+      type: object
+      properties:
+        rating:
+          type: number
+          format: double
+        body:
+          type: string
     BookServiceDto:
       type: object
       properties:
@@ -2577,7 +2845,7 @@ components:
       - address
       - description
       - firstName
-      - idDocuments
+      - idDocument
       - lastName
       - phoneNumber
       type: object
@@ -2593,7 +2861,7 @@ components:
         avatarImage:
           type: string
           format: binary
-        idDocuments:
+        idDocument:
           type: array
           items:
             type: string
@@ -2629,10 +2897,9 @@ components:
           type: string
         rating:
           type: number
-          format: double
         ratingCount:
           type: integer
-          format: int32
+          format: int64
         avatarImageUrl:
           type: string
         address:
@@ -2641,7 +2908,7 @@ components:
       required:
       - address
       - firstName
-      - idDocuments
+      - idDocument
       - lastName
       - phoneNumber
       type: object
@@ -2657,7 +2924,7 @@ components:
         avatarImage:
           type: string
           format: binary
-        idDocuments:
+        idDocument:
           type: array
           items:
             type: string
@@ -2687,10 +2954,9 @@ components:
           type: string
         rating:
           type: number
-          format: double
         ratingCount:
           type: integer
-          format: int32
+          format: int64
         avatarImageUrl:
           type: string
         address:
@@ -2816,10 +3082,9 @@ components:
           type: string
         rating:
           type: number
-          format: double
         ratingCount:
           type: integer
-          format: int32
+          format: int64
         avatarImageUrl:
           type: string
     LightweightAddressDto:
@@ -2860,10 +3125,9 @@ components:
           $ref: '#/components/schemas/LightweightAddressDto'
         rating:
           type: number
-          format: double
         ratingCount:
           type: integer
-          format: int32
+          format: int64
         price:
           type: number
         freelancer:
@@ -2880,12 +3144,18 @@ components:
     PageLightweightServiceDto:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -2900,20 +3170,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        first:
-          type: boolean
-        last:
-          type: boolean
         numberOfElements:
           type: integer
           format: int32
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         empty:
           type: boolean
     PageableObject:
       type: object
       properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
         offset:
           type: integer
           format: int64
@@ -2921,16 +3195,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        pageSize:
-          type: integer
-          format: int32
-        pageNumber:
-          type: integer
-          format: int32
-        unpaged:
-          type: boolean
-        paged:
-          type: boolean
     SortObject:
       type: object
       properties:
@@ -2953,53 +3217,6 @@ components:
         question:
           type: string
         answer:
-          type: string
-    ReviewDto:
-      required:
-      - createdAt
-      - id
-      - rating
-      - reviewer
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        reviewer:
-          $ref: '#/components/schemas/ReviewerDto'
-        body:
-          type: string
-        rating:
-          type: number
-          format: double
-        createdAt:
-          type: string
-          format: date-time
-    ReviewerDto:
-      required:
-      - firstName
-      - id
-      - rating
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        firstName:
-          type: string
-        lastName:
-          type: string
-        rating:
-          type: number
-          format: double
-        type:
-          type: string
-          enum:
-          - Employer
-          - Client
-          - Freelancer
-        avatarImageUrl:
           type: string
     ServiceDto:
       required:
@@ -3039,20 +3256,15 @@ components:
             $ref: '#/components/schemas/Faq'
         address:
           $ref: '#/components/schemas/ServiceAddressDto'
-        reviews:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReviewDto'
         categories:
           type: array
           items:
             $ref: '#/components/schemas/CategoryType'
         rating:
           type: number
-          format: double
         ratingCount:
           type: integer
-          format: int32
+          format: int64
         galleryUrls:
           type: array
           items:
@@ -3072,6 +3284,83 @@ components:
         title:
           type: string
         description:
+          type: string
+    PageReviewDto:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewDto'
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    ReviewDto:
+      required:
+      - createdAt
+      - id
+      - rating
+      - reviewer
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        reviewer:
+          $ref: '#/components/schemas/ReviewerDto'
+        body:
+          type: string
+        rating:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+    ReviewerDto:
+      required:
+      - firstName
+      - id
+      - profileType
+      - rating
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        rating:
+          type: number
+          format: double
+        profileType:
+          $ref: '#/components/schemas/ProfileType'
+        avatarImageUrl:
           type: string
     OrderStatus:
       type: string
@@ -3131,8 +3420,11 @@ components:
       required:
       - client
       - createdAt
+      - deadlineDate
       - events
+      - files
       - id
+      - reviews
       - service
       - status
       - transaction
@@ -3161,6 +3453,10 @@ components:
             $ref: '#/components/schemas/FileDto'
         rejectionReason:
           type: string
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewDto'
         createdAt:
           type: string
           format: date-time
@@ -3173,12 +3469,18 @@ components:
     PageOrderDto:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -3193,15 +3495,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        first:
-          type: boolean
-        last:
-          type: boolean
         numberOfElements:
           type: integer
           format: int32
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         empty:
           type: boolean
     TransactionStatus:
@@ -3229,7 +3525,6 @@ components:
         proposalStatus:
           type: string
           enum:
-          - NONE
           - PENDING
           - ACCEPTED
           - REJECTED

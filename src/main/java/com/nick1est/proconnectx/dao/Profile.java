@@ -2,7 +2,7 @@ package com.nick1est.proconnectx.dao;
 
 import java.util.List;
 
-public interface Profile {
+public interface Profile extends Rating {
     Long getId();
     User getUser();
     String getDisplayName();

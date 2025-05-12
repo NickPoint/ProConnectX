@@ -1,7 +1,7 @@
 import {Button, Card, CardActions, CardContent, Paper} from "@mui/material";
 import { FileDto } from "../../features/api/pcxApi";
 import Typography from "@mui/material/Typography";
-import {parseOffsetDateTime} from "../../utils/dateParser.ts";
+import {parseOffsetDateTimeToString} from "../../utils/dateParser.ts";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import { Download } from "@mui/icons-material";
@@ -14,7 +14,7 @@ const FileCard = ({ file }: {file: FileDto}) => {
             <Stack direction='row' justifyContent='space-between'>
                 <Stack>
                     <Typography variant="body1">{file.originalFileName}</Typography>
-                    <Typography variant="body2" color="textSecondary">{parseOffsetDateTime(file.uploadedAt)}</Typography>
+                    <Typography variant="body2" color="textSecondary">{parseOffsetDateTimeToString(file.uploadedAt)}</Typography>
                 </Stack>
                 <IconButton component='a' download href={`${import.meta.env.VITE_API_URL}files/${file.id}`}>
                     <Download />

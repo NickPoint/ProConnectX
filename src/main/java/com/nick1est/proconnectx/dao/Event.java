@@ -26,7 +26,7 @@ public class Event {
     private Order order;
 
     @JoinColumn
-    @OneToOne
+    @ManyToOne
     private Dispute dispute;
 
     @Column(nullable = false)

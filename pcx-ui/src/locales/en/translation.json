@@ -20,6 +20,9 @@
     "imageUpload": "Image Upload",
     "searchServices": "Search Services",
     "findTalents": "Find Talents",
+    "forceRefund": "Force Refund",
+    "forceRelease": "Force Release",
+    "leaveReview": "Leave Review",
     "join": "Join",
     "signIn": "Sign In",
     "change": "Change",
@@ -27,6 +30,7 @@
     "connect": "Connect",
     "sendRequest": "Send Request",
     "dispute": "Dispute",
+    "notifyAdministrator": "Notify Administrator",
     "back": "Back",
     "next": "Next",
     "cancel": "Cancel",
@@ -213,14 +217,17 @@
       "ORDER_APPROVED": "Order approved",
       "ORDER_APPROVED_BY_ADMIN": "Order approved by admin",
       "ORDER_DISPUTED": "Order disputed",
+      "ADMIN_NOTIFY": "Administrator notified",
       "ORDER_CANCELED": "Order canceled",
-      "ORDER_CANCELED_WITH_REFUND_BY_ADMIN": "Order canceled with refund by admin",
+      "ORDER_CANCELED_BY_ADMIN": "Order canceled by admin",
       "DISPUTE_CREATED": "Dispute created",
       "DISPUTE_RESOLVED": "Dispute resolved",
       "DISPUTE_REJECTED": "Dispute rejected",
       "PROPOSAL_CREATED": "Proposal created",
       "PROPOSAL_ACCEPTED": "Proposal accepted",
       "PROPOSAL_REJECTED": "Proposal rejected",
+      "PROPOSAL_ACCEPTED_BY_ADMIN": "Proposal accepted by admin",
+      "PROPOSAL_REJECTED_BY_ADMIN": "Proposal rejected by admin",
       "TRANSACTION_CREATED": "Transaction created",
       "TRANSACTION_ESCROWED": "Transaction escrowed",
       "TRANSACTION_RELEASED": "Transaction released",
@@ -233,12 +240,16 @@
       "IN_REVIEW": "In Review",
       "RESOLVED_REFUNDED": "Refunded",
       "RESOLVED_FREELANCER_PAID": "Solved",
+      "ADMIN_ACTION_REQUIRED": "Admin action required",
       "REJECTED": "Rejected"
     }
   },
   "rating": {
+    "yourRating": "Your Rating",
+    "basedOn": "Based on {{ratingCount}} reviews",
     "reviews": "Reviews",
     "noRating": "No rating",
+    "useless": "Useless",
     "poor": "Poor",
     "average": "Average",
     "good": "Good",
@@ -269,6 +280,7 @@
       "price": "Project Budget",
       "images": "Project Images",
       "workflow": "Project Workflow",
+      "review": "Review",
       "stepNumber": "Workflow Step Number",
       "faqs": "Frequently Asked Questions",
       "question": "FAQ Question",
@@ -359,10 +371,10 @@
         "title": "Clients"
       },
       "orders": {
-        "title": "Orders"
+        "title": "Your Orders"
       },
       "services": {
-        "title": "Services"
+        "title": "Your Services"
       },
       "settings": {
         "title": "Settings"
@@ -425,7 +437,8 @@
       "title": "Service",
       "description": "Description",
       "workflow": "Workflow",
-      "faq": "FAQ"
+      "faq": "FAQ",
+      "reviews": "Reviews"
     },
     "form": {
       "title": "Service Booking",
@@ -434,6 +447,7 @@
     "package": {
       "basic": "Basic"
     },
+    "noReviews": "No reviews yet",
     "notFound": ""
   },
   "order": {
@@ -447,6 +461,7 @@
     "rejectionReason": "Rejection Reason",
     "disputeReason": "Dispute Reason",
     "deadline": "Deadline",
+    "reviews": "Reviews",
     "dispute": {
       "title": "Dispute order",
       "success": "Order has been disputed!"
@@ -462,6 +477,11 @@
     "submitForReview": {
       "success": "Order has been submitted for review. Wait for client approval!"
     },
+    "review": {
+      "serviceReview": "How was your experience with the service?",
+      "clientReview": "How was your experience with the client?",
+      "success": "Review has been submitted!"
+    },
     "approve": {
       "success": "Order has been approved!"
     }
@@ -471,10 +491,21 @@
     "reason": "Reason of dispute",
     "proposal": {
       "title": "Freelancer's proposal",
+      "clientNone": "No proposal yet. If freelancer doesn't respond, notify administrator and we'll take care of it.",
+      "freelancerNone": "No proposal yet. If client rejects proposal and you don't agree with it, notify administrator and we'll take care of it.",
       "submitted": "Proposal has been submitted!"
+    },
+    "forceRefund": {
+      "success": "Dispute has been resolved! Refund has been issued."
+    },
+    "forceRelease": {
+      "success": "Dispute has been resolved! Release has been issued."
     },
     "accept": {
       "success": "Proposal has been accepted!"
+    },
+    "notifyAdmin": {
+        "success": "Administrator has been notified! We'll take care of it."
     },
     "reject": {
       "title": "Rejection reason",

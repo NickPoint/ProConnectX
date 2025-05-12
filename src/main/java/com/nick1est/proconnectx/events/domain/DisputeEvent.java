@@ -12,7 +12,8 @@ public interface DisputeEvent extends DomainEvent {
 
     @Override
     default Map<String, Object> getPayload() {
-        return Map.of("disputeId", getDispute().getId());
+        return Map.of("disputeId", getDispute().getId(),
+                "orderId", getDispute().getOrder().getId());
     }
 
     @Override

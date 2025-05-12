@@ -71,11 +71,7 @@ public class OrderService {
     public void approveOrder(Long orderId, Profile profile) {
         val order = getById(orderId);
         changeStatus(order, OrderStatus.APPROVED);
-        if (profile.getProfileType() == ProfileType.ADMIN) {
-            events.publishEvent(new OrderApprovedByAdminEvent(order, profile));
-        } else {
-            events.publishEvent(new OrderApprovedEvent(order, profile));
-        }
+        events.publishEvent(new OrderApprovedEvent(order, profile));
 
         completeOrder(orderId);
     }
@@ -84,8 +80,7 @@ public class OrderService {
     public void disputeOrder(Long orderId, String reason, Profile client) {
         val order = getById(orderId);
         changeStatus(order, OrderStatus.DISPUTED);
-        disputeService.openDispute(order, reason);
-        events.publishEvent(new OrderDisputedEvent(order, client));
+        disputeService.openDispute(order, reason, client);
     }
 
     @Transactional
@@ -96,23 +91,6 @@ public class OrderService {
         transactionService.cancelTransaction(order);
         events.publishEvent(new OrderCanceledEvent(order, freelancer));
     }
-
-    @Transactional
-    public void adminCancelAndRefundOrder(Long orderId, String reason, Profile admin) {
-        val order = getById(orderId);
-        changeStatus(order, OrderStatus.CANCELED);
-        order.setRejectionReason(reason);
-        transactionService.refundTransaction(order);
-        events.publishEvent(new OrderCanceledByAdminEvent(order, admin));
-    }
-
-//    TODO: Admin should have possibility to resolve dispute with refund or release transaction
-/*    @Transactional
-    public void cancelOrderAndMakeRefund(Order order, Profile profile) {
-        changeStatus(order, OrderStatus.CANCELED);
-        transactionService.refundTransaction(order);
-        events.recordOrderCanceledWithRefund(order, userDetails);
-    }*/
 
     private void changeStatus(Order order, OrderStatus newStatus) {
         if (!order.getStatus().canTransitionTo(newStatus)) {
@@ -139,7 +117,9 @@ public class OrderService {
         order.setAdditionalNotes(bookingInfo.getAdditionalNotes());
         transactionService.createTransaction(order);
         val savedOrder = orderRepository.save(order);
-        savedOrder.setFiles(fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, false));
+        if (!bookingInfo.getFiles().isEmpty()) {
+            order.setFiles(fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, true));
+        }
         events.publishEvent(new OrderPlacedEvent(savedOrder, client));
         return savedOrder.getId();
     }

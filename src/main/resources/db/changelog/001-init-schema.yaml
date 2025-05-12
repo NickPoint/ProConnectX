@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 1746963549041-1
-      author: Mykyta Voievudskyi
+      id: 1747081833173-1
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -40,8 +40,8 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: address
   - changeSet:
-      id: 1746963549041-2
-      author: Mykyta Voievudskyi
+      id: 1747081833173-2
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -61,8 +61,8 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: category
   - changeSet:
-      id: 1746963549041-3
-      author: Mykyta Voievudskyi
+      id: 1747081833173-3
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -96,12 +96,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: rating
-                  type: DOUBLE
+                  type: DECIMAL(3, 1)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_sum
+                  type: DECIMAL
               - column:
                   constraints:
                     nullable: false
                   name: rating_count
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
@@ -120,8 +125,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: client
   - changeSet:
-      id: 1746963549041-4
-      author: Mykyta Voievudskyi
+      id: 1747081833173-4
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -170,8 +175,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: dispute
   - changeSet:
-      id: 1746963549041-5
-      author: Mykyta Voievudskyi
+      id: 1747081833173-5
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -204,8 +209,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: event
   - changeSet:
-      id: 1746963549041-6
-      author: Mykyta Voievudskyi
+      id: 1747081833173-6
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -263,8 +268,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: file
   - changeSet:
-      id: 1746963549041-7
-      author: Mykyta Voievudskyi
+      id: 1747081833173-7
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -298,12 +303,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: rating
-                  type: DOUBLE
+                  type: DECIMAL(3, 1)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_sum
+                  type: DECIMAL
               - column:
                   constraints:
                     nullable: false
                   name: rating_count
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
@@ -325,8 +335,8 @@ databaseChangeLog:
                   type: oid
             tableName: freelancer
   - changeSet:
-      id: 1746963549041-8
-      author: Mykyta Voievudskyi
+      id: 1747081833173-8
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -343,8 +353,8 @@ databaseChangeLog:
                   type: BIGINT
             tableName: freelancer_categories
   - changeSet:
-      id: 1746963549041-9
-      author: Mykyta Voievudskyi
+      id: 1747081833173-9
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -391,8 +401,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: notification
   - changeSet:
-      id: 1746963549041-10
-      author: Mykyta Voievudskyi
+      id: 1747081833173-10
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -451,8 +461,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: orders
   - changeSet:
-      id: 1746963549041-11
-      author: Mykyta Voievudskyi
+      id: 1747081833173-11
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -475,6 +485,11 @@ databaseChangeLog:
                   name: service_id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: BIGINT
+              - column:
                   name: body
                   type: oid
               - column:
@@ -489,8 +504,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: review
   - changeSet:
-      id: 1746963549041-12
-      author: Mykyta Voievudskyi
+      id: 1747081833173-12
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -510,8 +525,8 @@ databaseChangeLog:
                   type: VARCHAR(20)
             tableName: role
   - changeSet:
-      id: 1746963549041-13
-      author: Mykyta Voievudskyi
+      id: 1747081833173-13
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -562,12 +577,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: rating
-                  type: DOUBLE
+                  type: DECIMAL(3, 1)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_sum
+                  type: DECIMAL
               - column:
                   constraints:
                     nullable: false
                   name: rating_count
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
@@ -580,8 +600,8 @@ databaseChangeLog:
                   type: INT
             tableName: service
   - changeSet:
-      id: 1746963549041-14
-      author: Mykyta Voievudskyi
+      id: 1747081833173-14
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -598,8 +618,8 @@ databaseChangeLog:
                   type: BIGINT
             tableName: service_categories
   - changeSet:
-      id: 1746963549041-15
-      author: Mykyta Voievudskyi
+      id: 1747081833173-15
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -639,8 +659,8 @@ databaseChangeLog:
                   type: DATETIME
             tableName: transaction
   - changeSet:
-      id: 1746963549041-16
-      author: Mykyta Voievudskyi
+      id: 1747081833173-16
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -668,8 +688,8 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: user
   - changeSet:
-      id: 1746963549041-17
-      author: Mykyta Voievudskyi
+      id: 1747081833173-17
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -690,8 +710,8 @@ databaseChangeLog:
                   type: BIGINT
             tableName: user_role
   - changeSet:
-      id: 1746963549041-19
-      author: Mykyta Voievudskyi
+      id: 1747081833173-18
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
@@ -699,17 +719,8 @@ databaseChangeLog:
             constraintName: uc_client_address
             tableName: client
   - changeSet:
-      id: 1746963549041-20
-      author: Mykyta Voievudskyi
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: dispute_id
-            constraintName: uc_event_dispute
-            tableName: event
-  - changeSet:
-      id: 1746963549041-21
-      author: Mykyta Voievudskyi
+      id: 1747081833173-19
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
@@ -717,8 +728,8 @@ databaseChangeLog:
             constraintName: uc_freelancer_address
             tableName: freelancer
   - changeSet:
-      id: 1746963549041-22
-      author: Mykyta Voievudskyi
+      id: 1747081833173-20
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
@@ -726,8 +737,8 @@ databaseChangeLog:
             constraintName: uc_service_address
             tableName: service
   - changeSet:
-      id: 1746963549041-23
-      author: Mykyta Voievudskyi
+      id: 1747081833173-21
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
@@ -735,8 +746,8 @@ databaseChangeLog:
             constraintName: uc_transaction_order
             tableName: transaction
   - changeSet:
-      id: 1746963549041-24
-      author: Mykyta Voievudskyi
+      id: 1747081833173-22
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
@@ -744,8 +755,8 @@ databaseChangeLog:
             constraintName: uc_user_email
             tableName: user
   - changeSet:
-      id: 1746963549041-25
-      author: Mykyta Voievudskyi
+      id: 1747081833173-23
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -755,8 +766,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: address
   - changeSet:
-      id: 1746963549041-26
-      author: Mykyta Voievudskyi
+      id: 1747081833173-24
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -766,8 +777,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1746963549041-27
-      author: Mykyta Voievudskyi
+      id: 1747081833173-25
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -777,8 +788,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: orders
   - changeSet:
-      id: 1746963549041-28
-      author: Mykyta Voievudskyi
+      id: 1747081833173-26
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -788,8 +799,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: dispute
   - changeSet:
-      id: 1746963549041-29
-      author: Mykyta Voievudskyi
+      id: 1747081833173-27
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -799,8 +810,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: orders
   - changeSet:
-      id: 1746963549041-30
-      author: Mykyta Voievudskyi
+      id: 1747081833173-28
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -810,8 +821,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: client
   - changeSet:
-      id: 1746963549041-31
-      author: Mykyta Voievudskyi
+      id: 1747081833173-29
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -821,8 +832,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
   - changeSet:
-      id: 1746963549041-32
-      author: Mykyta Voievudskyi
+      id: 1747081833173-30
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -832,8 +843,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: orders
   - changeSet:
-      id: 1746963549041-33
-      author: Mykyta Voievudskyi
+      id: 1747081833173-31
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -843,8 +854,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: service
   - changeSet:
-      id: 1746963549041-34
-      author: Mykyta Voievudskyi
+      id: 1747081833173-32
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -854,8 +865,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: address
   - changeSet:
-      id: 1746963549041-35
-      author: Mykyta Voievudskyi
+      id: 1747081833173-33
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -865,8 +876,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1746963549041-36
-      author: Mykyta Voievudskyi
+      id: 1747081833173-34
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -876,8 +887,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: client
   - changeSet:
-      id: 1746963549041-37
-      author: Mykyta Voievudskyi
+      id: 1747081833173-35
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -887,8 +898,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
   - changeSet:
-      id: 1746963549041-38
-      author: Mykyta Voievudskyi
+      id: 1747081833173-36
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -898,8 +909,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1746963549041-39
-      author: Mykyta Voievudskyi
+      id: 1747081833173-37
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -909,8 +920,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: client
   - changeSet:
-      id: 1746963549041-40
-      author: Mykyta Voievudskyi
+      id: 1747081833173-38
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -920,8 +931,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
   - changeSet:
-      id: 1746963549041-41
-      author: Mykyta Voievudskyi
+      id: 1747081833173-39
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -931,8 +942,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: service
   - changeSet:
-      id: 1746963549041-42
-      author: Mykyta Voievudskyi
+      id: 1747081833173-40
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -942,8 +953,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: client
   - changeSet:
-      id: 1746963549041-43
-      author: Mykyta Voievudskyi
+      id: 1747081833173-41
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -953,8 +964,19 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
   - changeSet:
-      id: 1746963549041-44
-      author: Mykyta Voievudskyi
+      id: 1747081833173-42
+      author: mykyta
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: review
+            constraintName: FK_REVIEW_ON_ORDER
+            referencedColumnNames: id
+            referencedTableName: orders
+  - changeSet:
+      id: 1747081833173-43
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -964,8 +986,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: service
   - changeSet:
-      id: 1746963549041-45
-      author: Mykyta Voievudskyi
+      id: 1747081833173-44
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -975,8 +997,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: address
   - changeSet:
-      id: 1746963549041-46
-      author: Mykyta Voievudskyi
+      id: 1747081833173-45
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -986,8 +1008,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
   - changeSet:
-      id: 1746963549041-47
-      author: Mykyta Voievudskyi
+      id: 1747081833173-46
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -997,8 +1019,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: orders
   - changeSet:
-      id: 1746963549041-48
-      author: Mykyta Voievudskyi
+      id: 1747081833173-47
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -1008,8 +1030,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: category
   - changeSet:
-      id: 1746963549041-49
-      author: Mykyta Voievudskyi
+      id: 1747081833173-48
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -1019,8 +1041,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: freelancer
   - changeSet:
-      id: 1746963549041-50
-      author: Mykyta Voievudskyi
+      id: 1747081833173-49
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -1030,8 +1052,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: category
   - changeSet:
-      id: 1746963549041-51
-      author: Mykyta Voievudskyi
+      id: 1747081833173-50
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -1041,8 +1063,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: service
   - changeSet:
-      id: 1746963549041-52
-      author: Mykyta Voievudskyi
+      id: 1747081833173-51
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -1052,8 +1074,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: role
   - changeSet:
-      id: 1746963549041-53
-      author: Mykyta Voievudskyi
+      id: 1747081833173-52
+      author: mykyta
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
@@ -1062,235 +1084,3 @@ databaseChangeLog:
             constraintName: fk_user_role_on_user
             referencedColumnNames: id
             referencedTableName: user
-
-  - changeSet:
-      id: 1745924617125-54
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_orders_client_id
-            tableName: orders
-            columns:
-              - column:
-                  name: client_id
-
-  - changeSet:
-      id: 1745924617125-55
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_orders_service_id
-            tableName: orders
-            columns:
-              - column:
-                  name: service_id
-
-  - changeSet:
-      id: 1745924617125-56
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_orders_status
-            tableName: orders
-            columns:
-              - column:
-                  name: status
-
-  - changeSet:
-      id: 1745924617125-57
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_review_service_id
-            tableName: review
-            columns:
-              - column:
-                  name: service_id
-
-  - changeSet:
-      id: 1745924617125-58
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_file_client
-            tableName: file
-            columns:
-              - column:
-                  name: client_id
-
-  - changeSet:
-      id: 1745924617125-59
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_file_freelancer
-            tableName: file
-            columns:
-              - column:
-                  name: freelancer_id
-
-  - changeSet:
-      id: 1745924617125-60
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_file_service
-            tableName: file
-            columns:
-              - column:
-                  name: service_id
-
-  - changeSet:
-      id: 1745924617125-61
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_freelancer_user
-            tableName: freelancer
-            columns:
-              - column:
-                  name: user_id
-
-  - changeSet:
-      id: 1745924617125-62
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_client_user
-            tableName: client
-            columns:
-              - column:
-                  name: user_id
-
-  - changeSet:
-      id: 1745924617125-63
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_freelancer
-            tableName: service
-            columns:
-              - column:
-                  name: freelancer_id
-
-  - changeSet:
-      id: 1745924617125-64
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_notification_freelancer
-            tableName: notification
-            columns:
-              - column:
-                  name: freelancer_id
-
-    # Index for filtering services by title
-  - changeSet:
-      id: 1745924617125-65
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_title
-            tableName: service
-            columns:
-              - column: { name: title }
-
-  # Index for filtering services by rating
-  - changeSet:
-      id: 1745924617125-66
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_rating
-            tableName: service
-            columns:
-              - column: { name: rating }
-
-  # Index for filtering services by price (for minBudget / maxBudget)
-  - changeSet:
-      id: 1745924617125-67
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_price
-            tableName: service
-            columns:
-              - column: { name: price }
-
-  # Index for filtering services by category (via service_categories)
-  - changeSet:
-      id: 1745924617125-68
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_categories_category
-            tableName: service_categories
-            columns:
-              - column: { name: category_id }
-
-  # Index for filtering services by address/location
-  - changeSet:
-      id: 1745924617125-69
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_address
-            tableName: service
-            columns:
-              - column: { name: address_id }
-
-  # Compound index: orders - status + created_at
-  - changeSet:
-      id: 1745924617125-70
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_orders_status_created
-            tableName: orders
-            columns:
-              - column: { name: status }
-              - column: { name: created_at }
-
-  # Compound index: service - freelancer_id + posted_at
-  - changeSet:
-      id: 1745924617125-71
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_service_freelancer_posted
-            tableName: service
-            columns:
-              - column: { name: freelancer_id }
-              - column: { name: posted_at }
-
-  # Unique constraint: user email
-  - changeSet:
-      id: 1745924617125-72
-      author: Mykyta Voievudskyi
-      changes:
-        - addUniqueConstraint:
-            tableName: user
-            columnNames: email
-            constraintName: uq_user_email
-
-  # Unique constraint: user-role mapping
-  - changeSet:
-      id: 1745924617125-73
-      author: Mykyta Voievudskyi
-      changes:
-        - addUniqueConstraint:
-            tableName: user_role
-            columnNames: user_id, role_id
-            constraintName: uq_user_role
-
-  # Compound index: file - owner_type + is_public
-  - changeSet:
-      id: 1745924617125-74
-      author: Mykyta Voievudskyi
-      changes:
-        - createIndex:
-            indexName: idx_file_owner_type_public
-            tableName: file
-            columns:
-              - column: { name: owner_type }
-              - column: { name: is_public }

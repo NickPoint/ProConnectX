@@ -13,6 +13,7 @@ import com.nick1est.proconnectx.service.notifications.NotificationProducer;
 import com.nick1est.proconnectx.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -23,12 +24,14 @@ import java.util.List;
 import static com.nick1est.proconnectx.dto.ChannelType.EMAIL;
 import static com.nick1est.proconnectx.dto.ChannelType.IN_APP;
 
+@Async
 @Component
 @RequiredArgsConstructor
 public class OnBoardingEventListener {
     private final NotificationProducer notificationProducer;
     private final UserRepository userRepository;
 
+    //TODO: blocking http threads when kafka is down
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleProfileInitiated(ProfileInitiatedEvent e) {
         notificationProducer.send(NotificationEvent.builder()

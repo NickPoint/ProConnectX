@@ -10,7 +10,7 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import {useTranslation} from 'react-i18next';
 import {useLocation, useNavigate} from "react-router-dom";
-import {ProfileType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
+import {ProfileStatus, ProfileType, useGetCurrentUserQuery} from "../../../features/api/pcxApi.ts";
 
 export default function MenuContent() {
     const {data: user} = useGetCurrentUserQuery();
@@ -29,13 +29,13 @@ export default function MenuContent() {
             label: 'orders',
             icon: <AssignmentRoundedIcon/>,
             onClick: () => navigate('/dashboard/orders'),
-            display: ProfileType.RoleUnverified !== user?.activeProfile,
+            display: ProfileStatus.Active === user?.activeProfile.status,
         },
         {
             label: 'services',
             icon: <Work/>,
             onClick: () => navigate('/dashboard/services'),
-            display: ProfileType.Freelancer === user?.activeProfile.profileType,
+            display: ProfileType.Freelancer === user?.activeProfile.profileType && ProfileStatus.Active === user?.activeProfile.status,
         },
     ];
 
@@ -44,7 +44,7 @@ export default function MenuContent() {
             label: 'settings',
             icon: <SettingsRoundedIcon/>,
             onClick: () => navigate('/dashboard/settings'),
-            display: user && [ProfileType.Freelancer, ProfileType.Client].includes(user?.activeProfile)
+            display: user && ProfileType.Admin !== user.activeProfile.profileType && user.activeProfile.status === ProfileStatus.Active
         },
         {
             label: 'exitDashboard',

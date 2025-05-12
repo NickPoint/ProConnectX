@@ -30,6 +30,7 @@ import * as React from "react";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import GoogleMaps from "./MuiAddressAutocomplete.tsx";
+import FormikRating from "./FormikRating.tsx";
 
 interface FieldRendererProps {
     fieldName: string;
@@ -216,6 +217,14 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ step, fieldName, f
                 }}
             />
         </Grid>);
+    }
+
+    if (fieldConfig.type === 'rating') {
+        return (
+            <Grid size={size}>
+                <FormikRating name={fullName} />
+            </Grid>
+        );
     }
 
 

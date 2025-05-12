@@ -236,7 +236,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({onSubmit}) => {
                                                                    </InputAdornment>
                                                                )
                                                            }}
-                                                           name="password" type="password" label={t('form.fields.password')}/>
+                                                           name="password" type={showPassword ? "text" : "password"} label={t('form.fields.password')}/>
                                                 </Stack>
                                                 <Stack spacing={1} sx={{alignItems: 'center', mt: 20}}>
                                                     <Button
@@ -390,7 +390,7 @@ export const SigninForm: React.FC<SigninFormProps> = ({onSubmit}) => {
                                                    </InputAdornment>
                                                )
                                            }}
-                                           name="password" type="password" label={t('form.fields.password')}/>
+                                           name="password" type={showPassword ? "text" : "password"} label={t('form.fields.password')}/>
                                 </Stack>
                                 <Stack spacing={1} sx={{alignItems: 'center', mt: 20}}>
                                     <Button

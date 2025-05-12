@@ -33,7 +33,7 @@ public class StatisticsService {
     private final TransactionRepository transactionRepository;
     private final OrderRepository orderRepository;
 
-    public Map<StatisticsType, StatsOverviewDto.StatisticsDto>  getStatsForRole(UserDetailsImpl userDetails, Instant start, Instant end,
+    public Map<StatisticsType, StatsOverviewDto.StatisticsDto> getStatsForRole(UserDetailsImpl userDetails, Instant start, Instant end,
                                                                                 ZoneId zoneId) {
         Map<StatisticsType, StatsOverviewDto.StatisticsDto> stats = new HashMap<>();
 
@@ -42,6 +42,9 @@ public class StatisticsService {
                 val freelancerId = userDetails.getActiveProfile().getId();
                 stats.put(StatisticsType.DAILY_TOTAL_EARNINGS, getFreelancerDailyEarnings(freelancerId, start, end, zoneId));
                 stats.put(StatisticsType.ORDERS_COMPLETED, getFreelancerOrdersCompleted(freelancerId, start, end));
+                stats.put(StatisticsType.PROFILE_RATING,
+                          rating(userDetails.getActiveProfile().getRating(),
+                                 userDetails.getActiveProfile().getRatingCount()));
                 stats.put(StatisticsType.ORDER_SUCCESS_RATE, getFreelancerSuccessRate(freelancerId));
                 stats.put(StatisticsType.ACTIVE_ORDERS, getFreelancerActiveOrders(freelancerId));
 //                stats.put(StatisticsType.PENDING_PAYMENTS, getFreelancerPendingPayments(freelancerId));
@@ -54,6 +57,9 @@ public class StatisticsService {
             case CLIENT -> {
                 val clientId = userDetails.getActiveProfile().getId();
                 stats.put(StatisticsType.TOTAL_SERVICES_PURCHASED, getTotalServicesPurchased(clientId, start, end));
+                stats.put(StatisticsType.PROFILE_RATING,
+                          rating(userDetails.getActiveProfile().getRating(),
+                                 userDetails.getActiveProfile().getRatingCount()));
             }
             case ADMIN -> {
                 // similar...
@@ -146,6 +152,13 @@ public class StatisticsService {
     public StatsOverviewDto.StatisticsDto getTotalServicesPurchased(Long clientId, Instant start, Instant end) {
         long count = orderRepository.countByClientIdAndStatusAndUpdatedAtBetween(clientId, OrderStatus.COMPLETED, start, end);
         return simpleStat(BigDecimal.valueOf(count));
+    }
+
+    private StatsOverviewDto.StatisticsDto rating(BigDecimal rating, Long ratingCount) {
+        return StatsOverviewDto.StatisticsDto.builder()
+                                             .value(rating)
+                                             .helperValue(ratingCount)
+                                             .build();
     }
 
     private StatsOverviewDto.StatisticsDto simpleStat(BigDecimal value) {

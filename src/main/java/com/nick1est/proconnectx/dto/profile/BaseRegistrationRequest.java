@@ -22,5 +22,5 @@ public class BaseRegistrationRequest {
     private String phoneNumber;
     private MultipartFile avatarImage;
     @NotEmpty
-    private List<MultipartFile> idDocuments;
+    private List<MultipartFile> idDocument;
 }

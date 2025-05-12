@@ -50,7 +50,7 @@ public abstract class AbstractProfileService<
         // 3) upload files
         List<File> allFiles = new ArrayList<>();
         allFiles.add(fileService.uploadSingle(profile, request.getAvatarImage(), DocumentType.AVATAR, true));
-        allFiles.addAll(fileService.uploadFiles(profile, request.getIdDocuments(), DocumentType.ID_CARD, false));
+        allFiles.addAll(fileService.uploadFiles(profile, request.getIdDocument(), DocumentType.ID_CARD, false));
         profile.setFiles(allFiles);
 
         // 4) transition status

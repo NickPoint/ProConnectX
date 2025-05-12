@@ -5,6 +5,7 @@ import com.nick1est.proconnectx.dao.ProfileStatus;
 import com.nick1est.proconnectx.dao.Category;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 @RepositoryRestResource(exported = false)
 public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
-    @Query("SELECT freelancer FROM Freelancer freelancer " +
+/*    @Query("SELECT freelancer FROM Freelancer freelancer " +
             "WHERE (:firstName is null or freelancer.firstName ILIKE %:firstName%) " +
             "AND (:lastName is null or freelancer.lastName ILIKE %:lastName%) " +
             "AND (:categories is null or EXISTS (SELECT 1 FROM freelancer.categories category WHERE category IN :categories)) " +
@@ -27,9 +28,13 @@ public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
                                                             @Param("categories") List<Category> categories,
                                                             @Param("country") String country,
                                                             @Param("city") String city,
-                                                            @Param("rating") Double rating);
+                                                            @Param("rating") Double rating);*/
 
     List<Freelancer> findByProfileStatus(@NotNull ProfileStatus profileStatus);
 
     List<Freelancer> findByUserIdAndProfileStatus(Long userId, @NotNull ProfileStatus profileStatus);
+
+    @Modifying
+    @Query("update Freelancer f set f.ratingSum = f.ratingSum + :newRating, f.ratingCount = f.ratingCount + 1 where f.id = :freelancerId")
+    void updateRating(Long freelancerId, Double newRating);
 }

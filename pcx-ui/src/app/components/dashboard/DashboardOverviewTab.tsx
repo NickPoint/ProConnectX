@@ -1,129 +1,101 @@
-import * as React from 'react';
-import {useMemo} from 'react';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import StatCard, {StatCardProps, StatType} from './StatCard';
+import * as React from "react"
+import { useMemo } from "react"
+import Grid from "@mui/material/Grid"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
+import StatCard, { StatCardProps, StatType } from "./StatCard"
+import RatingCard from "./RatingCard"
 import {
-    ProfileStatus,
-    ProfileType,
-    useGetCurrentUserQuery,
-    useGetStatsOverviewQuery
-} from "../../../features/api/pcxApi.ts";
-import RegistrationsTable from "./RegistrationsTable.tsx";
-import {useTranslation} from "react-i18next";
-import dayjs from "dayjs";
-
-const freelancerStats: StatCardProps[] = [
-    {
-        title: 'Total Earnings',
-        value: '$12,400',
-        interval: 'This Year',
-        trend: 'up',
-        data: [1200, 1500, 1800, 2000, 2500, 3000, 3200, 3500, 3700, 4000, 4500, 5000],
-    },
-    {
-        title: 'Jobs Completed',
-        value: '48',
-        interval: 'This Year',
-        trend: 'up',
-        data: [2, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 24],
-    },
-    {
-        title: 'Job Success Rate',
-        value: '96%',
-        interval: 'All Time',
-        trend: 'neutral',
-        data: [95, 96, 96, 97, 95, 96, 96, 97, 97, 96, 96, 97],
-    },
-    {
-        title: 'Active Orders',
-        value: '10',
-        interval: 'Current',
-        trend: 'neutral',
-        data: [10], // Single data point showing current contracts
-    },
-    {
-        title: 'Pending Payments',
-        value: '$2,800',
-        interval: 'This Month',
-        trend: 'down',
-        data: [1000, 1100, 1200, 800, 950, 1200, 1300, 1500, 1200, 1300, 1200, 1800],
-    },
-];
+  ProfileStatus,
+  ProfileType,
+  useGetCurrentUserQuery,
+  useGetStatsOverviewQuery,
+} from "../../../features/api/pcxApi.ts"
+import RegistrationsTable from "./RegistrationsTable.tsx"
+import { useTranslation } from "react-i18next"
+import dayjs from "dayjs"
 
 const statTypesByProfile: Record<ProfileType, StatType[]> = {
-    FREELANCER: [
-        'DAILY_TOTAL_EARNINGS',
-        'ORDERS_COMPLETED',
-        'ORDER_SUCCESS_RATE',
-        'ACTIVE_ORDERS',
-    ],
-    CLIENT: [
-        'TOTAL_SERVICES_PURCHASED',
-        // ...
-    ],
-    // ADMIN: [
-    //     'TOTAL_REVENUE',
-    //     'TOTAL_USERS',
-    //     // ...
-    // ],
-};
+  FREELANCER: [
+    "DAILY_TOTAL_EARNINGS",
+    "ORDERS_COMPLETED",
+    "PROFILE_RATING",
+    "ORDER_SUCCESS_RATE",
+    "ACTIVE_ORDERS",
+  ],
+  CLIENT: [
+    "TOTAL_SERVICES_PURCHASED",
+    "PROFILE_RATING",
+    // ...
+  ],
+  // ADMIN: [
+  //     'TOTAL_REVENUE',
+  //     'TOTAL_USERS',
+  //     // ...
+  // ],
+}
 
 export default function DashboardOverviewTab() {
-    const {data: user} = useGetCurrentUserQuery();
-    const {t} = useTranslation();
-    const queryArgs = useMemo(() => {
-        const end = dayjs();
-        const start = end.subtract(30, 'days');
+  const { data: user } = useGetCurrentUserQuery()
+  const { t } = useTranslation()
+  const queryArgs = useMemo(() => {
+    const end = dayjs()
+    const start = end.subtract(30, "days")
 
-        return {
-            start: start.startOf('day').toISOString(),
-            end: end.endOf('day').toISOString(),
-            zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone
-        };
-    }, []);
-    const {data: cards} = useGetStatsOverviewQuery(queryArgs, {
-        skip: user && user.activeProfile.status !== ProfileStatus.Active
-    });
+    return {
+      start: start.startOf("day").toISOString(),
+      end: end.endOf("day").toISOString(),
+      zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    }
+  }, [])
+  const { data: cards } = useGetStatsOverviewQuery(queryArgs, {
+    skip: user && user.activeProfile.status !== ProfileStatus.Active,
+  })
 
-    const visibleStatTypes = statTypesByProfile[user?.activeProfile.profileType] || [];
+  const visibleStatTypes =
+    statTypesByProfile[user?.activeProfile.profileType] || []
 
-    return (
-        <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
-            <Typography component="h2" variant="h4" sx={{mb: 2}}>
-                Overview
-            </Typography>
-            <Grid
-                container
-                spacing={2}
-                columns={12}
-                sx={{mb: (theme) => theme.spacing(2)}}
-            >
+  return (
+    <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
+      <Typography component="h2" variant="h4" sx={{ mb: 2 }}>
+        Overview
+      </Typography>
+      <Grid
+        container
+        spacing={2}
+        columns={12}
+        sx={{ mb: theme => theme.spacing(2) }}
+      >
+        <RegistrationsTable />
+        {cards &&
+          visibleStatTypes.map((type, index) => {
+            const card = cards[type]
+            if (!card) return null
 
-                <RegistrationsTable />
-                {cards && visibleStatTypes.map((type, index) => {
-                        const card = cards[type];
-                        if (!card) return null;
-
-                        return (
-                            <Grid key={index} size={{xs: 12, sm: 6, lg: 3}}>
-                                <StatCard
-                                    type={type}
-                                    title={t(`enum.statistics.${type}`)}
-                                    value={card.value}
-                                    percentGrow={card.percentGrow}
-                                    interval={t('dashboard.stats.last30Days')}
-                                    startDate={queryArgs.start}
-                                    endDate={queryArgs.end}
-                                    trend={card.trend}
-                                    data={card.data}
-                                />
-                            </Grid>
-                        );
-                    })
-                }
-                {/*                <Grid size={{xs: 12, sm: 6, lg: 3}}>
+            return (
+              <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
+                {type === "PROFILE_RATING" ? (
+                  <RatingCard
+                    rating={card.value}
+                    ratingCount={card.helperValue}
+                  />
+                ) : (
+                  <StatCard
+                    type={type}
+                    title={t(`enum.statistics.${type}`)}
+                    value={card.value}
+                    percentGrow={card.percentGrow}
+                    interval={t("dashboard.stats.last30Days")}
+                    startDate={queryArgs.start}
+                    endDate={queryArgs.end}
+                    trend={card.trend}
+                    data={card.data}
+                  />
+                )}
+              </Grid>
+            )
+          })}
+        {/*                <Grid size={{xs: 12, sm: 6, lg: 3}}>
                     <HighlightedCard/>
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
@@ -132,8 +104,8 @@ export default function DashboardOverviewTab() {
                 <Grid size={{xs: 12, md: 6}}>
                     <PageViewsBarChart/>
                 </Grid>*/}
-            </Grid>
-            {/*<Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+      </Grid>
+      {/*<Typography component="h2" variant="h6" sx={{ mb: 2 }}>
         Details
       </Typography>
       <Grid container spacing={2} columns={12}>
@@ -147,8 +119,8 @@ export default function DashboardOverviewTab() {
           </Stack>
         </Grid>
         </Grid>*/}
-        </Box>
-    );
+    </Box>
+  )
 }
 
 /*Stat | Freelancer
