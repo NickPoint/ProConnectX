@@ -103,9 +103,11 @@ const BookServiceForm = ({service}: Props) => {
     const handleClick = () => {
         if (user && user.activeProfile.status !== ProfileStatus.Active) {
             enqueueSnackbar(t('service.accountPending'), {variant: 'info'});
-        } else {
+        } else if (!user) {
             dispatch(setSignup(true));
             navigate('/auth', {state: {from: location}, replace: true});
+        } else {
+            setDialogOpen(true);
         }
     }
 
