@@ -65,6 +65,7 @@ public class FileStorageService {
             case SERVICE -> Paths.get(uploadDir, "service", ownerId.toString());
             case FREELANCER -> Paths.get(uploadDir, "freelancer", ownerId.toString());
             case CLIENT -> Paths.get(uploadDir, "client", ownerId.toString());
+            case ORDER -> Paths.get(uploadDir, "order", ownerId.toString());
             default -> Paths.get(uploadDir, "undefined", ownerId.toString());
         };
     }

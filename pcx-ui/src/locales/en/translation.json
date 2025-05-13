@@ -271,7 +271,7 @@
       "region": "Region/State",
       "postalCode": "Postal Code",
       "country": "Country",
-      "description": "Service Description",
+      "description": "Description",
       "fullDescription": "Full Description",
       "shortDescription": "Short description",
       "categories": "Categories",
@@ -585,7 +585,7 @@
         },
         "undefined": "Start filling out your details, and we’ll guide you through the process step by step - it’s super easy!"
       },
-      "success": "Your verification form has been submitted successfully! 🎉 Our team is reviewing your details—hang tight, and we’ll notify you once your account is approved."
+      "success": "Your verification form has been submitted successfully!🎉 Our team is reviewing your details.\nHang tight, and we’ll notify you once your account is approved."
     }
   },
   "postService": {

@@ -117,7 +117,7 @@ public class OrderService {
         order.setAdditionalNotes(bookingInfo.getAdditionalNotes());
         transactionService.createTransaction(order);
         val savedOrder = orderRepository.save(order);
-        if (!bookingInfo.getFiles().isEmpty()) {
+        if (bookingInfo.getFiles() != null) {
             order.setFiles(fileService.uploadFiles(savedOrder, bookingInfo.getFiles(), DocumentType.ORDER_FILES, true));
         }
         events.publishEvent(new OrderPlacedEvent(savedOrder, client));

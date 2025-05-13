@@ -13,5 +13,5 @@ public class BookServiceDto {
     String additionalNotes;
 
     @Schema(type = "array", format = "binary", description = "List of files to upload")
-    List<MultipartFile> files = new ArrayList<>();
+    List<MultipartFile> files;
 }
