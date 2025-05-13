@@ -17,6 +17,7 @@ import static com.nick1est.proconnectx.dao.AppEventType.*;
 public class EmailConfig {
     private final EmailChannelService emailChannelService;
 
+    @Bean
     public Map<AppEventType, BiConsumer<Profile, NotificationEvent>> emailActions() {
         return Map.ofEntries(
                 Map.entry(PROFILE_INITIATED, (p, e) -> emailChannelService.sendWelcomeEmail(p.getEmail(), p.getDisplayName())),
