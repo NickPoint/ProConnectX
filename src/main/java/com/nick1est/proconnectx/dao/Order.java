@@ -66,11 +66,9 @@ public class Order implements FileOwner {
     private OrderType type;
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String additionalNotes;
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String rejectionReason;
 
     @CreatedDate

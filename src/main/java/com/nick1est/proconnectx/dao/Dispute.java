@@ -33,15 +33,12 @@ public class Dispute {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotEmpty
-    @Lob
     private String reason;
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String proposal;
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String proposalRejectionReason;
 
     @Column

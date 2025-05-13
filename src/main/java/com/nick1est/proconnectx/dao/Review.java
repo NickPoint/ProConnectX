@@ -41,7 +41,6 @@ public class Review {
     private Employer employer;*/
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String body;
 
     @Column(nullable = false)

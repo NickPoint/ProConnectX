@@ -156,7 +156,7 @@ const DesktopServicePage = ({user, service}) => {
                         </Grid>
                         <Grid size={6} textAlign="right">
                             <Typography variant="h4" fontWeight="700">
-                                ${service.price}
+                                €{service.price}
                             </Typography>
                             <Typography variant="body2">
                                 {t("service.package.basic")}
@@ -352,7 +352,7 @@ const MobileServicePage = ({user, service}) => {
                     </Grid>
                     <Grid size={6} textAlign="right">
                         <Typography variant="h4" fontWeight="700">
-                            ${service.price}
+                            €{service.price}
                         </Typography>
                         <Typography variant="body2">
                             {t("service.package.basic")}

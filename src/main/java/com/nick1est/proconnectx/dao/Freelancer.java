@@ -15,7 +15,6 @@ public class Freelancer extends BaseProfile {
     protected String lastName;
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String description;
 
     @OneToMany(mappedBy = "freelancer", cascade = CascadeType.PERSIST)

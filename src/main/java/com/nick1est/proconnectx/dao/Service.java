@@ -37,7 +37,6 @@ public class Service implements Statistic, FileOwner, Rating {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotNull
-    @Lob
     private String description;
 
     @Column(nullable = false)

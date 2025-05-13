@@ -27,7 +27,7 @@ const initialValues = {
     location: '',
     rating: 3,
     minBudget: 0,
-    maxBudget: 1000,
+    maxBudget: undefined,
 }
 
 const SelectWithLabel = React.forwardRef<HTMLDivElement, SelectProps>(
@@ -44,9 +44,10 @@ const SelectWithLabel = React.forwardRef<HTMLDivElement, SelectProps>(
     });
 
 const ServicesFilter = () => {
-    const [budgetValues, setBudgetValues] = useState({min: 0, max: 1000});
-    const [ratingValue, setRatingValue] = useState(3);
     const [getFilteredServices, {data, isLoading, isFetching}] = useLazyGetServicesQuery();
+    const maxValue = data?.content && data?.content.length > 0 ? Math.max(...data?.content.map((s) => s.price)) : 10000;
+    const [budgetValues, setBudgetValues] = useState({min: 0, max: maxValue});
+    const [ratingValue, setRatingValue] = useState(3);
     const [filterOpened, setFilterOpened] = React.useState(false);
     const [page, setPage] = useState(0);
     const {t} = useTranslation();
@@ -147,7 +148,7 @@ const ServicesFilter = () => {
                                 valueLabelDisplay="auto"
                                 getAriaValueText={value => `${value}`}
                                 min={0}
-                                max={1000}
+                                max={maxValue}
                             />
                         </Grid>
                     </Grid>

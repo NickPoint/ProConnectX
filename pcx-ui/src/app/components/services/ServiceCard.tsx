@@ -105,7 +105,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({publicVariant = true, ...servi
                                 <Typography variant='body2'>{parseOffsetDateTimeToString(service.postedAt)}</Typography>
                             </Grid>
                             <Grid size={{xs: 4}} sx={{textAlign: 'right'}}>
-                                <Typography variant='h5' fontWeight={700}>${service.price}</Typography>
+                                <Typography variant='h5' fontWeight={700}>€{service.price}</Typography>
                             </Grid>
                             <Grid size={12}>
                                 <Divider />
