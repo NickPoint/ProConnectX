@@ -90,7 +90,7 @@
       "HELPDESK_SERVICES": "Helpdesk Services",
       "DATA_ENTRY": "Data Entry",
       "WEB_RESEARCH": "Web Research",
-      "PROJECT_MANAGEMENT": "Project Management",
+      "PROJECT_MANAGEMENT": "Service Management",
       "CALENDAR_MANAGEMENT": "Calendar Management",
       "DOCUMENT_PREPARATION": "Document Preparation",
       "DATA_ANALYSIS": "Data Analysis",
@@ -271,15 +271,16 @@
       "region": "Region/State",
       "postalCode": "Postal Code",
       "country": "Country",
-      "description": "Project Description",
+      "description": "Service Description",
+      "fullDescription": "Full Description",
       "shortDescription": "Short description",
       "categories": "Categories",
       "avatarImage": "Profile Avatar",
       "idDocument": "Identification Document",
-      "title": "Project Title",
-      "price": "Project Budget",
-      "images": "Project Images",
-      "workflow": "Project Workflow",
+      "title": "Service Title",
+      "price": "Service Budget",
+      "images": "Service Images",
+      "workflow": "Service Workflow",
       "review": "Review",
       "stepNumber": "Workflow Step Number",
       "faqs": "Frequently Asked Questions",
@@ -429,7 +430,7 @@
         "title": "Freelancer",
         "description": "Showcase your skills and find exciting projects to work on."
       },
-      "switchRole": "No worries if you change your mind later—you’ll always have the option to switch roles as your needs evolve."
+      "switchRole": "No worries if you change your mind later — you’ll always have the option to switch roles as your needs evolve."
     }
   },
   "service": {
@@ -599,20 +600,20 @@
         "workflow": "Workflow",
         "faqs": "FAQs",
         "step1": {
-          "title": "Give Your Project a Name",
+          "title": "Give Your Service a Name",
           "price": "Set a fair budget — what’s this service worth?",
           "address": {
             "fullAddress": "Where should this work happen? Remote or a specific location? If remote, then left this field empty."
           },
-          "categories": "Help clients find you! Pick the right project categories.",
+          "categories": "Help clients find you! Pick the right service categories.",
           "images": "A picture is worth a thousand words — upload some visuals!"
         },
         "step2": {
-          "description": "Make it shine! Describe your project in detail so clients know exactly what you need.",
-          "shortDescription": "Give your project the spotlight! Provide key details so clients understand your vision."
+          "description": "Make it shine! Describe your service in detail so clients know exactly what you need.",
+          "shortDescription": "Give your service the spotlight! Provide key details so clients understand your vision."
         },
         "step3": {
-          "workflow": "Break it down: Define the key steps to get your project done smoothly."
+          "workflow": "Break it down: Define the key steps to get your service done smoothly."
         },
         "step4": {
           "faqs": "Anticipate questions before they pop up—answer what freelancers might ask!"

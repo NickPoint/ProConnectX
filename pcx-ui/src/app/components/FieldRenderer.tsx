@@ -49,7 +49,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ step, fieldName, f
     if (fieldConfig.type === 'richtext') {
         return (
             <Grid size={{xs: size}}>
-                <TextEditor name={fullName} />
+                <TextEditor name={fullName} label={t(`form.fields.${fieldConfig.label}`)} />
             </Grid>
         );
     }

@@ -14,7 +14,7 @@ import {
 } from "mui-tiptap";
 import {useAppDispatch} from "../hooks.ts";
 import {setActiveField} from "../../features/form/formSlice.ts";
-import {FormControl, FormHelperText} from "@mui/material";
+import {FormControl, FormHelperText, InputLabel} from "@mui/material";
 import StarterKit from "@tiptap/starter-kit";
 import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
@@ -24,6 +24,8 @@ import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
 import ListKeymap from '@tiptap/extension-list-keymap'
+import Typography from "@mui/material/Typography";
+import { Stack } from "@mui/system"
 
 const isVisuallyEmpty = (html: string) =>
     html
@@ -36,51 +38,55 @@ const isVisuallyEmpty = (html: string) =>
 
 interface TextEditorProps {
     name: string,
+    label: string,
 }
 
-export const TextEditor: React.FC<TextEditorProps> = ({name}) => {
+export const TextEditor: React.FC<TextEditorProps> = ({name, label}) => {
     const [field, {error, touched}, helpers] = useField(name);
     const rteRef = useRef<RichTextEditorRef>(null);
     const dispatch = useAppDispatch();
 
     return (
-        <FormControl fullWidth error={Boolean(touched && error)}>
-            <RichTextEditor
-                ref={rteRef}
-                extensions={[
-                    StarterKit,
-                    TableImproved,
-                    TableRow,
-                    TableHeader,
-                    TableCell,
-                    BulletList,
-                    OrderedList,
-                    ListItem,
-                    ListKeymap,
-                ]}
-                content={field.value}
-                onFocus={() => dispatch(setActiveField(name))}
-                onBlur={() => {
-                    const rawHtml = rteRef.current?.editor?.getHTML() ?? '';
-                    const normalizedHtml = isVisuallyEmpty(rawHtml) ? '' : rawHtml;
-                    helpers.setValue(normalizedHtml).then(() =>
-                        helpers.setTouched(true)
-                    );
-                }}
-                renderControls={() => (
-                    <MenuControlsContainer>
-                        <MenuSelectHeading/>
-                        <MenuDivider/>
-                        <MenuButtonBold/>
-                        <MenuButtonItalic/>
-                        <MenuButtonBulletedList />
-                        <MenuButtonOrderedList />
-                        <MenuButtonAddTable />
-                        <TableBubbleMenu />
-                    </MenuControlsContainer>
-                )}
-            />
-            {touched && error && (<FormHelperText>{error}</FormHelperText>)}
-        </FormControl>
+        <Stack>
+            <Typography>{label}</Typography>
+            <FormControl fullWidth error={Boolean(touched && error)}>
+                <RichTextEditor
+                    ref={rteRef}
+                    extensions={[
+                        StarterKit,
+                        TableImproved,
+                        TableRow,
+                        TableHeader,
+                        TableCell,
+                        BulletList,
+                        OrderedList,
+                        ListItem,
+                        ListKeymap,
+                    ]}
+                    content={field.value}
+                    onFocus={() => dispatch(setActiveField(name))}
+                    onBlur={() => {
+                        const rawHtml = rteRef.current?.editor?.getHTML() ?? '';
+                        const normalizedHtml = isVisuallyEmpty(rawHtml) ? '' : rawHtml;
+                        helpers.setValue(normalizedHtml).then(() =>
+                            helpers.setTouched(true)
+                        );
+                    }}
+                    renderControls={() => (
+                        <MenuControlsContainer>
+                            <MenuSelectHeading/>
+                            <MenuDivider/>
+                            <MenuButtonBold/>
+                            <MenuButtonItalic/>
+                            <MenuButtonBulletedList />
+                            <MenuButtonOrderedList />
+                            <MenuButtonAddTable />
+                            <TableBubbleMenu />
+                        </MenuControlsContainer>
+                    )}
+                />
+                {touched && error && (<FormHelperText>{error}</FormHelperText>)}
+            </FormControl>
+        </Stack>
     );
 }

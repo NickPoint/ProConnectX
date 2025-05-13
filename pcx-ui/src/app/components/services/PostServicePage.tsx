@@ -86,10 +86,11 @@ const formFields: FormStepsConfig = {
             type: 'text',
             size: 12,
             multiline: true,
+            max: 255,
             maxRows: 4
         },
         description: {
-            label: 'description',
+            label: 'fullDescription',
             required: true,
             type: 'richtext',
             size: 12,

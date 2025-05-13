@@ -167,12 +167,12 @@ const LandingPage: React.FC = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
 
-    const {data, error, isLoading, isFetching} = useGetServicesQuery({
+    const {data, isLoading, isFetching} = useGetServicesQuery({
         sort: [
             'visitCounter,desc'
         ],
         page: 0,
-        size: 4,
+        size: 6,
     });
 
     return (
@@ -220,7 +220,7 @@ const LandingPage: React.FC = () => {
                     <Typography variant='h4'>{t('landingPage.popularServices.title')}</Typography>
                 </Grid>
                 <Grid size={12}>
-                    <CardList lastListSize={4} isLoading={isLoading || isFetching} data={data?.content}/>
+                    <CardList lastListSize={6} isLoading={isLoading || isFetching} data={data?.content}/>
                 </Grid>
             </Grid>
             <Grid size={12} sx={{position: 'relative'}}>

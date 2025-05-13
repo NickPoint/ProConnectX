@@ -131,7 +131,7 @@ export const generateValidationSchema = (fieldsConfig: FieldConfig) => {
                         schema = yup.date()
                         break;
                     default:
-                        schema = yup.string();
+                        schema = yup.string()
                 }
 
                 if (fieldConfig.dependsOn) {
