@@ -13,7 +13,7 @@ import {AccountDropdown} from "../UserMenu.tsx";
 import MenuButton from "./MenuButton.tsx";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 
-const drawerWidth = 240;
+const drawerWidth = 320;
 
 const Drawer = styled(MuiDrawer)({
     width: drawerWidth,
