@@ -22,6 +22,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {generateInitialValuesFromConfig, generateValidationSchema} from "./formUtils.ts";
 import {FieldRenderer} from "./FieldRenderer.tsx";
 import {useBookServiceMutation} from "../../features/api/enhancedApi.ts";
+import {useAppDispatch} from "../hooks.ts";
+import {setSignup} from "../../features/signupDialog/authFormSlice.ts";
 
 interface Props {
     service: ServiceDto;
@@ -70,6 +72,7 @@ const BookServiceForm = ({service}: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const {t} = useTranslation();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (!bottomRef.current) return;
@@ -101,6 +104,7 @@ const BookServiceForm = ({service}: Props) => {
         if (user && user.activeProfile.status !== ProfileStatus.Active) {
             enqueueSnackbar(t('service.accountPending'), {variant: 'info'});
         } else {
+            dispatch(setSignup(true));
             navigate('/auth', {state: {from: location}, replace: true});
         }
     }
