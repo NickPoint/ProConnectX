@@ -1,18 +1,29 @@
 import {useField} from "formik";
 import {useRef} from "react";
 import {
+    MenuButtonAddTable,
     MenuButtonBold,
-    MenuButtonItalic,
+    MenuButtonBulletedList,
+    MenuButtonItalic, MenuButtonOrderedList,
     MenuControlsContainer,
     MenuDivider,
     MenuSelectHeading,
     RichTextEditor,
-    RichTextEditorRef
+    RichTextEditorRef, TableBubbleMenu,
+    TableImproved
 } from "mui-tiptap";
 import {useAppDispatch} from "../hooks.ts";
+import {setActiveField} from "../../features/form/formSlice.ts";
 import {FormControl, FormHelperText} from "@mui/material";
 import StarterKit from "@tiptap/starter-kit";
-import {setActiveField} from "../../features/form/formSlice.ts";
+import TableRow from '@tiptap/extension-table-row'
+import TableHeader from '@tiptap/extension-table-header'
+import TableCell from '@tiptap/extension-table-cell'
+
+import BulletList from '@tiptap/extension-bullet-list'
+import OrderedList from '@tiptap/extension-ordered-list'
+import ListItem from '@tiptap/extension-list-item'
+import ListKeymap from '@tiptap/extension-list-keymap'
 
 const isVisuallyEmpty = (html: string) =>
     html
@@ -36,7 +47,17 @@ export const TextEditor: React.FC<TextEditorProps> = ({name}) => {
         <FormControl fullWidth error={Boolean(touched && error)}>
             <RichTextEditor
                 ref={rteRef}
-                extensions={[StarterKit]}
+                extensions={[
+                    StarterKit,
+                    TableImproved,
+                    TableRow,
+                    TableHeader,
+                    TableCell,
+                    BulletList,
+                    OrderedList,
+                    ListItem,
+                    ListKeymap,
+                ]}
                 content={field.value}
                 onFocus={() => dispatch(setActiveField(name))}
                 onBlur={() => {
@@ -52,7 +73,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({name}) => {
                         <MenuDivider/>
                         <MenuButtonBold/>
                         <MenuButtonItalic/>
-                        {/* More buttons */}
+                        <MenuButtonBulletedList />
+                        <MenuButtonOrderedList />
+                        <MenuButtonAddTable />
+                        <TableBubbleMenu />
                     </MenuControlsContainer>
                 )}
             />
