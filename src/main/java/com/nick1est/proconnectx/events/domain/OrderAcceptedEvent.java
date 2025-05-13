@@ -22,6 +22,8 @@ public class OrderAcceptedEvent implements OrderEvent {
     @Override
     public Map<String, Object> getPayload() {
         return Map.of("orderId", order.getId(),
+                "serviceName", order.getService().getTitle(),
+                "freelancerName", profile.getDisplayName(),
                 "deadline", deadline);
     }
 }

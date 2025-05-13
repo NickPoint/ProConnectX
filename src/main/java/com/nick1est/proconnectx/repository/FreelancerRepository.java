@@ -37,4 +37,17 @@ public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
     @Modifying
     @Query("update Freelancer f set f.ratingSum = f.ratingSum + :newRating, f.ratingCount = f.ratingCount + 1 where f.id = :freelancerId")
     void updateRating(Long freelancerId, Double newRating);
+
+    @Modifying
+    @Query("""
+              UPDATE Freelancer f
+                 SET f.rating = CASE
+                     WHEN f.ratingCount > 0
+                       THEN ROUND(f.ratingSum * 1.0 / f.ratingCount, 1)
+                     ELSE 0.0
+                   END
+               WHERE f.id = :freelancerId
+            """)
+    void updateRatingAverage(Long freelancerId);
+
 }

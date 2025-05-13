@@ -5,10 +5,8 @@ import com.nick1est.proconnectx.dao.Dispute;
 import com.nick1est.proconnectx.dao.Profile;
 import lombok.Value;
 
-import java.util.Map;
-
 @Value
-public class DisputeSolutionAccepteByAdminEvent implements DisputeEvent {
+public class DisputeSolutionAcceptedByAdminEvent implements DisputeEvent {
     Dispute dispute;
     Profile profile;
 

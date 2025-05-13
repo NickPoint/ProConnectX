@@ -19,7 +19,7 @@ public class DisputeSolutionAcceptedEvent implements DisputeEvent {
 
     @Override
     public Map<String, Object> getPayload() {
-        return Map.of("disputeId", dispute.getId(),
+        return Map.of("orderId", dispute.getOrder().getId(),
                 "clientName", profile.getDisplayName());
     }
 }

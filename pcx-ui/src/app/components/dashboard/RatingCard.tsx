@@ -2,7 +2,8 @@ import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
-import * as React from "react"
+import { useTranslation } from "react-i18next"
+import { Star } from "@mui/icons-material"
 
 interface RatingCardProps {
   rating: number
@@ -10,7 +11,7 @@ interface RatingCardProps {
 }
 
 export default function RatingCard({ rating, ratingCount }: RatingCardProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <Card variant="outlined" sx={{ height: "100%", flexGrow: 1 }}>
       <CardContent>
@@ -20,9 +21,9 @@ export default function RatingCard({ rating, ratingCount }: RatingCardProps) {
         <Stack sx={{ justifyContent: "space-between" }}>
           <Stack
             direction="row"
-            sx={{ justifyContent: "space-between", alignItems: "center" }}
+            sx={{ alignItems: "center" }}
           >
-            <Star />
+            <Star color='warning'/>
             <Typography variant="h4" component="p">
               {rating}
             </Typography>

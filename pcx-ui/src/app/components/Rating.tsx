@@ -1,5 +1,5 @@
 import {Stack, Typography} from "@mui/material";
-import {StarRate} from "@mui/icons-material";
+import {Star, StarRate} from "@mui/icons-material";
 import Chip from "@mui/material/Chip";
 import {t} from "i18next";
 
@@ -29,8 +29,8 @@ const Rating: React.FC<RatingProps> = ({rating, ratingCount, withRatingCount}) =
     }
     return (
         <>
-            <Stack direction="row" spacing={1}>
-                <StarRate/>
+            <Stack direction="row" spacing={1} alignItems="center">
+                <Star/>
                 <Typography variant="body1">{`${rating}/5 - ${getRatingText(rating)}`}</Typography>
             </Stack>
             {withRatingCount && ratingCount > 0 &&

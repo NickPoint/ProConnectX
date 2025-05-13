@@ -33,7 +33,6 @@ const formConfig = {
         type: 'text',
         multiline: true,
         rows: 4,
-        maxRows: 6,
         size: 12
     },
     files: {
@@ -98,7 +97,7 @@ const BookServiceForm = ({service}: Props) => {
     return (
         <>
             <div ref={bottomRef} style={{height: '1px'}}/>
-            <Dialog fullWidth={true} maxWidth='md' open={dialogOpen}>
+            <Dialog fullWidth={true} onClose={() => setDialogOpen(false)} maxWidth='md' open={dialogOpen}>
                 <Formik
                     initialValues={generateInitialValuesFromConfig(formConfig)}
                     validationSchema={generateValidationSchema(formConfig)}
@@ -106,7 +105,7 @@ const BookServiceForm = ({service}: Props) => {
                         bookService(mapValuesToFormData(service.id, values)).unwrap()
                             .then(() => {
                                 enqueueSnackbar(t('service.form.success'), {variant: 'success'});
-                                navigate('/dashboard/home');
+                                navigate('/dashboard/orders');
                             })
                             .finally(() => {
                                 setDialogOpen(false);

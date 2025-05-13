@@ -37,9 +37,9 @@ const ServiceReviews: React.FC<ReviewsProps> = ({ service }) => {
             {rating}
           </Typography>
           <Box>
-            <Rating value={rating} readOnly />
+            <Rating value={rating} precision={0.5} readOnly />
             <Typography variant="body2">
-              {`Based on ${ratingCount} reviews`}
+              {t('rating.basedOn', {ratingCount: ratingCount})}
             </Typography>
           </Box>
         </Stack>

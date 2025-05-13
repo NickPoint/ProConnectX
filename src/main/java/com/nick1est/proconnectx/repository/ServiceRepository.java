@@ -16,4 +16,16 @@ public interface ServiceRepository extends JpaRepository<Service, Long>, JpaSpec
     @Modifying
     @Query("update Service s set s.ratingSum = s.ratingSum + :newRating, s.ratingCount = s.ratingCount + 1 where s.id = :serviceId")
     void updateRating(Long serviceId, Double newRating);
+
+    @Modifying
+    @Query("""
+            UPDATE Service s 
+              SET s.rating = CASE
+                  WHEN s.ratingCount > 0 
+                    THEN ROUND(s.ratingSum * 1.0 / s.ratingCount, 1)
+                  ELSE 0.0
+                END
+            WHERE s.id = :serviceId
+            """)
+    void updateRatingAverage(Long serviceId);
 }

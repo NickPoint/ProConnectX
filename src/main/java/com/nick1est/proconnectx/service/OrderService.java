@@ -89,7 +89,7 @@ public class OrderService {
         changeStatus(order, OrderStatus.CANCELED);
         order.setRejectionReason(reason);
         transactionService.cancelTransaction(order);
-        events.publishEvent(new OrderCanceledEvent(order, freelancer));
+        events.publishEvent(new OrderCanceledEvent(order, freelancer, reason));
     }
 
     private void changeStatus(Order order, OrderStatus newStatus) {

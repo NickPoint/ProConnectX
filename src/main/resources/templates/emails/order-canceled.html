@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<body>
+<div layout:fragment="content">
+    <h2>Hi <span th:text="${name}">User</span>!</h2>
+    <p>Your order <strong th:text="${orderId}">123</strong> has been canceled.</p>
+    <p>Reason: <strong th:text="${reason}">Cancellation reason</strong></p>
+    <p>If you need assistance, contact support.</p>
+    <p><a th:href="${baseUrl} + '/dashboard/orders'">View Order</a></p>
+</div>
+</body>
+</html>

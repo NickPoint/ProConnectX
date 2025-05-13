@@ -447,6 +447,9 @@
     "package": {
       "basic": "Basic"
     },
+    "location": {
+      "remote": "Remote"
+    },
     "noReviews": "No reviews yet",
     "notFound": ""
   },
@@ -456,6 +459,10 @@
     "payment": "Payment",
     "status": "Status",
     "timeline": "Timeline",
+    "serviceDetails": "Service Details",
+    "serviceName": "Service name",
+    "servicePrice": "Service price",
+    "servicePackage": "Package",
     "additionalNotes": "Additional Notes",
     "additionalFiles": "Additional Files",
     "rejectionReason": "Rejection Reason",

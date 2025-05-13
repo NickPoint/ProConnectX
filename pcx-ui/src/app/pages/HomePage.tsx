@@ -13,10 +13,10 @@ import {useNavigate} from 'react-router-dom';
 import Grid from "@mui/material/Grid";
 import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
-import Rating, {RatingProps} from "../components/Rating.tsx";
 import {
     OrderDto,
-    OrderStatus, ProfileStatus,
+    OrderStatus,
+    ProfileStatus,
     ProfileType,
     useGetCurrentUserQuery,
     useGetOrdersQuery,
@@ -27,7 +27,6 @@ import {useTranslation} from "react-i18next";
 import * as React from "react";
 import {useMemo} from "react";
 import dayjs from "dayjs";
-import {GlobalLoadingBackdrop} from "../components/GlobalLoadingBackdrop.tsx";
 import StatCard, {StatType} from "../components/dashboard/StatCard.tsx";
 import Chip from "@mui/material/Chip";
 import {parseOffsetDateTimeToString} from "../../utils/dateParser.ts";
@@ -40,27 +39,19 @@ import plumbing from "../../assets/plumbing.png"
 import carWash from "../../assets/carWash.png"
 import CardList from "./CardList.tsx";
 import {FooterWave, HeroWave} from "../components/svgs/WavesSvg.tsx";
-
-
-const RatingCard: React.FC<RatingProps> = ({rating, ratingCount}) => {
-    <Card variant="outlined" sx={{height: '100%', flexGrow: 1}}>
-        <CardContent>
-            <Typography component="h4" variant="h5" gutterBottom>
-                Rating
-            </Typography>
-            <Rating rating={rating} ratingCount={ratingCount} withRatingCount/>
-        </CardContent>
-    </Card>
-}
+import RatingCard from "../components/dashboard/RatingCard.tsx";
+import {useTheme} from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const statTypesConf: Record<ProfileType, { type: StatType, size: number }[]> = {
     FREELANCER: [
         {type: 'DAILY_TOTAL_EARNINGS', size: 12},
-        {type: 'ORDERS_COMPLETED', size: 6},
+        {type: 'PROFILE_RATING', size: 6},
         {type: 'ORDER_SUCCESS_RATE', size: 6},
     ],
     CLIENT: [
-        {type: 'TOTAL_SERVICES_PURCHASED', size: 6}
+        {type: 'TOTAL_SERVICES_PURCHASED', size: 6},
+        {type: 'PROFILE_RATING', size: 6},
     ],
     ADMIN: [
         // ...
@@ -88,7 +79,8 @@ const OrderCard = (props: OrderDto) => {
                         <Box>
                             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                                 <Typography variant='body2'>{parseOffsetDateTimeToString(props.createdAt)}</Typography>
-                                <Typography variant='body2'>{parseOffsetDateTimeToString(props.deadlineDate)}</Typography>
+                                <Typography
+                                    variant='body2'>{parseOffsetDateTimeToString(props.deadlineDate)}</Typography>
                             </Box>
                             <LinearProgress variant='determinate'
                                             value={calculateProgress(props.createdAt, props.deadlineDate, props.status)}/>
@@ -343,7 +335,7 @@ const AuthHomePage = () => {
     });
 
     if (!user || !cards) {
-        return ;
+        return;
     }
 
     return (
@@ -355,17 +347,20 @@ const AuthHomePage = () => {
 
                     return (
                         <Grid key={index} size={conf.size}>
-                            <StatCard
-                                type={conf.type}
-                                title={t(`enum.statistics.${conf.type}`)}
-                                value={card.value}
-                                percentGrow={card.percentGrow}
-                                interval={t('dashboard.stats.last30Days')}
-                                startDate={queryArgs.start}
-                                endDate={queryArgs.end}
-                                trend={card.trend}
-                                data={card.data}
-                            />
+                            {conf.type === "PROFILE_RATING" ?
+                                <RatingCard rating={card.value} ratingCount={card.helperValue}/>
+                                : <StatCard
+                                    type={conf.type}
+                                    title={t(`enum.statistics.${conf.type}`)}
+                                    value={card.value}
+                                    percentGrow={card.percentGrow}
+                                    interval={t('dashboard.stats.last30Days')}
+                                    startDate={queryArgs.start}
+                                    endDate={queryArgs.end}
+                                    trend={card.trend}
+                                    data={card.data}
+                                />
+                            }
                         </Grid>
                     );
                 })}
@@ -411,11 +406,13 @@ const AuthHomePage = () => {
 
 const HomePage = () => {
     const {data: user} = useGetCurrentUserQuery();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-    if (!user || ProfileType.Admin === user.activeProfile.profileType || ProfileStatus.Active !== user.activeProfile.status) {
-        return <LandingPage/>
-    } else {
+    if (isMobile && user && ProfileStatus.Active === user.activeProfile.status && ProfileType.Admin !== user.activeProfile.profileType) {
         return <AuthHomePage />
+    } else {
+        return <LandingPage />
     }
 
 };

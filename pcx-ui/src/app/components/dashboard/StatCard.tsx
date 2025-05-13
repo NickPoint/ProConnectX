@@ -18,6 +18,7 @@ export type StatType =
     | 'ACTIVE_ORDERS'
     | 'PENDING_PAYMENTS'
     | 'TOTAL_SERVICES_PURCHASED'
+    | 'PROFILE_RATING'
 
 export type StatCardProps = {
     type: StatType;

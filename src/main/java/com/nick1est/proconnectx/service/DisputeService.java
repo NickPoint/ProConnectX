@@ -28,7 +28,7 @@ public class DisputeService {
         dispute.setOrder(order);
         dispute.setReason(reason);
         val savedDispute = disputeRepository.save(dispute);
-        events.publishEvent(new OrderDisputedEvent(savedDispute, client));
+        events.publishEvent(new OrderDisputedEvent(savedDispute, client, reason));
     }
 
     @Transactional
@@ -46,7 +46,7 @@ public class DisputeService {
 
         dispute.setProposalStatus(ProposalStatus.ACCEPTED);
         changeStatus(dispute, DisputeStatus.RESOLVED_FREELANCER_PAID);
-        events.publishEvent(new DisputeSolutionAccepteByAdminEvent(dispute, admin));
+        events.publishEvent(new DisputeSolutionAcceptedByAdminEvent(dispute, admin));
         adminOrderService.approveOrderFromDispute(dispute.getOrder(), admin);
     }
 
@@ -57,7 +57,7 @@ public class DisputeService {
         dispute.setProposalStatus(ProposalStatus.REJECTED);
         changeStatus(dispute, DisputeStatus.RESOLVED_REFUNDED);
         dispute.setProposalRejectionReason(reason);
-        events.publishEvent(new DisputeSolutionRejectedEvent(dispute, client));
+        events.publishEvent(new DisputeSolutionRejectedEvent(dispute, client, reason));
         openDispute(dispute.getOrder(), reason, client);
     }
 
@@ -77,7 +77,7 @@ public class DisputeService {
         dispute.setProposal(proposal);
         dispute.setProposalStatus(ProposalStatus.PENDING);
         changeStatus(dispute, DisputeStatus.IN_REVIEW);
-        events.publishEvent(new DisputeSolutionProposedEvent(dispute, freelancer));
+        events.publishEvent(new DisputeSolutionProposedEvent(dispute, freelancer, proposal));
     }
 
     @Transactional

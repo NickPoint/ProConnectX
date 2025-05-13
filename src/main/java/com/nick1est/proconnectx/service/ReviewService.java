@@ -11,12 +11,13 @@ import com.nick1est.proconnectx.repository.ReviewRepository;
 import com.nick1est.proconnectx.repository.ServiceRepository;
 import com.nick1est.proconnectx.service.profile.ClientProfileService;
 import com.nick1est.proconnectx.service.profile.FreelancerProfileService;
-import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -32,18 +33,21 @@ public class ReviewService {
     private final FreelancerProfileService freelancerProfileService;
     private final OrderService orderService;
 
+    @Transactional
     public Page<ReviewDto> getServiceReviews(Long serviceId, Pageable pageable) {
         val reviews = reviewRepository.findAllByServiceId(serviceId, pageable);
         return reviews.map(reviewMapper::toDto);
     }
 
+    @Transactional
     public Page<ReviewDto> getClientReviews(Long clientId, Pageable pageable) {
         val reviews = reviewRepository.findAllByClientId(clientId, pageable);
         return reviews.map(reviewMapper::toDto);
     }
 
-
+    @Transactional
     public void postServiceReview(PostReviewDto dto, Long orderId, Long clientId) {
+        log.info("Client {} left review, orderId: {}", clientId, orderId);
         val order = orderService.getById(orderId);
         val client = clientProfileService.getById(clientId);
 
@@ -56,10 +60,15 @@ public class ReviewService {
         reviewRepository.save(review);
 
         serviceRepository.updateRating(order.getService().getId(), dto.getRating());
+        serviceRepository.updateRatingAverage(order.getService().getId());
+
         freelancerRepository.updateRating(order.getService().getFreelancer().getId(), dto.getRating());
+        freelancerRepository.updateRatingAverage(order.getService().getFreelancer().getId());
     }
 
+    @Transactional
     public void postClientReview(PostReviewDto dto, Long orderId, Long freelancerId) {
+        log.info("Freelancer {} left review, orderId: {}", freelancerId, orderId);
         val order = orderService.getById(orderId);
         val freelancer = freelancerProfileService.getById(freelancerId);
 
@@ -72,6 +81,7 @@ public class ReviewService {
         reviewRepository.save(review);
 
         clientRepository.updateRating(order.getClient().getId(), dto.getRating());
+        clientRepository.updateRatingAverage(order.getClient().getId());
     }
 
 }

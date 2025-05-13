@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<body>
+<div layout:fragment="content">
+    <h2>Hi <span th:text="${name}">User</span>!</h2>
+    <p>Your dispute solution for order <strong th:text="${orderId}">123</strong> has been rejected.</p>
+    <p>Reason: <strong th:text="${reason}">Rejection reason</strong></p>
+    <p>Please propose another solution or contact support.</p>
+    <p><a th:href="${baseUrl} + '/dashboard/orders'">View Dispute</a></p>
+</div>
+</body>
+</html>

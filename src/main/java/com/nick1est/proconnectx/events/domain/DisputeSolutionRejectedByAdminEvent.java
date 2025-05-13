@@ -17,8 +17,4 @@ public class DisputeSolutionRejectedByAdminEvent implements DisputeEvent {
         return AppEventType.PROPOSAL_REJECTED_BY_ADMIN;
     }
 
-    @Override
-    public Map<String, Object> getPayload() {
-        return Map.of("disputeId", dispute.getId());
-    }
 }

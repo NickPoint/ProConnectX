@@ -19,6 +19,7 @@ import React from "react";
 import {LocationOn, Star} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
 import {parseOffsetDateTimeToString} from "../../../utils/dateParser.ts";
+import {t} from 'i18next';
 
 const CustomCardMediaRoot = styled(Box, {
     name: "CustomCardMedia",
@@ -57,9 +58,9 @@ const CustomCardMedia =
         }
     );
 
-function getAddressAsString(address: LightweightAddressDto | undefined): string {
+export function getAddressAsString(address: LightweightAddressDto | undefined): string {
     if (!address) {
-        return "Remote";
+        return t('service.location.remote');
     }
     return `${address.country}, ${address.city}`
 }

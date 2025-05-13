@@ -20,4 +20,16 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Modifying
     @Query("update Client c set c.ratingSum = c.ratingSum + :newRating, c.ratingCount = c.ratingCount + 1 where c.id = :clientId")
     void updateRating(Long clientId, Double newRating);
+
+    @Modifying
+    @Query("""
+            UPDATE Client c 
+              SET c.rating = CASE
+                  WHEN c.ratingCount > 0 
+                    THEN ROUND(c.ratingSum * 1.0 / c.ratingCount, 1)
+                  ELSE 0.0
+                END
+            WHERE c.id = :clientId
+            """)
+    void updateRatingAverage(Long clientId);
 }

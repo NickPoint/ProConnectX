@@ -13,6 +13,7 @@ import java.util.Map;
 public class DisputeSolutionProposedEvent implements DisputeEvent {
     Dispute dispute;
     Profile profile;
+    String solution;
 
     @Override
     public AppEventType getType() {
@@ -21,7 +22,8 @@ public class DisputeSolutionProposedEvent implements DisputeEvent {
 
     @Override
     public Map<String, Object> getPayload() {
-        return Map.of("disputeId", dispute.getId(),
-                "freelancerName", profile.getDisplayName());
+        return Map.of("orderId", dispute.getOrder().getId(),
+                "freelancerName", profile.getDisplayName(),
+                "solution", solution);
     }
 }

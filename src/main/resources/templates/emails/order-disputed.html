@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<body>
+<div layout:fragment="content">
+    <h2>Hi <span th:text="${name}">User</span>!</h2>
+    <p>A dispute has been raised for your order <strong th:text="${orderId}">123</strong>.</p>
+    <p>Reason: <strong th:text="${reason}">Dispute reason</strong></p>
+    <p>Please check the dispute details:</p>
+    <p><a th:href="${baseUrl} + '/dashboard/orders'">View Dispute</a></p>
+</div>
+</body>
+</html>
