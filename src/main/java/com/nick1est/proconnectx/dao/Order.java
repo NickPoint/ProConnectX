@@ -65,11 +65,11 @@ public class Order implements FileOwner {
     @NotNull
     private OrderType type;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     @Lob
     private String additionalNotes;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     @Lob
     private String rejectionReason;
 

@@ -35,14 +35,13 @@ public class Service implements Statistic, FileOwner, Rating {
     @NotNull
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotNull
     @Lob
     private String description;
 
     @Column(nullable = false)
     @NotNull
-    @Lob
     private String shortDescription;
 
     @Column(precision = 10, scale = 2, nullable = false)

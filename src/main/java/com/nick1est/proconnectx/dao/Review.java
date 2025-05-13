@@ -40,7 +40,7 @@ public class Review {
     @ManyToOne
     private Employer employer;*/
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     @Lob
     private String body;
 

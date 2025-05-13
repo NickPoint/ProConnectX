@@ -14,6 +14,7 @@ public class Freelancer extends BaseProfile {
     protected String firstName;
     protected String lastName;
 
+    @Column(columnDefinition = "TEXT")
     @Lob
     private String description;
 

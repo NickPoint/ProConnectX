@@ -31,16 +31,16 @@ public class Dispute {
     @NotNull
     private DisputeStatus status = DisputeStatus.OPEN;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotEmpty
     @Lob
     private String reason;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     @Lob
     private String proposal;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     @Lob
     private String proposalRejectionReason;
 
