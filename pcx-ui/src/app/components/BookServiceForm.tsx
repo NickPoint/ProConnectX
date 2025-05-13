@@ -4,7 +4,8 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, Divider,
+    DialogTitle,
+    Divider,
     Fab,
     FabProps,
     Grid,
@@ -13,11 +14,11 @@ import {
 } from '@mui/material';
 import {useEffect, useRef, useState} from "react";
 import {styled} from "@mui/material/styles";
-import {BookServiceDto, ServiceDto} from "../../features/api/pcxApi.ts";
+import {BookServiceDto, ProfileStatus, ServiceDto, useGetCurrentUserQuery} from "../../features/api/pcxApi.ts";
 import Avatar from "@mui/material/Avatar";
 import {enqueueSnackbar} from "notistack";
 import {useTranslation} from 'react-i18next';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {generateInitialValuesFromConfig, generateValidationSchema} from "./formUtils.ts";
 import {FieldRenderer} from "./FieldRenderer.tsx";
 import {useBookServiceMutation} from "../../features/api/enhancedApi.ts";
@@ -62,10 +63,12 @@ function mapValuesToFormData(id: number, values: BookServiceDto): FormData {
 
 const BookServiceForm = ({service}: Props) => {
     const [dialogOpen, setDialogOpen] = useState(false);
+    const {data: user} = useGetCurrentUserQuery();
     const [bookService] = useBookServiceMutation();
     const bottomRef = useRef<HTMLDivElement>(null);
     const [isBottomVisible, setIsBottomVisible] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -93,6 +96,14 @@ const BookServiceForm = ({service}: Props) => {
         left: '50%',
         transition: 'all 0.3s ease', //TODO: animation doesn't work
     }));
+
+    const handleClick = () => {
+        if (user && user.activeProfile.status !== ProfileStatus.Active) {
+            enqueueSnackbar(t('service.accountPending'), {variant: 'info'});
+        } else {
+            navigate('/auth', {state: {from: location}, replace: true});
+        }
+    }
 
     return (
         <>
@@ -167,7 +178,7 @@ const BookServiceForm = ({service}: Props) => {
                     )}
                 </Formik>
             </Dialog>
-            <FloatingButton size='large' color='primary' variant='extended' onClick={() => setDialogOpen(true)}>
+            <FloatingButton size='large' color='primary' variant='extended' onClick={handleClick}>
                 {t('buttons.connect')}</FloatingButton>
         </>
     );

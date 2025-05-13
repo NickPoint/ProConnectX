@@ -441,6 +441,7 @@
       "faq": "FAQ",
       "reviews": "Reviews"
     },
+    "accountPending": "You can't book a service until your account is verified.",
     "form": {
       "title": "Service Booking",
       "success": "Your order has been successfully created! \uD83C\uDF89 We're getting things ready—sit back and track the progress in your dashboard."
