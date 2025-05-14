@@ -52,7 +52,6 @@
     "@tiptap/starter-kit": "^2.11.7",
     "@types/sockjs-client": "^1.5.4",
     "autosuggest-highlight": "^3.3.4",
-    "axios": "^1.7.9",
     "babel-plugin-import": "^1.13.8",
     "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",

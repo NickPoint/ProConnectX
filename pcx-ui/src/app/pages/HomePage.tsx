@@ -206,6 +206,8 @@ const LandingPage: React.FC = () => {
                                 borderTopLeftRadius: theme.spacing(10),
                                 borderTopRightRadius: theme.spacing(10),
                                 objectFit: 'cover',
+                                height: '100%',
+                                width: '100%'
                             })}
                         />
                     </Grid>
