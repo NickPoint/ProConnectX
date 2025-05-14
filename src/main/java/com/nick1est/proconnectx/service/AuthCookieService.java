@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class AuthCookieService {
         return ResponseCookie.from(jwtCookieName, token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(jwtUtils.getJwtExpirationMs())
+                .maxAge(Duration.ofMillis(jwtUtils.getJwtExpirationMs()))
                 .secure(jwtCookieProperties.isSecure())
                 .sameSite(jwtCookieProperties.getSameSite())
                 .build();

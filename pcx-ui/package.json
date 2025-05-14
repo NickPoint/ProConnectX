@@ -99,9 +99,12 @@
     "eslint-plugin-react-refresh": "^0.4.18",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.1",
+    "sharp": "^0.34.1",
+    "svgo": "^3.3.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0",
     "vite": "^6.1.0",
+    "vite-plugin-image-optimizer": "^1.1.8",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.0.5"
   }
