@@ -16,6 +16,7 @@ public class NotificationProducer {
     private final KafkaTemplate<String, NotificationEvent> kafkaTemplate;
 
     public void send(NotificationEvent event) {
+        log.debug("Sending notification event to kafka: {}", event);
         CompletableFuture<SendResult<String,NotificationEvent>> future =
                 kafkaTemplate.send("notifications", event.getEventType().toString(), event);
         future.whenComplete((result, ex) -> {

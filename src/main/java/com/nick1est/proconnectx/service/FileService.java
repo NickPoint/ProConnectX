@@ -41,6 +41,7 @@ public class FileService {
 
     public File uploadSingle(FileOwner owner, MultipartFile multipart,
                              DocumentType type, boolean isPublic) {
+        log.debug("Uploading file {} of owner with id {}, ownerType: {}", multipart.getOriginalFilename(), owner.getId(), owner.getOwnerType());
         try {
             val ownerType = owner.getOwnerType();
             val path = fileStorageService.uploadFile(multipart, owner.getId(), ownerType);
@@ -72,6 +73,7 @@ public class FileService {
             throw new AccessDeniedException("You do not have permission to access this file");
         }
 
+        log.debug("User {} accessed file {}", user.getUsername(), fileId);
         return fileStorageService.loadFileAsResource(file.getPath());
     }
 
@@ -82,6 +84,7 @@ public class FileService {
 
     @Transactional
     public void deleteFileById(Long fileId) {
+        log.debug("Deleting file {}", fileId);
         File file = getById(fileId);
 
         fileStorageService.deleteFile(file.getPath());

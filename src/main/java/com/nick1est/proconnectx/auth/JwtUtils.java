@@ -49,6 +49,7 @@ public class JwtUtils {
     }
 
     public String generateToken(String username, ProfileType profileType) {
+        log.debug("Generating token for username {}", username);
         return Jwts.builder()
                 .subject(username)
                 .claim("activeProfile", profileType.toString())

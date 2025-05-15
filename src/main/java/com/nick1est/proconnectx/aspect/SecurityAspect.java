@@ -28,7 +28,7 @@ public class SecurityAspect {
         if (role == RoleType.ROLE_ADMIN) {
             return;
         }
-
+        log.debug("Checking ownership for user {}, role {}, checkType: {}", userDetails.getUsername(), role, check.type());
         Pair<ResourceType,RoleType> key = Pair.of(check.type(), role);
         OwnershipStrategy strategy = strategies.get(key);
         if (strategy == null || !strategy.owns(id, userDetails)) {

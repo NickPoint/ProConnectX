@@ -5,6 +5,7 @@ import com.nick1est.proconnectx.config.JwtCookieProperties;
 import com.nick1est.proconnectx.dao.ProfileType;
 import com.nick1est.proconnectx.dto.AuthResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthCookieService {
     @Value("${proConnectX.app.jwtCookieName}")
     private String jwtCookieName;
@@ -38,6 +40,7 @@ public class AuthCookieService {
             String email
     ) {
         // no valid cookie at all → issue fresh
+        log.debug("Refreshing cookie for {}, incomingCookie: {}", email, incomingCookie);
         if (incomingCookie == null || !jwtUtils.validateToken(incomingCookie)) {
             return Optional.of(createCookie(email, currentProfileType));
         }

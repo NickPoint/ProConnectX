@@ -50,6 +50,7 @@ public class AuthController {
         if (ud == null) {
             return ResponseEntity.noContent().build();
         }
+        log.debug("Updating session of user: {}", ud.getUsername());
 
         AuthResponse body = userService.buildAuthResponse(ud);
 
@@ -63,12 +64,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        log.debug("Login request: {}", loginRequest);
         val authResponse = userService.signInUser(loginRequest);
         return okWithCookie(authResponse);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody SignupFormRequest signUpFormRequest) {
+        log.debug("Signup request: {}", signUpFormRequest);
         val authResponse = userService.signupUser(signUpFormRequest);
         return okWithCookie(authResponse);
     }
@@ -79,6 +82,7 @@ public class AuthController {
             @AuthenticationPrincipal UserDetailsImpl ud,
             @RequestParam ProfileType profileType
     ) {
+        log.debug("Add profile request: {}, profileType: {}", ud, profileType);
         userService.createProfile(ud.getUser().getId(), profileType);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -104,6 +108,7 @@ public class AuthController {
             @RequestParam ProfileType newProfileType,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
+        log.debug("Switch profile request: {}", newProfileType);
         boolean hasProfile = userService.getAllActiveProfiles(userDetails.getUser().getId()).stream()
                 .anyMatch(p -> p.getProfileType() == newProfileType);
         if (!hasProfile) {

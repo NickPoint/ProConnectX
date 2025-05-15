@@ -8,6 +8,7 @@ import com.nick1est.proconnectx.service.DisputeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/dispute")
+@Slf4j
 public class DisputeController {
 
     private final DisputeService disputeService;
@@ -34,6 +36,7 @@ public class DisputeController {
     @CheckOwnership(type = ResourceType.DISPUTE)
     public void acceptProposal(@PathVariable Long disputeId,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("Accepting proposal for dispute {}, username: {}", disputeId, userDetails.getUsername());
         disputeService.acceptProposal(disputeId, userDetails.getActiveProfile());
     }
 
@@ -43,6 +46,7 @@ public class DisputeController {
     public void rejectProposal(@PathVariable Long disputeId,
                                @RequestBody String reason,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("Rejecting proposal for dispute {}, username: {}", disputeId, userDetails.getUsername());
         disputeService.rejectProposal(disputeId, reason, userDetails.getActiveProfile());
     }
 
@@ -52,6 +56,7 @@ public class DisputeController {
     public void proposeSolution(@PathVariable Long disputeId,
                                 @NotEmpty @RequestBody String proposal,
                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("Received proposal  for dispute {}, username: {}", disputeId, userDetails.getUsername());
         disputeService.proposeSolution(disputeId, proposal, userDetails.getActiveProfile());
     }
 
@@ -61,6 +66,7 @@ public class DisputeController {
     @CheckOwnership(type = ResourceType.DISPUTE)
     public void forceRefund(@PathVariable Long disputeId,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("Admin making refund for dispute {}, usename: {}", disputeId,  userDetails.getUsername());
         disputeService.adminRejectProposal(disputeId, userDetails.getActiveProfile());
     }
 
@@ -69,6 +75,7 @@ public class DisputeController {
     @CheckOwnership(type = ResourceType.DISPUTE)
     public void forceRelease(@PathVariable Long disputeId,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("Admin making release for  dispute {}, username: {}", disputeId, userDetails.getUsername());
         disputeService.adminAcceptProposal(disputeId, userDetails.getActiveProfile());
     }
 
@@ -76,6 +83,7 @@ public class DisputeController {
     @PreAuthorize("hasAnyRole('FREELANCER','CLIENT')")
     public void notifyAdmin(@PathVariable Long disputeId,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("User requested admin attention for dispute {}, username: {}", disputeId, userDetails.getUsername());
         disputeService.notifyAdmin(disputeId, userDetails.getActiveProfile());
     }
 }

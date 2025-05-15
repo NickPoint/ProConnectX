@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
     private final OrderService orderService;
 
@@ -60,6 +62,7 @@ public class OrderController {
     public ResponseEntity<Long> bookService(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                             @PathVariable Long serviceId,
                                             @Valid @ModelAttribute BookServiceDto bookingInfo) {
+        log.info("Booking request received for service {}, username: {}", serviceId, userDetails.getUsername());
         val orderId = orderService.bookService(serviceId, userDetails.getActiveProfile().getId(), bookingInfo);
         return ResponseEntity.ok().body(orderId);
     }
@@ -69,6 +72,7 @@ public class OrderController {
     @CheckOwnership(type = ResourceType.ORDER)
     public void acceptOrder(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails,
                             @RequestParam LocalDate deadlineDate) {
+        log.info("Freelancer accept request for order {}, username: {}", orderId, userDetails.getUsername());
         orderService.acceptOrder(orderId, userDetails.getActiveProfile(), deadlineDate);
     }
 
@@ -76,6 +80,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_FREELANCER') or hasRole('ADMIN')")
     @CheckOwnership(type = ResourceType.ORDER)
     public void submitOrderForReview(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("Freelancer submit order for review {}, username: {}", orderId, userDetails.getUsername());
         orderService.submitOrderForReview(orderId, userDetails.getActiveProfile());
     }
 
@@ -83,6 +88,7 @@ public class OrderController {
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     @CheckOwnership(type = ResourceType.ORDER)
     public void approveOrder(@PathVariable Long orderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("Client approve order {}, username: {}", orderId, userDetails.getUsername());
         orderService.approveOrder(orderId, userDetails.getActiveProfile());
     }
 
@@ -92,6 +98,7 @@ public class OrderController {
     public void disputeOrder(@PathVariable Long orderId,
                              @NotEmpty @RequestBody String reason,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("Client {} dispute order {}", userDetails.getUsername(), orderId);
         orderService.disputeOrder(orderId, reason, userDetails.getActiveProfile());
     }
 
@@ -101,6 +108,7 @@ public class OrderController {
     public void cancelOrder(@PathVariable Long orderId,
                             @RequestBody String reason,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("Client {} cancel order {}", userDetails.getUsername(), orderId);
         orderService.cancelOrder(orderId, reason, userDetails.getActiveProfile());
     }
 

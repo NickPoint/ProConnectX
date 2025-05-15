@@ -8,10 +8,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 public class NotificationController {
-    @MessageMapping("/sendMessage") // Endpoint matching the JavaScript destination
-    @SendTo("/topic/notifications") // Broadcast to subscribers of this topic
+    @MessageMapping("/sendMessage")
+    @SendTo("/topic/notifications")
         public String sendMessage(String message) {
-        System.out.println("Received message: " + message); // Debugging log
-        return message; // Broadcast the message
+        return message;
     }
 }
